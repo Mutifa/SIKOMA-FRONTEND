@@ -1,0 +1,51 @@
+import React from 'react'
+import { useParams } from 'react-router-dom'
+import Template from '../../layouts/Template.jsx'
+import api from '../../lib/api.js'
+import { assetUrl } from '../../lib/assets.js'
+
+export default function EdukasiDetail() {
+  const { slug } = useParams()
+  const [data, setData] = React.useState({ edukasi: null, galeri: [] })
+  const [loading, setLoading] = React.useState(true)
+  const [error, setError] = React.useState('')
+
+  React.useEffect(() => {
+    let mounted = true
+    api.get(`/api/edukasi/${slug}`)
+      .then(res => { if (mounted) { setData(res.data); setLoading(false) } })
+      .catch(err => { if (mounted) { setError(err.message); setLoading(false) } })
+    return () => { mounted = false }
+  }, [slug])
+
+  return (
+    <Template title={`Detail: ${data.edukasi?.slug || slug}`} active="edukasi">
+      <section className="container my-5">
+        {loading && <p>Memuat...</p>}
+        {error && <div className="alert alert-danger">{error}</div>}
+        {!loading && !error && data.edukasi && (
+          <div className="row">
+            <div className="col-lg-6 mb-4">
+              <img src={assetUrl(`/uploads/edukasi/${data.edukasi.foto}`)} alt={data.edukasi.judul} style={{width:'100%', height:400, objectFit:'cover', borderRadius:10}} />
+              <div className="mt-3" style={{display:'flex', gap:8, flexWrap:'wrap'}}>
+                <img loading="lazy" src={assetUrl(`/uploads/edukasi/${data.edukasi.foto}`)} style={{width:100, height:80, objectFit:'cover', borderRadius:6}} />
+                {data.galeri.map((g) => (
+                  <img loading="lazy" key={g.id} src={assetUrl(`/uploads/galeri/${g.gambar}`)} style={{width:100, height:80, objectFit:'cover', borderRadius:6}} />
+                ))}
+              </div>
+            </div>
+            <div className="col-lg-6 mb-4">
+              <h1 className="mb-2">{data.edukasi.judul}</h1>
+              <hr />
+              <div>
+                <span dangerouslySetInnerHTML={{ __html: data.edukasi.deskripsi }} />
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+    </Template>
+  )
+}
+
+
