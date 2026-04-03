@@ -13,25 +13,25 @@ import Register from './pages/Auth/Register.jsx'
 import ForgotPassword from './pages/Auth/ForgotPassword.jsx'
 import ResetPassword from './pages/Auth/ResetPassword.jsx'
 import VerifyEmail from './pages/Auth/VerifyEmail.jsx'
-import AdminDashboard from './pages/Admin/Dashboard.jsx'
-import LaporanKonservasi from './pages/Admin/LaporanKonservasi.jsx'
-import LaporanTambah from './pages/Admin/LaporanTambah.jsx'
-import LaporanDetail from './pages/Admin/LaporanDetail.jsx'
-import LaporanEdit from './pages/Admin/LaporanEdit.jsx'
-import Akun from './pages/Admin/Akun.jsx'
-import SuperadminDashboard from './pages/Superadmin/Dashboard.jsx'
-import SuperadminPengguna from './pages/Superadmin/Pengguna.jsx'
-import SuperadminGaleri from './pages/Superadmin/Galeri.jsx'
-import SuperadminCustomer from './pages/Superadmin/Customer.jsx'
-import SuperadminProfilPerusahaan from './pages/Superadmin/ProfilPerusahaan.jsx'
-import SuperadminProgram from './pages/Superadmin/Program.jsx'
-import SuperadminKonten from './pages/Superadmin/Konten.jsx'
-import SuperadminKawasan from './pages/Superadmin/Kawasan.jsx'
-import SuperadminLaporan from './pages/Superadmin/Laporan.jsx'
-import SuperadminLaporanDetail from './pages/Superadmin/LaporanDetail.jsx'
-import SuperadminPeraturan from './pages/Superadmin/Peraturan.jsx'
-import SuperadminStandarPelayanan from './pages/Superadmin/StandarPelayanan.jsx'
-import SuperadminAkun from './pages/Superadmin/Akun.jsx'
+import AdminDashboard from './pages/AdminLapangan/Dashboard.jsx'
+import LaporanKonservasi from './pages/AdminLapangan/LaporanKonservasi.jsx'
+import LaporanTambah from './pages/AdminLapangan/LaporanTambah.jsx'
+import LaporanDetail from './pages/AdminLapangan/LaporanDetail.jsx'
+import LaporanEdit from './pages/AdminLapangan/LaporanEdit.jsx'
+import Akun from './pages/AdminLapangan/Akun.jsx'
+import SuperadminDashboard from './pages/AdminPusat/Dashboard.jsx'
+import SuperadminPengguna from './pages/AdminPusat/Pengguna.jsx'
+import SuperadminGaleri from './pages/AdminPusat/Galeri.jsx'
+import SuperadminCustomer from './pages/AdminPusat/Customer.jsx'
+import SuperadminProfilPerusahaan from './pages/AdminPusat/ProfilPerusahaan.jsx'
+import SuperadminProgram from './pages/AdminPusat/Program.jsx'
+import SuperadminKonten from './pages/AdminPusat/Konten.jsx'
+import SuperadminKawasan from './pages/AdminPusat/Kawasan.jsx'
+import SuperadminLaporan from './pages/AdminPusat/Laporan.jsx'
+import SuperadminLaporanDetail from './pages/AdminPusat/LaporanDetail.jsx'
+import SuperadminPeraturan from './pages/AdminPusat/Peraturan.jsx'
+import SuperadminStandarPelayanan from './pages/AdminPusat/StandarPelayanan.jsx'
+import SuperadminAkun from './pages/AdminPusat/Akun.jsx'
 import NotFound from './pages/NotFound.jsx'
 import HealthCheck from './pages/HealthCheck.jsx'
 
@@ -54,100 +54,100 @@ export default function App() {
           <Route path="/verify-email" element={<VerifyEmail />} />
 
           {/* Admin Routes */}cd
-          <Route path="/admin" element={
-            <RoleGuard allowedRoles={['admin']}>
+          <Route path="/AdminLapangan" element={
+            <RoleGuard allowedRoles={['AdminLapangan']}>
               <AdminDashboard />
             </RoleGuard>
           } />
-          <Route path="/admin/laporan" element={
-            <RoleGuard allowedRoles={['admin']}>
+          <Route path="/AdminLapangan/laporan" element={
+            <RoleGuard allowedRoles={['AdminLapangan']}>
               <LaporanKonservasi />
             </RoleGuard>
           } />
-          <Route path="/admin/laporan/tambah" element={
-            <RoleGuard allowedRoles={['admin']}>
+          <Route path="/AdminLapangan/laporan/tambah" element={
+            <RoleGuard allowedRoles={['AdminLapangan']}>
               <LaporanTambah />
             </RoleGuard>
           } />
-          <Route path="/admin/laporan/detail/:id" element={
-            <RoleGuard allowedRoles={['admin']}>
+          <Route path="/AdminLapangan/laporan/detail/:id" element={
+            <RoleGuard allowedRoles={['AdminLapangan']}>
               <LaporanDetail />
             </RoleGuard>
           } />
           <Route path="/admin/laporan/edit/:id" element={
-            <RoleGuard allowedRoles={['admin']}>
+            <RoleGuard allowedRoles={['AdminLapangan']}>
               <LaporanEdit />
             </RoleGuard>
           } />
-          <Route path="/admin/akun" element={
-            <RoleGuard allowedRoles={['admin']}>
+          <Route path="/AdminLapangan/akun" element={
+            <RoleGuard allowedRoles={['AdminLapangan']}>
               <Akun />
             </RoleGuard>
           } />
 
           {/* Superadmin Routes */}
-          <Route path="/superadmin" element={
-            <RoleGuard allowedRoles={['superadmin']}>
+          <Route path="/AdminPusat" element={
+            <RoleGuard allowedRoles={['AdminPusat']}>
               <SuperadminDashboard />
             </RoleGuard>
           } />
-          <Route path="/superadmin/pengguna" element={
-            <RoleGuard allowedRoles={['superadmin']}>
+          <Route path="/AdminPusat/pengguna" element={
+            <RoleGuard allowedRoles={['AdminPusat']}>
               <SuperadminPengguna />
             </RoleGuard>
           } />
-          <Route path="/superadmin/galeri" element={
-            <RoleGuard allowedRoles={['superadmin']}>
+          <Route path="/AdminPusat/galeri" element={
+            <RoleGuard allowedRoles={['AdminPusat']}>
               <SuperadminGaleri />
             </RoleGuard>
           } />
-          <Route path="/superadmin/customer" element={
-            <RoleGuard allowedRoles={['superadmin']}>
+          <Route path="/AdminPusat/customer" element={
+            <RoleGuard allowedRoles={['AdminPusat']}>
               <SuperadminCustomer />
             </RoleGuard>
           } />
-          <Route path="/superadmin/profil-perusahaan" element={
-            <RoleGuard allowedRoles={['superadmin']}>
+          <Route path="/AdminPusat/profil-perusahaan" element={
+            <RoleGuard allowedRoles={['AdminPusat']}>
               <SuperadminProfilPerusahaan />
             </RoleGuard>
           } />
-          <Route path="/superadmin/program" element={
-            <RoleGuard allowedRoles={['superadmin']}>
+          <Route path="/AdminPusat/program" element={
+            <RoleGuard allowedRoles={['AdminPusat']}>
               <SuperadminProgram />
             </RoleGuard>
           } />
-          <Route path="/superadmin/konten" element={
-            <RoleGuard allowedRoles={['superadmin']}>
+          <Route path="/AdminPusat/konten" element={
+            <RoleGuard allowedRoles={['AdminPusat']}>
               <SuperadminKonten />
             </RoleGuard>
           } />
-          <Route path="/superadmin/kawasan" element={
-            <RoleGuard allowedRoles={['superadmin']}>
+          <Route path="/AdminPusat/kawasan" element={
+            <RoleGuard allowedRoles={['AdminPusat']}>
               <SuperadminKawasan />
             </RoleGuard>
           } />
-          <Route path="/superadmin/laporan" element={
-            <RoleGuard allowedRoles={['superadmin']}>
+          <Route path="/AdminPusat/laporan" element={
+            <RoleGuard allowedRoles={['AdminPusat']}>
               <SuperadminLaporan />
             </RoleGuard>
           } />
-          <Route path="/superadmin/laporan/detail/:id" element={
-            <RoleGuard allowedRoles={['superadmin']}>
+          <Route path="/AdminPusat/laporan/detail/:id" element={
+            <RoleGuard allowedRoles={['AdminPusat']}>
               <SuperadminLaporanDetail />
             </RoleGuard>
           } />
-          <Route path="/superadmin/peraturan" element={
-            <RoleGuard allowedRoles={['superadmin']}>
+          <Route path="/AdminPusat/peraturan" element={
+            <RoleGuard allowedRoles={['AdminPusat']}>
               <SuperadminPeraturan />
             </RoleGuard>
           } />
-          <Route path="/superadmin/standar-pelayanan" element={
-            <RoleGuard allowedRoles={['superadmin']}>
+          <Route path="/AdminPusat/standar-pelayanan" element={
+            <RoleGuard allowedRoles={['AdminPusat']}>
               <SuperadminStandarPelayanan />
             </RoleGuard>
           } />
-          <Route path="/superadmin/akun" element={
-            <RoleGuard allowedRoles={['superadmin']}>
+          <Route path="/AdminPusat/akun" element={
+            <RoleGuard allowedRoles={['AdminPusat']}>
               <SuperadminAkun />
             </RoleGuard>
           } />

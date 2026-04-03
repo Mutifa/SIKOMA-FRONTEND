@@ -7,7 +7,7 @@ export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider')
-  }
+  } 
   return context
 }
 
@@ -54,9 +54,9 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       // Get CSRF cookie first
-      await api.get('/csrf-cookie')
+      const response = await api.post('/login', {email, password})
       
-      const response = await api.post('/api/auth/login', { email, password })
+
       const userData = response.data.user
       
       console.log('Login response:', response.data)
@@ -65,11 +65,12 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true)
       setLoading(false)
       
-      return {
-        success: true,
-        role: response.data.role,
-        user: userData
-      }
+   return {
+  success: true,
+  role: response.data.role,
+  redirect: response.data.redirect,
+  user: userData
+}
     } catch (error) {
       console.error('Login error:', error)
       return {

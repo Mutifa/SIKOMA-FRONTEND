@@ -17,41 +17,27 @@ export default function Login() {
   const from = location.state?.from?.pathname || '/'
 
 
-  async function onSubmit(e) {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
-    
-    try {
-      console.log('Attempting login with:', { email, password: '***' })
-      const result = await login(email, password)
-      console.log('Login result:', result)
-      
-      if (result.success) {
-        console.log('Login successful, redirecting to:', result.role)
-        // Redirect based on role
-        if (result.role === 'superadmin') {
-          console.log('Navigating to /superadmin')
-          window.location.href = '/superadmin'
-        } else if (result.role === 'admin') {
-          console.log('Navigating to /admin')
-          window.location.href = '/admin'
-        } else {
-          // Default fallback
-          console.log('Navigating to /admin (fallback)')
-          window.location.href = '/admin'
-        }
-      } else {
-        console.log('Login failed:', result.message)
-        setError(result.message)
-      }
-    } catch (err) {
-      console.error('Login error:', err)
-      setError('Terjadi kesalahan saat login')
-    } finally {
-      setLoading(false)
+ async function onSubmit(e) {
+  e.preventDefault()
+  setError('')
+  setLoading(true)
+
+  try {
+    const result = await login(email, password)
+
+    if (result.success) {
+      window.location.href = result.redirect
+    } else {
+      setError(result.message)
     }
+
+  } catch (err) {
+    console.error(err)
+    setError('Terjadi kesalahan saat login')
+  } finally {
+    setLoading(false)
   }
+}
   return (
     <Template title="Login">
       <section className="container py-5" style={{maxWidth:480}}>
