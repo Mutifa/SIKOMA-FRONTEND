@@ -1,5 +1,5 @@
 import React from 'react'
-import SuperadminLayout from '../../layouts/SuperadminLayout.jsx'
+import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function LaporanKonservasi() {
@@ -19,7 +19,7 @@ export default function LaporanKonservasi() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/superadmin/laporan-konservasi')
+    api.get('/api/AdminPusat/laporan-konservasi')
       .then(res => { 
         if (mounted) {
           setData(res.data.data || res.data)
@@ -49,11 +49,11 @@ export default function LaporanKonservasi() {
 
     try {
       if (editingItem) {
-        await api.put(`/api/superadmin/laporan-konservasi/${editingItem.id}`, formDataToSend, {
+        await api.put(`/api/AdminPusat/laporan-konservasi/${editingItem.id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       } else {
-        await api.post('/api/superadmin/laporan-konservasi', formDataToSend, {
+        await api.post('/api/AdminPusat/laporan-konservasi', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       }
@@ -68,7 +68,7 @@ export default function LaporanKonservasi() {
         file: null 
       })
       // Reload data
-      const res = await api.get('/api/superadmin/laporan-konservasi')
+      const res = await api.get('/api/AdminPusat/laporan-konservasi')
       setData(res.data.data || res.data)
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal menyimpan laporan')
@@ -91,7 +91,7 @@ export default function LaporanKonservasi() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus laporan ini?')) {
       try {
-        await api.delete(`/api/superadmin/laporan-konservasi/${id}`)
+        await api.delete(`/api/AdminPusat/laporan-konservasi/${id}`)
         setData(data.filter(item => item.id !== id))
       } catch (err) {
         setError(err.response?.data?.message || 'Gagal menghapus laporan')
@@ -101,7 +101,7 @@ export default function LaporanKonservasi() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      await api.put(`/api/superadmin/laporan-konservasi/${id}/status`, { status: newStatus })
+      await api.put(`/api/AdminPusat/laporan-konservasi/${id}/status`, { status: newStatus })
       setData(data.map(item => 
         item.id === id ? { ...item, status: newStatus } : item
       ))
@@ -143,18 +143,18 @@ export default function LaporanKonservasi() {
 
   if (loading) {
     return (
-      <SuperadminLayout title="Laporan Konservasi">
+      <AdminPusatLayout title="Laporan Konservasi">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   return (
-    <SuperadminLayout title="Laporan Konservasi">
+    <AdminPusatLayout title="Laporan Konservasi">
       {error && <div className="alert alert-danger alert-dismissible fade show" role="alert">
         {error}
         <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -361,6 +361,6 @@ export default function LaporanKonservasi() {
           </div>
         </div>
       )}
-    </SuperadminLayout>
+    </AdminPusatLayout>
   )
 }

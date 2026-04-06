@@ -60,9 +60,9 @@ export const AuthProvider = ({ children }) => {
       // 🔀 REDIRECT BERDASARKAN ROLE
       let redirect = '/'
 
-      if (userData.role === 'admin_pusat') {
+      if (userData.role === 'AdminLapangan_pusat') {
         redirect = '/AdminPusat/Dashboard'
-      } else if (userData.role === 'admin_lapangan') {
+      } else if (userData.role === 'AdminLapangan_lapangan') {
         redirect = '/AdminLapangan/Dashboard'
       }
 

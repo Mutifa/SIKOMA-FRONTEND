@@ -1,5 +1,5 @@
 import React from 'react'
-import SuperadminLayout from '../../layouts/SuperadminLayout.jsx'
+import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function Galeri() {
@@ -19,7 +19,7 @@ export default function Galeri() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/superadmin/galeri')
+    api.get('/api/AdminPusat/galeri')
       .then(res => { 
         if (mounted) {
           setData(res.data.data || res.data)
@@ -65,14 +65,14 @@ export default function Galeri() {
 
       if (editingItem) {
         // Update item - Laravel already uses POST for galeri updates
-        await api.post(`/api/superadmin/galeri/${editingItem.id}`, formDataToSend, {
+        await api.post(`/api/AdminPusat/galeri/${editingItem.id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         const updatedData = data.map(item => item.id === editingItem.id ? {...item, ...formData} : item)
         setData(updatedData)
       } else {
         // Create item
-        const response = await api.post('/api/superadmin/galeri', formDataToSend, {
+        const response = await api.post('/api/AdminPusat/galeri', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         const newData = [response.data, ...data]
@@ -94,7 +94,7 @@ export default function Galeri() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus item ini?')) {
       try {
-        await api.delete(`/api/superadmin/galeri/${id}`)
+        await api.delete(`/api/AdminPusat/galeri/${id}`)
         const newData = data.filter(item => item.id !== id)
         setData(newData)
       } catch (err) {
@@ -105,18 +105,18 @@ export default function Galeri() {
 
   if (loading) {
     return (
-      <SuperadminLayout title="Galeri">
+      <AdminPusatLayout title="Galeri">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   return (
-    <SuperadminLayout title="Galeri">
+    <AdminPusatLayout title="Galeri">
       {error && <div className="alert alert-danger">{error}</div>}
       
       {/* Header with Add Button */}
@@ -401,6 +401,6 @@ export default function Galeri() {
           </div>
         </div>
       )}
-    </SuperadminLayout>
+    </AdminPusatLayout>
   )
 }

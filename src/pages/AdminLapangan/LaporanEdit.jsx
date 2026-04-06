@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import AdminLayout from '../../layouts/AdminLayout.jsx'
+import AdminLapanganLayout from '../../layouts/AdminLapanganLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function LaporanEdit() {
@@ -30,7 +30,7 @@ export default function LaporanEdit() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get(`/api/admin/laporanKonservasi/${id}`)
+    api.get(`/api/AdminLapangan/laporanKonservasi/${id}`)
       .then(res => {
         if (mounted) {
           const laporan = res.data
@@ -132,12 +132,12 @@ export default function LaporanEdit() {
     })
 
     try {
-      await api.put(`/api/admin/laporanKonservasi/${id}`, formDataToSend, {
+      await api.put(`/api/AdminLapangan/laporanKonservasi/${id}`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
-      navigate('/admin/laporan')
+      navigate('/AdminLapangan/laporan')
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal memperbarui laporan')
     } finally {
@@ -147,29 +147,29 @@ export default function LaporanEdit() {
 
   if (loading) {
     return (
-      <AdminLayout title="Edit Laporan">
+      <AdminLapanganLayout title="Edit Laporan">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </AdminLayout>
+      </AdminLapanganLayout>
     )
   }
 
   if (error) {
     return (
-      <AdminLayout title="Edit Laporan">
+      <AdminLapanganLayout title="Edit Laporan">
         <div className="alert alert-danger">{error}</div>
-        <button className="btn btn-secondary" onClick={() => navigate('/admin/laporan')}>
+        <button className="btn btn-secondary" onClick={() => navigate('/AdminLapangan/laporan')}>
           Kembali
         </button>
-      </AdminLayout>
+      </AdminLapanganLayout>
     )
   }
 
   return (
-    <AdminLayout title="Edit Laporan Konservasi">
+    <AdminLapanganLayout title="Edit Laporan Konservasi">
       {error && <div className="alert alert-danger">{error}</div>}
       
       <div className="row">
@@ -421,7 +421,7 @@ export default function LaporanEdit() {
                 <button
                   type="button"
                   className="btn btn-secondary me-2"
-                  onClick={() => navigate('/admin/laporan')}
+                  onClick={() => navigate('/AdminLapangan/laporan')}
                 >
                   Batal
                 </button>
@@ -437,6 +437,6 @@ export default function LaporanEdit() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </AdminLapanganLayout>
   )
 }

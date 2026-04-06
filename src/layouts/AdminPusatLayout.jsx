@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.jsx'
-import '../assets/css/admin.css'
+import '../assets/css/AdminLapangan.css'
 
-export default function SuperadminLayout({ children, title = "Super Admin" }) {
+export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
   const location = useLocation()
   const { user, logout } = useAuth()
 
@@ -33,7 +33,7 @@ export default function SuperadminLayout({ children, title = "Super Admin" }) {
       <header className="topbar" data-navbarbg="skin5">
         <nav className="navbar top-navbar navbar-expand-md navbar-dark">
           <div className="navbar-header" data-logobg="skin6">
-            <Link className="navbar-brand" to="/superadmin">
+            <Link className="navbar-brand" to="/AdminPusat">
               <b className="logo-icon">
                 <img src="/img/logo.png" height="30px" alt="homepage" />
               </b>
@@ -52,7 +52,7 @@ export default function SuperadminLayout({ children, title = "Super Admin" }) {
               <li>
                 <a className="profile-pic" type="button">
                   <img className="img-circle" src="/img/user.png" alt="user" width="40px" height="40px" />
-                  <span className="text-white font-medium">{user?.name || 'Super Admin'}</span>
+                  <span className="text-white font-medium">{user?.name || 'Admin Pusat'}</span>
                 </a>
               </li>
             </ul>
@@ -67,8 +67,8 @@ export default function SuperadminLayout({ children, title = "Super Admin" }) {
             <ul id="sidebarnav">
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/superadmin' ? 'active' : ''}`}
-                  to="/superadmin"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat' ? 'active' : ''}`}
+                  to="/AdminPusat"
                 >
                   <i className="fas fa-home" aria-hidden="true"></i>
                   <span className="hide-menu">Dashboard</span>
@@ -76,8 +76,8 @@ export default function SuperadminLayout({ children, title = "Super Admin" }) {
               </li>
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/superadmin/profil-perusahaan' ? 'active' : ''}`}
-                  to="/superadmin/profil-perusahaan"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/profil-perusahaan' ? 'active' : ''}`}
+                  to="/AdminPusat/profil-perusahaan"
                 >
                   <i className="fas fa-building" aria-hidden="true"></i>
                   <span className="hide-menu">Profil Perusahaan</span>
@@ -85,8 +85,8 @@ export default function SuperadminLayout({ children, title = "Super Admin" }) {
               </li>
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/superadmin/program' ? 'active' : ''}`}
-                  to="/superadmin/program"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/program' ? 'active' : ''}`}
+                  to="/AdminPusat/program"
                 >
                   <i className="fas fa-list-ul" aria-hidden="true"></i>
                   <span className="hide-menu">Program</span>
@@ -94,8 +94,8 @@ export default function SuperadminLayout({ children, title = "Super Admin" }) {
               </li>
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/superadmin/konten' ? 'active' : ''}`}
-                  to="/superadmin/konten"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/konten' ? 'active' : ''}`}
+                  to="/AdminPusat/konten"
                 >
                   <i className="fas fa-newspaper" aria-hidden="true"></i>
                   <span className="hide-menu">Konten Informasi & Edukasi</span>
@@ -103,8 +103,8 @@ export default function SuperadminLayout({ children, title = "Super Admin" }) {
               </li>
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/superadmin/kawasan' ? 'active' : ''}`}
-                  to="/superadmin/kawasan"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/kawasan' ? 'active' : ''}`}
+                  to="/AdminPusat/kawasan"
                 >
                   <i className="fas fa-map-marker-alt" aria-hidden="true"></i>
                   <span className="hide-menu">Kawasan Konservasi</span>
@@ -112,8 +112,8 @@ export default function SuperadminLayout({ children, title = "Super Admin" }) {
               </li>
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/superadmin/laporan' ? 'active' : ''}`}
-                  to="/superadmin/laporan"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/laporan' ? 'active' : ''}`}
+                  to="/AdminPusat/laporan"
                 >
                   <i className="fas fa-file-lines" aria-hidden="true"></i>
                   <span className="hide-menu">Laporan Konservasi</span>
@@ -121,8 +121,8 @@ export default function SuperadminLayout({ children, title = "Super Admin" }) {
               </li>
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/superadmin/peraturan' ? 'active' : ''}`}
-                  to="/superadmin/peraturan"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/peraturan' ? 'active' : ''}`}
+                  to="/AdminPusat/peraturan"
                 >
                   <i className="fas fa-gavel" aria-hidden="true"></i>
                   <span className="hide-menu">Peraturan</span>
@@ -130,8 +130,8 @@ export default function SuperadminLayout({ children, title = "Super Admin" }) {
               </li>
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/superadmin/standar-pelayanan' ? 'active' : ''}`}
-                  to="/superadmin/standar-pelayanan"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/standar-pelayanan' ? 'active' : ''}`}
+                  to="/AdminPusat/standar-pelayanan"
                 >
                   <i className="fas fa-clipboard-list" aria-hidden="true"></i>
                   <span className="hide-menu">Standar Pelayanan</span>
@@ -139,8 +139,8 @@ export default function SuperadminLayout({ children, title = "Super Admin" }) {
               </li>
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/superadmin/galeri' ? 'active' : ''}`}
-                  to="/superadmin/galeri"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/galeri' ? 'active' : ''}`}
+                  to="/AdminPusat/galeri"
                 >
                   <i className="fas fa-images" aria-hidden="true"></i>
                   <span className="hide-menu">Galeri</span>
@@ -148,8 +148,8 @@ export default function SuperadminLayout({ children, title = "Super Admin" }) {
               </li>
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/superadmin/pengguna' ? 'active' : ''}`}
-                  to="/superadmin/pengguna"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/pengguna' ? 'active' : ''}`}
+                  to="/AdminPusat/pengguna"
                 >
                   <i className="fas fa-users" aria-hidden="true"></i>
                   <span className="hide-menu">Pengguna</span>
@@ -157,8 +157,8 @@ export default function SuperadminLayout({ children, title = "Super Admin" }) {
               </li>
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/superadmin/akun' ? 'active' : ''}`}
-                  to="/superadmin/akun"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/akun' ? 'active' : ''}`}
+                  to="/AdminPusat/akun"
                 >
                   <i className="fas fa-user-cog" aria-hidden="true"></i>
                   <span className="hide-menu">Akun</span>

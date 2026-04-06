@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import AdminLayout from '../../layouts/AdminLayout.jsx'
+import AdminLapanganLayout from '../../layouts/AdminLapanganLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function LaporanKonservasi() {
@@ -15,8 +15,8 @@ export default function LaporanKonservasi() {
   React.useEffect(() => {
     let mounted = true
     const endpoint = selectedDaerah 
-      ? `/api/admin/laporanKonservasi?daerah=${selectedDaerah}`
-      : '/api/admin/laporanKonservasi'
+      ? `/api/AdminLapangan/laporanKonservasi?daerah=${selectedDaerah}`
+      : '/api/AdminLapangan/laporanKonservasi'
     
     api.get(endpoint)
       .then(res => { 
@@ -58,11 +58,11 @@ export default function LaporanKonservasi() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus laporan ini?')) {
       try {
-        await api.delete(`/api/admin/laporanKonservasi/${id}`)
+        await api.delete(`/api/AdminLapangan/laporanKonservasi/${id}`)
         // Refresh data
         const endpoint = selectedDaerah 
-          ? `/api/admin/laporanKonservasi?daerah=${selectedDaerah}`
-          : '/api/admin/laporanKonservasi'
+          ? `/api/AdminLapangan/laporanKonservasi?daerah=${selectedDaerah}`
+          : '/api/AdminLapangan/laporanKonservasi'
         const res = await api.get(endpoint)
         setData(res.data)
       } catch (err) {
@@ -73,23 +73,23 @@ export default function LaporanKonservasi() {
 
   if (loading) {
     return (
-      <AdminLayout title="Laporan Konservasi">
+      <AdminLapanganLayout title="Laporan Konservasi">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </AdminLayout>
+      </AdminLapanganLayout>
     )
   }
 
   return (
-    <AdminLayout title="Laporan Konservasi">
+    <AdminLapanganLayout title="Laporan Konservasi">
       {error && <div className="alert alert-danger">{error}</div>}
       
       <div className="row">
         <div className="col-12">
-          <Link to="/admin/laporan/tambah" className="btn btn-primary btn-sm float-end">
+          <Link to="/AdminLapangan/laporan/tambah" className="btn btn-primary btn-sm float-end">
             + Laporan
           </Link>
           <div className="white-box">
@@ -128,14 +128,14 @@ export default function LaporanKonservasi() {
                         }) : 'N/A'}</td>
                         <td>
                           <Link 
-                            to={`/admin/laporan/detail/${item.id}`}
+                            to={`/AdminLapangan/laporan/detail/${item.id}`}
                             className="btn btn-primary btn-sm"
                           >
                             <i className="fas fa-eye"></i> Detail
                           </Link>
                           {' '}
                           <Link 
-                            to={`/admin/laporan/edit/${item.id}`}
+                            to={`/AdminLapangan/laporan/edit/${item.id}`}
                             className="btn btn-warning btn-sm"
                           >
                             <i className="fas fa-edit"></i>
@@ -157,6 +157,6 @@ export default function LaporanKonservasi() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </AdminLapanganLayout>
   )
 }

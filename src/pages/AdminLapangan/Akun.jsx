@@ -1,5 +1,5 @@
 import React from 'react'
-import AdminLayout from '../../layouts/AdminLayout.jsx'
+import AdminLapanganLayout from '../../layouts/AdminLapanganLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function Akun() {
@@ -28,7 +28,7 @@ export default function Akun() {
   React.useEffect(() => {
     let mounted = true
     // Ambil data user dari dashboard API (karena sudah ada user data di sana)
-    api.get('/api/admin/dashboard')
+    api.get('/api/AdminLapangan/dashboard')
       .then(res => { 
         if (mounted && res.data.user) {
           setUser(res.data.user)
@@ -96,18 +96,18 @@ export default function Akun() {
 
   if (loading) {
     return (
-      <AdminLayout title="Akun">
+      <AdminLapanganLayout title="Akun">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </AdminLayout>
+      </AdminLapanganLayout>
     )
   }
 
   return (
-    <AdminLayout title="Akun">
+    <AdminLapanganLayout title="Akun">
       {error && <div className="alert alert-danger">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
       
@@ -276,6 +276,6 @@ export default function Akun() {
           </form>
         </div>
       </div>
-    </AdminLayout>
+    </AdminLapanganLayout>
   )
 }

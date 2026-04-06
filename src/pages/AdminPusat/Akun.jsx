@@ -1,5 +1,5 @@
 import React from 'react'
-import SuperadminLayout from '../../layouts/SuperadminLayout.jsx'
+import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function Akun() {
@@ -28,7 +28,7 @@ export default function Akun() {
   React.useEffect(() => {
     let mounted = true
     // Ambil data user dari dashboard API (karena sudah ada user data di sana)
-    api.get('/api/superadmin/dashboard')
+    api.get('/api/AdminPusat/dashboard')
       .then(res => { 
         if (mounted && res.data.user) {
           setUser(res.data.user)
@@ -51,7 +51,7 @@ export default function Akun() {
     setSuccess('')
 
     try {
-      const response = await api.put('/api/superadmin/profile', user)
+      const response = await api.put('/api/AdminPusat/profile', user)
       setSuccess(response.data.message || 'Profil berhasil diperbarui')
       // Update user data with response
       if (response.data.user) {
@@ -77,7 +77,7 @@ export default function Akun() {
     }
 
     try {
-      const response = await api.put('/api/superadmin/password', passwordData)
+      const response = await api.put('/api/AdminPusat/password', passwordData)
       setSuccess(response.data.message || 'Password berhasil diperbarui')
       setPasswordData({
         current_password: '',
@@ -93,18 +93,18 @@ export default function Akun() {
 
   if (loading) {
     return (
-      <SuperadminLayout title="Akun">
+      <AdminPusatLayout title="Akun">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   return (
-    <SuperadminLayout title="Akun">
+    <AdminPusatLayout title="Akun">
       {error && <div className="alert alert-danger">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
       
@@ -230,6 +230,6 @@ export default function Akun() {
           </div>
         </div>
       </div>
-    </SuperadminLayout>
+    </AdminPusatLayout>
   )
 }

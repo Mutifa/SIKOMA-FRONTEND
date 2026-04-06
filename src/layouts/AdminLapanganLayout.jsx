@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.jsx'
-import '../assets/css/admin.css'
+import '../assets/css/AdminLapangan.css'
 
-export default function AdminLayout({ children, title = "Dashboard Admin" }) {
+export default function AdminLapanganLayout({ children, title = "Dashboard AdminLapangan" }) {
   const location = useLocation()
   const { user, logout } = useAuth()
 
@@ -27,7 +27,7 @@ export default function AdminLayout({ children, title = "Dashboard Admin" }) {
       <header className="topbar" data-navbarbg="skin5">
         <nav className="navbar top-navbar navbar-expand-md navbar-dark">
           <div className="navbar-header" data-logobg="skin6">
-            <Link className="navbar-brand" to="/admin">
+            <Link className="navbar-brand" to="/AdminLapangan">
               <b className="logo-icon">
                 <img src="/img/logo.png" height="30px" alt="homepage" />
               </b>
@@ -46,7 +46,7 @@ export default function AdminLayout({ children, title = "Dashboard Admin" }) {
               <li>
                 <a className="profile-pic" type="button">
                   <img className="img-circle" src="/img/user.png" alt="user" width="40px" height="40px" />
-                  <span className="text-white font-medium">{user?.name || 'Admin User'}</span>
+                  <span className="text-white font-medium">{user?.name || 'AdminLapangan User'}</span>
                 </a>
               </li>
             </ul>
@@ -61,8 +61,8 @@ export default function AdminLayout({ children, title = "Dashboard Admin" }) {
             <ul id="sidebarnav">
               <li className="sidebar-item pt-2">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/admin' ? 'active' : ''}`}
-                  to="/admin"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminLapangan' ? 'active' : ''}`}
+                  to="/AdminLapangan"
                 >
                   <i className="fas fa-home me-3" aria-hidden="true"></i>
                   <span className="hide-menu">Dashboard</span>
@@ -70,8 +70,8 @@ export default function AdminLayout({ children, title = "Dashboard Admin" }) {
               </li>
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/admin/laporan' ? 'active' : ''}`}
-                  to="/admin/laporan"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminLapangan/laporan' ? 'active' : ''}`}
+                  to="/AdminLapangan/laporan"
                 >
                   <i className="fas fa-file-lines me-3" aria-hidden="true"></i>
                   <span className="hide-menu">Laporan Konservasi</span>
@@ -79,8 +79,8 @@ export default function AdminLayout({ children, title = "Dashboard Admin" }) {
               </li>
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/admin/akun' ? 'active' : ''}`}
-                  to="/admin/akun"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminLapangan/akun' ? 'active' : ''}`}
+                  to="/AdminLapangan/akun"
                 >
                   <i className="fas fa-user-cog me-3" aria-hidden="true"></i>
                   <span className="hide-menu">Akun</span>

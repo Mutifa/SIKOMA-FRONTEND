@@ -19,11 +19,11 @@ export default function RoleGuard({ children, allowedRoles }) {
 
   if (!allowedRoles.includes(user.role)) {
     // redirect sesuai role
-    if (user.role === 'admin_pusat') {
+    if (user.role === 'AdminLapangan_pusat') {
       return <Navigate to="/AdminPusat/Dashboard" replace />
     }
 
-    if (user.role === 'admin_lapangan') {
+    if (user.role === 'AdminLapangan_lapangan') {
       return <Navigate to="/AdminLapangan/Dashboard" replace />
     }
 

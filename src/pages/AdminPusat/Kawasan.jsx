@@ -1,5 +1,5 @@
 import React from 'react'
-import SuperadminLayout from '../../layouts/SuperadminLayout.jsx'
+import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function Kawasan() {
@@ -25,7 +25,7 @@ export default function Kawasan() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/superadmin/kawasan')
+    api.get('/api/AdminPusat/kawasan')
       .then(res => { 
         if (mounted) {
           const kawasan = res.data.data || res.data
@@ -75,7 +75,7 @@ export default function Kawasan() {
   const handleDelete = async () => {
     if (window.confirm('Apakah Anda yakin ingin menghapus kawasan konservasi ini?')) {
       try {
-        await api.delete(`/api/superadmin/kawasan/${data.id}`)
+        await api.delete(`/api/AdminPusat/kawasan/${data.id}`)
         setData(null)
         setFormData({
           deskripsi: '',
@@ -120,18 +120,18 @@ export default function Kawasan() {
       if (data) {
         // Update existing - Laravel workaround: use POST with _method for file uploads
         formDataToSend.append('_method', 'PUT')
-        await api.post(`/api/superadmin/kawasan/${data.id}`, formDataToSend, {
+        await api.post(`/api/AdminPusat/kawasan/${data.id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       } else {
         // Create new
-        await api.post('/api/superadmin/kawasan', formDataToSend, {
+        await api.post('/api/AdminPusat/kawasan', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       }
       
       // Reload data
-      const res = await api.get('/api/superadmin/kawasan')
+      const res = await api.get('/api/AdminPusat/kawasan')
       const kawasan = res.data.data || res.data
       if (kawasan && kawasan.length > 0) {
         setData(kawasan[0])
@@ -154,18 +154,18 @@ export default function Kawasan() {
 
   if (loading) {
     return (
-      <SuperadminLayout title="Kawasan Konservasi">
+      <AdminPusatLayout title="Kawasan Konservasi">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   return (
-    <SuperadminLayout title="Kawasan Konservasi">
+    <AdminPusatLayout title="Kawasan Konservasi">
       {error && <div className="alert alert-danger alert-dismissible fade show" role="alert">
         {error}
         <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -319,6 +319,6 @@ export default function Kawasan() {
           </div>
         </form>
       </div>
-    </SuperadminLayout>
+    </AdminPusatLayout>
   )
 }

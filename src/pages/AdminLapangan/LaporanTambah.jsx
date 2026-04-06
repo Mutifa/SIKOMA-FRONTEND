@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import AdminLayout from '../../layouts/AdminLayout.jsx'
+import AdminLapanganLayout from '../../layouts/AdminLapanganLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function LaporanTambah() {
@@ -155,12 +155,12 @@ export default function LaporanTambah() {
     }
 
     try {
-      await api.post('/api/admin/laporanKonservasi', formDataToSend, {
+      await api.post('/api/AdminLapangan/laporanKonservasi', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
-      navigate('/admin/laporan')
+      navigate('/AdminLapangan/laporan')
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal menyimpan laporan')
     } finally {
@@ -169,7 +169,7 @@ export default function LaporanTambah() {
   }
 
   return (
-    <AdminLayout title="Tambah Laporan Konservasi">
+    <AdminLapanganLayout title="Tambah Laporan Konservasi">
       {error && <div className="alert alert-danger">{error}</div>}
       
       <div className="row">
@@ -385,7 +385,7 @@ export default function LaporanTambah() {
                 <button
                   type="button"
                   className="btn btn-secondary me-2"
-                  onClick={() => navigate('/admin/laporan')}
+                  onClick={() => navigate('/AdminLapangan/laporan')}
                 >
                   Batal
                 </button>
@@ -401,6 +401,6 @@ export default function LaporanTambah() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </AdminLapanganLayout>
   )
 }

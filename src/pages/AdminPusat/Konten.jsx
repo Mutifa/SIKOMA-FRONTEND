@@ -1,5 +1,5 @@
 import React from 'react'
-import SuperadminLayout from '../../layouts/SuperadminLayout.jsx'
+import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function Konten() {
@@ -17,7 +17,7 @@ export default function Konten() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/superadmin/edukasi')
+    api.get('/api/AdminPusat/edukasi')
       .then(res => { 
         if (mounted) {
           setData(res.data.data || res.data)
@@ -47,11 +47,11 @@ export default function Konten() {
       if (editingItem) {
         // Laravel workaround: use POST with _method for file uploads
         formDataToSend.append('_method', 'PUT')
-        await api.post(`/api/superadmin/edukasi/${editingItem.id}`, formDataToSend, {
+        await api.post(`/api/AdminPusat/edukasi/${editingItem.id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       } else {
-        await api.post('/api/superadmin/edukasi', formDataToSend, {
+        await api.post('/api/AdminPusat/edukasi', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       }
@@ -59,7 +59,7 @@ export default function Konten() {
       setEditingItem(null)
       setFormData({ judul: '', deskripsi: '', foto: null, kategori: 'Edukasi' })
       // Reload data
-      const res = await api.get('/api/superadmin/edukasi')
+      const res = await api.get('/api/AdminPusat/edukasi')
       setData(res.data.data || res.data)
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal menyimpan konten')
@@ -88,7 +88,7 @@ export default function Konten() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus konten ini?')) {
       try {
-        await api.delete(`/api/superadmin/edukasi/${id}`)
+        await api.delete(`/api/AdminPusat/edukasi/${id}`)
         setData(data.filter(item => item.id !== id))
       } catch (err) {
         setError(err.response?.data?.message || 'Gagal menghapus konten')
@@ -111,18 +111,18 @@ export default function Konten() {
 
   if (loading) {
     return (
-      <SuperadminLayout title="Konten Informasi & Edukasi">
+      <AdminPusatLayout title="Konten Informasi & Edukasi">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   return (
-    <SuperadminLayout title="Konten Informasi & Edukasi">
+    <AdminPusatLayout title="Konten Informasi & Edukasi">
       {error && <div className="alert alert-danger alert-dismissible fade show" role="alert">
         {error}
         <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -316,6 +316,6 @@ export default function Konten() {
           </div>
         </div>
       )}
-    </SuperadminLayout>
+    </AdminPusatLayout>
   )
 }

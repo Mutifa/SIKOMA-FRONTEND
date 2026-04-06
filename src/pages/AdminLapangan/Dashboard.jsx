@@ -1,5 +1,5 @@
 import React from 'react'
-import AdminLayout from '../../layouts/AdminLayout.jsx'
+import AdminLapanganLayout from '../../layouts/AdminLapanganLayout.jsx'
 import api from '../../lib/api.js'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js'
 import { Pie, Bar } from 'react-chartjs-2'
@@ -7,7 +7,7 @@ import { Pie, Bar } from 'react-chartjs-2'
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement)
 
-export default function AdminDashboard() {
+export default function AdminLapanganDashboard() {
   const [data, setData] = React.useState({ 
     laporan: [], 
     laporanDisetujui: 0, 
@@ -19,7 +19,7 @@ export default function AdminDashboard() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/admin/dashboard')
+    api.get('/api/AdminLapangan/dashboard')
       .then(res => { 
         if (mounted) {
           setData(res.data)
@@ -82,18 +82,18 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <AdminLayout title="Dashboard Admin">
+      <AdminLapanganLayout title="Dashboard AdminLapangan">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </AdminLayout>
+      </AdminLapanganLayout>
     )
   }
 
   return (
-    <AdminLayout title="Dashboard Admin">
+    <AdminLapanganLayout title="Dashboard AdminLapangan">
       {error && <div className="alert alert-danger">{error}</div>}
       
       <div className="row">
@@ -164,7 +164,7 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </AdminLapanganLayout>
   )
 }
 

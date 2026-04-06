@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
-import SuperadminLayout from '../../layouts/SuperadminLayout.jsx'
+import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function LaporanDetail() {
@@ -15,7 +15,7 @@ export default function LaporanDetail() {
     let mounted = true
     const fetchLaporan = async () => {
       try {
-        const res = await api.get(`/api/superadmin/laporan-konservasi/${id}`)
+        const res = await api.get(`/api/AdminPusat/laporan-konservasi/${id}`)
         if (mounted) {
           setLaporan(res.data.data || res.data)
           setLoading(false)
@@ -39,9 +39,9 @@ export default function LaporanDetail() {
 
     setProcessing(true)
     try {
-      await api.put(`/api/superadmin/laporan-konservasi/${id}/status`, { status })
+      await api.put(`/api/AdminPusat/laporan-konservasi/${id}/status`, { status })
       // Refresh the data
-      const res = await api.get(`/api/superadmin/laporan-konservasi/${id}`)
+      const res = await api.get(`/api/AdminPusat/laporan-konservasi/${id}`)
       setLaporan(res.data.data || res.data)
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal memperbarui status laporan')
@@ -96,50 +96,50 @@ export default function LaporanDetail() {
 
   if (loading) {
     return (
-      <SuperadminLayout title="Detail Laporan Konservasi">
+      <AdminPusatLayout title="Detail Laporan Konservasi">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   if (error) {
     return (
-      <SuperadminLayout title="Detail Laporan Konservasi">
+      <AdminPusatLayout title="Detail Laporan Konservasi">
         <div className="alert alert-danger">
           {error}
         </div>
-        <Link to="/superadmin/laporan" className="btn btn-secondary">
+        <Link to="/AdminPusat/laporan" className="btn btn-secondary">
           <i className="fas fa-arrow-left"></i> Kembali
         </Link>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   if (!laporan) {
     return (
-      <SuperadminLayout title="Detail Laporan Konservasi">
+      <AdminPusatLayout title="Detail Laporan Konservasi">
         <div className="alert alert-warning">
           Laporan tidak ditemukan
         </div>
-        <Link to="/superadmin/laporan" className="btn btn-secondary">
+        <Link to="/AdminPusat/laporan" className="btn btn-secondary">
           <i className="fas fa-arrow-left"></i> Kembali
         </Link>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   return (
-    <SuperadminLayout title="Detail Laporan Konservasi">
+    <AdminPusatLayout title="Detail Laporan Konservasi">
       {error && <div className="alert alert-danger alert-dismissible fade show" role="alert">
         {error}
         <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>}
 
-      <Link to="/superadmin/laporan" className="btn btn-secondary btn-sm text-white mb-2">
+      <Link to="/AdminPusat/laporan" className="btn btn-secondary btn-sm text-white mb-2">
         <i className="fas fa-angles-left"></i> Kembali
       </Link>
 
@@ -266,6 +266,6 @@ export default function LaporanDetail() {
           </div>
         </div>
       </div>
-    </SuperadminLayout>
+    </AdminPusatLayout>
   )
 }

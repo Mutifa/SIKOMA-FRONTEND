@@ -1,5 +1,5 @@
 import React from 'react'
-import SuperadminLayout from '../../layouts/SuperadminLayout.jsx'
+import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function Pengguna() {
@@ -14,12 +14,12 @@ export default function Pengguna() {
     email: '',
     nohp: '',
     password: '',
-    role: 'admin'
+    role: 'AdminLapangan'
   })
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/superadmin/pengguna')
+    api.get('/api/AdminPusat/pengguna')
       .then(res => { 
         if (mounted) {
           setData(res.data.data || res.data)
@@ -43,7 +43,7 @@ export default function Pengguna() {
       email: user.email || '',
       nohp: user.nohp || '',
       password: '',
-      role: user.role || 'admin'
+      role: user.role || 'AdminLapangan'
     })
     setShowModal(true)
   }
@@ -53,11 +53,11 @@ export default function Pengguna() {
     try {
       if (editingUser) {
         // Update user
-        await api.put(`/api/superadmin/pengguna/${editingUser.id}`, formData)
+        await api.put(`/api/AdminPusat/pengguna/${editingUser.id}`, formData)
         setData(data.map(user => user.id === editingUser.id ? {...user, ...formData} : user))
       } else {
         // Create user
-        const response = await api.post('/api/superadmin/pengguna', formData)
+        const response = await api.post('/api/AdminPusat/pengguna', formData)
         setData([response.data, ...data])
       }
       setShowModal(false)
@@ -68,7 +68,7 @@ export default function Pengguna() {
         email: '',
         nohp: '',
         password: '',
-        role: 'admin'
+        role: 'AdminLapangan'
       })
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal menyimpan data')
@@ -78,7 +78,7 @@ export default function Pengguna() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
       try {
-        await api.delete(`/api/superadmin/pengguna/${id}`)
+        await api.delete(`/api/AdminPusat/pengguna/${id}`)
         setData(data.filter(user => user.id !== id))
       } catch (err) {
         setError(err.response?.data?.message || 'Gagal menghapus data')
@@ -88,18 +88,18 @@ export default function Pengguna() {
 
   if (loading) {
     return (
-      <SuperadminLayout title="Pengguna">
+      <AdminPusatLayout title="Pengguna">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   return (
-    <SuperadminLayout title="Pengguna">
+    <AdminPusatLayout title="Pengguna">
       {error && <div className="alert alert-danger">{error}</div>}
       
       <div className="row">
@@ -114,7 +114,7 @@ export default function Pengguna() {
                 email: '',
                 nohp: '',
                 password: '',
-                role: 'admin'
+                role: 'AdminLapangan'
               })
               setShowModal(true)
             }}
@@ -154,8 +154,8 @@ export default function Pengguna() {
                     <td>{user.email || 'N/A'}</td>
                     <td>{user.nohp || 'N/A'}</td>
                     <td>
-                      <span className={`badge ${user.role === 'superadmin' ? 'bg-danger' : 'bg-primary'}`}>
-                        {user.role || 'admin'}
+                      <span className={`badge ${user.role === 'AdminPusat' ? 'bg-danger' : 'bg-primary'}`}>
+                        {user.role || 'AdminLapangan'}
                       </span>
                     </td>
                     <td>
@@ -262,8 +262,8 @@ export default function Pengguna() {
                       value={formData.role}
                       onChange={(e) => setFormData({...formData, role: e.target.value})}
                     >
-                      <option value="admin">Admin</option>
-                      <option value="superadmin">Super Admin</option>
+                      <option value="AdminLapangan">AdminLapangan</option>
+                      <option value="AdminPusat">Admin Pusat</option>
                     </select>
                   </div>
                 </div>
@@ -284,6 +284,6 @@ export default function Pengguna() {
           </div>
         </div>
       )}
-    </SuperadminLayout>
+    </AdminPusatLayout>
   )
 }

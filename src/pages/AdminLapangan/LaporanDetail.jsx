@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import AdminLayout from '../../layouts/AdminLayout.jsx'
+import AdminLapanganLayout from '../../layouts/AdminLapanganLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function LaporanDetail() {
@@ -12,7 +12,7 @@ export default function LaporanDetail() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get(`/api/admin/laporanKonservasi/${id}`)
+    api.get(`/api/AdminLapangan/laporanKonservasi/${id}`)
       .then(res => {
         if (mounted) {
           console.log('Raw laporan data:', res.data)
@@ -55,24 +55,24 @@ export default function LaporanDetail() {
 
   if (loading) {
     return (
-      <AdminLayout title="Detail Laporan">
+      <AdminLapanganLayout title="Detail Laporan">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </AdminLayout>
+      </AdminLapanganLayout>
     )
   }
 
   if (error) {
     return (
-      <AdminLayout title="Detail Laporan">
+      <AdminLapanganLayout title="Detail Laporan">
         <div className="alert alert-danger">{error}</div>
-        <button className="btn btn-secondary" onClick={() => navigate('/admin/laporan')}>
+        <button className="btn btn-secondary" onClick={() => navigate('/AdminLapangan/laporan')}>
           Kembali
         </button>
-      </AdminLayout>
+      </AdminLapanganLayout>
     )
   }
 
@@ -190,10 +190,10 @@ export default function LaporanDetail() {
   }
 
   return (
-    <AdminLayout title="Detail Laporan Konservasi">
+    <AdminLapanganLayout title="Detail Laporan Konservasi">
       <button 
         className="btn btn-secondary btn-sm text-white mb-2"
-        onClick={() => navigate('/admin/laporan')}
+        onClick={() => navigate('/AdminLapangan/laporan')}
       >
         <i className="fas fa-angles-left"></i> Kembali
       </button>
@@ -288,6 +288,6 @@ export default function LaporanDetail() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </AdminLapanganLayout>
   )
 }

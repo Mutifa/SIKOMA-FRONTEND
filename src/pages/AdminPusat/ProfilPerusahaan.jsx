@@ -1,5 +1,5 @@
 import React from 'react'
-import SuperadminLayout from '../../layouts/SuperadminLayout.jsx'
+import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function ProfilPerusahaan() {
@@ -38,7 +38,7 @@ export default function ProfilPerusahaan() {
 
   const loadWebsiteData = async () => {
     try {
-      const response = await api.get('/api/superadmin/website')
+      const response = await api.get('/api/AdminPusat/website')
       const data = response.data
       setFormData({
         nama: stripHtmlTags(data.nama) || '',
@@ -102,7 +102,7 @@ export default function ProfilPerusahaan() {
       if (formData.logo) formDataToSend.append('logo', formData.logo)
       if (formData.struktur) formDataToSend.append('struktur', formData.struktur)
 
-      await api.post('/api/superadmin/website', formDataToSend, {
+      await api.post('/api/AdminPusat/website', formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       
@@ -117,18 +117,18 @@ export default function ProfilPerusahaan() {
 
   if (loading) {
     return (
-      <SuperadminLayout title="Profil Perusahaan">
+      <AdminPusatLayout title="Profil Perusahaan">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   return (
-    <SuperadminLayout title="Profil Perusahaan">
+    <AdminPusatLayout title="Profil Perusahaan">
       {error && <div className="alert alert-danger alert-dismissible fade show" role="alert">
         {error}
         <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -363,6 +363,6 @@ export default function ProfilPerusahaan() {
           </div>
         </form>
       </div>
-    </SuperadminLayout>
+    </AdminPusatLayout>
   )
 }

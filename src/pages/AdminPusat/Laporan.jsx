@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import SuperadminLayout from '../../layouts/SuperadminLayout.jsx'
+import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function Laporan() {
@@ -15,8 +15,8 @@ export default function Laporan() {
     const fetchData = async () => {
       try {
         const url = selectedDaerah 
-          ? `/api/superadmin/laporan-konservasi?daerah=${selectedDaerah}`
-          : '/api/superadmin/laporan-konservasi'
+          ? `/api/AdminPusat/laporan-konservasi?daerah=${selectedDaerah}`
+          : '/api/AdminPusat/laporan-konservasi'
         
         const res = await api.get(url)
         if (mounted) {
@@ -37,7 +37,7 @@ export default function Laporan() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/superadmin/laporan-konservasi/daerah')
+    api.get('/api/AdminPusat/laporan-konservasi/daerah')
       .then(res => {
         if (mounted) {
           setDaerah(res.data.data || res.data)
@@ -72,18 +72,18 @@ export default function Laporan() {
 
   if (loading) {
     return (
-      <SuperadminLayout title="Laporan Konservasi">
+      <AdminPusatLayout title="Laporan Konservasi">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   return (
-    <SuperadminLayout title="Laporan Konservasi">
+    <AdminPusatLayout title="Laporan Konservasi">
       {error && <div className="alert alert-danger alert-dismissible fade show" role="alert">
         {error}
         <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -153,7 +153,7 @@ export default function Laporan() {
                         </td>
                         <td>
                           <Link
-                            to={`/superadmin/laporan/detail/${item.id}`}
+                            to={`/AdminPusat/laporan/detail/${item.id}`}
                             className="btn btn-primary btn-sm"
                           >
                             <i className="fas fa-eye"></i> Detail
@@ -174,6 +174,6 @@ export default function Laporan() {
           </div>
         </div>
       </div>
-    </SuperadminLayout>
+    </AdminPusatLayout>
   )
 }

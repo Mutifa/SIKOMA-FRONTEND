@@ -1,5 +1,5 @@
 import React from 'react'
-import SuperadminLayout from '../../layouts/SuperadminLayout.jsx'
+import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
@@ -7,7 +7,7 @@ import { Bar } from 'react-chartjs-2'
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
-export default function SuperadminDashboard() {
+export default function AdminPusatDashboard() {
   const [data, setData] = React.useState({
     customer: 0,
     laporanTerakhir: 0,
@@ -20,7 +20,7 @@ export default function SuperadminDashboard() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/superadmin/dashboard')
+    api.get('/api/AdminPusat/dashboard')
       .then(res => { 
         if (mounted) {
           setData(res.data)
@@ -63,18 +63,18 @@ export default function SuperadminDashboard() {
 
   if (loading) {
     return (
-      <SuperadminLayout title="Super Admin">
+      <AdminPusatLayout title="Admin Pusat">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   return (
-    <SuperadminLayout title="Super Admin">
+    <AdminPusatLayout title="Admin Pusat">
       {error && <div className="alert alert-danger">{error}</div>}
       
       <div className="row">
@@ -183,6 +183,6 @@ export default function SuperadminDashboard() {
           </div>
         </div>
       </div>
-    </SuperadminLayout>
+    </AdminPusatLayout>
   )
 }

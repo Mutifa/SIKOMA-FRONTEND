@@ -1,5 +1,5 @@
 import React from 'react'
-import SuperadminLayout from '../../layouts/SuperadminLayout.jsx'
+import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function StandarPelayanan() {
@@ -26,7 +26,7 @@ export default function StandarPelayanan() {
   const loadData = async () => {
     setLoading(true)
     try {
-      const res = await api.get('/api/superadmin/standar-pelayanan')
+      const res = await api.get('/api/AdminPusat/standar-pelayanan')
       setData(res.data.data || res.data)
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal memuat data standar pelayanan')
@@ -70,12 +70,12 @@ export default function StandarPelayanan() {
       if (editingItem) {
         // Laravel workaround: use POST with _method for consistency
         formDataToSend.append('_method', 'PUT')
-        await api.post(`/api/superadmin/standar-pelayanan/${editingItem.id}`, formDataToSend, {
+        await api.post(`/api/AdminPusat/standar-pelayanan/${editingItem.id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         setSuccess('Standar pelayanan berhasil diperbarui')
       } else {
-        await api.post('/api/superadmin/standar-pelayanan', formDataToSend, {
+        await api.post('/api/AdminPusat/standar-pelayanan', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         setSuccess('Standar pelayanan berhasil ditambahkan')
@@ -117,7 +117,7 @@ export default function StandarPelayanan() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus standar pelayanan ini?')) {
       try {
-        await api.delete(`/api/superadmin/standar-pelayanan/${id}`)
+        await api.delete(`/api/AdminPusat/standar-pelayanan/${id}`)
         setSuccess('Standar pelayanan berhasil dihapus')
         await loadData()
       } catch (err) {
@@ -157,18 +157,18 @@ export default function StandarPelayanan() {
 
   if (loading) {
     return (
-      <SuperadminLayout title="Standar Pelayanan">
+      <AdminPusatLayout title="Standar Pelayanan">
         <div className="d-flex justify-content-center py-5">
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   return (
-    <SuperadminLayout title="Standar Pelayanan">
+    <AdminPusatLayout title="Standar Pelayanan">
       {/* Alert Messages */}
       {error && (
         <div className="alert alert-danger alert-dismissible fade show" role="alert">
@@ -479,6 +479,6 @@ export default function StandarPelayanan() {
           </div>
         </div>
       )}
-    </SuperadminLayout>
+    </AdminPusatLayout>
   )
 }

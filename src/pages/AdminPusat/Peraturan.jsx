@@ -1,5 +1,5 @@
 import React from 'react'
-import SuperadminLayout from '../../layouts/SuperadminLayout.jsx'
+import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function Peraturan() {
@@ -18,7 +18,7 @@ export default function Peraturan() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/superadmin/peraturan')
+    api.get('/api/AdminPusat/peraturan')
       .then(res => { 
         if (mounted) {
           setData(res.data.data || res.data)
@@ -49,11 +49,11 @@ export default function Peraturan() {
       if (editingItem) {
         // Laravel workaround: use POST with _method for file uploads
         formDataToSend.append('_method', 'PUT')
-        await api.post(`/api/superadmin/peraturan/${editingItem.id}`, formDataToSend, {
+        await api.post(`/api/AdminPusat/peraturan/${editingItem.id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       } else {
-        await api.post('/api/superadmin/peraturan', formDataToSend, {
+        await api.post('/api/AdminPusat/peraturan', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       }
@@ -61,7 +61,7 @@ export default function Peraturan() {
       setEditingItem(null)
       setFormData({ nama: '', deskripsi: '', tahun: '', nomor: '', file: null })
       // Reload data
-      const res = await api.get('/api/superadmin/peraturan')
+      const res = await api.get('/api/AdminPusat/peraturan')
       setData(res.data.data || res.data)
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal menyimpan peraturan')
@@ -83,7 +83,7 @@ export default function Peraturan() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus peraturan ini?')) {
       try {
-        await api.delete(`/api/superadmin/peraturan/${id}`)
+        await api.delete(`/api/AdminPusat/peraturan/${id}`)
         setData(data.filter(item => item.id !== id))
       } catch (err) {
         setError(err.response?.data?.message || 'Gagal menghapus peraturan')
@@ -101,18 +101,18 @@ export default function Peraturan() {
 
   if (loading) {
     return (
-      <SuperadminLayout title="Peraturan">
+      <AdminPusatLayout title="Peraturan">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   return (
-    <SuperadminLayout title="Peraturan">
+    <AdminPusatLayout title="Peraturan">
       {error && <div className="alert alert-danger alert-dismissible fade show" role="alert">
         {error}
         <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -285,6 +285,6 @@ export default function Peraturan() {
           </div>
         </div>
       )}
-    </SuperadminLayout>
+    </AdminPusatLayout>
   )
 }

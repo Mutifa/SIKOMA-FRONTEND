@@ -1,5 +1,5 @@
 import React from 'react'
-import SuperadminLayout from '../../layouts/SuperadminLayout.jsx'
+import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 
 export default function Program() {
@@ -20,7 +20,7 @@ export default function Program() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/superadmin/program')
+    api.get('/api/AdminPusat/program')
       .then(res => { 
         if (mounted) {
           const programData = res.data.data || res.data
@@ -53,11 +53,11 @@ export default function Program() {
       if (editingItem) {
         // Laravel workaround: use POST with _method for file uploads
         formDataToSend.append('_method', 'PUT')
-        await api.post(`/api/superadmin/program/${editingItem.id}`, formDataToSend, {
+        await api.post(`/api/AdminPusat/program/${editingItem.id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       } else {
-        await api.post('/api/superadmin/program', formDataToSend, {
+        await api.post('/api/AdminPusat/program', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       }
@@ -65,7 +65,7 @@ export default function Program() {
       setEditingItem(null)
       setFormData({ judul: '', deskripsi: '', foto: null, kategori: 'Program' })
       // Reload data
-      const res = await api.get('/api/superadmin/program')
+      const res = await api.get('/api/AdminPusat/program')
       setData(res.data.data || res.data)
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal menyimpan program')
@@ -86,7 +86,7 @@ export default function Program() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus program ini?')) {
       try {
-        await api.delete(`/api/superadmin/program/${id}`)
+        await api.delete(`/api/AdminPusat/program/${id}`)
         setData(data.filter(item => item.id !== id))
       } catch (err) {
         setError(err.response?.data?.message || 'Gagal menghapus program')
@@ -130,18 +130,18 @@ export default function Program() {
 
   if (loading) {
     return (
-      <SuperadminLayout title="Program">
+      <AdminPusatLayout title="Program">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      </SuperadminLayout>
+      </AdminPusatLayout>
     )
   }
 
   return (
-    <SuperadminLayout title="Program">
+    <AdminPusatLayout title="Program">
       {error && <div className="alert alert-danger alert-dismissible fade show" role="alert">
         {error}
         <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -399,6 +399,6 @@ export default function Program() {
           </div>
         </div>
       )}
-    </SuperadminLayout>
+    </AdminPusatLayout>
   )
 }
