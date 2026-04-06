@@ -5,23 +5,25 @@ const api = axios.create({
   timeout: 15000,
   withCredentials: true,
   headers: {
-    'Accept': 'application/json',
+    Accept: 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
   },
+})
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
 })
 
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response) {
-      console.error('API error:', err.response.status, err.response.data)
-    } else {
-      console.error('API error:', err.message)
-    }
+    console.error('API ERROR:', err.response?.data || err.message)
     return Promise.reject(err)
   }
 )
 
 export default api
-
-

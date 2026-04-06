@@ -1,49 +1,39 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
-import api from '../lib/api.js'
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import { authService } from '../services/authService'
 
+// 🔥 BUAT CONTEXT
 const AuthContext = createContext()
 
+// 🔥 HOOK CUSTOM
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  } 
+    throw new Error('useAuth harus dipakai dalam AuthProvider')
+  }
   return context
 }
 
+// 🔥 PROVIDER
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  // Check if user is authenticated on app load
+  // 🔄 AUTO CHECK LOGIN SAAT APP LOAD
   useEffect(() => {
     checkAuth()
   }, [])
 
+  // 🔐 CEK AUTH (API: /me)
   const checkAuth = async () => {
     try {
-      // Try to get user data from dashboard endpoint based on current path
-      const currentPath = window.location.pathname
-      let endpoint = ''
-      
-      if (currentPath.startsWith('/admin')) {
-        endpoint = '/api/admin/dashboard'
-      } else if (currentPath.startsWith('/superadmin')) {
-        endpoint = '/api/superadmin/dashboard'
-      } else {
-        // If not on admin/superadmin path, just set loading to false
-        setLoading(false)
-        return
-      }
+      const res = await authService.me()
 
-      const response = await api.get(endpoint)
-      if (response.data.user) {
-        setUser(response.data.user)
-        setIsAuthenticated(true)
-      }
+      const userData = res.data
+
+      setUser(userData)
+      setIsAuthenticated(true)
     } catch (error) {
-      console.log('User not authenticated')
       setUser(null)
       setIsAuthenticated(false)
     } finally {
@@ -51,64 +41,83 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  // 🔑 LOGIN
   const login = async (email, password) => {
     try {
-      // Get CSRF cookie first
-      const response = await api.post('/login', {email, password})
-      
+      const res = await authService.login({ email, password })
 
-      const userData = response.data.user
-      
-      console.log('Login response:', response.data)
-      
+      const userData = res.data.user
+
+      // simpan user
       setUser(userData)
       setIsAuthenticated(true)
-      setLoading(false)
-      
-   return {
-  success: true,
-  role: response.data.role,
-  redirect: response.data.redirect,
-  user: userData
-}
+
+      // 🔥 OPTIONAL: simpan token kalau backend kirim
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token)
+      }
+
+      // 🔀 REDIRECT BERDASARKAN ROLE
+      let redirect = '/'
+
+      if (userData.role === 'admin_pusat') {
+        redirect = '/AdminPusat/Dashboard'
+      } else if (userData.role === 'admin_lapangan') {
+        redirect = '/AdminLapangan/Dashboard'
+      }
+
+      return {
+        success: true,
+        user: userData,
+        role: userData.role,
+        redirect,
+      }
     } catch (error) {
-      console.error('Login error:', error)
       return {
         success: false,
-        message: error.response?.data?.message || 'Login gagal'
+        message: error.response?.data?.message || 'Login gagal',
       }
     }
   }
 
+  // 🚪 LOGOUT
   const logout = async () => {
     try {
-      await api.post('/api/auth/logout')
+      await authService.logout()
     } catch (error) {
       console.error('Logout error:', error)
     } finally {
+      // hapus semua state
       setUser(null)
       setIsAuthenticated(false)
+      localStorage.removeItem('token')
+
+      // redirect ke login
       window.location.href = '/login'
     }
   }
 
+  // 🔐 CEK ROLE
   const hasRole = (role) => {
     return user?.role === role
   }
 
-  const hasAnyRole = (roles) => {
+  const hasAnyRole = (roles = []) => {
     return roles.includes(user?.role)
   }
 
+  // 🔥 VALUE GLOBAL
   const value = {
     user,
     loading,
     isAuthenticated,
+
     login,
     logout,
+    checkAuth,
+
     hasRole,
     hasAnyRole,
-    checkAuth
   }
 
   return (

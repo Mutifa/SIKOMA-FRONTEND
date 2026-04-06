@@ -1,46 +1,34 @@
-import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext.jsx'
+import { useAuth } from '../contexts/AuthContext'
 
-const RoleGuard = ({ children, allowedRoles, fallbackPath = '/login' }) => {
+export default function RoleGuard({ children, allowedRoles }) {
   const { user, loading, isAuthenticated } = useAuth()
   const location = useLocation()
 
-  console.log('RoleGuard:', { user, loading, isAuthenticated, allowedRoles, currentPath: location.pathname })
-
-  // Show loading while checking authentication
   if (loading) {
-    console.log('RoleGuard: Showing loading')
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
-        <div className="spinner-border" role="status">
-          <span className="sr-only">Loading...</span>
-        </div>
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border" />
       </div>
     )
   }
 
-  // Redirect to login if not authenticated
   if (!isAuthenticated || !user) {
-    console.log('RoleGuard: Not authenticated, redirecting to login')
-    return <Navigate to={fallbackPath} state={{ from: location }} replace />
+    return <Navigate to="/login" state={{ from: location }} replace />
   }
 
-  // Check if user has required role
-  const hasRequiredRole = allowedRoles.includes(user.role)
-  console.log('RoleGuard: Role check', { userRole: user.role, allowedRoles, hasRequiredRole })
+  if (!allowedRoles.includes(user.role)) {
+    // redirect sesuai role
+    if (user.role === 'admin_pusat') {
+      return <Navigate to="/AdminPusat/Dashboard" replace />
+    }
 
-  if (!hasRequiredRole) {
-    // Redirect to appropriate dashboard based on user role
-    const redirectPath = user.role === 'admin' ? '/admin' : 
-                        user.role === 'superadmin' ? '/superadmin' : 
-                        '/login'
-    console.log('RoleGuard: Role not allowed, redirecting to:', redirectPath)
-    return <Navigate to={redirectPath} replace />
+    if (user.role === 'admin_lapangan') {
+      return <Navigate to="/AdminLapangan/Dashboard" replace />
+    }
+
+    return <Navigate to="/" replace />
   }
 
-  console.log('RoleGuard: Access granted, rendering children')
   return children
 }
-
-export default RoleGuard
