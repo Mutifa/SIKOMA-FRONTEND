@@ -16,5 +16,8 @@ export const ENDPOINTS = {
 
   EDUKASI: {
     GET: '/edukasi'
-  }
+  },
+  HOME: {
+  GET: '/home'
+}
 }

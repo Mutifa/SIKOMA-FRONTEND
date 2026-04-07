@@ -8,18 +8,27 @@ export default function Template({ title, active, children }) {
   const [website, setWebsite] = React.useState(null)
   const [loading, setLoading] = React.useState(false)
 
-  React.useEffect(() => {
-    if (title) document.title = title
-  }, [title])
+ React.useEffect(() => {
+  let mounted = true
+  setLoading(true)
 
-  React.useEffect(() => {
-    let mounted = true
-    setLoading(true)
   api.get('/home')
-      .then(res => { if (mounted) { setWebsite(res.data.website || res.data.data?.website || res.data.data)} })
-      .catch(() => { if (mounted) setLoading(false) })
-    return () => { mounted = false }
-  }, [])
+    .then(res => {
+      if (mounted) {
+        setWebsite(
+          res.data.website ||
+          res.data.data?.website ||
+          res.data.data
+        )
+      }
+    })
+    .catch(() => {})
+    .finally(() => {
+      if (mounted) setLoading(false) // 🔥 AUTO MATI
+    })
+
+  return () => { mounted = false }
+}, [])
 
   return (
     <div>

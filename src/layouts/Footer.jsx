@@ -27,7 +27,7 @@ export default function Footer({ website }) {
         <div className="container">
           <div className="row">
             <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
-              &copy; <a className="border-bottom" href="/">{website?.nama || 'UPT KPH Tasik Besar Serkap'}</a>, All Right Reserved.
+              &copy; <a className="border-bottom" href="/">{website?.nama || 'UPT KPH Tasik Besar Serkap'}</a>, All Right Reserved 2026.
             </div>
           </div>
         </div>

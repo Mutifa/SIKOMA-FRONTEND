@@ -2,6 +2,7 @@ import React from 'react'
 import Template from '../../layouts/Template.jsx'
 import api from '../../lib/api.js'
 import { assetUrl } from '../../lib/assets.js'
+import { homeService } from '../../services/homeService.js'
 
 export default function Home() {
   const [data, setData] = React.useState({ banner: [], program: [], website: null })
@@ -10,19 +11,20 @@ export default function Home() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/home')
+    homeService.get()
       .then(res => { if (mounted) { setData(res.data); setLoading(false) } })
       .catch(err => { if (mounted) { setError(err.message); setLoading(false) } })
     return () => { mounted = false }
   }, [])
-
+console.log('DATA HOME:', data)
   return (
     <Template title={data?.website?.nama || 'Beranda'} active="home">
       {/* Carousel Start */}
       <div className="container-fluid p-0">
         <div id="header-carousel" className="carousel slide" data-bs-ride="carousel">
-          <div className="carousel-inner">
-            {data.banner.map((b, idx) => (
+          <div className="carousel-inner">{Array.isArray(data.banner) &&
+  data.banner.map((b, idx) => (
+            
               <div key={b.id} className={`carousel-item ${idx === 0 ? 'active' : ''}`}>
                 <img className="w-100" src={assetUrl(`/uploads/galeri/${b.gambar}`)} alt="Image" />
                 <div className="carousel-caption">
@@ -38,7 +40,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-          {data.banner.length > 1 && (
+          {Array.isArray(data.banner) && data.banner.length > 1 && ( 
             <>
               <button className="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
                 <span className="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -64,7 +66,8 @@ export default function Home() {
               <div className="mb-4">
                 <h2 className="mb-3">Program UPT KPH Tasik Besar Serkap</h2>
                 <div className="row g-4">
-                  {data.program.map((p) => (
+                  {Array.isArray(data.program) &&
+  data.program.map((p) => (
                     <div key={p.id} className="col-md-4">
                       <div className="border rounded">
                         <img loading="lazy" src={assetUrl(`/uploads/edukasi/${p.foto}`)} alt={p.judul} className="produk-img" />
