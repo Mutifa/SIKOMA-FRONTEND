@@ -16,7 +16,7 @@ export default function LaporanKonservasi() {
     let mounted = true
     const endpoint = selectedDaerah 
       ? `/api/AdminLapangan/laporanKonservasi?daerah=${selectedDaerah}`
-      : '/api/AdminLapangan/laporanKonservasi'
+      : '/AdminLapangan/laporanKonservasi'
     
     api.get(endpoint)
       .then(res => { 
@@ -62,7 +62,7 @@ export default function LaporanKonservasi() {
         // Refresh data
         const endpoint = selectedDaerah 
           ? `/api/AdminLapangan/laporanKonservasi?daerah=${selectedDaerah}`
-          : '/api/AdminLapangan/laporanKonservasi'
+          : '/AdminLapangan/laporanKonservasi'
         const res = await api.get(endpoint)
         setData(res.data)
       } catch (err) {

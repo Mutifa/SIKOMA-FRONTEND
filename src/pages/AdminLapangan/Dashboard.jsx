@@ -3,6 +3,8 @@ import AdminLapanganLayout from '../../layouts/AdminLapanganLayout.jsx'
 import api from '../../lib/api.js'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js'
 import { Pie, Bar } from 'react-chartjs-2'
+import { dashboardService } from '../../services/dashboardService'
+
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement)
@@ -19,7 +21,7 @@ export default function AdminLapanganDashboard() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/AdminLapangan/dashboard')
+    api.get('/AdminLapangan/dashboard')
       .then(res => { 
         if (mounted) {
           setData(res.data)

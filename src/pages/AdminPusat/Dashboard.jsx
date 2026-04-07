@@ -1,9 +1,8 @@
 import React from 'react'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
-import api from '../../lib/api.js'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
-
+import { dashboardService } from '../../services/dashboardService.js'
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -19,22 +18,27 @@ export default function AdminPusatDashboard() {
   const [loading, setLoading] = React.useState(true)
 
   React.useEffect(() => {
-    let mounted = true
-    api.get('/api/AdminPusat/dashboard')
-      .then(res => { 
-        if (mounted) {
-          setData(res.data)
-          setLoading(false)
-        }
-      })
-      .catch(err => { 
-        if (mounted) {
-          setError(err.response?.data?.message || 'Gagal memuat')
-          setLoading(false)
-        }
-      })
-    return () => { mounted = false }
-  }, [])
+  let mounted = true
+
+  dashboardService.getAdminPusat()
+    .then(res => {
+      if (mounted) {
+
+        console.log('DASHBOARD:', res.data) // ✅ TARUH DI SINI
+
+        setData(res.data.data || res.data) // ✅ FIX
+        setLoading(false)
+      }
+    })
+    .catch(err => {
+      if (mounted) {
+        setError(err.response?.data?.message || 'Gagal memuat')
+        setLoading(false)
+      }
+    })
+
+  return () => { mounted = false }
+}, [])
 
   // Chart data untuk laporan tahunan
   const tahunanChartData = {

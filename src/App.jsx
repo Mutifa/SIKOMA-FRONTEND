@@ -34,6 +34,7 @@ import AdminPusatStandarPelayanan from './pages/AdminPusat/StandarPelayanan.jsx'
 import AdminPusatAkun from './pages/AdminPusat/Akun.jsx'
 import NotFound from './pages/NotFound.jsx'
 import HealthCheck from './pages/HealthCheck.jsx'
+import DashboardAdminLapangan from './pages/AdminLapangan/Dashboard'
 
 export default function App() {
   return (
@@ -52,13 +53,15 @@ export default function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/admin-pusat/dashboard" element={<AdminPusatDashboard />} />
+          
 
           {/* AdminLapangan Routes */}cd
-          <Route path="/AdminLapangan" element={
-            <RoleGuard allowedRoles={['AdminLapangan']}>
-              <AdminLapanganDashboard />
-            </RoleGuard>
-          } />
+          <Route path="/admin-lapangan/dashboard" element={
+  <RoleGuard allowedRoles={['admin_lapangan']}>
+    <DashboardAdminLapangan />
+  </RoleGuard>
+} />
           <Route path="/AdminLapangan/laporan" element={
             <RoleGuard allowedRoles={['AdminLapangan']}>
               <LaporanKonservasi />

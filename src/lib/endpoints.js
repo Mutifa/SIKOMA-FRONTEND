@@ -8,4 +8,13 @@ export const ENDPOINTS = {
     GET: '/laporan',
     CREATE: '/laporan'
   },
+
+  DASHBOARD: {
+    ADMIN_PUSAT: '/admin/dashboard',        // ✅ FIX
+    ADMIN_LAPANGAN: '/lapangan/dashboard'   // ✅ FIX
+  },
+
+  EDUKASI: {
+    GET: '/edukasi'
+  }
 }

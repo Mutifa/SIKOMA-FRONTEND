@@ -58,14 +58,13 @@ export const AuthProvider = ({ children }) => {
       }
 
       // REDIRECT BERDASARKAN ROLE
-      let redirect = '/'
+    let redirect = '/'
 
-      if (userData.role === 'AdminLapangan_pusat') {
-        redirect = '/AdminPusat/Dashboard'
-      } else if (userData.role === 'AdminLapangan_lapangan') {
-        redirect = '/AdminLapangan/Dashboard'
-      }
-
+if (userData.role === 'admin_pusat') {
+  redirect = '/admin-pusat/dashboard'
+} else if (userData.role === 'admin_lapangan') {
+  redirect = '/admin-lapangan/dashboard'
+}
       return {
         success: true,
         user: userData,

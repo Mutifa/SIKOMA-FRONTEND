@@ -44,7 +44,7 @@ export default function Login() {
       // Jika login berhasil
       if (result.success) {
         // Redirect ke halaman sesuai role / response backend
-        window.location.href = result.redirect
+        navigate(result.redirect)
       } else {
         // Jika gagal, tampilkan pesan error dari backend
         setError(result.message)

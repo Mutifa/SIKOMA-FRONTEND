@@ -15,8 +15,8 @@ export default function Template({ title, active, children }) {
   React.useEffect(() => {
     let mounted = true
     setLoading(true)
-    api.get('/api/home')
-      .then(res => { if (mounted) { setWebsite(res.data.website); setLoading(false) } })
+  api.get('/home')
+      .then(res => { if (mounted) { setWebsite(res.data.website || res.data.data?.website || res.data.data)} })
       .catch(() => { if (mounted) setLoading(false) })
     return () => { mounted = false }
   }, [])
