@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { authService } from '../services/authService'
 
-// 🔥 BUAT CONTEXT
+// BUAT CONTEXT
 const AuthContext = createContext()
 
-// 🔥 HOOK CUSTOM
+//  HOOK CUSTOM
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
@@ -13,18 +13,18 @@ export const useAuth = () => {
   return context
 }
 
-// 🔥 PROVIDER
+//  PROVIDER
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  // 🔄 AUTO CHECK LOGIN SAAT APP LOAD
+  //  AUTO CHECK LOGIN SAAT APP LOAD
   useEffect(() => {
     checkAuth()
   }, [])
 
-  // 🔐 CEK AUTH (API: /me)
+  //  CEK AUTH (API: /me)
   const checkAuth = async () => {
     try {
       const res = await authService.me()
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // 🔑 LOGIN
+  //  LOGIN
   const login = async (email, password) => {
     try {
       const res = await authService.login({ email, password })
@@ -52,12 +52,12 @@ export const AuthProvider = ({ children }) => {
       setUser(userData)
       setIsAuthenticated(true)
 
-      // 🔥 OPTIONAL: simpan token kalau backend kirim
+      //  OPTIONAL: simpan token kalau backend kirim
       if (res.data.token) {
         localStorage.setItem('token', res.data.token)
       }
 
-      // 🔀 REDIRECT BERDASARKAN ROLE
+      // REDIRECT BERDASARKAN ROLE
       let redirect = '/'
 
       if (userData.role === 'AdminLapangan_pusat') {
@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // 🚪 LOGOUT
+  // LOGOUT
   const logout = async () => {
     try {
       await authService.logout()
@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // 🔐 CEK ROLE
+  //  CEK ROLE
   const hasRole = (role) => {
     return user?.role === role
   }
@@ -106,7 +106,7 @@ export const AuthProvider = ({ children }) => {
     return roles.includes(user?.role)
   }
 
-  // 🔥 VALUE GLOBAL
+  //  VALUE GLOBAL
   const value = {
     user,
     loading,

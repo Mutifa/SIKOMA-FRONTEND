@@ -4,16 +4,23 @@ import { useAuth } from '../contexts/AuthContext.jsx'
 import '../assets/css/AdminLapangan.css'
 
 export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
+
+  // Mengambil path URL saat ini (untuk menentukan menu aktif)
   const location = useLocation()
+
+  // Mengambil data user & fungsi logout dari auth context
   const { user, logout } = useAuth()
 
-  // Load CKEditor
+  // ===== LOAD CKEDITOR =====
   React.useEffect(() => {
+
+    // Membuat elemen script untuk load CKEditor dari CDN
     const script = document.createElement('script')
     script.src = 'https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js'
     script.async = true
     document.head.appendChild(script)
     
+    // Cleanup: hapus script saat component unmount
     return () => {
       if (document.head.contains(script)) {
         document.head.removeChild(script)
@@ -21,17 +28,20 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
     }
   }, [])
 
+  // Function logout
   const handleLogout = async () => {
-    await logout()
+    await logout() // Menghapus session/token user
   }
 
   return (
     <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
          data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
       
-      {/* Topbar header */}
+      {/* ===== HEADER / TOPBAR ===== */}
       <header className="topbar" data-navbarbg="skin5">
         <nav className="navbar top-navbar navbar-expand-md navbar-dark">
+
+          {/* Logo & Branding */}
           <div className="navbar-header" data-logobg="skin6">
             <Link className="navbar-brand" to="/AdminPusat">
               <b className="logo-icon">
@@ -41,18 +51,25 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                 <h2 className="sikoma-title" title="SIKOMA">SIKOMA aaas</h2>
               </span>
             </Link>
+
+            {/* Toggle sidebar (mobile) */}
             <a className="nav-toggler waves-effect waves-light text-dark d-block d-md-none mt-2"
                href="javascript:void(0)">
               <i className="fas fa-bars fs-6"></i>
             </a>
           </div>
           
+          {/* Profile user di kanan atas */}
           <div className="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
             <ul className="navbar-nav ms-auto d-flex align-items-center">
               <li>
                 <a className="profile-pic" type="button">
                   <img className="img-circle" src="/img/user.png" alt="user" width="40px" height="40px" />
-                  <span className="text-white font-medium">{user?.name || 'Admin Pusat'}</span>
+
+                  {/* Nama user (fallback jika kosong) */}
+                  <span className="text-white font-medium">
+                    {user?.name || 'Admin Pusat'}
+                  </span>
                 </a>
               </li>
             </ul>
@@ -60,11 +77,13 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
         </nav>
       </header>
 
-      {/* Left Sidebar */}
+      {/* ===== SIDEBAR ===== */}
       <aside className="left-sidebar" data-sidebarbg="skin6">
         <div className="scroll-sidebar">
           <nav className="sidebar-nav">
             <ul id="sidebarnav">
+
+              {/* Dashboard */}
               <li className="sidebar-item">
                 <Link 
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat' ? 'active' : ''}`}
@@ -74,6 +93,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                   <span className="hide-menu">Dashboard</span>
                 </Link>
               </li>
+
+              {/* Profil Perusahaan */}
               <li className="sidebar-item">
                 <Link 
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/profil-perusahaan' ? 'active' : ''}`}
@@ -83,6 +104,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                   <span className="hide-menu">Profil Perusahaan</span>
                 </Link>
               </li>
+
+              {/* Program */}
               <li className="sidebar-item">
                 <Link 
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/program' ? 'active' : ''}`}
@@ -92,6 +115,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                   <span className="hide-menu">Program</span>
                 </Link>
               </li>
+
+              {/* Konten (pakai CKEditor nanti) */}
               <li className="sidebar-item">
                 <Link 
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/konten' ? 'active' : ''}`}
@@ -101,6 +126,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                   <span className="hide-menu">Konten Informasi & Edukasi</span>
                 </Link>
               </li>
+
+              {/* Kawasan */}
               <li className="sidebar-item">
                 <Link 
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/kawasan' ? 'active' : ''}`}
@@ -110,6 +137,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                   <span className="hide-menu">Kawasan Konservasi</span>
                 </Link>
               </li>
+
+              {/* Laporan */}
               <li className="sidebar-item">
                 <Link 
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/laporan' ? 'active' : ''}`}
@@ -119,6 +148,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                   <span className="hide-menu">Laporan Konservasi</span>
                 </Link>
               </li>
+
+              {/* Peraturan */}
               <li className="sidebar-item">
                 <Link 
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/peraturan' ? 'active' : ''}`}
@@ -128,6 +159,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                   <span className="hide-menu">Peraturan</span>
                 </Link>
               </li>
+
+              {/* Standar Pelayanan */}
               <li className="sidebar-item">
                 <Link 
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/standar-pelayanan' ? 'active' : ''}`}
@@ -137,6 +170,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                   <span className="hide-menu">Standar Pelayanan</span>
                 </Link>
               </li>
+
+              {/* Galeri */}
               <li className="sidebar-item">
                 <Link 
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/galeri' ? 'active' : ''}`}
@@ -146,6 +181,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                   <span className="hide-menu">Galeri</span>
                 </Link>
               </li>
+
+              {/* Pengguna */}
               <li className="sidebar-item">
                 <Link 
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/pengguna' ? 'active' : ''}`}
@@ -155,6 +192,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                   <span className="hide-menu">Pengguna</span>
                 </Link>
               </li>
+
+              {/* Akun */}
               <li className="sidebar-item">
                 <Link 
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/akun' ? 'active' : ''}`}
@@ -164,26 +203,37 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                   <span className="hide-menu">Akun</span>
                 </Link>
               </li>
+
+              {/* Logout */}
               <li className="sidebar-item bg-danger">
-                <a className="sidebar-link waves-effect waves-dark sidebar-link text-white" 
-                   href="#" onClick={handleLogout}>
+                <a 
+                  className="sidebar-link waves-effect waves-dark sidebar-link text-white" 
+                  href="#" 
+                  onClick={handleLogout} // Trigger logout
+                >
                   <i className="fas fa-lock-open text-white"></i>
                   <span className="hide-menu">Logout</span>
                 </a>
               </li>
+
             </ul>
           </nav>
         </div>
       </aside>
 
-      {/* Page wrapper */}
+      {/* ===== CONTENT ===== */}
       <div className="page-wrapper">
         <div className="d-lg-none"><br /></div>
         
+        {/* Judul & Breadcrumb */}
         <div className="page-breadcrumb bg-white">
           <div className="row align-items-center">
             <div className="col-md-6 col-8 align-self-center">
+
+              {/* Title dinamis */}
               <h3 className="page-title mb-0 p-0">{title}</h3>
+
+              {/* Breadcrumb */}
               <div className="d-flex align-items-center">
                 <nav aria-label="breadcrumb">
                   <ol className="breadcrumb">
@@ -192,16 +242,19 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                   </ol>
                 </nav>
               </div>
+
             </div>
           </div>
         </div>
 
+        {/* Tempat render halaman */}
         <div className="container-fluid">
           {children}
         </div>
 
+        {/* Footer */}
         <footer className="footer text-center">
-          © 2024 SIKOMA. All rights reserved.
+          © 2026 SIKOMA. All rights reserved.
         </footer>
       </div>
     </div>
