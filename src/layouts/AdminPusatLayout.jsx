@@ -51,13 +51,16 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                 <h2 className="sikoma-title" title="SIKOMA">SIKOMA aaas</h2>
               </span>
             </Link>
+            </div>
 
             {/* Toggle sidebar (mobile) */}
-            <a className="nav-toggler waves-effect waves-light text-dark d-block d-md-none mt-2"
-               href="javascript:void(0)">
-              <i className="fas fa-bars fs-6"></i>
-            </a>
-          </div>
+<button
+  type="button"
+  className="nav-toggler waves-effect waves-light text-dark d-block d-md-none mt-2 border-0 bg-transparent"
+  onClick={() => console.log("toggle")}
+>
+  <i className="fas fa-bars fs-6"></i>
+</button>
           
           {/* Profile user di kanan atas */}
           <div className="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">

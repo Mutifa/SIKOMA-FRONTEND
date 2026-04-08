@@ -14,9 +14,16 @@ export default function AdminPusatDashboard() {
     laporanTahunan: {},
     daerah: []
   })
+
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(true)
 
+  // ✅ INI POINT 1 (TAMBAHKAN DI SINI)
+  const summary = data.summary || {}
+  const chart = data.chart || []
+  const daerahList = data.per_daerah || []
+
+  // ⬇️ BARU INI useEffect
   React.useEffect(() => {
   let mounted = true
 
@@ -41,30 +48,32 @@ export default function AdminPusatDashboard() {
 }, [])
 
   // Chart data untuk laporan tahunan
-  const tahunanChartData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
-    datasets: [{
+ const bulanMap = {
+  Jan: 0, Feb: 1, Mar: 2, Apr: 3, Mei: 4, Jun: 5,
+  Jul: 6, Agu: 7, Sep: 8, Okt: 9, Nov: 10, Des: 11
+}
+
+const chartDataFix = Array(12).fill(0)
+
+chart.forEach(item => {
+  const index = bulanMap[item.bulan]
+  if (index !== undefined) {
+    chartDataFix[index] = item.total
+  }
+})
+
+const tahunanChartData = {
+  labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],
+  datasets: [
+    {
       label: 'Jumlah Laporan',
-      data: [
-        data.laporanTahunan[1] || 0,
-        data.laporanTahunan[2] || 0,
-        data.laporanTahunan[3] || 0,
-        data.laporanTahunan[4] || 0,
-        data.laporanTahunan[5] || 0,
-        data.laporanTahunan[6] || 0,
-        data.laporanTahunan[7] || 0,
-        data.laporanTahunan[8] || 0,
-        data.laporanTahunan[9] || 0,
-        data.laporanTahunan[10] || 0,
-        data.laporanTahunan[11] || 0,
-        data.laporanTahunan[12] || 0
-      ],
+      data: chartDataFix,
       backgroundColor: 'rgba(54, 162, 235, 0.7)',
       borderColor: 'rgba(54, 162, 235, 1)',
       borderWidth: 1
-    }]
-  }
-
+    }
+  ]
+}
   if (loading) {
     return (
       <AdminPusatLayout title="Admin Pusat">
@@ -92,7 +101,7 @@ export default function AdminPusatDashboard() {
                 <i className="fas fa-file-lines text-primary fa-2x ms-1"></i>
               </li>
               <li className="ms-auto">
-                <span className="counter text-primary">{data.laporanTerakhir}</span>
+                <span className="counter text-primary">{summary.total_laporan || 0} </span>
               </li>
             </ul>
           </div>
@@ -106,8 +115,8 @@ export default function AdminPusatDashboard() {
                 <i className="fas fa-check-circle text-success fa-2x ms-1"></i>
               </li>
               <li className="ms-auto">
-                <span className="counter text-success">{data.laporanDisetujui}</span>
-              </li>
+                <span className="counter text-success">{summary.disetujui || 0} </span>
+                  </li>
             </ul>
           </div>
         </div>
@@ -170,18 +179,20 @@ export default function AdminPusatDashboard() {
                     <th>Aksi</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {data.daerah.map((daerah, index) => (
-                    <tr key={index}>
-                      <td>{daerah}</td>
-                      <td>
-                        <button className="btn btn-success btn-sm">
-                          <i className="fas fa-eye"></i> View
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+             <tbody>
+  {daerahList && daerahList.length > 0 ? (
+    daerahList.map((item, index) => (
+      <tr key={index}>
+        <td>{item.daerahLokasi}</td>
+        <td>{item.total}</td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="2">Tidak ada data</td>
+    </tr>
+  )}
+</tbody>
               </table>
             </div>
           </div>
