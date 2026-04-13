@@ -1,5 +1,5 @@
-import api from '../lib/api'
+import api from "../lib/api";
 
 export const homeService = {
-  get: () => api.get('/home')
-}
+  get: () => api.get("/home"),
+};

@@ -3,54 +3,47 @@ import Template from '../../layouts/Template.jsx'
 import api from '../../lib/api.js'
 import { assetUrl } from '../../lib/assets.js'
 import { homeService } from '../../services/homeService.js'
-import React, { useEffect } from "react";
-import { gsap } from "gsap";
+import React, { useEffect, useState } from "react";
 
 
 export default function Home() {
+  const [banner, setBanner] = useState([]);
+  const [program, setProgram] = useState([]);
+  const [website, setWebsite] = useState(null);
+  const [loading, setLoading] = useState(true); // 🔥 penting
+const [error, setError] = useState(null);
+ 
+
+  // API
   useEffect(() => {
-    gsap.from(".hero-text", {
-      opacity: 0,
-      y: 80,
-      duration: 1,
-    });
+    homeService
+      .get()
+      .then((res) => {
+       
 
-    gsap.from(".hero-btn", {
-      opacity: 0,
-      y: 50,
-      delay: 0.5,
-      duration: 1,
-    });
-  }, []);
-  const [data, setData] = React.useState({ banner: [], program: [], website: null })
-  const [loading, setLoading] = React.useState(true)
-  const [error, setError] = React.useState('')
-
-  React.useEffect(() => {
-    let mounted = true
-    homeService.get()
-      .then(res => { 
-  if (mounted) { 
-    setData(res.data.data); // ✅ INI YANG BENAR
-    setLoading(false) 
-  } 
+        setBanner(res.data.banner);
+        setProgram(res.data.program);
+        setWebsite(res.data.website);
+      })
+   .catch((err) => {
+  console.error("ERROR:", err);
+  setError("Gagal mengambil data dari server");
 })
-      .catch(err => { if (mounted) { setError(err.message); setLoading(false) } })
-    return () => { mounted = false }
-  }, [])
-  console.log('DATA HOME:', data)
-  console.log("STRUKTUR:", data.website?.struktur)
-  console.log("BANNER:", data.banner)
+      .finally(() => {
+        setLoading(false); // 🔥 WAJIB biar ga loading terus
+      });
+  }, []);
+  
   return (
-    <Template title={data?.website?.nama || 'Beranda'} active="home">
+   <Template title={website?.nama || 'Beranda'} active="home">
 
       {/* Carousel Start */}
       <div className="container-fluid p-0 hero-section" style={{ marginTop: '80px' }}>
         <div id="header-carousel" className="carousel slide" data-bs-ride="carousel">
 
           <div className="carousel-inner">
-            {Array.isArray(data.banner) && data.banner.length > 0 ? (
-              data.banner.map((b, idx) => (
+            {Array.isArray(banner) && banner.length > 0 ? (
+              banner.map((b, idx) => (
                 <div key={b.id} className={`carousel-item ${idx === 0 ? 'active' : ''}`}>
 
                   <img
@@ -59,12 +52,12 @@ export default function Home() {
                     alt="Image"
                   />
 
-                  <div className="carousel-caption">
-                    <div className="container">
+                  <div className="carousel-caption w-100 h-100 d-flex align-items-center justify-content-center text-center">
+  <div className="container-fluid">
                       <div className="row justify-content-center">
                         <div className="col-lg-8">
                           <h1 className="fw-bold text-white hero-title hero-text">
-                            Selamat Datang di<br /> {data?.website?.deskripsi}
+                            Selamat Datang di<br /> {website?.deskripsi}
                           </h1>
                           <p className="fs-4">
                             Kini telah hadir Sistem Informasi Konservasi untuk UPT KPH Tasik Besar Serkap
@@ -97,7 +90,7 @@ export default function Home() {
             )}
           </div>
 
-          {Array.isArray(data.banner) && data.banner.length > 1 && (
+          {Array.isArray(banner) && banner.length > 1 && (
             <>
               <button className="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
                 <span className="carousel-control-prev-icon"></span>
@@ -135,8 +128,8 @@ export default function Home() {
 
                   <div className="text-center mt-4" style={{ overflowX: 'auto' }}>
                     <img
-                      src={data.website?.struktur
-                        ? `/img/${data.website.struktur}`
+                      src={website?.struktur
+                        ? `/img/${website.struktur}`
                         : `/img/struktur.png`
                       }
                       alt="Struktur Organisasi"
@@ -185,14 +178,14 @@ export default function Home() {
                     <div className="text-start fw-bold mb-4">
                       <p className="mb-2">Visi:</p>
                       <span dangerouslySetInnerHTML={{
-                        __html: data.website?.visi || 'Visi belum tersedia'
+                        __html: website?.visi || 'Visi belum tersedia'
                       }} />
                     </div>
 
                     <div className="text-start fw-bold">
                       <p className="mb-2">Misi:</p>
                       <span dangerouslySetInnerHTML={{
-                        __html: data.website?.misi || 'Misi belum tersedia'
+                        __html: website?.misi || 'Misi belum tersedia'
                       }} />
                     </div>
 
