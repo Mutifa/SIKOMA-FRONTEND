@@ -9,23 +9,20 @@ export default function Edukasi() {
   const [error, setError] = React.useState('')
 
   React.useEffect(() => {
-    let mounted = true
 
-   api.get('/edukasi')
-  .then(res => { 
-    if (mounted) { 
-      setItems(res.data.data || []); // ✅ INI YANG BENAR
-      setLoading(false) 
-    } 
-  })
-      .catch(err => {
-        if (mounted) {
-          setError(err.response?.data?.message || 'Gagal memuat edukasi') // ✅ FIX
-          setLoading(false)
-        }
-      })
+    api.get('/edukasi')
+        .then(res => { 
+            setItems(res.data.data || []); // ✅ INI YANG BENAR
+            setLoading(false) 
+        })
+        .catch(err => {
+          if (mounted) {
+            setError(err.response?.data?.message || 'Gagal memuat edukasi') // ✅ FIX
+            setLoading(false)
+          }
+        })
 
-    return () => { mounted = false }
+    return () => { true }
   }, [])
 
   return (

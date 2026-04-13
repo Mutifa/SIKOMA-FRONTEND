@@ -38,6 +38,7 @@ export default function Template({ title, active, children }) {
         {children}
       </main>
       <Footer website={website} />
+      
     </div>
   )
 }

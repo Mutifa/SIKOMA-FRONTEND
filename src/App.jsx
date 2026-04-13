@@ -35,7 +35,7 @@ import AdminPusatAkun from './pages/AdminPusat/Akun.jsx'
 import NotFound from './pages/NotFound.jsx'
 import HealthCheck from './pages/HealthCheck.jsx'
 import DashboardAdminLapangan from './pages/AdminLapangan/Dashboard'
-
+import Kontak from './pages/Public/Kontak'
 export default function App() {
   return (
     <AuthProvider>
@@ -54,7 +54,7 @@ export default function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/admin-pusat/dashboard" element={<AdminPusatDashboard />} />
-          
+          <Route path="/kontak" element={<Kontak />} />
 
           {/* AdminLapangan Routes */}cd
           <Route path="/admin-lapangan/dashboard" element={

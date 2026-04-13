@@ -38,10 +38,27 @@ export default function Navbar({ active, website }) {
                 <a href="/informasi#dilindungi" className="dropdown-item">Jenis TSL Dilindungi</a>
                 <a href="/informasi#executive-summary" className="dropdown-item">Executive Summary</a>
                 <a href="/informasi#peraturan" className="dropdown-item">Peraturan</a>
+                
               </div>
             </div>
-            <NavLink to="/standar-pelayanan" className={({isActive})=>`nav-item nav-link ${isActive||active==='standar-pelayanan'?'active':''}`}>Standar Pelayanan</NavLink>
-            <NavLink to="/login" className="btn btn-primary py-4 px-lg-4 rounded-0 d-none d-lg-block">Login<i className="fa fa-arrow-right ms-3"></i></NavLink>
+           <NavLink 
+  to="/standar-pelayanan" 
+  className={({isActive})=>`nav-item nav-link ${isActive||active==='standar-pelayanan'?'active':''}`}
+>
+  Standar Pelayanan
+</NavLink>
+
+{/* TAMBAH INI */}
+<a href="/#kontak" className="nav-item nav-link">
+  Kontak
+</a>
+
+<NavLink 
+  to="/login" 
+  className="btn btn-primary py-4 px-lg-4 rounded-0 d-none d-lg-block"
+>
+  Login<i className="fa fa-arrow-right ms-3"></i>
+</NavLink>
           </div>
         </div>
       </div>

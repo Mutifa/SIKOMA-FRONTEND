@@ -3,38 +3,48 @@ import React from 'react'
 export default function Footer({ website }) {
   return (
     <>
-      <div className="container-fluid bg-dark text-light footer pt-5 mt-5">
+     <div id="kontak" style={{ background: '#2f2f2f', color: '#fff' }}>
         <div className="container py-5">
-          <div className="row g-5">
-            <div className="col-lg-3 col-md-6">
-              <h4 className="text-light mb-4">Alamat</h4>
-              <p className="mb-2"><i className="fa fa-map-marker-alt me-3"></i>{website?.alamat || 'Alamat'}</p>
-              <p className="mb-2"><i className="fa fa-phone-alt me-3"></i>{website?.telepon || 'Telepon'}</p>
-              <p className="mb-2"><i className="fa fa-envelope me-3"></i>{website?.email || 'Email'}</p>
-            </div>
-            <div className="col-lg-3 col-md-6">
-              <h4 className="text-light mb-4">Jam Operasional</h4>
-              <span dangerouslySetInnerHTML={{ __html: website?.jambuka || 'Senin - Jumat' }} />
-            </div>
-            <div className="col-lg-6 col-md-12">
-              <h4 className="text-light mb-4">Maps</h4>
-              <div className="map-container" dangerouslySetInnerHTML={{ __html: website?.gmaps || '' }} />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="container-fluid copyright py-4">
-        <div className="container">
           <div className="row">
-            <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
-              &copy; <a className="border-bottom" href="/">{website?.nama || 'UPT KPH Tasik Besar Serkap'}</a>, All Right Reserved 2026.
+
+            {/* KIRI */}
+            <div className="col-md-6">
+
+              {/* MENU */}
+              <div className="mb-4">
+                <a className="me-3 text-white">Profil</a>
+                <a className="me-3 text-white">Program</a>
+                <a className="me-3 text-white">Data & Informasi</a>
+                <a className="me-3 text-white">Standar Pelayanan</a>
+                <a className="text-white">Kontak</a>
+              </div>
+
+              {/* SOSIAL */}
+              <p><i className="fab fa-facebook me-2"></i> kph.tbs</p>
+              <p><i className="fab fa-instagram me-2"></i> kph.tbs</p>
+
+              <p className="mt-3">terms & services</p>
+              <p>{website?.nama || 'SIKOMA'} © 2025</p>
             </div>
+
+            {/* KANAN */}
+            <div className="col-md-6 text-md-end">
+             <h5 className="text-white">Kontak</h5>
+              <p>{website?.telepon || '+62 8123456789'}</p>
+              <p>{website?.email || 'info@UPTKPH.com'}</p>
+              <p>{website?.alamat || 'Pekanbaru, Riau'}</p>
+            </div>
+
           </div>
         </div>
       </div>
-      <a href="#" className="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i className="bi bi-arrow-up"></i></a>
+
+      {/* COPYRIGHT */}
+      <div style={{ background: '#1b1b1b', color: '#fff' }}>
+        <div className="container py-3 text-center">
+          © {website?.nama || 'UPT KPH Tasik Besar Serkap'} 2026
+        </div>
+      </div>
     </>
   )
 }
-
-
