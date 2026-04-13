@@ -94,3 +94,25 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+.hero-title {
+  font-size: 40px;
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 24px;
+  }
+}
+
+.card {
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.hero-section {
+  margin-top: 80px;
+}
