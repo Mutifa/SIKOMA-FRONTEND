@@ -11,31 +11,31 @@ export default function Home() {
   const [program, setProgram] = useState([]);
   const [website, setWebsite] = useState(null);
   const [loading, setLoading] = useState(true); // 🔥 penting
-const [error, setError] = useState(null);
- 
+  const [error, setError] = useState(null);
+
 
   // API
   useEffect(() => {
     homeService
       .get()
       .then((res) => {
-       
+
 
         setBanner(res.data.banner);
         setProgram(res.data.program);
         setWebsite(res.data.website);
       })
-   .catch((err) => {
-  console.error("ERROR:", err);
-  setError("Gagal mengambil data dari server");
-})
+      .catch((err) => {
+        console.error("ERROR:", err);
+        setError("Gagal mengambil data dari server");
+      })
       .finally(() => {
         setLoading(false); // 🔥 WAJIB biar ga loading terus
       });
   }, []);
-  
+
   return (
-   <Template title={website?.nama || 'Beranda'} active="home">
+    <Template title={website?.nama || 'Beranda'} active="home">
 
       {/* Carousel Start */}
       <div className="container-fluid p-0 hero-section" style={{ marginTop: '80px' }}>
@@ -53,7 +53,7 @@ const [error, setError] = useState(null);
                   />
 
                   <div className="carousel-caption w-100 h-100 d-flex align-items-center justify-content-center text-center">
-  <div className="container-fluid">
+                    <div className="w-100 px-3">
                       <div className="row justify-content-center">
                         <div className="col-lg-8">
                           <h1 className="fw-bold text-white hero-title hero-text">
@@ -66,14 +66,13 @@ const [error, setError] = useState(null);
                       </div>
                     </div>
                   </div>
-
                 </div>
               ))
             ) : (
               <div className="carousel-item active">
                 <img className="w-100" src="/img/carousel-1.jpg" alt="Default" />
                 <div className="carousel-caption">
-                  <div className="container">
+                  <div className="container-fluid p-0">
                     <div className="row justify-content-center">
                       <div className="col-lg-8">
                         <h1 className="display-3 text-white mb-2">
@@ -106,21 +105,19 @@ const [error, setError] = useState(null);
       </div>
       {/* Carousel End */}
 
-      <section className="container-xxl py-5">
+     <section className="container-xxl py-5">
         <div className="container">
           {loading && <p>Memuat...</p>}
           {error && <div className="alert alert-danger">{error}</div>}
 
           {!loading && !error && (
             <>
-         
-
               {/* Struktur Start */}
               <div id="struktur-organisasi" className="container-xxl py-5">
                 <div className="container">
 
                   <div className="text-center">
-                   
+
                     <h1 className="mb-5">
                       Struktur Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap
                     </h1>
@@ -144,17 +141,18 @@ const [error, setError] = useState(null);
                 </div>
               </div>
               {/* Struktur End */}
+              
 
 
               {/* Visi Misi Start */}
               <div
                 id="visi-misi"
-                className="container-xxl py-5 visi-misi-section" style={{
+                className="container-fluid p-0 visi-misi-section" style={{
                   backgroundImage: 'url(/img/visi-misi.jpg)',
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   position: 'relative',
-                  minHeight: '500px' // 🔥 biar ga kecil
+                  height: 'calc(100vh - 70px)'// 🔥 biar ga kecil
                 }}>
 
                 {/* 🔥 GANTI overlay lama */}
@@ -164,17 +162,11 @@ const [error, setError] = useState(null);
                 ></div>
 
                 {/* 🔥 TAMBAH flex biar center */}
-                <div
-                  className="container position-relative d-flex align-items-center justify-content-center text-center"
-                  style={{ zIndex: 2, minHeight: '500px' }}
-                  
-                >
+                <div className="w-100 position-relative d-flex align-items-center justify-content-center text-center"
+                  style={{ zIndex: 2, minHeight: '500px' }}>
 
-                  <div style={{ maxWidth: '800px' }} className="text-white">
-
-                  
+                  <div className="text-white content-box text-start">
                     <h1 className="mb-4">Visi dan Misi Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap</h1>
-
                     <div className="text-start fw-bold mb-4">
                       <p className="mb-2">Visi:</p>
                       <span dangerouslySetInnerHTML={{
@@ -188,9 +180,7 @@ const [error, setError] = useState(null);
                         __html: website?.misi || 'Misi belum tersedia'
                       }} />
                     </div>
-
                   </div>
-
                 </div>
               </div>
               {/* Visi Misi End */}
@@ -199,8 +189,8 @@ const [error, setError] = useState(null);
               <div id="sejarah" className="container-xxl py-5">
                 <div className="container">
                   <div className="text-center">
-                    
-                   <h1 className="mb-4">Sejarah Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap</h1>
+
+                    <h1 className="mb-4">Sejarah Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap</h1>
                   </div>
                   <br />
                   <div className="row g-4">

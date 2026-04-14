@@ -55,7 +55,7 @@ export default function Navbar({ active, website }) {
 
 <NavLink 
   to="/login" 
-  className="btn btn-primary py-4 px-lg-4 rounded-0 d-none d-lg-block"
+className="btn btn-login px-4 py-2 me-4 d-none d-lg-block"
 >
   Login<i className="fa fa-arrow-right ms-3"></i>
 </NavLink>
