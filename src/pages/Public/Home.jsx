@@ -56,7 +56,7 @@ export default function Home() {
                     <div className="w-100 px-3">
                       <div className="row justify-content-center">
                         <div className="col-lg-8">
-                          <h1 className="fw-bold text-white hero-title hero-text">
+                          <h1 className="hero-title text-white fw-bold animate-fade-up">
                             Selamat Datang di<br /> {website?.deskripsi}
                           </h1>
                           <p className="fs-4">
@@ -89,7 +89,7 @@ export default function Home() {
             )}
           </div>
 
-          {Array.isArray(banner) && banner.length > 1 && (
+          {/* {Array.isArray(banner) && banner.length > 1 && (
             <>
               <button className="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
                 <span className="carousel-control-prev-icon"></span>
@@ -99,7 +99,7 @@ export default function Home() {
                 <span className="carousel-control-next-icon"></span>
               </button>
             </>
-          )}
+          )} */}
 
         </div>
       </div>
