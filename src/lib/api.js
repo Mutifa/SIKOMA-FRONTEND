@@ -4,7 +4,7 @@ import axios from 'axios'
 const api = axios.create({
 
   // Base URL API backend (Laravel)
-  baseURL: 'http://127.0.0.1:8000/api',
+baseURL: 'http://127.0.0.1:8000/api',
 
   // Batas waktu request (15 detik)
   timeout: 15000,

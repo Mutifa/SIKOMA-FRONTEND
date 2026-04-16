@@ -24,7 +24,7 @@ export default function Footer({ website }) {
               <p><i className="fab fa-instagram me-2"></i> kph.tbs</p>
 
               <p className="mt-3">terms & services</p>
-              <p>{website?.nama || 'SIKOMA'} © 2025</p>
+              <p>{website?.nama || 'SIKOMA'} © 2026</p>
             </div>
 
             {/* KANAN */}

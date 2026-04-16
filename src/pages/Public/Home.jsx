@@ -59,8 +59,10 @@ export default function Home() {
                           <h1 className="hero-title text-white fw-bold animate-fade-up">
                             Selamat Datang di<br /> {website?.deskripsi}
                           </h1>
-                          <p className="fs-4">
-                            Kini telah hadir Sistem Informasi Konservasi untuk UPT KPH Tasik Besar Serkap
+                          <p className="hero-subtitle">
+                            Kini telah hadir Sistem Informasi Konservasi untuk <br />
+                            Unit Pelaksanaan Teknis <br />
+                            Tasik Besar Serkap
                           </p>
                         </div>
                       </div>
@@ -79,7 +81,7 @@ export default function Home() {
                           Selamat Datang di Sistem Informasi Konservasi
                         </h1>
                         <p className="fs-4">
-                          UPT KPH Tasik Besar Serkap
+                          Unit Pelaksana Teknis Tasik Besar Serkap
                         </p>
                       </div>
                     </div>
@@ -105,7 +107,7 @@ export default function Home() {
       </div>
       {/* Carousel End */}
 
-     <section className="container-xxl py-5">
+      <section className="container-xxl py-5">
         <div className="container">
           {loading && <p>Memuat...</p>}
           {error && <div className="alert alert-danger">{error}</div>}
@@ -117,8 +119,7 @@ export default function Home() {
                 <div className="container">
 
                   <div className="text-center">
-
-                    <h1 className="mb-5">
+                    <h1 className="mb-5 heading-green">
                       Struktur Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap
                     </h1>
                   </div>
@@ -141,7 +142,7 @@ export default function Home() {
                 </div>
               </div>
               {/* Struktur End */}
-              
+
 
 
               {/* Visi Misi Start */}
@@ -155,18 +156,15 @@ export default function Home() {
                   height: 'calc(100vh - 70px)'// 🔥 biar ga kecil
                 }}>
 
-                {/* 🔥 GANTI overlay lama */}
-                <div
-                  className="position-absolute top-0 start-0 w-100 h-100"
-                  style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
-                ></div>
 
                 {/* 🔥 TAMBAH flex biar center */}
                 <div className="w-100 position-relative d-flex align-items-center justify-content-center text-center"
                   style={{ zIndex: 2, minHeight: '500px' }}>
 
                   <div className="text-white content-box text-start">
-                    <h1 className="mb-4">Visi dan Misi Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap</h1>
+                    <h1 className="mb-4 heading-green">
+                      Visi dan Misi Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan <br />
+                    </h1>
                     <div className="text-start fw-bold mb-4">
                       <p className="mb-2">Visi:</p>
                       <span dangerouslySetInnerHTML={{
@@ -189,8 +187,10 @@ export default function Home() {
               <div id="sejarah" className="container-xxl py-5">
                 <div className="container">
                   <div className="text-center">
+                    <h1 className="mb-5 heading-green">
+                      Sejarah Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap
+                    </h1>
 
-                    <h1 className="mb-4">Sejarah Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap</h1>
                   </div>
                   <br />
                   <div className="row g-4">
