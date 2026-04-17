@@ -12,20 +12,20 @@ export default function Home() {
   const [website, setWebsite] = useState(null);
   const [loading, setLoading] = useState(true); // 🔥 penting
   const [error, setError] = useState(null);
-const location = useLocation()
+  const location = useLocation()
 
-useEffect(() => {
-  const handleScroll = () => {
-    if (location.hash) {
-      const el = document.querySelector(location.hash)
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' })
+  useEffect(() => {
+    const handleScroll = () => {
+      if (location.hash) {
+        const el = document.querySelector(location.hash)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
       }
     }
-  }
 
-  setTimeout(handleScroll, 300)
-}, [location])
+    setTimeout(handleScroll, 300)
+  }, [location])
 
   // API
   useEffect(() => {
@@ -170,14 +170,10 @@ useEffect(() => {
                   height: 'calc(100vh - 70px)'
                 }}
               >
-
-
                 {/* 🔥 TAMBAH flex biar center */}
                 <div className="w-100 position-relative d-flex align-items-center justify-content-center text-center"
                   style={{ zIndex: 2, minHeight: '500px' }}>
-
                   <div className="content-box text-start" style={{ color: 'black' }}>
-
                     <h2 className="fw-bold heading-green animate-title">
                       Visi dan Misi Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan <br />
                     </h2>
@@ -206,7 +202,6 @@ useEffect(() => {
                     <h2 className="fw-bold heading-green animate-title">
                       Sejarah Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap <br />
                     </h2>
-
                   </div>
                   <br />
                   <div className="row g-4">
