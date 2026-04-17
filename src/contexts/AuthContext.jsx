@@ -20,9 +20,9 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   //  AUTO CHECK LOGIN SAAT APP LOAD
-  useEffect(() => {
-    checkAuth()
-  }, [])
+ useEffect(() => {
+  setLoading(false)
+}, [])
 
   //  CEK AUTH (API: /me)
   const checkAuth = async () => {

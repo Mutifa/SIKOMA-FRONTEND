@@ -4,7 +4,7 @@ import api from '../../lib/api.js'
 import { assetUrl } from '../../lib/assets.js'
 import { homeService } from '../../services/homeService.js'
 import React, { useEffect, useState } from "react";
-
+import { useLocation } from 'react-router-dom'
 
 export default function Home() {
   const [banner, setBanner] = useState([]);
@@ -12,7 +12,20 @@ export default function Home() {
   const [website, setWebsite] = useState(null);
   const [loading, setLoading] = useState(true); // 🔥 penting
   const [error, setError] = useState(null);
+const location = useLocation()
 
+useEffect(() => {
+  const handleScroll = () => {
+    if (location.hash) {
+      const el = document.querySelector(location.hash)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }
+
+  setTimeout(handleScroll, 300)
+}, [location])
 
   // API
   useEffect(() => {
@@ -119,9 +132,9 @@ export default function Home() {
                 <div className="container">
 
                   <div className="text-center">
-                    <h1 className="mb-5 heading-green">
-                      Struktur Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap
-                    </h1>
+                    <h2 className="fw-bold heading-green animate-title">
+                      Struktur Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap  <br />
+                    </h2>
                   </div>
 
                   <div className="text-center mt-4" style={{ overflowX: 'auto' }}>
@@ -148,23 +161,26 @@ export default function Home() {
               {/* Visi Misi Start */}
               <div
                 id="visi-misi"
-                className="container-fluid p-0 visi-misi-section" style={{
+                className="container-fluid p-0 visi-misi-section"
+                style={{
                   backgroundImage: 'url(/img/visi-misi.jpg)',
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   position: 'relative',
-                  height: 'calc(100vh - 70px)'// 🔥 biar ga kecil
-                }}>
+                  height: 'calc(100vh - 70px)'
+                }}
+              >
 
 
                 {/* 🔥 TAMBAH flex biar center */}
                 <div className="w-100 position-relative d-flex align-items-center justify-content-center text-center"
                   style={{ zIndex: 2, minHeight: '500px' }}>
 
-                  <div className="text-white content-box text-start">
-                    <h1 className="mb-4 heading-green">
+                  <div className="content-box text-start" style={{ color: 'black' }}>
+
+                    <h2 className="fw-bold heading-green animate-title">
                       Visi dan Misi Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan <br />
-                    </h1>
+                    </h2>
                     <div className="text-start fw-bold mb-4">
                       <p className="mb-2">Visi:</p>
                       <span dangerouslySetInnerHTML={{
@@ -187,9 +203,9 @@ export default function Home() {
               <div id="sejarah" className="container-xxl py-5">
                 <div className="container">
                   <div className="text-center">
-                    <h1 className="mb-5 heading-green">
-                      Sejarah Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap
-                    </h1>
+                    <h2 className="fw-bold heading-green animate-title">
+                      Sejarah Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap <br />
+                    </h2>
 
                   </div>
                   <br />

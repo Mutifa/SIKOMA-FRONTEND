@@ -269,12 +269,7 @@ a {
   margin: auto;
   line-height: 1.7;
 }
-#visi-misi .content-box,
-#visi-misi p,
-#visi-misi span,
-#visi-misi div {
-  color: #ffffff !important;
-}
+
 
 /* JUDUL */
 #visi-misi h1 {
@@ -315,6 +310,14 @@ a {
 #visi-misi .content-box {
   animation: fadeUp 5s ease;
 }
+
+.visi-misi-section * {
+  color: black !important;
+}
+#visi-misi::before {
+  background: rgba(255,255,255,0.5);
+} 
+
 /* ================= MOBILE FIX ================= */
 @media (max-width: 768px) {
   #visi-misi {
@@ -385,4 +388,25 @@ a {
   display: block;
   margin: 10px auto 0;
   border-radius: 2px;
+}
+.animate-title {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: fadeSlideUp 3s ease forwards;
+  animation-delay: 0.3s;
+  color: #2f6f4f;
+}
+
+@keyframes fadeSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.section-title {
+  font-size: 2rem; /* 🔥 kecilkan di sini */
+  font-weight: 700;
+  color: var(--primary-green);
+  text-align: center;
+  line-height: 1.3;
 }

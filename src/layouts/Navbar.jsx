@@ -30,32 +30,33 @@ export default function Navbar({ website }) {
         <div className="collapse navbar-collapse mobile-menu" id="navbarNav">
           <ul className="navbar-nav ms-auto align-items-lg-center mobile-nav">
 
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                data-bs-toggle="dropdown"
-              >
-                Profil
-              </a>
-              <ul className="dropdown-menu">
-                <li>
-                  <a href="/#struktur-organisasi" className="dropdown-item">
-                    Struktur Organisasi
-                  </a>
-                </li>
-                <li>
-                  <a href="/#visi-misi" className="dropdown-item">
-                    Visi Misi
-                  </a>
-                </li>
-                <li>
-                  <a href="/#sejarah" className="dropdown-item">
-                    Sejarah
-                  </a>
-                </li>
-              </ul>
-            </li>
+           <li className="nav-item dropdown">
+  <a
+    className="nav-link dropdown-toggle"
+    href="#"
+    data-bs-toggle="dropdown"
+  >
+    Profil
+  </a>
+
+  <ul className="dropdown-menu">
+    <li>
+      <a href="/#struktur-organisasi" className="dropdown-item">
+        Struktur Organisasi
+      </a>
+    </li>
+    <li>
+      <a href="/#visi-misi" className="dropdown-item">
+        Visi Misi
+      </a>
+    </li>
+    <li>
+      <a href="/#sejarah" className="dropdown-item">
+        Sejarah
+      </a>
+    </li>
+  </ul>
+</li>
 
             <li className="nav-item">
               <NavLink

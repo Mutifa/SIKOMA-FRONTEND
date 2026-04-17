@@ -16,7 +16,6 @@ export default function Footer({ website }) {
                 <a className="me-3 text-white">Program</a>
                 <a className="me-3 text-white">Data & Informasi</a>
                 <a className="me-3 text-white">Standar Pelayanan</a>
-                <a className="text-white">Kontak</a>
               </div>
 
               {/* SOSIAL */}

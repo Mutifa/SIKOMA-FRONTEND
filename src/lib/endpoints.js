@@ -1,7 +1,8 @@
 export const ENDPOINTS = {
   AUTH: {
-    LOGIN: '/login',
-    LOGOUT: '/logout'
+    LOGIN: '/auth/login',
+    LOGOUT: '/auth/logout',
+    ME: '/auth/me'
   },
 
   LAPORAN: {
@@ -10,14 +11,15 @@ export const ENDPOINTS = {
   },
 
   DASHBOARD: {
-    ADMIN_PUSAT: '/admin/dashboard',        // ✅ FIX
-    ADMIN_LAPANGAN: '/lapangan/dashboard'   // ✅ FIX
+    ADMIN_PUSAT: '/admin/dashboard',
+    ADMIN_LAPANGAN: '/lapangan/dashboard'
   },
 
   EDUKASI: {
     GET: '/edukasi'
   },
+
   HOME: {
-  GET: '/home'
-}
+    GET: '/home'
+  }
 }
