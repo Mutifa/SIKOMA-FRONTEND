@@ -21,5 +21,8 @@ export const ENDPOINTS = {
 
   HOME: {
     GET: '/home'
-  }
+  },
+  INFORMASI: {
+  GET: '/informasi'
+}
 }

@@ -133,7 +133,7 @@ export default function Home() {
 
                   <div className="text-center">
                     <h2 className="fw-bold heading-green animate-title">
-                      Struktur Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap  <br />
+                      Struktur Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan  <br /> Tasik Besar Serkap 
                     </h2>
                   </div>
 
@@ -175,7 +175,7 @@ export default function Home() {
                   style={{ zIndex: 2, minHeight: '500px' }}>
                   <div className="content-box text-start" style={{ color: 'black' }}>
                     <h2 className="fw-bold heading-green animate-title">
-                      Visi dan Misi Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan <br />
+                      Visi dan Misi Unit Pelaksanaan Teknis Kesatuan <br />Pengelolaan Hutan 
                     </h2>
                     <div className="text-start fw-bold mb-4">
                       <p className="mb-2">Visi:</p>
@@ -200,7 +200,7 @@ export default function Home() {
                 <div className="container">
                   <div className="text-center">
                     <h2 className="fw-bold heading-green animate-title">
-                      Sejarah Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan Tasik Besar Serkap <br />
+                      Sejarah Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan <br />Tasik Besar Serkap 
                     </h2>
                   </div>
                   <br />

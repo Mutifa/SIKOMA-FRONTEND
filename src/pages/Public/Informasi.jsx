@@ -10,7 +10,7 @@ export default function Informasi() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/informasi')
+    api.get('/informasi')
       .then(res => { if (mounted) { setData(res.data); setLoading(false) } })
       .catch(err => { if (mounted) { setError(err.message); setLoading(false) } })
     return () => { mounted = false }
@@ -20,29 +20,61 @@ export default function Informasi() {
     <Template title="Informasi" active="informasi">
       <div className="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
         <div className="container text-center py-5">
-          <h1 className="display-5 text-white mb-4 animated slideInDown">Informasi dan Edukasi <br/>
+          <h1 className="display-5 text-white mb-4 animated slideInDown">Informasi dan Edukasi <br />
             Seputar Konservasi Bersama Masayarakat</h1>
         </div>
       </div>
       <section id="kawasan-konservasi" className="container-fluid py-3">
         <div className="row g-4">
-          <div className="col-lg-7">
-            {loading ? <div style={{height:300, background:'#eee'}} /> : (
-              data.kawasan?.gambar ? (
-                <img src={assetUrl(`/img/${data.kawasan.gambar}`)} alt="Peta" className="img-fluid" />
-              ) : <div style={{height:300, background:'#eee'}} />
-            )}
-          </div>
-          <div className="col-lg-5">
+        <div className="col-lg-7 col-md-12 d-flex justify-content-center">
+  {loading ? (
+    <div style={{ height: 300, background: '#eee', width: '100%' }} />
+  ) : (
+    data.kawasan?.gambar ? (
+      <img
+        src={assetUrl(`/uploads/${data.kawasan.gambar}`)}
+        alt="Peta"
+        className="img-fluid rounded shadow-sm peta-img"
+      />
+    ) : (
+      <div style={{ height: 300, background: '#eee', width: '100%' }} />
+    )
+  )}
+</div>
+          <div className="col-lg-5 col-md-12">
             <h4 className="wow fadeInUp" data-wow-delay="0.1s">Kawasan Konservasi</h4>
             {loading ? <p>Memuat...</p> : (
               <span dangerouslySetInnerHTML={{ __html: data.kawasan?.deskripsi || '' }} />
             )}
             <h4 className="mt-3">Data Statistik</h4>
-            <div className="row">
-              <div className="col-4 d-flex"><div className="bg-warning shadow-sm px-3 py-4 text-center flex-fill"><h5 className="m-0">Luas Kawasan <br /> {data.kawasan?.luasKawasan || '-'}</h5></div></div>
-              <div className="col-4 d-flex"><div className="bg-warning shadow-sm px-3 py-4 text-center flex-fill"><h5 className="m-0">Jenis Kawasan <br /> {data.kawasan?.jenisKawasan || '-'}</h5></div></div>
-              <div className="col-4 d-flex"><div className="bg-warning shadow-sm px-3 py-4 text-center flex-fill"><h6 className="m-0">{data.kawasan?.alamat || '-'}</h6></div></div>
+
+            <div className="row g-2">
+              <div className="col-md-4 d-flex">
+                <div className="stat-card yellow">
+                  <h5>Luas Kawasan</h5>
+                  <p>{data.kawasan?.luasKawasan || '-'}</p>
+                </div>
+              </div>
+
+              <div className="col-md-4 d-flex">
+                <div className="stat-card brown">
+                  <h5>Jenis Kawasan</h5>
+                  <p>{data.kawasan?.jenisKawasan || '-'}</p>
+                </div>
+              </div>
+
+              <div className="col-md-4 d-flex">
+                <div className="stat-card orange">
+                  <h5>Alamat</h5>
+                  <p>{data.kawasan?.alamat || '-'}</p>
+                </div>
+              </div>
+
+            </div>
+
+            <div className="mt-4">
+              <h4>Status Kawasan</h4>
+              <p>{data.kawasan?.status}</p>
             </div>
           </div>
         </div>
@@ -51,7 +83,7 @@ export default function Informasi() {
       {/* Satwa Dilindungi Start */}
       <section id="dilindungi" className="container-fluid py-5">
         <div className="text-center">
-          <h1 className="mb-3">Tumbuhan, <br/>Satwa di Lindungi</h1>
+          <h2 className="fw-bold heading-green animate-title">Tumbuhan, <br />Satwa di Lindungi</h2>
           <p className="mx-lg-5 mb-5">Hutan mangrove mempunyai banyak sekali manfaat untuk Indonesia. Kini kami bersama-sama dengan lembaga, kelompok, maupun perseorangan melakukan penanaman dan monitoring mangrove.</p>
         </div>
         <a href="/edukasi?kategori=Satwa" className="btn btn-primary mb-3">Lebih Banyak</a>
@@ -77,7 +109,7 @@ export default function Informasi() {
 
       <section id="executive-summary" className="container-fluid py-5">
         <div className="text-center">
-          <h1 className="mb-3">Executive Summary</h1>
+          <h2 className="fw-bold heading-green animate-title">Executive Summary<br /></h2>
         </div>
         <div className="text-end mb-3">
           <a href="/edukasi?kategori=Executive" className="btn btn-primary">Lihat Informasi Lainnya</a>
@@ -103,7 +135,7 @@ export default function Informasi() {
 
       <section id="peraturan" className="container py-5">
         <div className="text-center">
-          <h1 className="mb-3">Daftar Peraturan</h1>
+          <h2 className="fw-bold heading-green animate-title">Daftar Peraturan<br /></h2>
         </div>
         {data.peraturan.map((p) => (
           <div key={p.id} className="border rounded p-3 mb-3">

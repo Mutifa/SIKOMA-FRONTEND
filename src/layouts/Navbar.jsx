@@ -52,7 +52,7 @@ export default function Navbar({ website }) {
     </li>
     <li>
       <a href="/#sejarah" className="dropdown-item">
-        Sejarah
+        Sejarah UPT KPH Tasik Besar Serkap
       </a>
     </li>
   </ul>

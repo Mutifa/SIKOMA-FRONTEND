@@ -416,3 +416,72 @@ a {
   transform: translateY(40px);
   animation: fadeSlideUp 0.8s ease forwards;
 }
+/* ================= BUTTON CUSTOM ================= */
+.btn-primary {
+  background-color: var(--primary-green) !important;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-green-dark) !important;
+}
+
+.card-stat {
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+/* 🔥 biar ga geser keluar layar */
+.row {
+  overflow-x: hidden;
+}
+.stat-card {
+  background: #f4b400;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat-card h5 {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* warna beda tiap card */
+.stat-card.yellow {
+  background: #f4b400;
+}
+
+.stat-card.brown {
+  background: #c89b6d;
+}
+
+.stat-card.orange {
+  background: #d2691e;
+}
+
+.stat-card {
+  width: 100%;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  min-height: 140px; /* 🔥 INI YANG BUAT SAMA */
+}
