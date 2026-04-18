@@ -1,18 +1,33 @@
 import React from 'react'
 import Template from '../../layouts/Template.jsx'
 import api from '../../lib/api.js'
+import { ENDPOINTS } from '../../lib/endpoints'
 
 export default function StandarPelayanan() {
   const [website, setWebsite] = React.useState(null)
   const [form, setForm] = React.useState({ nama: '', email: '', nohp: '', judul: '', pesan: '' })
   const [message, setMessage] = React.useState('')
   const [error, setError] = React.useState('')
+  const [loading, setLoading] = React.useState(false)
+
+const handleChange = (e) => {
+  setForm({
+    ...form,
+    [e.target.name]: e.target.value
+  })
+}
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/home').then(res => { if (mounted) setWebsite(res.data.website) })
+    api.get('/home').then(res => { if (mounted) setWebsite(res.data.website) })
     return () => { mounted = false }
   }, [])
+React.useEffect(() => {
+  if (message) {
+    const timer = setTimeout(() => setMessage(''), 3000)
+    return () => clearTimeout(timer)
+  }
+}, [message])
 
   return (
     <Template title="Standar Pelayanan" active="standar-pelayanan">
@@ -46,11 +61,23 @@ export default function StandarPelayanan() {
               {message && <div className="alert alert-success text-start">{message}</div>}
               {error && <div className="alert alert-danger text-start">{error}</div>}
               <form onSubmit={(e)=>{
-                e.preventDefault(); setMessage(''); setError('');
-                api.post('/api/simpan-pesan', form)
-                  .then(()=>{ setMessage('Pesan anda telah terkirim.'); setForm({ nama:'', email:'', nohp:'', judul:'', pesan:'' }) })
-                  .catch(err=> setError(err.response?.data?.message || 'Gagal mengirim pesan'))
-              }}>
+  e.preventDefault();
+  setMessage('');
+  setError('');
+  setLoading(true); // 🔥 mulai loading
+
+  api.post('/simpan-pesan', form)
+    .then(()=>{
+      setMessage('Pesan anda telah terkirim.');
+      setForm({ nama:'', email:'', nohp:'', judul:'', pesan:'' });
+    })
+    .catch(err=>{
+      setError(err.response?.data?.message || 'Gagal mengirim pesan');
+    })
+    .finally(()=>{
+      setLoading(false); // 🔥 stop loading
+    });
+}}>
                 <div className="row g-3">
                   <div className="col-12 col-md-4">
                     <input type="text" name="nama" className="form-control border-0" placeholder="Nama Lengkap" style={{height:55}} value={form.nama} onChange={e=>setForm({...form, nama:e.target.value})} />
@@ -68,7 +95,9 @@ export default function StandarPelayanan() {
                     <textarea name="pesan" className="form-control border-0" rows="4" placeholder="Pesan kamu" value={form.pesan} onChange={e=>setForm({...form, pesan:e.target.value})}></textarea>
                   </div>
                   <div className="col-12">
-                    <button className="btn btn-primary w-100 py-3" type="submit">Kirim</button>
+                  <button className="btn btn-primary w-100 py-3" type="submit" disabled={loading}>
+  {loading ? 'Mengirim...' : 'Kirim'}
+</button>
                   </div>
                 </div>
               </form>

@@ -24,5 +24,8 @@ export const ENDPOINTS = {
   },
   INFORMASI: {
   GET: '/informasi'
-}
+},
+PESAN: {
+    CREATE: '/simpan-pesan'
+  }
 }
