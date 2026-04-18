@@ -2,7 +2,7 @@ export const ENDPOINTS = {
   AUTH: {
     LOGIN: '/auth/login',
     LOGOUT: '/auth/logout',
-    ME: '/auth/me'
+    ME: '/profile'
   },
 
   LAPORAN: {
@@ -11,9 +11,9 @@ export const ENDPOINTS = {
   },
 
   DASHBOARD: {
-    ADMIN_PUSAT: '/admin/dashboard',
-    ADMIN_LAPANGAN: '/lapangan/dashboard'
-  },
+  ADMIN_PUSAT: '/admin_pusat/dashboard',
+  ADMIN_LAPANGAN: '/admin_lapangan/dashboard'
+},
 
   EDUKASI: {
     GET: '/edukasi'
@@ -22,10 +22,16 @@ export const ENDPOINTS = {
   HOME: {
     GET: '/home'
   },
+
   INFORMASI: {
-  GET: '/informasi'
-},
-PESAN: {
+    GET: '/informasi'
+  },
+  
+  PESAN: {
     CREATE: '/simpan-pesan'
-  }
+  },
+  WEBSITE: {
+  GET: '/admin_pusat/website',
+  UPDATE: '/admin_pusat/website'
+}
 }

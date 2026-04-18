@@ -44,25 +44,26 @@ export const AuthProvider = ({ children }) => {
   //  LOGIN
   const login = async (email, password) => {
     try {
-      const res = await authService.login({ email, password })
+ const res = await authService.login({ email, password })
 
-      const userData = res.data.user
+const userData = res.data.data.user
+const token = res.data.data.token
+const role = res.data.data.role
 
-      // simpan user
-      setUser(userData)
-      setIsAuthenticated(true)
+// simpan user
+setUser({ ...userData, role })
+setIsAuthenticated(true)
 
-      //  OPTIONAL: simpan token kalau backend kirim
-      if (res.data.token) {
-        localStorage.setItem('token', res.data.token)
-      }
-
+// simpan token
+if (token) {
+  localStorage.setItem('token', token)
+}
       // REDIRECT BERDASARKAN ROLE
     let redirect = '/'
 
-if (userData.role === 'admin_pusat') {
+if (role === 'admin_pusat') {
   redirect = '/admin-pusat/dashboard'
-} else if (userData.role === 'admin_lapangan') {
+} else if (role === 'admin_lapangan') {
   redirect = '/admin-lapangan/dashboard'
 }
       return {

@@ -1,6 +1,6 @@
 import React from 'react'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
-import api from '../../lib/api.js'
+import { profilPerusahaanService } from '../../services/profilPerusahaanService'
 
 export default function ProfilPerusahaan() {
   const [formData, setFormData] = React.useState({
@@ -25,6 +25,19 @@ export default function ProfilPerusahaan() {
   const [saving, setSaving] = React.useState(false)
   const [error, setError] = React.useState('')
   const [success, setSuccess] = React.useState('')
+  const [isEdit, setIsEdit] = React.useState(false)
+
+
+  // 🔥 TAMBAHKAN DI SINI
+  React.useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        setSuccess('')
+      }, 3000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [success])
 
   // Function to strip HTML tags
   const stripHtmlTags = (html) => {
@@ -38,7 +51,7 @@ export default function ProfilPerusahaan() {
 
   const loadWebsiteData = async () => {
     try {
-      const response = await api.get('/api/AdminPusat/website')
+      const response = await profilPerusahaanService.get()
       const data = response.data
       setFormData({
         nama: stripHtmlTags(data.nama) || '',
@@ -80,34 +93,36 @@ export default function ProfilPerusahaan() {
       [name]: files[0] || null
     }))
   }
+const handleSubmit = async (e) => {
+  e.preventDefault()
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  // 🔥 TAMBAHKAN INI
+  if (!isEdit) return
     setSaving(true)
     setError('')
     setSuccess('')
 
     try {
       const formDataToSend = new FormData()
-      
-      // Add text fields
+
       Object.keys(formData).forEach(key => {
         if (key !== 'icon' && key !== 'logo' && key !== 'struktur') {
           formDataToSend.append(key, formData[key] || '')
         }
       })
 
-      // Add files if they exist
       if (formData.icon) formDataToSend.append('icon', formData.icon)
       if (formData.logo) formDataToSend.append('logo', formData.logo)
       if (formData.struktur) formDataToSend.append('struktur', formData.struktur)
 
-      await api.post('/api/AdminPusat/website', formDataToSend, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-      
+      // 🔥 INI YANG DIGANTI
+      await profilPerusahaanService.update(formDataToSend)
+
+      await loadWebsiteData()
+
       setSuccess('Data website berhasil diperbarui')
-      loadWebsiteData() // Reload data with cleaned HTML tags
+      setIsEdit(false)
+
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal menyimpan data')
     } finally {
@@ -137,11 +152,10 @@ export default function ProfilPerusahaan() {
         {success}
         <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>}
-      
+
       <div className="white-box">
         <div className="box-title mb-3">Pengaturan Website</div>
-        
-        <form onSubmit={handleSubmit}>
+       <form onSubmit={handleSubmit} autoComplete="off">
           <div className="row">
             <div className="col-md-6 mb-3">
               <label className="form-label">Nama Website</label>
@@ -152,7 +166,9 @@ export default function ProfilPerusahaan() {
                 value={formData.nama}
                 onChange={handleChange}
                 required
-              />
+                disabled={!isEdit} />
+
+
             </div>
 
             <div className="col-md-6 mb-3">
@@ -164,7 +180,7 @@ export default function ProfilPerusahaan() {
                 onChange={handleChange}
                 rows="3"
                 required
-              />
+                disabled={!isEdit} />
             </div>
 
             <div className="col-md-6 mb-3">
@@ -176,7 +192,7 @@ export default function ProfilPerusahaan() {
                 value={formData.keyword}
                 onChange={handleChange}
                 required
-              />
+                disabled={!isEdit} />
             </div>
 
             <div className="col-md-6 mb-3">
@@ -188,7 +204,7 @@ export default function ProfilPerusahaan() {
                 onChange={handleChange}
                 rows="3"
                 required
-              />
+                disabled={!isEdit} />
             </div>
 
             <div className="col-md-6 mb-3">
@@ -200,7 +216,7 @@ export default function ProfilPerusahaan() {
                 value={formData.telepon}
                 onChange={handleChange}
                 required
-              />
+                disabled={!isEdit} />
             </div>
 
             <div className="col-md-6 mb-3">
@@ -212,7 +228,7 @@ export default function ProfilPerusahaan() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-              />
+                disabled={!isEdit} />
             </div>
 
             <div className="col-md-6 mb-3">
@@ -223,7 +239,7 @@ export default function ProfilPerusahaan() {
                 name="facebook"
                 value={formData.facebook}
                 onChange={handleChange}
-              />
+                disabled={!isEdit} />
             </div>
 
             <div className="col-md-6 mb-3">
@@ -234,7 +250,7 @@ export default function ProfilPerusahaan() {
                 name="instagram"
                 value={formData.instagram}
                 onChange={handleChange}
-              />
+                disabled={!isEdit} />
             </div>
 
             <div className="col-md-12 mb-3">
@@ -246,7 +262,7 @@ export default function ProfilPerusahaan() {
                 value={formData.wa}
                 onChange={handleChange}
                 rows="3"
-              />
+                disabled={!isEdit} />
             </div>
 
             <div className="col-md-12 mb-3">
@@ -258,7 +274,7 @@ export default function ProfilPerusahaan() {
                 onChange={handleChange}
                 rows="4"
                 required
-              />
+                disabled={!isEdit} />
             </div>
 
             <div className="col-md-4 mb-3">
@@ -271,11 +287,11 @@ export default function ProfilPerusahaan() {
                 onChange={handleFileChange}
               />
               {formData.icon && (
-                <img 
-                  src={formData.icon instanceof File ? URL.createObjectURL(formData.icon) : `/img/${formData.icon}`} 
-                  alt="Icon" 
-                  width="50" 
-                />
+                <img
+                  src={formData.icon instanceof File ? URL.createObjectURL(formData.icon) : `/img/${formData.icon}`}
+                  alt="Icon"
+                  width="50"
+                  disabled={!isEdit} />
               )}
             </div>
 
@@ -289,11 +305,11 @@ export default function ProfilPerusahaan() {
                 onChange={handleFileChange}
               />
               {formData.logo && (
-                <img 
-                  src={formData.logo instanceof File ? URL.createObjectURL(formData.logo) : `/img/${formData.logo}`} 
-                  alt="Logo" 
-                  width="100" 
-                />
+                <img
+                  src={formData.logo instanceof File ? URL.createObjectURL(formData.logo) : `/img/${formData.logo}`}
+                  alt="Logo"
+                  width="100"
+                  disabled={!isEdit} />
               )}
             </div>
 
@@ -307,11 +323,11 @@ export default function ProfilPerusahaan() {
                 onChange={handleFileChange}
               />
               {formData.struktur && (
-                <img 
-                  src={formData.struktur instanceof File ? URL.createObjectURL(formData.struktur) : `/img/${formData.struktur}`} 
-                  alt="struktur" 
-                  width="100" 
-                />
+                <img
+                  src={formData.struktur instanceof File ? URL.createObjectURL(formData.struktur) : `/img/${formData.struktur}`}
+                  alt="struktur"
+                  width="100"
+                  disabled={!isEdit} />
               )}
             </div>
 
@@ -324,7 +340,7 @@ export default function ProfilPerusahaan() {
                 onChange={handleChange}
                 rows="3"
                 required
-              />
+                disabled={!isEdit} />
             </div>
 
             <div className="col-md-6 mb-3">
@@ -336,7 +352,7 @@ export default function ProfilPerusahaan() {
                 onChange={handleChange}
                 rows="3"
                 required
-              />
+                disabled={!isEdit} />
             </div>
 
             <div className="col-md-6 mb-3">
@@ -348,18 +364,28 @@ export default function ProfilPerusahaan() {
                 onChange={handleChange}
                 rows="3"
                 required
-              />
+                disabled={!isEdit} />
             </div>
           </div>
 
-          <div className="mt-3">
-            <button 
-              type="submit" 
-              className="btn btn-primary float-end"
-              disabled={saving}
-            >
-              {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
-            </button>
+          <div className="mt-3 text-end">
+            {isEdit ? (
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={saving}
+              >
+                {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={() => setIsEdit(true)}
+              >
+                Edit
+              </button>
+            )}
           </div>
         </form>
       </div>
