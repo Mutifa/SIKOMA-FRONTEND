@@ -2,22 +2,24 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
+import { ENDPOINTS } from '../../lib/endpoints'
 
 export default function Laporan() {
   const [laporan, setLaporan] = React.useState([])
-  const [daerah, setDaerah] = React.useState([])
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(true)
   const [selectedDaerah, setSelectedDaerah] = React.useState('')
+  const [data, setData] = React.useState([])
+  const [daerah, setDaerah] = React.useState([])
 
   React.useEffect(() => {
     let mounted = true
     const fetchData = async () => {
       try {
-        const url = selectedDaerah 
-          ? `/api/AdminPusat/laporan-konservasi?daerah=${selectedDaerah}`
-          : '/api/AdminPusat/laporan-konservasi'
-        
+        const url = selectedDaerah
+          ? `${ENDPOINTS.LAPORAN_ADMIN.GET}?daerah=${selectedDaerah}`
+          : ENDPOINTS.LAPORAN_ADMIN.GET
+
         const res = await api.get(url)
         if (mounted) {
           setLaporan(res.data.data || res.data)
@@ -37,17 +39,24 @@ export default function Laporan() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/AdminPusat/laporan-konservasi/daerah')
+
+    api.get('/admin_pusat/laporan-konservasi')
       .then(res => {
         if (mounted) {
-          setDaerah(res.data.data || res.data)
+          const data = res.data.data || res.data
+
+          setData(data)
+
+          // ambil daftar daerah unik dari data
+          const daerahList = [...new Set(data.map(item => item.daerahLokasi))]
+
+          setDaerah(daerahList)
         }
       })
       .catch(err => {
-        if (mounted) {
-          console.error('Error fetching daerah:', err)
-        }
+        console.error(err)
       })
+
     return () => { mounted = false }
   }, [])
 
@@ -88,12 +97,12 @@ export default function Laporan() {
         {error}
         <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>}
-      
+
       <div className="row">
         <div className="col-12">
           <div className="white-box">
             <h3 className="box-title">Laporan Konservasi</h3>
-            
+
             {/* Filter by Daerah */}
             {daerah.length > 0 && (
               <div className="mb-3">

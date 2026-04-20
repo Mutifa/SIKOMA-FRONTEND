@@ -1,13 +1,17 @@
 import React from 'react'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
+import kawasanService from '../../services/kawasanService.js'
 
 export default function Kawasan() {
   const [data, setData] = React.useState(null)
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(true)
   const [saving, setSaving] = React.useState(false)
+  const [success, setSuccess] = React.useState('')
   const [formData, setFormData] = React.useState({
+
+
     deskripsi: '',
     luasKawasan: '',
     jenisKawasan: '',
@@ -25,8 +29,8 @@ export default function Kawasan() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/AdminPusat/kawasan')
-      .then(res => { 
+    api.get('/admin_pusat/kawasan')
+      .then(res => {
         if (mounted) {
           const kawasan = res.data.data || res.data
           console.log('Kawasan data received:', kawasan)
@@ -47,7 +51,7 @@ export default function Kawasan() {
           setLoading(false)
         }
       })
-      .catch(err => { 
+      .catch(err => {
         if (mounted) {
           setError(err.response?.data?.message || 'Gagal memuat')
           setLoading(false)
@@ -75,7 +79,7 @@ export default function Kawasan() {
   const handleDelete = async () => {
     if (window.confirm('Apakah Anda yakin ingin menghapus kawasan konservasi ini?')) {
       try {
-        await api.delete(`/api/AdminPusat/kawasan/${data.id}`)
+        await api.delete(`/admin_pusat/kawasan/${data.id}`)
         setData(null)
         setFormData({
           deskripsi: '',
@@ -99,7 +103,7 @@ export default function Kawasan() {
 
     try {
       const formDataToSend = new FormData()
-      
+
       // Add all required fields explicitly
       formDataToSend.append('deskripsi', formData.deskripsi || '')
       formDataToSend.append('luasKawasan', formData.luasKawasan || '')
@@ -110,7 +114,7 @@ export default function Kawasan() {
 
       // Add file if it exists
       if (formData.gambar) formDataToSend.append('gambar', formData.gambar)
-      
+
       // Debug log FormData
       console.log('FormData contents:')
       for (let [key, value] of formDataToSend.entries()) {
@@ -120,18 +124,19 @@ export default function Kawasan() {
       if (data) {
         // Update existing - Laravel workaround: use POST with _method for file uploads
         formDataToSend.append('_method', 'PUT')
-        await api.post(`/api/AdminPusat/kawasan/${data.id}`, formDataToSend, {
+        await api.post(`/admin_pusat/kawasan/${data.id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       } else {
         // Create new
-        await api.post('/api/AdminPusat/kawasan', formDataToSend, {
+        await api.post('/admin_pusat/kawasan', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       }
-      
+
       // Reload data
-      const res = await api.get('/api/AdminPusat/kawasan')
+      setSuccess('Data kawasan berhasil diperbarui')
+      const res = await api.get('/admin_pusat/kawasan')
       const kawasan = res.data.data || res.data
       if (kawasan && kawasan.length > 0) {
         setData(kawasan[0])
@@ -166,21 +171,32 @@ export default function Kawasan() {
 
   return (
     <AdminPusatLayout title="Kawasan Konservasi">
-      {error && <div className="alert alert-danger alert-dismissible fade show" role="alert">
-        {error}
-        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>}
-      
+
+      {/* ✅ SUCCESS */}
+      {success && (
+        <div className="alert alert-success alert-dismissible fade show" role="alert">
+          {success}
+          <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      )}
+
+      {/* ❌ ERROR (yang sudah ada) */}
+      {error && (
+        <div className="alert alert-danger alert-dismissible fade show" role="alert">
+          {error}
+          <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      )}
+
       <div className="white-box">
-        <h3 className="box-title mb-4">Kawasan Konservasi</h3>
 
         <form onSubmit={handleSubmit}>
           {data && data.gambar && (
             <center>
-              <img 
-                src={`/img/${data.gambar}`} 
+              <img
+               src={`http://127.0.0.1:8000/storage/${data.gambar}?t=${Date.now()}`}
                 alt="foto kawasan konservasi"
-                className="img-fluid mb-5" 
+                className="img-fluid mb-5"
                 style={{ maxHeight: '120px' }}
                 onLoad={() => {
                   console.log('Gambar berhasil dimuat:', `/img/${data.gambar}`)
@@ -192,9 +208,9 @@ export default function Kawasan() {
                   if (fallback) fallback.style.display = 'block'
                 }}
               />
-              <div 
-                className="fallback-text text-muted" 
-                style={{display: 'none'}}
+              <div
+                className="fallback-text text-muted"
+                style={{ display: 'none' }}
               >
                 <i className="fas fa-image fa-3x mb-2"></i><br />
                 Foto kawasan konservasi tidak tersedia
@@ -274,10 +290,10 @@ export default function Kawasan() {
                 />
                 {formData.gambar && (
                   <div className="mt-2">
-                    <img 
-                      src={URL.createObjectURL(formData.gambar)} 
+                    <img
+                      src={URL.createObjectURL(formData.gambar)}
                       alt="Preview"
-                      className="img-fluid" 
+                      className="img-fluid"
                       style={{ maxHeight: '120px' }}
                     />
                   </div>
@@ -299,16 +315,16 @@ export default function Kawasan() {
           </div>
 
           <div className="d-flex gap-2">
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="btn btn-primary"
               disabled={saving}
             >
               <i className="fas fa-save"></i> {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
             </button>
             {data && (
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="btn btn-danger"
                 onClick={handleDelete}
                 disabled={saving}

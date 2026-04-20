@@ -45,6 +45,25 @@ KONTEN: {
   CREATE: '/admin_pusat/edukasi',
   UPDATE: (id) => `/admin_pusat/edukasi/${id}`,
   DELETE: (id) => `/admin_pusat/edukasi/${id}`
-}
+},
+KAWASAN: {
+  GET: '/admin_pusat/kawasan',
+  CREATE: '/admin_pusat/kawasan',
+  UPDATE: (id) => `/admin_pusat/kawasan/${id}`,
+  DELETE: (id) => `/admin_pusat/kawasan/${id}`
+},
+LAPORAN_ADMIN: {
+  GET: '/admin_pusat/laporan-konservasi',
+  CREATE: '/admin_pusat/laporan-konservasi',
+  UPDATE: (id) => `/admin_pusat/laporan-konservasi/${id}`,
+  DELETE: (id) => `/admin_pusat/laporan-konservasi/${id}`,
+  UPDATE_STATUS: (id) => `/admin_pusat/laporan-konservasi/${id}/status`
+},
+LAPORAN_ADMIN: {
+  GET: '/admin_pusat/laporan-konservasi',
+  UPDATE_STATUS: (id) => `/admin_pusat/laporan-konservasi/${id}/status`,
+  DETAIL_LAPORAN: (id) => `/detail-konservasi/${id}`
+},
+
 
 }

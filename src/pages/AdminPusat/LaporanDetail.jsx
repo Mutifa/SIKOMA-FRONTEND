@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
+import { ENDPOINTS } from '../../lib/endpoints'
 
 export default function LaporanDetail() {
   const { id } = useParams()
@@ -15,7 +16,7 @@ export default function LaporanDetail() {
     let mounted = true
     const fetchLaporan = async () => {
       try {
-        const res = await api.get(`/api/AdminPusat/laporan-konservasi/${id}`)
+       const res = await api.get('/admin_pusat/laporan-konservasi')
         if (mounted) {
           setLaporan(res.data.data || res.data)
           setLoading(false)
@@ -32,23 +33,26 @@ export default function LaporanDetail() {
     return () => { mounted = false }
   }, [id])
 
-  const handleStatusUpdate = async (status) => {
-    if (!window.confirm(`Apakah Anda yakin ingin ${status === 1 ? 'menyetujui' : 'menolak'} laporan ini?`)) {
-      return
-    }
+const handleStatusUpdate = async (status) => {
+  if (!window.confirm('Yakin?')) return
 
-    setProcessing(true)
-    try {
-      await api.put(`/api/AdminPusat/laporan-konservasi/${id}/status`, { status })
-      // Refresh the data
-      const res = await api.get(`/api/AdminPusat/laporan-konservasi/${id}`)
-      setLaporan(res.data.data || res.data)
-    } catch (err) {
-      setError(err.response?.data?.message || 'Gagal memperbarui status laporan')
-    } finally {
-      setProcessing(false)
-    }
+  setProcessing(true)
+
+  try {
+    await api.put(`/admin_pusat/laporan-konservasi/${id}/status`, { status })
+
+    // 🔥 UPDATE LANGSUNG TANPA RELOAD
+    setLaporan(prev => ({
+      ...prev,
+      status: status
+    }))
+
+  } catch (err) {
+    setError(err.response?.data?.message || 'Gagal update')
+  } finally {
+    setProcessing(false)
   }
+}
 
   const formatDate = (dateString) => {
     const date = new Date(dateString)
