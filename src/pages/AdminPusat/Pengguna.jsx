@@ -13,7 +13,6 @@ export default function Pengguna() {
     name: '',
     username: '',
     email: '',
-    nohp: '',
     password: '',
     role: 'AdminLapangan'
   })
@@ -21,13 +20,13 @@ export default function Pengguna() {
   React.useEffect(() => {
     let mounted = true
     api.get('/admin_pusat/pengguna')
-      .then(res => { 
+      .then(res => {
         if (mounted) {
           setData(res.data.data || res.data)
           setLoading(false)
         }
       })
-      .catch(err => { 
+      .catch(err => {
         if (mounted) {
           setError(err.response?.data?.message || 'Gagal memuat')
           setLoading(false)
@@ -42,7 +41,6 @@ export default function Pengguna() {
       name: user.name || '',
       username: user.username || '',
       email: user.email || '',
-      nohp: user.nohp || '',
       password: '',
       role: user.role || 'AdminLapangan'
     })
@@ -50,32 +48,45 @@ export default function Pengguna() {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-      if (editingUser) {
-        // Update user
-        await api.put(`/admin_pusat/pengguna/${editingUser.id}`, formData)
-        setData(data.map(user => user.id === editingUser.id ? {...user, ...formData} : user))
-      } else {
-        // Create user
-        const response = await api.post('/admin_pusat/pengguna', formData)
-        setData([response.data, ...data])
+  e.preventDefault()
+  try {
+    if (editingUser) {
+      const payload = {
+        name: formData.name,
+        username: formData.username,
+        email: formData.email,
+        role: formData.role
       }
-      setShowModal(false)
-      setEditingUser(null)
-      setFormData({
-        name: '',
-        username: '',
-        email: '',
-        nohp: '',
-        password: '',
-        role: 'AdminLapangan'
-      })
-    } catch (err) {
-      setError(err.response?.data?.message || 'Gagal menyimpan data')
-    }
-  }
 
+      if (formData.password && formData.password.length >= 8) {
+        payload.password = formData.password
+      }
+
+      await api.put(`/admin_pusat/pengguna/${editingUser.id}`, payload)
+
+      setData(data.map(user =>
+        user.id === editingUser.id ? { ...user, ...payload } : user
+      ))
+
+    } else {
+      const response = await api.post('/admin_pusat/pengguna', formData)
+      setData([response.data, ...data])
+    }
+
+    setShowModal(false)
+    setEditingUser(null)
+    setFormData({
+      name: '',
+      username: '',
+      email: '',
+      password: '',
+      role: 'AdminLapangan'
+    })
+
+  } catch (err) {
+    setError(err.response?.data?.message || 'Gagal menyimpan data')
+  }
+}
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
       try {
@@ -102,10 +113,10 @@ export default function Pengguna() {
   return (
     <AdminPusatLayout title="Pengguna">
       {error && <div className="alert alert-danger">{error}</div>}
-      
+
       <div className="row">
         <div className="col-12">
-          <button 
+          <button
             className="btn btn-primary btn-sm float-end mb-3"
             onClick={() => {
               setEditingUser(null)
@@ -113,7 +124,6 @@ export default function Pengguna() {
                 name: '',
                 username: '',
                 email: '',
-                nohp: '',
                 password: '',
                 role: 'AdminLapangan'
               })
@@ -124,10 +134,10 @@ export default function Pengguna() {
           </button>
         </div>
       </div>
-      
+
       <div className="white-box">
         <h3 className="box-title">Daftar Pengguna</h3>
-        
+
         {data.length === 0 ? (
           <div className="text-center py-4">
             <p className="text-muted">Belum ada pengguna</p>
@@ -153,20 +163,19 @@ export default function Pengguna() {
                     <td>{user.name || 'N/A'}</td>
                     <td>{user.username || 'N/A'}</td>
                     <td>{user.email || 'N/A'}</td>
-                    <td>{user.nohp || 'N/A'}</td>
                     <td>
                       <span className={`badge ${user.role === 'AdminPusat' ? 'bg-danger' : 'bg-primary'}`}>
                         {user.role || 'AdminLapangan'}
                       </span>
                     </td>
                     <td>
-                      <button 
+                      <button
                         className="btn btn-warning btn-sm me-1"
                         onClick={() => handleEdit(user)}
                       >
                         <i className="fas fa-edit"></i>
                       </button>
-                      <button 
+                      <button
                         className="btn btn-danger btn-sm text-white"
                         onClick={() => handleDelete(user.id)}
                       >
@@ -183,16 +192,16 @@ export default function Pengguna() {
 
       {/* Modal Form */}
       {showModal && (
-        <div className="modal show d-block" style={{backgroundColor: 'rgba(0,0,0,0.5)'}}>
+        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">
                   {editingUser ? 'Edit Pengguna' : 'Tambah Pengguna'}
                 </h5>
-                <button 
-                  type="button" 
-                  className="btn-close" 
+                <button
+                  type="button"
+                  className="btn-close"
                   onClick={() => setShowModal(false)}
                 ></button>
               </div>
@@ -200,55 +209,45 @@ export default function Pengguna() {
                 <div className="modal-body">
                   <div className="form-group mb-3">
                     <label htmlFor="name">Nama</label>
-                    <input 
-                      type="text" 
-                      id="name" 
-                      className="form-control" 
+                    <input
+                      type="text"
+                      id="name"
+                      className="form-control"
                       value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      required 
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      required
                     />
                   </div>
                   <div className="form-group mb-3">
                     <label htmlFor="username">Username</label>
-                    <input 
-                      type="text" 
-                      id="username" 
-                      className="form-control" 
+                    <input
+                      type="text"
+                      id="username"
+                      className="form-control"
                       value={formData.username}
-                      onChange={(e) => setFormData({...formData, username: e.target.value})}
-                      required 
+                      onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                      required
                     />
                   </div>
                   <div className="form-group mb-3">
                     <label htmlFor="email">Email</label>
-                    <input 
-                      type="email" 
-                      id="email" 
-                      className="form-control" 
+                    <input
+                      type="email"
+                      id="email"
+                      className="form-control"
                       value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      required 
-                    />
-                  </div>
-                  <div className="form-group mb-3">
-                    <label htmlFor="nohp">No. HP</label>
-                    <input 
-                      type="text" 
-                      id="nohp" 
-                      className="form-control" 
-                      value={formData.nohp}
-                      onChange={(e) => setFormData({...formData, nohp: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      required
                     />
                   </div>
                   <div className="form-group mb-3">
                     <label htmlFor="password">Password</label>
-                    <input 
-                      type="password" 
-                      id="password" 
-                      className="form-control" 
+                    <input
+                      type="password"
+                      id="password"
+                      className="form-control"
                       value={formData.password}
-                      onChange={(e) => setFormData({...formData, password: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                       required={!editingUser}
                     />
                     {editingUser && (
@@ -257,11 +256,11 @@ export default function Pengguna() {
                   </div>
                   <div className="form-group mb-3">
                     <label htmlFor="role">Role</label>
-                    <select 
-                      id="role" 
-                      className="form-control" 
+                    <select
+                      id="role"
+                      className="form-control"
                       value={formData.role}
-                      onChange={(e) => setFormData({...formData, role: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                     >
                       <option value="AdminLapangan">AdminLapangan</option>
                       <option value="AdminPusat">Admin Pusat</option>
@@ -269,9 +268,9 @@ export default function Pengguna() {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button 
-                    type="button" 
-                    className="btn btn-secondary" 
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
                     onClick={() => setShowModal(false)}
                   >
                     Batal
