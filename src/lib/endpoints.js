@@ -65,6 +65,17 @@ PERATURAN: {
   CREATE: '/admin_pusat/peraturan',
   UPDATE: (id) => `/admin_pusat/peraturan/${id}`,
   DELETE: (id) => `/admin_pusat/peraturan/${id}`
+},
+GALERI: {
+  GET: '/admin_pusat/galeri',
+  CREATE: '/admin_pusat/galeri',
+  DELETE: (id) => `/admin_pusat/galeri/${id}`
+},
+PENGGUNA: {
+  GET: '/admin_pusat/pengguna',
+  CREATE: '/admin_pusat/pengguna',
+  UPDATE: (id) => `/admin_pusat/pengguna/${id}`,
+  DELETE: (id) => `/admin_pusat/pengguna/${id}`
 }
 
 }

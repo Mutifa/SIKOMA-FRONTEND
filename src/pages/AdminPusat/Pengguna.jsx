@@ -1,6 +1,7 @@
 import React from 'react'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
+import { ENDPOINTS } from '../../lib/endpoints'
 
 export default function Pengguna() {
   const [data, setData] = React.useState([])
@@ -19,7 +20,7 @@ export default function Pengguna() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/AdminPusat/pengguna')
+    api.get('/admin_pusat/pengguna')
       .then(res => { 
         if (mounted) {
           setData(res.data.data || res.data)
@@ -53,11 +54,11 @@ export default function Pengguna() {
     try {
       if (editingUser) {
         // Update user
-        await api.put(`/api/AdminPusat/pengguna/${editingUser.id}`, formData)
+        await api.put(`/admin_pusat/pengguna/${editingUser.id}`, formData)
         setData(data.map(user => user.id === editingUser.id ? {...user, ...formData} : user))
       } else {
         // Create user
-        const response = await api.post('/api/AdminPusat/pengguna', formData)
+        const response = await api.post('/admin_pusat/pengguna', formData)
         setData([response.data, ...data])
       }
       setShowModal(false)
@@ -78,7 +79,7 @@ export default function Pengguna() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
       try {
-        await api.delete(`/api/AdminPusat/pengguna/${id}`)
+        await api.delete(`/admin_pusat/pengguna/${id}`)
         setData(data.filter(user => user.id !== id))
       } catch (err) {
         setError(err.response?.data?.message || 'Gagal menghapus data')

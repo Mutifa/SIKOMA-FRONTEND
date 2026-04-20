@@ -1,6 +1,8 @@
 import React from 'react'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
+import { ENDPOINTS } from '../../lib/endpoints'
+
 
 export default function Galeri() {
   const [data, setData] = React.useState([])
@@ -19,7 +21,7 @@ export default function Galeri() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/AdminPusat/galeri')
+    api.get('/admin_pusat/galeri')
       .then(res => { 
         if (mounted) {
           setData(res.data.data || res.data)
@@ -65,14 +67,14 @@ export default function Galeri() {
 
       if (editingItem) {
         // Update item - Laravel already uses POST for galeri updates
-        await api.post(`/api/AdminPusat/galeri/${editingItem.id}`, formDataToSend, {
+        await api.post(`/admin_pusat/galeri/${editingItem.id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         const updatedData = data.map(item => item.id === editingItem.id ? {...item, ...formData} : item)
         setData(updatedData)
       } else {
         // Create item
-        const response = await api.post('/api/AdminPusat/galeri', formDataToSend, {
+        const response = await api.post('/admin_pusat/galeri', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         const newData = [response.data, ...data]
@@ -94,7 +96,7 @@ export default function Galeri() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus item ini?')) {
       try {
-        await api.delete(`/api/AdminPusat/galeri/${id}`)
+        await api.delete(`/admin_pusat/galeri/${id}`)
         const newData = data.filter(item => item.id !== id)
         setData(newData)
       } catch (err) {
@@ -183,7 +185,7 @@ export default function Galeri() {
                   <div className="position-relative">
                     {item.gambar ? (
                       <img 
-                        src={`/uploads/galeri/${item.gambar}`} 
+                        src={`http://127.0.0.1:8000/uploads/galeri/${item.gambar}`} 
                         className="card-img-top" 
                         alt={item.judul}
                         style={{height: '200px', objectFit: 'cover'}}
@@ -374,7 +376,7 @@ export default function Galeri() {
                       <label className="form-label">Gambar Saat Ini:</label>
                       <div className="text-center">
                         <img 
-                          src={`/uploads/galeri/${editingItem.gambar}`} 
+                          src={`http://127.0.0.1:8000/uploads/galeri/${editingItem.gambar}`} 
                           alt="Current" 
                           className="img-thumbnail" 
                           style={{maxHeight: '200px'}}
