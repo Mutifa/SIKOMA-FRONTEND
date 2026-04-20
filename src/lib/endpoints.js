@@ -2,7 +2,7 @@ export const ENDPOINTS = {
   AUTH: {
     LOGIN: '/auth/login',
     LOGOUT: '/auth/logout',
-    ME: '/profile'
+    ME: '/admin_pusat/profile'
   },
 
   LAPORAN: {

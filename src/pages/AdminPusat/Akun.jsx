@@ -25,25 +25,32 @@ export default function Akun() {
     confirm: false
   })
 
-  React.useEffect(() => {
-    let mounted = true
-    // Ambil data user dari dashboard API (karena sudah ada user data di sana)
-    api.get('/api/AdminPusat/dashboard')
-      .then(res => { 
-        if (mounted && res.data.user) {
-          setUser(res.data.user)
-          setLoading(false)
-        }
-      })
-      .catch(err => { 
-        if (mounted) {
-          setError('Gagal memuat data profil')
-          setLoading(false)
-        }
-      })
-    return () => { mounted = false }
-  }, [])
+React.useEffect(() => {
+  let mounted = true
 
+  api.get('/admin_pusat/dashboard') // ✅ ganti endpoint
+    .then(res => { 
+      if (mounted) {
+       setUser(res.data.user || {
+  name: '',
+  username: '',
+  email: '',
+  nohp: '',
+  role: ''
+})  // ✅ ambil user dari dashboard
+        setLoading(false)
+      }
+    })
+    .catch(err => { 
+      if (mounted) {
+        console.error(err)
+        setError('Gagal memuat data profil')
+        setLoading(false)
+      }
+    })
+
+  return () => { mounted = false }
+}, [])
   const handleProfileUpdate = async (e) => {
     e.preventDefault()
     setSaving(true)
@@ -51,7 +58,7 @@ export default function Akun() {
     setSuccess('')
 
     try {
-      const response = await api.put('/api/AdminPusat/profile', user)
+      const response = await api.put('/admin_pusat/profile', user)
       setSuccess(response.data.message || 'Profil berhasil diperbarui')
       // Update user data with response
       if (response.data.user) {
@@ -77,7 +84,7 @@ export default function Akun() {
     }
 
     try {
-      const response = await api.put('/api/AdminPusat/password', passwordData)
+      const response = await api.put('/password', passwordData)
       setSuccess(response.data.message || 'Password berhasil diperbarui')
       setPasswordData({
         current_password: '',
@@ -127,7 +134,8 @@ export default function Akun() {
                 <input 
                   type="text" 
                   className="form-control" 
-                  value={user.username} 
+                  value={user.username}
+ 
                   onChange={e => setUser({...user, username: e.target.value})} 
                 />
               </div>
@@ -136,7 +144,7 @@ export default function Akun() {
                 <input 
                   type="email" 
                   className="form-control" 
-                  value={user.email} 
+                  value={user?.email || ''} 
                   onChange={e => setUser({...user, email: e.target.value})} 
                 />
               </div>
@@ -154,7 +162,7 @@ export default function Akun() {
                 <input 
                   type="text" 
                   className="form-control" 
-                  value={user.role} 
+                  value={user?.role || ''} 
                   disabled 
                 />
               </div>

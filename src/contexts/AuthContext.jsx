@@ -20,8 +20,14 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   //  AUTO CHECK LOGIN SAAT APP LOAD
- useEffect(() => {
-  setLoading(false)
+useEffect(() => {
+  const token = localStorage.getItem('token')
+
+  if (token) {
+    checkAuth()
+  } else {
+    setLoading(false)
+  }
 }, [])
 
   //  CEK AUTH (API: /me)
@@ -42,43 +48,54 @@ export const AuthProvider = ({ children }) => {
   }
 
   //  LOGIN
-  const login = async (email, password) => {
-    try {
- const res = await authService.login({ email, password })
+ const login = async (email, password) => {
+  try {
+    // 🔥 PANGGIL API LOGIN
+    const res = await authService.login({
+      email,
+      password
+    })
 
-const userData = res.data.data.user
-const token = res.data.data.token
-const role = res.data.data.role
+    console.log('LOGIN RESPONSE:', res.data)
 
-// simpan user
-setUser({ ...userData, role })
-setIsAuthenticated(true)
+    const userData = res.data.data.user
+    const token = res.data.data.token
+    const role = res.data.data.role
 
-// simpan token
-if (token) {
-  localStorage.setItem('token', token)
-}
-      // REDIRECT BERDASARKAN ROLE
+    // simpan user
+    setUser({ ...userData, role })
+    setIsAuthenticated(true)
+
+    // simpan token
+    if (token) {
+      localStorage.setItem('token', token)
+    }
+
+    // redirect berdasarkan role
     let redirect = '/'
 
-if (role === 'admin_pusat') {
-  redirect = '/admin-pusat/dashboard'
-} else if (role === 'admin_lapangan') {
-  redirect = '/admin-lapangan/dashboard'
-}
-      return {
-        success: true,
-        user: userData,
-        role: userData.role,
-        redirect,
-      }
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || 'Login gagal',
-      }
+    if (role === 'admin_pusat') {
+      redirect = '/admin-pusat/dashboard'
+    } else if (role === 'admin_lapangan') {
+      redirect = '/admin-lapangan/dashboard'
+    }
+
+    return {
+      success: true,
+      user: userData,
+      role,
+      redirect,
+    }
+
+  } catch (error) {
+    console.log('LOGIN ERROR:', error.response)
+
+    return {
+      success: false,
+      message: error.response?.data?.message || 'Login gagal',
     }
   }
+}
 
   // LOGOUT
   const logout = async () => {

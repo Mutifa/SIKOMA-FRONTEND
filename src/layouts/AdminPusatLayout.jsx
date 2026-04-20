@@ -48,7 +48,7 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
                 <img src="/img/logo.png" height="30px" alt="homepage" />
               </b>
               <span className="logo-text">
-                <h2 className="sikoma-title" title="SIKOMA">SIKOMA aaas</h2>
+                <h2 className="sikoma-title" title="SIKOMA">SIKOMA</h2>
               </span>
             </Link>
             </div>
