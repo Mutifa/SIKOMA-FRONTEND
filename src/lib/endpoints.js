@@ -60,10 +60,14 @@ LAPORAN_ADMIN: {
   UPDATE_STATUS: (id) => `/admin_pusat/laporan-konservasi/${id}/status`
 },
 LAPORAN_ADMIN: {
-  GET: '/admin_pusat/laporan-konservasi',
   UPDATE_STATUS: (id) => `/admin_pusat/laporan-konservasi/${id}/status`,
   DETAIL_LAPORAN: (id) => `/detail-konservasi/${id}`
 },
-
+PERATURAN: {
+  GET: '/admin_pusat/peraturan',
+  CREATE: '/admin_pusat/peraturan',
+  UPDATE: (id) => `/admin_pusat/peraturan/${id}`,
+  DELETE: (id) => `/admin_pusat/peraturan/${id}`
+}
 
 }

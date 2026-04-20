@@ -18,14 +18,14 @@ export default function Peraturan() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/AdminPusat/peraturan')
-      .then(res => { 
+    api.get('/admin_pusat/peraturan')
+      .then(res => {
         if (mounted) {
           setData(res.data.data || res.data)
           setLoading(false)
         }
       })
-      .catch(err => { 
+      .catch(err => {
         if (mounted) {
           setError(err.response?.data?.message || 'Gagal memuat')
           setLoading(false)
@@ -49,11 +49,11 @@ export default function Peraturan() {
       if (editingItem) {
         // Laravel workaround: use POST with _method for file uploads
         formDataToSend.append('_method', 'PUT')
-        await api.post(`/api/AdminPusat/peraturan/${editingItem.id}`, formDataToSend, {
+        await api.post(`/admin_pusat/peraturan/${editingItem.id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       } else {
-        await api.post('/api/AdminPusat/peraturan', formDataToSend, {
+        await api.post('/admin_pusat/peraturan', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       }
@@ -61,7 +61,7 @@ export default function Peraturan() {
       setEditingItem(null)
       setFormData({ nama: '', deskripsi: '', tahun: '', nomor: '', file: null })
       // Reload data
-      const res = await api.get('/api/AdminPusat/peraturan')
+      const res = await api.get('/admin_pusat/peraturan')
       setData(res.data.data || res.data)
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal menyimpan peraturan')
@@ -83,7 +83,7 @@ export default function Peraturan() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus peraturan ini?')) {
       try {
-        await api.delete(`/api/AdminPusat/peraturan/${id}`)
+        await api.delete(`/admin_pusat/peraturan/${id}`)
         setData(data.filter(item => item.id !== id))
       } catch (err) {
         setError(err.response?.data?.message || 'Gagal menghapus peraturan')
@@ -117,13 +117,13 @@ export default function Peraturan() {
         {error}
         <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>}
-      
+
       <div className="row">
         <div className="col-12">
-          <a 
-            href="#tambahperaturan" 
-            type="button" 
-            data-bs-toggle="modal" 
+          <a
+            href="#tambahperaturan"
+            type="button"
+            data-bs-toggle="modal"
             className="btn btn-primary btn-sm float-end"
             onClick={() => {
               setEditingItem(null)
@@ -161,9 +161,9 @@ export default function Peraturan() {
                         <td>{item.tahun} - {item.nomor}</td>
                         <td>
                           {item.file && (
-                            <a 
-                              href={`/uploads/peraturan/${item.file}`} 
-                              target="_blank" 
+                            <a
+                              href={`/uploads/peraturan/${item.file}`}
+                              target="_blank"
                               rel="noopener noreferrer"
                             >
                               Lihat File
@@ -171,13 +171,13 @@ export default function Peraturan() {
                           )}
                         </td>
                         <td>
-                          <button 
+                          <button
                             className="btn btn-warning btn-sm"
                             onClick={() => handleEdit(item)}
                           >
                             <i className="fas fa-edit"></i>
                           </button>
-                          <button 
+                          <button
                             className="btn btn-danger btn-sm text-white ms-1"
                             onClick={() => handleDelete(item.id)}
                           >
@@ -196,7 +196,7 @@ export default function Peraturan() {
 
       {/* Modal Tambah peraturan */}
       {showModal && (
-        <div className="modal show d-block" style={{backgroundColor: 'rgba(0,0,0,0.5)'}}>
+        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <div className="modal-dialog">
             <form onSubmit={handleSubmit}>
               <div className="modal-content">
@@ -204,9 +204,9 @@ export default function Peraturan() {
                   <h5 className="modal-title">
                     {editingItem ? 'Edit Peraturan' : 'Tambah Peraturan'}
                   </h5>
-                  <button 
-                    type="button" 
-                    className="btn-close" 
+                  <button
+                    type="button"
+                    className="btn-close"
                     onClick={() => setShowModal(false)}
                   ></button>
                 </div>
@@ -217,7 +217,7 @@ export default function Peraturan() {
                       type="text"
                       className="form-control"
                       value={formData.nama}
-                      onChange={(e) => setFormData({...formData, nama: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
                       required
                     />
                   </div>
@@ -228,7 +228,7 @@ export default function Peraturan() {
                       type="text"
                       className="form-control"
                       value={formData.deskripsi}
-                      onChange={(e) => setFormData({...formData, deskripsi: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
                     />
                   </div>
 
@@ -240,7 +240,7 @@ export default function Peraturan() {
                           type="number"
                           className="form-control"
                           value={formData.tahun}
-                          onChange={(e) => setFormData({...formData, tahun: e.target.value})}
+                          onChange={(e) => setFormData({ ...formData, tahun: e.target.value })}
                         />
                       </div>
                     </div>
@@ -252,7 +252,7 @@ export default function Peraturan() {
                           type="text"
                           className="form-control"
                           value={formData.nomor}
-                          onChange={(e) => setFormData({...formData, nomor: e.target.value})}
+                          onChange={(e) => setFormData({ ...formData, nomor: e.target.value })}
                         />
                       </div>
                     </div>
@@ -264,14 +264,14 @@ export default function Peraturan() {
                       type="file"
                       className="form-control"
                       accept=".pdf,.doc,.docx"
-                      onChange={(e) => setFormData({...formData, file: e.target.files[0]})}
+                      onChange={(e) => setFormData({ ...formData, file: e.target.files[0] })}
                     />
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button 
-                    type="button" 
-                    className="btn btn-secondary" 
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
                     onClick={() => setShowModal(false)}
                   >
                     Batal
