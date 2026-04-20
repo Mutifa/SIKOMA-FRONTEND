@@ -57,9 +57,6 @@ LAPORAN_ADMIN: {
   CREATE: '/admin_pusat/laporan-konservasi',
   UPDATE: (id) => `/admin_pusat/laporan-konservasi/${id}`,
   DELETE: (id) => `/admin_pusat/laporan-konservasi/${id}`,
-  UPDATE_STATUS: (id) => `/admin_pusat/laporan-konservasi/${id}/status`
-},
-LAPORAN_ADMIN: {
   UPDATE_STATUS: (id) => `/admin_pusat/laporan-konservasi/${id}/status`,
   DETAIL_LAPORAN: (id) => `/detail-konservasi/${id}`
 },

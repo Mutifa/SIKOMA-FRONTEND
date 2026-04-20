@@ -1,6 +1,7 @@
 import React from 'react'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
+import { getStandar } from '../../services/standarPelayanan'
 
 export default function StandarPelayanan() {
   const [data, setData] = React.useState([])
@@ -26,7 +27,7 @@ export default function StandarPelayanan() {
   const loadData = async () => {
     setLoading(true)
     try {
-      const res = await api.get('/api/AdminPusat/standar-pelayanan')
+      const res = await api.get('/admin_pusat/standar-pelayanan')
       setData(res.data.data || res.data)
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal memuat data standar pelayanan')
@@ -70,12 +71,12 @@ export default function StandarPelayanan() {
       if (editingItem) {
         // Laravel workaround: use POST with _method for consistency
         formDataToSend.append('_method', 'PUT')
-        await api.post(`/api/AdminPusat/standar-pelayanan/${editingItem.id}`, formDataToSend, {
+        await api.post(`/admin_pusat/standar-pelayanan/${editingItem.id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         setSuccess('Standar pelayanan berhasil diperbarui')
       } else {
-        await api.post('/api/AdminPusat/standar-pelayanan', formDataToSend, {
+        await api.post('/admin_pusat/standar-pelayanan', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         setSuccess('Standar pelayanan berhasil ditambahkan')
@@ -117,7 +118,7 @@ export default function StandarPelayanan() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus standar pelayanan ini?')) {
       try {
-        await api.delete(`/api/AdminPusat/standar-pelayanan/${id}`)
+        await api.delete(`/admin_pusat/standar-pelayanan/${id}`)
         setSuccess('Standar pelayanan berhasil dihapus')
         await loadData()
       } catch (err) {
