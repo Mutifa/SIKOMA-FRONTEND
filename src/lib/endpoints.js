@@ -33,5 +33,18 @@ export const ENDPOINTS = {
   WEBSITE: {
   GET: '/admin_pusat/website',
   UPDATE: '/admin_pusat/website'
+},
+PROGRAM: {
+  GET: '/admin_pusat/program',
+  CREATE: '/admin_pusat/program',
+  UPDATE: (id) => `/admin_pusat/program/${id}`,
+  DELETE: (id) => `/admin_pusat/program/${id}`
+},
+KONTEN: {
+  GET: '/admin_pusat/edukasi',
+  CREATE: '/admin_pusat/edukasi',
+  UPDATE: (id) => `/admin_pusat/edukasi/${id}`,
+  DELETE: (id) => `/admin_pusat/edukasi/${id}`
 }
+
 }

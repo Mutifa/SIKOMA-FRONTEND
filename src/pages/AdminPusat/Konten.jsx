@@ -1,6 +1,7 @@
 import React from 'react'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
+import { kontenService } from '../../services/kontenService'
 
 export default function Konten() {
   const [data, setData] = React.useState([])
@@ -17,19 +18,21 @@ export default function Konten() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/AdminPusat/edukasi')
-      .then(res => { 
+
+    kontenService.getAll()
+      .then(res => {
         if (mounted) {
           setData(res.data.data || res.data)
           setLoading(false)
         }
       })
-      .catch(err => { 
+      .catch(err => {
         if (mounted) {
           setError(err.response?.data?.message || 'Gagal memuat')
           setLoading(false)
         }
       })
+
     return () => { mounted = false }
   }, [])
 
@@ -45,21 +48,18 @@ export default function Konten() {
 
     try {
       if (editingItem) {
-        // Laravel workaround: use POST with _method for file uploads
         formDataToSend.append('_method', 'PUT')
-        await api.post(`/api/AdminPusat/edukasi/${editingItem.id}`, formDataToSend, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        })
+        await kontenService.update(editingItem.id, formDataToSend)
       } else {
-        await api.post('/api/AdminPusat/edukasi', formDataToSend, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        })
+        await kontenService.create(formDataToSend)
       }
+
       setShowModal(false)
       setEditingItem(null)
       setFormData({ judul: '', deskripsi: '', foto: null, kategori: 'Edukasi' })
       // Reload data
-      const res = await api.get('/api/AdminPusat/edukasi')
+      const res = await kontenService.getAll()
+      setData(res.data.data || res.data)
       setData(res.data.data || res.data)
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal menyimpan konten')
@@ -68,14 +68,14 @@ export default function Konten() {
 
   const handleEdit = (item) => {
     setEditingItem(item)
-    
+
     // Map database kategori back to frontend values
     const kategoriReverseMapping = {
       'Satwa': 'Edukasi',
       'Executive': 'Informasi',
       'Program': 'Berita'
     }
-    
+
     setFormData({
       judul: item.judul || '',
       deskripsi: item.deskripsi || '',
@@ -88,7 +88,8 @@ export default function Konten() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus konten ini?')) {
       try {
-        await api.delete(`/api/AdminPusat/edukasi/${id}`)
+        await kontenService.delete(id)
+        setData(data.filter(item => item.id !== id))
         setData(data.filter(item => item.id !== id))
       } catch (err) {
         setError(err.response?.data?.message || 'Gagal menghapus konten')
@@ -127,13 +128,13 @@ export default function Konten() {
         {error}
         <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>}
-      
+
       <div className="row">
         <div className="col-12">
-          <a 
-            href="#tambahkonten" 
-            type="button" 
-            data-bs-toggle="modal" 
+          <a
+            href="#tambahkonten"
+            type="button"
+            data-bs-toggle="modal"
             className="btn btn-primary btn-sm float-end"
             onClick={() => {
               setEditingItem(null)
@@ -168,10 +169,10 @@ export default function Konten() {
                         <td>{index + 1}.</td>
                         <td className="text-capitalize">
                           {item.foto ? (
-                            <img 
+                            <img
                               src={`/uploads/edukasi/${item.foto}`}
-                              alt="Foto Konten" 
-                              className="img-fluid" 
+                              alt="Foto Konten"
+                              className="img-fluid"
                               width="100px"
                               onError={(e) => {
                                 e.target.style.display = 'none'
@@ -180,9 +181,9 @@ export default function Konten() {
                               }}
                             />
                           ) : null}
-                          <span 
-                            className="fallback-text" 
-                            style={{display: item.foto ? 'none' : 'inline'}}
+                          <span
+                            className="fallback-text"
+                            style={{ display: item.foto ? 'none' : 'inline' }}
                           >
                             &lt;Foto Konten&gt;
                           </span>
@@ -202,13 +203,13 @@ export default function Konten() {
                           </div>
                         </td>
                         <td>
-                          <button 
+                          <button
                             className="btn btn-warning btn-sm"
                             onClick={() => handleEdit(item)}
                           >
                             <i className="fas fa-edit"></i>
                           </button>
-                          <button 
+                          <button
                             className="btn btn-danger btn-sm text-white ms-1"
                             onClick={() => handleDelete(item.id)}
                           >
@@ -227,7 +228,7 @@ export default function Konten() {
 
       {/* Modal Tambah konten */}
       {showModal && (
-        <div className="modal show d-block" style={{backgroundColor: 'rgba(0,0,0,0.5)'}}>
+        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <div className="modal-dialog modal-lg">
             <form onSubmit={handleSubmit}>
               <div className="modal-content">
@@ -235,9 +236,9 @@ export default function Konten() {
                   <h5 className="modal-title">
                     {editingItem ? 'Edit Konten' : 'Tambah Konten'}
                   </h5>
-                  <button 
-                    type="button" 
-                    className="btn-close" 
+                  <button
+                    type="button"
+                    className="btn-close"
                     onClick={() => setShowModal(false)}
                   ></button>
                 </div>
@@ -249,7 +250,7 @@ export default function Konten() {
                         type="text"
                         className="form-control"
                         value={formData.judul}
-                        onChange={(e) => setFormData({...formData, judul: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, judul: e.target.value })}
                         required
                       />
                     </div>
@@ -258,7 +259,7 @@ export default function Konten() {
                       <select
                         className="form-control"
                         value={formData.kategori}
-                        onChange={(e) => setFormData({...formData, kategori: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}
                         required
                       >
                         <option value="Edukasi">Edukasi</option>
@@ -271,7 +272,7 @@ export default function Konten() {
                       <textarea
                         className="form-control"
                         value={formData.deskripsi}
-                        onChange={(e) => setFormData({...formData, deskripsi: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
                         rows="3"
                       />
                     </div>
@@ -281,17 +282,17 @@ export default function Konten() {
                         type="file"
                         className="form-control"
                         accept="image/*"
-                        onChange={(e) => setFormData({...formData, foto: e.target.files[0]})}
+                        onChange={(e) => setFormData({ ...formData, foto: e.target.files[0] })}
                       />
                       {editingItem && editingItem.foto && (
                         <div className="mt-2">
                           <label className="form-label">Foto Saat Ini:</label>
                           <div className="text-center">
-                            <img 
-                              src={`/uploads/edukasi/${editingItem.foto}`} 
-                              alt="Current" 
-                              className="img-thumbnail" 
-                              style={{maxHeight: '200px'}}
+                            <img
+                              src={`/uploads/edukasi/${editingItem.foto}`}
+                              alt="Current"
+                              className="img-thumbnail"
+                              style={{ maxHeight: '200px' }}
                             />
                           </div>
                         </div>
@@ -300,9 +301,9 @@ export default function Konten() {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button 
-                    type="button" 
-                    className="btn btn-secondary" 
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
                     onClick={() => setShowModal(false)}
                   >
                     Batal

@@ -1,6 +1,7 @@
 import React from 'react'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
+import { programService } from '../../services/programService'
 
 export default function Program() {
   const [data, setData] = React.useState([])
@@ -20,7 +21,7 @@ export default function Program() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/api/AdminPusat/program')
+    api.get('/admin_pusat/program')
       .then(res => { 
         if (mounted) {
           const programData = res.data.data || res.data
@@ -53,11 +54,11 @@ export default function Program() {
       if (editingItem) {
         // Laravel workaround: use POST with _method for file uploads
         formDataToSend.append('_method', 'PUT')
-        await api.post(`/api/AdminPusat/program/${editingItem.id}`, formDataToSend, {
+        await api.post(`/admin_pusat/program/${editingItem.id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       } else {
-        await api.post('/api/AdminPusat/program', formDataToSend, {
+        await api.post('/admin_pusat/program', formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       }
@@ -65,7 +66,7 @@ export default function Program() {
       setEditingItem(null)
       setFormData({ judul: '', deskripsi: '', foto: null, kategori: 'Program' })
       // Reload data
-      const res = await api.get('/api/AdminPusat/program')
+      const res = await api.get('/admin_pusat/program')
       setData(res.data.data || res.data)
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal menyimpan program')
@@ -86,7 +87,7 @@ export default function Program() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus program ini?')) {
       try {
-        await api.delete(`/api/AdminPusat/program/${id}`)
+        await api.delete(`/admin_pusat/program/${id}`)
         setData(data.filter(item => item.id !== id))
       } catch (err) {
         setError(err.response?.data?.message || 'Gagal menghapus program')
@@ -222,7 +223,7 @@ export default function Program() {
                         <td className="text-capitalize">
                           {item.foto ? (
                             <img 
-                              src={`/uploads/edukasi/${item.foto}`}
+                              src={`http://127.0.0.1:8000/uploads/edukasi/${item.foto}`}
                               alt="Foto Program" 
                               className="img-fluid" 
                               width="100px"
