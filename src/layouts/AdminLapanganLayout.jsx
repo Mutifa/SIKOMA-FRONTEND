@@ -34,7 +34,7 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
 
           {/* Logo & brand */}
           <div className="navbar-header" data-logobg="skin6">
-            <Link className="navbar-brand" to="/AdminLapangan">
+            <Link className="navbar-brand" to="/admin-lapangan/dashboard">
               <b className="logo-icon">
                 <img src="/img/logo.png" height="30px" alt="homepage" />
               </b>
@@ -78,7 +78,7 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
               <li className="sidebar-item pt-2">
                 <Link 
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminLapangan' ? 'active' : ''}`}
-                  to="/AdminLapangan"
+                  to="/admin-lapangan/dashboard"
                 >
                   <i className="fas fa-home me-3" aria-hidden="true"></i>
                   <span className="hide-menu">Dashboard</span>

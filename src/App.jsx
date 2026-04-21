@@ -102,33 +102,33 @@ export default function App() {
           } />
 
           {/* CRUD laporan konservasi */}
-          <Route path="/AdminLapangan/laporan" element={
-            <RoleGuard allowedRoles={['AdminLapangan']}>
+          <Route path="/admin-lapangan/laporan" element={
+            <RoleGuard allowedRoles={['admin_lapangan']}>
               <LaporanKonservasi />
             </RoleGuard>
           } />
 
-          <Route path="/AdminLapangan/laporan/tambah" element={
-            <RoleGuard allowedRoles={['AdminLapangan']}>
+          <Route path="/admin-lapangan/laporan/tambah" element={
+            <RoleGuard allowedRoles={['admin_lapangan']}>
               <LaporanTambah />
             </RoleGuard>
           } />
 
-          <Route path="/AdminLapangan/laporan/detail/:id" element={
-            <RoleGuard allowedRoles={['AdminLapangan']}>
+          <Route path="/admin-lapangan/laporan/detail/:id" element={
+            <RoleGuard allowedRoles={['admin_lapangan']}>
               <LaporanDetail />
             </RoleGuard>
           } />
 
-          <Route path="/AdminLapangan/laporan/edit/:id" element={
-            <RoleGuard allowedRoles={['AdminLapangan']}>
+          <Route path="/admin-lapangan/laporan/edit/:id" element={
+            <RoleGuard allowedRoles={['admin_lapangan']}>
               <LaporanEdit />
             </RoleGuard>
           } />
 
           {/* Akun */}
           <Route path="/AdminLapangan/akun" element={
-            <RoleGuard allowedRoles={['AdminLapangan']}>
+            <RoleGuard allowedRoles={['admin_lapangan']}>
               <Akun />
             </RoleGuard>
           } />

@@ -19,7 +19,7 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
     script.src = 'https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js'
     script.async = true
     document.head.appendChild(script)
-    
+
     // Cleanup: hapus script saat component unmount
     return () => {
       if (document.head.contains(script)) {
@@ -34,44 +34,32 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
   }
 
   return (
-    <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
-         data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
-      
+    <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="mini-sidebar"
+      data-sidebar-position="fixed" data-header-position="absolute" data-boxed-layout="full">
+
       {/* ===== HEADER / TOPBAR ===== */}
       <header className="topbar" data-navbarbg="skin5">
-        <nav className="navbar top-navbar navbar-expand-md navbar-dark">
+        <nav className="navbar top-navbar navbar-expand-md navbar-dark px-4">
 
-          {/* Logo & Branding */}
-          <div className="navbar-header" data-logobg="skin6">
-            <Link className="navbar-brand" to="/AdminPusat">
-              <b className="logo-icon">
-                <img src="/img/logo.png" height="30px" alt="homepage" />
-              </b>
-              <span className="logo-text">
-                <h2 className="sikoma-title" title="SIKOMA">SIKOMA</h2>
-              </span>
-            </Link>
-            </div>
+          {/* Toggle sidebar (mobile) */}
+          <button
+            type="button"
+            className="nav-toggler waves-effect waves-light text-dark d-block d-md-none mt-2 border-0 bg-transparent"
+            onClick={() => console.log("toggle")}
+          >
+            <i className="fas fa-bars fs-6"></i>
+          </button>
 
-            {/* Toggle sidebar (mobile) */}
-<button
-  type="button"
-  className="nav-toggler waves-effect waves-light text-dark d-block d-md-none mt-2 border-0 bg-transparent"
-  onClick={() => console.log("toggle")}
->
-  <i className="fas fa-bars fs-6"></i>
-</button>
-          
           {/* Profile user di kanan atas */}
           <div className="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
-            <ul className="navbar-nav ms-auto d-flex align-items-center">
+            <ul className="navbar-nav ms-auto d-flex align-items-center me-3">
               <li>
                 <a className="profile-pic" type="button">
                   <img className="img-circle" src="/img/user.png" alt="user" width="40px" height="40px" />
 
                   {/* Nama user (fallback jika kosong) */}
-                  <span className="text-white font-medium">
-                    {user?.name || 'Admin Pusat'}
+                  <span className="text-dark font-medium">
+                    {user?.name && user.name.trim() !== '' ? user.name : 'Admin Pusat'}
                   </span>
                 </a>
               </li>
@@ -81,26 +69,32 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
       </header>
 
       {/* ===== SIDEBAR ===== */}
-      <aside className="left-sidebar" data-sidebarbg="skin6">
+      <aside className="left-sidebar sidebar-admin-pusat">
         <div className="scroll-sidebar">
+
+          <div className="sidebar-header-pusat horizontal">
+            <img src="/img/logo.png" alt="logo" />
+            <span>SIKOMA</span>
+          </div>
+
           <nav className="sidebar-nav">
             <ul id="sidebarnav">
 
               {/* Dashboard */}
               <li className="sidebar-item">
-                <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat' ? 'active' : ''}`}
+                <Link
+                  className={`sidebar-link ${location.pathname === '/AdminPusat' ? 'active' : ''}`}
                   to="/AdminPusat"
                 >
-                  <i className="fas fa-home" aria-hidden="true"></i>
+                  <i className="fas fa-home"></i>
                   <span className="hide-menu">Dashboard</span>
                 </Link>
               </li>
 
               {/* Profil Perusahaan */}
               <li className="sidebar-item">
-                <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/profil-perusahaan' ? 'active' : ''}`}
+                <Link
+                  className={`sidebar-link ${location.pathname === '/AdminPusat/profil-perusahaan' ? 'active' : ''}`}
                   to="/AdminPusat/profil-perusahaan"
                 >
                   <i className="fas fa-building" aria-hidden="true"></i>
@@ -110,8 +104,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
 
               {/* Program */}
               <li className="sidebar-item">
-                <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/program' ? 'active' : ''}`}
+                <Link
+                  className={`sidebar-link ${location.pathname === '/AdminPusat/program' ? 'active' : ''}`}
                   to="/AdminPusat/program"
                 >
                   <i className="fas fa-list-ul" aria-hidden="true"></i>
@@ -121,8 +115,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
 
               {/* Konten (pakai CKEditor nanti) */}
               <li className="sidebar-item">
-                <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/konten' ? 'active' : ''}`}
+                <Link
+                  className={`sidebar-link ${location.pathname === '/AdminPusat/konten' ? 'active' : ''}`}
                   to="/AdminPusat/konten"
                 >
                   <i className="fas fa-newspaper" aria-hidden="true"></i>
@@ -132,8 +126,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
 
               {/* Kawasan */}
               <li className="sidebar-item">
-                <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/kawasan' ? 'active' : ''}`}
+                <Link
+                  className={`sidebar-link ${location.pathname === '/AdminPusat/kawasan' ? 'active' : ''}`}
                   to="/AdminPusat/kawasan"
                 >
                   <i className="fas fa-map-marker-alt" aria-hidden="true"></i>
@@ -143,8 +137,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
 
               {/* Laporan */}
               <li className="sidebar-item">
-                <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/laporan' ? 'active' : ''}`}
+                <Link
+                  className={`sidebar-link ${location.pathname === '/AdminPusat/laporan' ? 'active' : ''}`}
                   to="/AdminPusat/laporan"
                 >
                   <i className="fas fa-file-lines" aria-hidden="true"></i>
@@ -154,8 +148,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
 
               {/* Peraturan */}
               <li className="sidebar-item">
-                <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/peraturan' ? 'active' : ''}`}
+                <Link
+                  className={`sidebar-link ${location.pathname === '/AdminPusat/peraturan' ? 'active' : ''}`}
                   to="/AdminPusat/peraturan"
                 >
                   <i className="fas fa-gavel" aria-hidden="true"></i>
@@ -165,8 +159,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
 
               {/* Standar Pelayanan */}
               <li className="sidebar-item">
-                <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/standar-pelayanan' ? 'active' : ''}`}
+                <Link
+                  className={`sidebar-link ${location.pathname === '/AdminPusat/standar-pelayanan' ? 'active' : ''}`}
                   to="/AdminPusat/standar-pelayanan"
                 >
                   <i className="fas fa-clipboard-list" aria-hidden="true"></i>
@@ -176,8 +170,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
 
               {/* Galeri */}
               <li className="sidebar-item">
-                <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/galeri' ? 'active' : ''}`}
+                <Link
+                  className={`sidebar-link ${location.pathname === '/AdminPusat/galeri' ? 'active' : ''}`}
                   to="/AdminPusat/galeri"
                 >
                   <i className="fas fa-images" aria-hidden="true"></i>
@@ -187,8 +181,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
 
               {/* Pengguna */}
               <li className="sidebar-item">
-                <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/pengguna' ? 'active' : ''}`}
+                <Link
+                  className={`sidebar-link ${location.pathname === '/AdminPusat/pengguna' ? 'active' : ''}`}
                   to="/AdminPusat/pengguna"
                 >
                   <i className="fas fa-users" aria-hidden="true"></i>
@@ -198,8 +192,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
 
               {/* Akun */}
               <li className="sidebar-item">
-                <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminPusat/akun' ? 'active' : ''}`}
+                <Link
+                  className={`sidebar-link ${location.pathname === '/AdminPusat/akun' ? 'active' : ''}`}
                   to="/AdminPusat/akun"
                 >
                   <i className="fas fa-user-cog" aria-hidden="true"></i>
@@ -208,10 +202,10 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
               </li>
 
               {/* Logout */}
-              <li className="sidebar-item bg-danger">
-                <a 
-                  className="sidebar-link waves-effect waves-dark sidebar-link text-white" 
-                  href="#" 
+              <li className="sidebar-item logout-item">
+                <a
+                  className="sidebar-link text-white"
+                  href="#"
                   onClick={handleLogout} // Trigger logout
                 >
                   <i className="fas fa-lock-open text-white"></i>
@@ -227,7 +221,7 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
       {/* ===== CONTENT ===== */}
       <div className="page-wrapper">
         <div className="d-lg-none"><br /></div>
-        
+
         {/* Judul & Breadcrumb */}
         <div className="page-breadcrumb bg-white">
           <div className="row align-items-center">

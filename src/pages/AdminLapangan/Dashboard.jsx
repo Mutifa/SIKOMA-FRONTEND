@@ -19,25 +19,27 @@ export default function AdminLapanganDashboard() {
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(true)
 
-  React.useEffect(() => {
-    let mounted = true
-    api.get('/AdminLapangan/dashboard')
-      .then(res => { 
-        if (mounted) {
-          setData(res.data)
-          setLoading(false)
-        }
-      })
-      .catch(err => { 
-        if (mounted) {
-          setError(err.response?.data?.message || 'Gagal memuat')
-          setLoading(false)
-        }
-      })
-    return () => { 
-      mounted = false 
-    }
-  }, [])
+React.useEffect(() => {
+  let mounted = true
+
+  dashboardService.getAdminLapangan() // ✅ PAKAI SERVICE
+    .then(res => {
+      if (mounted) {
+     setData(res.data.data || res.data)
+        setLoading(false)
+      }
+    })
+    .catch(err => {
+      if (mounted) {
+        setError(err.response?.data?.message || 'Gagal memuat')
+        setLoading(false)
+      }
+    })
+
+  return () => {
+    mounted = false
+  }
+}, [])
 
   // Chart data untuk status laporan (pie chart)
   const statusChartData = {
