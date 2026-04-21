@@ -12,7 +12,7 @@ export default function LaporanDetail() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get(`/api/AdminLapangan/laporanKonservasi/${id}`)
+    api.get(`/admin_lapangan/laporanKonservasi/${id}`)
       .then(res => {
         if (mounted) {
           console.log('Raw laporan data:', res.data)
@@ -69,7 +69,7 @@ export default function LaporanDetail() {
     return (
       <AdminLapanganLayout title="Detail Laporan">
         <div className="alert alert-danger">{error}</div>
-        <button className="btn btn-secondary" onClick={() => navigate('/AdminLapangan/laporan')}>
+        <button className="btn btn-secondary" onClick={() => navigate('/admin_lapangan/laporan')}>
           Kembali
         </button>
       </AdminLapanganLayout>
@@ -193,7 +193,7 @@ export default function LaporanDetail() {
     <AdminLapanganLayout title="Detail Laporan Konservasi">
       <button 
         className="btn btn-secondary btn-sm text-white mb-2"
-        onClick={() => navigate('/AdminLapangan/laporan')}
+        onClick={() => navigate('/admin-lapangan/laporan')}
       >
         <i className="fas fa-angles-left"></i> Kembali
       </button>

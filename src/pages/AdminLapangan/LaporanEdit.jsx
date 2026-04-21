@@ -30,7 +30,7 @@ export default function LaporanEdit() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get(`/api/AdminLapangan/laporanKonservasi/${id}`)
+    api.get(`/admin_lapangan/laporanKonservasi/${id}`)
       .then(res => {
         if (mounted) {
           const laporan = res.data
@@ -51,12 +51,12 @@ export default function LaporanEdit() {
             fotoSebelum: [],
             fotoSetelah: []
           })
-          
+
           // Set location status
           if (laporan.latitude && laporan.longitude) {
             setLocationStatus('✅ Lokasi sudah diverifikasi')
           }
-          
+
           setLoading(false)
         }
       })
@@ -116,34 +116,55 @@ export default function LaporanEdit() {
     setError('')
 
     const formDataToSend = new FormData()
+
+    const mapping = {
+      judulLaporan: 'judul_laporan',
+      jenisKegiatan: 'jenis_kegiatan',
+      tanggalMulai: 'tanggal_mulai',
+      tanggalSelesai: 'tanggal_selesai',
+      keterangan: 'keterangan',
+      daerahLokasi: 'daerah_lokasi',
+      kabupaten: 'kabupaten',
+      kecamatan: 'kecamatan',
+      latitude: 'latitude',
+      longitude: 'longitude',
+      luasArea: 'luas_area',
+      suratTugas: 'surat_tugas',
+      fotoSebelum: 'foto_sebelum',
+      fotoSetelah: 'foto_setelah'
+    }
+
     Object.keys(formData).forEach(key => {
-      if (formData[key] !== null && formData[key] !== '') {
-        if (Array.isArray(formData[key]) && ['suratTugas', 'fotoSebelum', 'fotoSetelah'].includes(key)) {
-          // Handle multiple files - only send if files are selected
-          if (formData[key].length > 0) {
-            formData[key].forEach((file) => {
-              formDataToSend.append(key, file)
-            })
-          }
-        } else if (!Array.isArray(formData[key])) {
-          formDataToSend.append(key, formData[key])
+      const backendKey = mapping[key]
+
+      if (Array.isArray(formData[key])) {
+        if (formData[key].length > 0) {
+          formData[key].forEach(file => {
+            formDataToSend.append(backendKey, file)
+          })
         }
+      } else {
+        formDataToSend.append(backendKey, formData[key] ?? '')
       }
     })
 
     try {
-      await api.put(`/api/AdminLapangan/laporanKonservasi/${id}`, formDataToSend, {
+      await api.put(`/admin_lapangan/laporanKonservasi/${id}`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
-      navigate('/AdminLapangan/laporan')
+      navigate('/admin-lapangan/laporan')
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal memperbarui laporan')
     } finally {
       setSaving(false)
     }
   }
+
+  const fotoSetelahList = originalData?.fotoSetelah
+    ? JSON.parse(originalData.fotoSetelah || '[]')
+    : []
 
   if (loading) {
     return (
@@ -157,21 +178,10 @@ export default function LaporanEdit() {
     )
   }
 
-  if (error) {
-    return (
-      <AdminLapanganLayout title="Edit Laporan">
-        <div className="alert alert-danger">{error}</div>
-        <button className="btn btn-secondary" onClick={() => navigate('/AdminLapangan/laporan')}>
-          Kembali
-        </button>
-      </AdminLapanganLayout>
-    )
-  }
-
   return (
     <AdminLapanganLayout title="Edit Laporan Konservasi">
       {error && <div className="alert alert-danger">{error}</div>}
-      
+
       <div className="row">
         <div className="col-12">
           <div className="white-box">
@@ -185,11 +195,11 @@ export default function LaporanEdit() {
                   <label className="form-label">Judul Laporan</label>
                   <input
                     type="text"
-                    name="judulLaporan"
                     className="form-control"
                     value={formData.judulLaporan}
-                    onChange={handleChange}
-                    required
+                    onChange={(e) =>
+                      setFormData({ ...formData, judulLaporan: e.target.value })
+                    }
                   />
                 </div>
                 <div className="col-md-6 mb-3">
@@ -326,10 +336,10 @@ export default function LaporanEdit() {
                     <div className="mt-1">
                       <small className="text-muted">File saat ini:</small>
                       {JSON.parse(originalData.suratTugas || '[]').map((filename, index) => (
-                        <a 
+                        <a
                           key={index}
-                          href={`/uploads/laporan/${filename}`} 
-                          target="_blank" 
+                          href={`/uploads/laporan/${filename}`}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="d-block"
                         >
@@ -370,10 +380,10 @@ export default function LaporanEdit() {
                     <div className="mt-1">
                       <small className="text-muted">File saat ini:</small>
                       {JSON.parse(originalData.fotoSebelum || '[]').map((filename, index) => (
-                        <a 
+                        <a
                           key={index}
-                          href={`/uploads/laporan/${filename}`} 
-                          target="_blank" 
+                          href={`/uploads/laporan/${filename}`}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="d-block"
                         >
@@ -402,10 +412,10 @@ export default function LaporanEdit() {
                     <div className="mt-1">
                       <small className="text-muted">File saat ini:</small>
                       {JSON.parse(originalData.fotoSetelah || '[]').map((filename, index) => (
-                        <a 
+                        <a
                           key={index}
-                          href={`/uploads/laporan/${filename}`} 
-                          target="_blank" 
+                          href={`/uploads/laporan/${filename}`}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="d-block"
                         >
@@ -421,7 +431,7 @@ export default function LaporanEdit() {
                 <button
                   type="button"
                   className="btn btn-secondary me-2"
-                  onClick={() => navigate('/AdminLapangan/laporan')}
+                  onClick={() => navigate('/admin-lapangan/laporan')}
                 >
                   Batal
                 </button>

@@ -155,12 +155,12 @@ export default function LaporanTambah() {
     }
 
     try {
-      await api.post('/api/AdminLapangan/laporanKonservasi', formDataToSend, {
+      await laporanKonservasiService.create(formDataToSend), {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-      })
-      navigate('/AdminLapangan/laporan')
+      }
+      navigate('/admin-lapangan/laporan')
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal menyimpan laporan')
     } finally {

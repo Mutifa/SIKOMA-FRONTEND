@@ -9,3 +9,17 @@ export const laporanService = {
   updateStatus: (id, status) =>
     api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE_STATUS(id), { status })
 }
+
+export const laporanKonservasiService = {
+  getAll: () => api.get(ENDPOINTS.ADMIN_LAPANGAN_LAPORAN.GET),
+
+ create: (data) =>
+  api.post('/admin_lapangan/laporanKonservasi', data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }),
+
+  delete: (id) =>
+    api.delete(ENDPOINTS.ADMIN_LAPANGAN_LAPORAN.DELETE(id))
+}

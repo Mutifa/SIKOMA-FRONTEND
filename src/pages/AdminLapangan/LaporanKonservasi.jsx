@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import AdminLapanganLayout from '../../layouts/AdminLapanganLayout.jsx'
 import api from '../../lib/api.js'
+import { laporanKonservasiService } from '../../services/laporanKonservasi'
 
 export default function LaporanKonservasi() {
   const [data, setData] = React.useState({
@@ -12,28 +13,39 @@ export default function LaporanKonservasi() {
   const [loading, setLoading] = React.useState(true)
   const [selectedDaerah, setSelectedDaerah] = React.useState('')
 
-  React.useEffect(() => {
-    let mounted = true
-    const endpoint = selectedDaerah 
-      ? `/api/AdminLapangan/laporanKonservasi?daerah=${selectedDaerah}`
-      : '/AdminLapangan/laporanKonservasi'
-    
-    api.get(endpoint)
-      .then(res => { 
-        if (mounted) {
-          setData(res.data)
-          setLoading(false)
-        }
-      })
-      .catch(err => { 
-        if (mounted) {
-          setError(err.response?.data?.message || 'Gagal memuat')
-          setLoading(false)
-        }
-      })
-    return () => { mounted = false }
-  }, [selectedDaerah])
+ React.useEffect(() => {
+  let mounted = true
 
+  laporanKonservasiService.getAll()
+    .then(res => {
+      if (mounted) {
+        console.log('RESPON LAPORAN:', res.data)
+
+        const laporanData =
+          res.data?.laporan?.data ||
+          res.data?.laporan ||
+          res.data?.data ||
+          []
+
+        setData({
+          laporan: Array.isArray(laporanData) ? laporanData : [],
+          daerah: []
+        })
+
+        setLoading(false)
+      }
+    })
+    .catch(err => {
+      if (mounted) {
+        setError(err.response?.data?.message || 'Gagal memuat data')
+        setLoading(false)
+      }
+    })
+
+  return () => {
+    mounted = false
+  }
+}, [])
   const formatDate = (dateString) => {
     const date = new Date(dateString)
     const day = date.getDate().toString().padStart(2, '0')
@@ -58,11 +70,11 @@ export default function LaporanKonservasi() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus laporan ini?')) {
       try {
-        await api.delete(`/api/AdminLapangan/laporanKonservasi/${id}`)
+        await api.delete(`/admin_lapangan/laporan/${id}`)
         // Refresh data
-        const endpoint = selectedDaerah 
-          ? `/api/AdminLapangan/laporanKonservasi?daerah=${selectedDaerah}`
-          : '/AdminLapangan/laporanKonservasi'
+       const endpoint = selectedDaerah 
+  ? `/admin_lapangan/laporan-konservasi?daerah=${selectedDaerah}`
+  : `/admin_lapangan/laporan-konservasi`
         const res = await api.get(endpoint)
         setData(res.data)
       } catch (err) {
@@ -89,7 +101,7 @@ export default function LaporanKonservasi() {
       
       <div className="row">
         <div className="col-12">
-          <Link to="/AdminLapangan/laporan/tambah" className="btn btn-primary btn-sm float-end">
+          <Link to="/admin-lapangan/laporan/tambah" className="btn btn-primary btn-sm float-end">
             + Laporan
           </Link>
           <div className="white-box">
@@ -128,14 +140,14 @@ export default function LaporanKonservasi() {
                         }) : 'N/A'}</td>
                         <td>
                           <Link 
-                            to={`/AdminLapangan/laporan/detail/${item.id}`}
+                            to={`/admin-lapangan/laporan/detail/${item.id}`}
                             className="btn btn-primary btn-sm"
                           >
                             <i className="fas fa-eye"></i> Detail
                           </Link>
                           {' '}
                           <Link 
-                            to={`/AdminLapangan/laporan/edit/${item.id}`}
+                            to={`/admin-lapangan/laporan/edit/${item.id}`}
                             className="btn btn-warning btn-sm"
                           >
                             <i className="fas fa-edit"></i>

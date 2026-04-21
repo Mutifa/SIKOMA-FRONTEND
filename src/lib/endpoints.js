@@ -76,6 +76,16 @@ PENGGUNA: {
   CREATE: '/admin_pusat/pengguna',
   UPDATE: (id) => `/admin_pusat/pengguna/${id}`,
   DELETE: (id) => `/admin_pusat/pengguna/${id}`
+},
+ ADMIN_LAPANGAN_LAPORAN: {
+    GET: '/admin_lapangan/laporanKonservasi',
+    DELETE: (id) => `/admin_lapangan/laporanKonservasi/${id}`,
+    UPDATE: (id) => `/admin_lapangan/laporanKonservasi/${id}`,
+  },
+LAPORAN_LAPANGAN: {
+  GET: '/admin_lapangan/laporan-konservasi',
+  DETAIL: (id) => `/admin_lapangan/laporan-konservasi/${id}`,
+  UPDATE: (id) => `/admin_lapangan/laporan-konservasi/${id}`,
+  DELETE: (id) => `/admin_lapangan/laporan-konservasi/${id}`
 }
-
 }

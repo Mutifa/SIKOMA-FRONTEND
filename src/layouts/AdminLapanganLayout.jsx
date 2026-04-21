@@ -77,7 +77,7 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
               {/* Menu Dashboard */}
               <li className="sidebar-item pt-2">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminLapangan' ? 'active' : ''}`}
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/admin-lapangan/dashboard'? 'active' : ''}`}
                   to="/admin-lapangan/dashboard"
                 >
                   <i className="fas fa-home me-3" aria-hidden="true"></i>
@@ -88,8 +88,8 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
               {/* Menu Laporan */}
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminLapangan/laporan' ? 'active' : ''}`}
-                  to="/AdminLapangan/laporan"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/admin-lapangan/laporan' ? 'active' : ''}`}
+                  to="/admin-lapangan/laporan"
                 >
                   <i className="fas fa-file-lines me-3" aria-hidden="true"></i>
                   <span className="hide-menu">Laporan Konservasi</span>
@@ -99,8 +99,8 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
               {/* Menu Akun */}
               <li className="sidebar-item">
                 <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/AdminLapangan/akun' ? 'active' : ''}`}
-                  to="/AdminLapangan/akun"
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/admin-lapangan/akun' ? 'active' : ''}`}
+                  to="/admin-lapangan/akun"
                 >
                   <i className="fas fa-user-cog me-3" aria-hidden="true"></i>
                   <span className="hide-menu">Akun</span>
