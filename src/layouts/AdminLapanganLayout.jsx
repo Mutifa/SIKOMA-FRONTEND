@@ -33,33 +33,23 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
         <nav className="navbar top-navbar navbar-expand-md navbar-dark">
 
           {/* Logo & brand */}
-          <div className="navbar-header" data-logobg="skin6">
-            <Link className="navbar-brand" to="/admin-lapangan/dashboard">
-              <b className="logo-icon">
-                <img src="/img/logo.png" height="30px" alt="homepage" />
-              </b>
-              <span className="logo-text">
-                <h2 className="text-dark mt-4 bold" title="SIKOMA">SIKOMA</h2>
-              </span>
-            </Link>
-
-            {/* Toggle menu untuk tampilan mobile */}
-            <a className="nav-toggler waves-effect waves-light text-dark d-block d-md-none mt-2"
-               href="javascript:void(0)">
-              <i className="fas fa-bars fs-6"></i>
-            </a>
-          </div>
+        
           
           {/* Bagian kanan header (profil user) */}
           <div className="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
-            <ul className="navbar-nav ms-auto d-flex align-items-center">
+            <ul className="navbar-nav ms-auto d-flex align-items-center me-3">
               <li>
-                <a className="profile-pic" type="button">
+                <a 
+  className="profile-pic" 
+  type="button"
+  onClick={handleLogout}
+  style={{ cursor: 'pointer' }}
+>
                   <img className="img-circle" src="/img/user.png" alt="user" width="40px" height="40px" />
 
                   {/* Menampilkan nama user (fallback jika kosong) */}
-                  <span className="text-white font-medium">
-                    {user?.name || 'AdminLapangan User'}
+                  <span className="text-dark font-medium">
+                    {user?.name && user.name.trim() !== '' ? user.name : 'Admin Lapangan'}
                   </span>
                 </a>
               </li>
@@ -71,6 +61,10 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
       {/* ===== SIDEBAR (MENU KIRI) ===== */}
       <aside className="left-sidebar" data-sidebarbg="skin6">
         <div className="scroll-sidebar">
+          <div className="sidebar-header-pusat horizontal">
+  <img src="/img/logo.png" alt="logo" />
+  <span>SIKOMA</span>
+</div>
           <nav className="sidebar-nav">
             <ul id="sidebarnav">
 
@@ -108,7 +102,7 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
               </li>
 
               {/* Menu Logout */}
-              <li className="sidebar-item bg-danger">
+              <li className="sidebar-item">
                 <a 
                   className="sidebar-link waves-effect waves-dark sidebar-link text-white" 
                   href="#" 

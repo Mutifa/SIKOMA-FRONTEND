@@ -1,9 +1,9 @@
 export const ENDPOINTS = {
-  AUTH: {
-    LOGIN: '/auth/login',
-    LOGOUT: '/auth/logout',
-    ME: '/admin_pusat/profile'
-  },
+AUTH: {
+  LOGIN: '/auth/login',
+  LOGOUT: '/auth/logout',
+  ME: '/admin_lapangan/profile' // ✅ FIX
+},
 
   LAPORAN: {
     GET: '/laporan',

@@ -54,10 +54,10 @@ import HealthCheck from './pages/HealthCheck.jsx'
 
 export default function App() {
   return (
-    // 🔐 Bungkus semua dengan AuthProvider (biar login bisa global)
+    //  Bungkus semua dengan AuthProvider (biar login bisa global)
     <AuthProvider>
 
-      {/* 🌐 Router utama */}
+      {/* Router utama */}
       <BrowserRouter>
 
         <Routes>
@@ -127,7 +127,7 @@ export default function App() {
           } />
 
           {/* Akun */}
-          <Route path="/AdminLapangan/akun" element={
+          <Route path="/admin-lapangan/akun" element={
             <RoleGuard allowedRoles={['admin_lapangan']}>
               <Akun />
             </RoleGuard>
@@ -142,18 +142,18 @@ export default function App() {
           } />
 
           {/* halaman admin pusat lainnya */}
-          <Route path="/AdminPusat/pengguna" element={<AdminPusatPengguna />} />
-          <Route path="/AdminPusat/galeri" element={<AdminPusatGaleri />} />
-          <Route path="/AdminPusat/customer" element={<AdminPusatCustomer />} />
-          <Route path="/AdminPusat/profil-perusahaan" element={<AdminPusatProfilPerusahaan />} />
-          <Route path="/AdminPusat/program" element={<AdminPusatProgram />} />
-          <Route path="/AdminPusat/konten" element={<AdminPusatKonten />} />
-          <Route path="/AdminPusat/kawasan" element={<AdminPusatKawasan />} />
-          <Route path="/AdminPusat/laporan" element={<AdminPusatLaporan />} />
-          <Route path="/AdminPusat/laporan/detail/:id" element={<AdminPusatLaporanDetail />} />
-          <Route path="/AdminPusat/peraturan" element={<AdminPusatPeraturan />} />
-          <Route path="/AdminPusat/standar-pelayanan" element={<AdminPusatStandarPelayanan />} />
-          <Route path="/AdminPusat/akun" element={<AdminPusatAkun />} />
+          <Route path="/admin-pusat/pengguna" element={<AdminPusatPengguna />} />
+          <Route path="/admin-pusat/galeri" element={<AdminPusatGaleri />} />
+          <Route path="/admin-pusat/customer" element={<AdminPusatCustomer />} />
+          <Route path="/admin-pusat/profil-perusahaan" element={<AdminPusatProfilPerusahaan />} />
+          <Route path="/admin-pusat/program" element={<AdminPusatProgram />} />
+          <Route path="/admin-pusat/konten" element={<AdminPusatKonten />} />
+          <Route path="/admin-pusat/kawasan" element={<AdminPusatKawasan />} />
+          <Route path="/admin-pusat/laporan" element={<AdminPusatLaporan />} />
+          <Route path="/admin-pusat/laporan/detail/:id" element={<AdminPusatLaporanDetail />} />
+          <Route path="/admin-pusat/peraturan" element={<AdminPusatPeraturan />} />
+          <Route path="/admin-pusat/standar-pelayanan" element={<AdminPusatStandarPelayanan />} />
+          <Route path="/admin-pusat/akun" element={<AdminPusatAkun />} />
 
           {/* ================= UTIL ================= */}
 

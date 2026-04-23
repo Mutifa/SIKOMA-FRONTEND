@@ -86,7 +86,7 @@ React.useEffect(() => {
 
   if (loading) {
     return (
-      <AdminLapanganLayout title="Dashboard AdminLapangan">
+      <AdminLapanganLayout title="Dashboard Admin Lapangan">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
             <span className="sr-only">Loading...</span>
@@ -97,7 +97,7 @@ React.useEffect(() => {
   }
 
   return (
-    <AdminLapanganLayout title="Dashboard AdminLapangan">
+    <AdminLapanganLayout title="Dashboard Admin Lapangan">
       {error && <div className="alert alert-danger">{error}</div>}
       
       <div className="row">

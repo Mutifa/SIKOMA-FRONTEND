@@ -151,7 +151,6 @@ export default function Pengguna() {
                   <th>Nama</th>
                   <th>Username</th>
                   <th>Email</th>
-                  <th>No. HP</th>
                   <th>Role</th>
                   <th>Aksi</th>
                 </tr>

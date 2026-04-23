@@ -5,6 +5,7 @@ export default function RoleGuard({ children, allowedRoles }) {
   const { user, loading, isAuthenticated } = useAuth()
   const location = useLocation()
 
+  // 🔥 tunggu auth selesai
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
@@ -13,18 +14,20 @@ export default function RoleGuard({ children, allowedRoles }) {
     )
   }
 
-  if (!isAuthenticated || !user) {
+  // 🔥 kalau belum login
+  if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 
-  if (!allowedRoles.includes(user.role)) {
-    // redirect sesuai role
-    if (user.role === 'AdminLapangan_pusat') {
-      return <Navigate to="/AdminPusat/Dashboard" replace />
+  // 🔥 kalau role tidak sesuai
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+
+    if (user.role === 'admin_pusat') {
+      return <Navigate to="/admin-pusat/dashboard" replace />
     }
 
-    if (user.role === 'AdminLapangan_lapangan') {
-      return <Navigate to="/AdminLapangan/Dashboard" replace />
+    if (user.role === 'admin_lapangan') {
+      return <Navigate to="/admin-lapangan/dashboard" replace />
     }
 
     return <Navigate to="/" replace />

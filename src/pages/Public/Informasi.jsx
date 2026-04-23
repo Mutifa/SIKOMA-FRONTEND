@@ -26,25 +26,28 @@ export default function Informasi() {
       </div>
       <section id="kawasan-konservasi" className="container-fluid py-3">
         <div className="row g-4">
-        <div className="col-lg-7 col-md-12 d-flex justify-content-center">
-  {loading ? (
-    <div style={{ height: 300, background: '#eee', width: '100%' }} />
-  ) : (
-    data.kawasan?.gambar ? (
-      <img
-        src={assetUrl(`/uploads/${data.kawasan.gambar}`)}
-        alt="Peta"
-        className="img-fluid rounded shadow-sm peta-img"
-      />
-    ) : (
-      <div style={{ height: 300, background: '#eee', width: '100%' }} />
-    )
-  )}
-</div>
+          <div className="col-lg-7 col-md-12 d-flex justify-content-center">
+            {loading ? (
+              <div style={{ height: 300, background: '#eee', width: '100%' }} />
+            ) : (
+              data.kawasan?.gambar ? (
+                <img
+                  src={assetUrl(`/uploads/${data.kawasan.gambar}`)}
+                  alt="Peta"
+                  className="img-fluid rounded shadow-sm peta-img"
+                />
+              ) : (
+                <div style={{ height: 300, background: '#eee', width: '100%' }} />
+              )
+            )}
+          </div>
           <div className="col-lg-5 col-md-12">
             <h4 className="wow fadeInUp" data-wow-delay="0.1s">Kawasan Konservasi</h4>
             {loading ? <p>Memuat...</p> : (
-              <span dangerouslySetInnerHTML={{ __html: data.kawasan?.deskripsi || '' }} />
+              <div
+                className="text-justify"
+                dangerouslySetInnerHTML={{ __html: data.kawasan?.deskripsi || '' }}
+              />
             )}
             <h4 className="mt-3">Data Statistik</h4>
 

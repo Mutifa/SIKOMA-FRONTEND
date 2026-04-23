@@ -28,7 +28,7 @@ export default function Akun() {
   React.useEffect(() => {
     let mounted = true
     // Ambil data user dari dashboard API (karena sudah ada user data di sana)
-    api.get('/api/AdminLapangan/dashboard')
+    api.get('/admin_lapangan/dashboard')
       .then(res => { 
         if (mounted && res.data.user) {
           setUser(res.data.user)
@@ -51,7 +51,7 @@ export default function Akun() {
     setSuccess('')
 
     try {
-      await api.put('/api/profile', user)
+      await api.put('/admin_lapangan/dashboard', user)
       setSuccess('Profil berhasil diperbarui')
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal memperbarui profil')
@@ -73,7 +73,7 @@ export default function Akun() {
     }
 
     try {
-      await api.put('/api/password', passwordData)
+      await api.put('/admin_lapangan/dashboard', passwordData)
       setSuccess('Password berhasil diperbarui')
       setPasswordData({
         current_password: '',
@@ -123,7 +123,7 @@ export default function Akun() {
                 type="text" 
                 id="name" 
                 className="form-control" 
-                placeholder="Nama"
+            
                 value={user.name || ''}
                 onChange={(e) => setUser({...user, name: e.target.value})}
                 required 
@@ -136,7 +136,7 @@ export default function Akun() {
                 type="text" 
                 id="username" 
                 className="form-control" 
-                placeholder="Username"
+        
                 value={user.username || ''}
                 onChange={(e) => setUser({...user, username: e.target.value})}
                 required 
@@ -149,24 +149,14 @@ export default function Akun() {
                 type="email" 
                 id="email" 
                 className="form-control" 
-                placeholder="Email"
+               
                 value={user.email || ''}
                 onChange={(e) => setUser({...user, email: e.target.value})}
                 required 
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="nohp">No. HP</label>
-              <input 
-                type="text" 
-                id="nohp" 
-                className="form-control" 
-                placeholder="No. HP"
-                value={user.nohp || ''}
-                onChange={(e) => setUser({...user, nohp: e.target.value})}
-              />
-            </div>
+          
 
             <div className="form-group">
               <label htmlFor="role">Role</label>
@@ -213,7 +203,7 @@ export default function Akun() {
                       style={{top: '50%', right: '5px', transform: 'translateY(-50%)'}}
                       onClick={() => togglePassword('current')}
                     >
-                      {showPasswords.current ? '🙈' : '👁'}
+                      <i className={`fa ${showPasswords.current ? 'fa-eye-slash' : 'fa-eye'}`}></i>
                     </button>
                   </div>
                 </div>
@@ -237,7 +227,7 @@ export default function Akun() {
                       style={{top: '50%', right: '5px', transform: 'translateY(-50%)'}}
                       onClick={() => togglePassword('new')}
                     >
-                      {showPasswords.new ? '🙈' : '👁'}
+                      <i className={`fa ${showPasswords.new ? 'fa-eye-slash' : 'fa-eye'}`}></i>
                     </button>
                   </div>
                 </div>
@@ -261,7 +251,7 @@ export default function Akun() {
                       style={{top: '50%', right: '5px', transform: 'translateY(-50%)'}}
                       onClick={() => togglePassword('confirm')}
                     >
-                      {showPasswords.confirm ? '🙈' : '👁'}
+                      <i className={`fa ${showPasswords.new ? 'fa-eye-slash' : 'fa-eye'}`}></i>
                     </button>
                   </div>
                 </div>

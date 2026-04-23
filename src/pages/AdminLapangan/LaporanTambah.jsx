@@ -175,7 +175,7 @@ export default function LaporanTambah() {
       <div className="row">
         <div className="col-12">
           <div className="white-box">
-            <h3 className="fw-bold mb-4">Tambah Laporan Konservasi</h3>
+
 
             <form onSubmit={handleSubmit} encType="multipart/form-data">
               {/* Deskripsi Kegiatan */}

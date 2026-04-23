@@ -54,7 +54,12 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
           <div className="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
             <ul className="navbar-nav ms-auto d-flex align-items-center me-3">
               <li>
-                <a className="profile-pic" type="button">
+                <a 
+  className="profile-pic" 
+  type="button"
+  onClick={handleLogout}
+  style={{ cursor: 'pointer' }}
+>
                   <img className="img-circle" src="/img/user.png" alt="user" width="40px" height="40px" />
 
                   {/* Nama user (fallback jika kosong) */}
@@ -83,8 +88,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
               {/* Dashboard */}
               <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link ${location.pathname === '/AdminPusat' ? 'active' : ''}`}
-                  to="/AdminPusat"
+                  className={`sidebar-link ${location.pathname === '/admin-pusat/dashboard' ? 'active' : ''}`}
+                  to="/admin-pusat/dashboard"
                 >
                   <i className="fas fa-home"></i>
                   <span className="hide-menu">Dashboard</span>
@@ -94,8 +99,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
               {/* Profil Perusahaan */}
               <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link ${location.pathname === '/AdminPusat/profil-perusahaan' ? 'active' : ''}`}
-                  to="/AdminPusat/profil-perusahaan"
+                  className={`sidebar-link ${location.pathname === '/admin-pusat/profil-perusahaan' ? 'active' : ''}`}
+                  to="/admin-pusat/profil-perusahaan"
                 >
                   <i className="fas fa-building" aria-hidden="true"></i>
                   <span className="hide-menu">Profil Perusahaan</span>
@@ -105,8 +110,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
               {/* Program */}
               <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link ${location.pathname === '/AdminPusat/program' ? 'active' : ''}`}
-                  to="/AdminPusat/program"
+                  className={`sidebar-link ${location.pathname === '/admin-pusat/program' ? 'active' : ''}`}
+                  to="/admin-pusat/program"
                 >
                   <i className="fas fa-list-ul" aria-hidden="true"></i>
                   <span className="hide-menu">Program</span>
@@ -116,8 +121,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
               {/* Konten (pakai CKEditor nanti) */}
               <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link ${location.pathname === '/AdminPusat/konten' ? 'active' : ''}`}
-                  to="/AdminPusat/konten"
+                  className={`sidebar-link ${location.pathname === '/admin-pusat/konten' ? 'active' : ''}`}
+                  to="/admin-pusat/konten"
                 >
                   <i className="fas fa-newspaper" aria-hidden="true"></i>
                   <span className="hide-menu">Konten Informasi & Edukasi</span>
@@ -127,8 +132,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
               {/* Kawasan */}
               <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link ${location.pathname === '/AdminPusat/kawasan' ? 'active' : ''}`}
-                  to="/AdminPusat/kawasan"
+                  className={`sidebar-link ${location.pathname === '/admin-pusat/kawasan' ? 'active' : ''}`}
+                  to="/admin-pusat/kawasan"
                 >
                   <i className="fas fa-map-marker-alt" aria-hidden="true"></i>
                   <span className="hide-menu">Kawasan Konservasi</span>
@@ -138,8 +143,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
               {/* Laporan */}
               <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link ${location.pathname === '/AdminPusat/laporan' ? 'active' : ''}`}
-                  to="/AdminPusat/laporan"
+                  className={`sidebar-link ${location.pathname === '/admin-pusat/laporan' ? 'active' : ''}`}
+                  to="/admin-pusat/laporan"
                 >
                   <i className="fas fa-file-lines" aria-hidden="true"></i>
                   <span className="hide-menu">Laporan Konservasi</span>
@@ -149,8 +154,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
               {/* Peraturan */}
               <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link ${location.pathname === '/AdminPusat/peraturan' ? 'active' : ''}`}
-                  to="/AdminPusat/peraturan"
+                  className={`sidebar-link ${location.pathname === '/admin-pusat/peraturan' ? 'active' : ''}`}
+                  to="/admin-pusat/peraturan"
                 >
                   <i className="fas fa-gavel" aria-hidden="true"></i>
                   <span className="hide-menu">Peraturan</span>
@@ -160,8 +165,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
               {/* Standar Pelayanan */}
               <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link ${location.pathname === '/AdminPusat/standar-pelayanan' ? 'active' : ''}`}
-                  to="/AdminPusat/standar-pelayanan"
+                  className={`sidebar-link ${location.pathname === '/admin-pusat/standar-pelayanan' ? 'active' : ''}`}
+                  to="/admin-pusat/standar-pelayanan"
                 >
                   <i className="fas fa-clipboard-list" aria-hidden="true"></i>
                   <span className="hide-menu">Standar Pelayanan</span>
@@ -171,8 +176,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
               {/* Galeri */}
               <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link ${location.pathname === '/AdminPusat/galeri' ? 'active' : ''}`}
-                  to="/AdminPusat/galeri"
+                  className={`sidebar-link ${location.pathname === '/admin-pusat/galeri' ? 'active' : ''}`}
+                  to="/admin-pusat/galeri"
                 >
                   <i className="fas fa-images" aria-hidden="true"></i>
                   <span className="hide-menu">Galeri</span>
@@ -182,8 +187,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
               {/* Pengguna */}
               <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link ${location.pathname === '/AdminPusat/pengguna' ? 'active' : ''}`}
-                  to="/AdminPusat/pengguna"
+                  className={`sidebar-link ${location.pathname === '/admin-pusat/pengguna' ? 'active' : ''}`}
+                  to="/admin-pusat/pengguna"
                 >
                   <i className="fas fa-users" aria-hidden="true"></i>
                   <span className="hide-menu">Pengguna</span>
@@ -193,8 +198,8 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
               {/* Akun */}
               <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link ${location.pathname === '/AdminPusat/akun' ? 'active' : ''}`}
-                  to="/AdminPusat/akun"
+                  className={`sidebar-link ${location.pathname === '/admin-pusat/akun' ? 'active' : ''}`}
+                  to="/admin-pusat/akun"
                 >
                   <i className="fas fa-user-cog" aria-hidden="true"></i>
                   <span className="hide-menu">Akun</span>

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { authService } from '../services/authService'
+import api from '../lib/api'
 
 // BUAT CONTEXT
 const AuthContext = createContext()
@@ -20,82 +21,109 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   //  AUTO CHECK LOGIN SAAT APP LOAD
-useEffect(() => {
-  const token = localStorage.getItem('token')
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    const savedUser = localStorage.getItem('user')
 
-  if (token) {
-    checkAuth()
-  } else {
-    setLoading(false)
-  }
-}, [])
+    if (savedUser) {
+      setUser(JSON.parse(savedUser)) // 🔥 penting
+      setIsAuthenticated(true)
+    }
+
+    if (token) {
+      checkAuth()
+    } else {
+      setLoading(false)
+    }
+  }, [])
 
   //  CEK AUTH (API: /me)
   const checkAuth = async () => {
     try {
-      const res = await authService.me()
+      const role = localStorage.getItem('role')
+
+      const endpoint =
+        role === 'admin_pusat'
+          ? '/admin_pusat/profile'
+          : '/admin_lapangan/profile'
+
+      const res = await api.get(endpoint)
 
       const userData = res.data
 
       setUser(userData)
       setIsAuthenticated(true)
-    } catch (error) {
-      setUser(null)
-      setIsAuthenticated(false)
-    } finally {
+    }
+    catch (error) {
+      console.error('CHECK AUTH ERROR:', error)
+
+      const token = localStorage.getItem('token')
+      const savedUser = localStorage.getItem('user')
+
+      if (token && savedUser) {
+        setUser(JSON.parse(savedUser)) // 🔥 ini kunci
+        setIsAuthenticated(true)
+      } else {
+        setIsAuthenticated(false)
+      }
+    }
+
+    finally {
       setLoading(false)
     }
   }
 
   //  LOGIN
- const login = async (email, password) => {
-  try {
-    // 🔥 PANGGIL API LOGIN
-    const res = await authService.login({
-      email,
-      password
-    })
+  const login = async (email, password) => {
+    try {
+      // 🔥 PANGGIL API LOGIN
+      const res = await authService.login({
+        email,
+        password
+      })
 
-    console.log('LOGIN RESPONSE:', res.data)
+      console.log('LOGIN RESPONSE:', res.data)
 
-    const userData = res.data.data.user
-    const token = res.data.data.token
-    const role = res.data.data.role
+      const userData = res.data.data.user
+      const token = res.data.data.token
+      const role = res.data.data.role
 
-    // simpan user
-    setUser({ ...userData, role })
-    setIsAuthenticated(true)
+      // simpan user
+      setUser({ ...userData, role })
+      localStorage.setItem('user', JSON.stringify({ ...userData, role }))
+      setIsAuthenticated(true)
 
-    // simpan token
-    if (token) {
-      localStorage.setItem('token', token)
-    }
+      // simpan token
+      if (token) {
+        localStorage.setItem('token', token)
+      }
+      localStorage.setItem('role', role) // ✅ TAMBAH INI
 
-    // redirect berdasarkan role
-    let redirect = '/'
+      // redirect berdasarkan role
+      let redirect = '/'
 
-    if (role === 'admin_pusat') {
-      redirect = '/admin-pusat/dashboard'
-    } else if (role === 'admin_lapangan') {
-      redirect = '/admin-lapangan/dashboard'
-    }
+      if (role === 'admin_pusat') {
+        redirect = '/admin-pusat/dashboard'
+      } else if (role === 'admin_lapangan') {
+        redirect = '/admin-lapangan/dashboard'
+      }
 
-    return {
-      success: true,
-      user: userData,
-      role,
-      redirect,
-    }
+      return {
+        success: true,
+        user: userData,
+        role,
+        redirect,
+      }
 
-  } catch (error) {
-    console.log('LOGIN ERROR:', error.response)
+    } catch (error) {
+      console.log('LOGIN ERROR:', error.response)
 
-    return {
-      success: false,
-      message: error.response?.data?.message || 'Login gagal',
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Login gagal',
+      }
     }
   }
-}
 
   // LOGOUT
   const logout = async () => {
@@ -108,6 +136,8 @@ useEffect(() => {
       setUser(null)
       setIsAuthenticated(false)
       localStorage.removeItem('token')
+      localStorage.removeItem('role')
+      localStorage.removeItem('user')
 
       // redirect ke login
       window.location.href = '/login'

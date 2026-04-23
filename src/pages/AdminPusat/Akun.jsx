@@ -7,8 +7,7 @@ export default function Akun() {
     name: '',
     username: '',
     email: '',
-    nohp: '',
-    role: ''
+    role: '',
   })
   const [passwordData, setPasswordData] = React.useState({
     current_password: '',
@@ -35,8 +34,7 @@ React.useEffect(() => {
   name: '',
   username: '',
   email: '',
-  nohp: '',
-  role: ''
+  role: '',
 })  // ✅ ambil user dari dashboard
         setLoading(false)
       }
@@ -148,15 +146,7 @@ React.useEffect(() => {
                   onChange={e => setUser({...user, email: e.target.value})} 
                 />
               </div>
-              <div className="mb-3">
-                <label className="form-label">No. HP</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={user.nohp || ''} 
-                  onChange={e => setUser({...user, nohp: e.target.value})} 
-                />
-              </div>
+             
               <div className="mb-3">
                 <label className="form-label">Role</label>
                 <input 

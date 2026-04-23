@@ -61,16 +61,16 @@ export default function Edukasi() {
 
                     {/* IMAGE */}
                     {p.foto && (
-                <img
-  src={`http://127.0.0.1:8000/uploads/edukasi/${p.foto}`}
-  alt={p.judul}
-  className="card-img-top"
-  style={{
-    height: '200px',
-    objectFit: 'cover',
-    width: '100%'
-  }}
-/>
+                      <img
+                        src={`${p.foto}`}
+                        alt={p.judul}
+                        className="card-img-top"
+                        style={{
+                          height: '200px',
+                          objectFit: 'cover',
+                          width: '100%'
+                        }}
+                      />
                     )}
 
                     {/* BODY */}

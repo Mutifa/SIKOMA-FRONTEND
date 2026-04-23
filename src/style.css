@@ -486,6 +486,12 @@ a {
   min-height: 140px; /* 🔥 INI YANG BUAT SAMA */
 }
 
+.text-justify {
+  text-align: justify;
+  line-height: 1.7;
+  font-size: inherit; /* 🔥 ikut font bawaan */
+}
+
 /* Layout Admin Pusat */
 /* ================= SIDEBAR ADMIN PUSAT FINAL ================= */
 
@@ -535,14 +541,14 @@ a {
 
 /* LOGO */
 .sidebar-header-pusat.horizontal img {
-  width: 35px;
+  width: 28px;
   height: auto;
 }
 
 /* TEXT LOGO SIKOMA */
 .sidebar-header-pusat.horizontal span {
   color: black;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 }
 
@@ -559,23 +565,22 @@ a {
 }
 
 .sidebar-item {
-  width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 6px;      /* 🔥 dari 10 → 6 */
 }
 
 /* LINK */
 .sidebar-link {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
 
   width: 100%;
-  padding: 14px 18px;
+  padding: 10px 14px;      /* 🔥 dari 14 → 10 */
 
-  border-radius: 14px;
+  border-radius: 12px;
 
   color: white;
-  font-size: 14px;
+  font-size: 13px;         /* 🔥 dari 14 → 13 */
   font-weight: 500;
 
   transition: 0.25s ease;
@@ -583,8 +588,8 @@ a {
 
 /* ICON */
 .sidebar-link i {
-  font-size: 18px;
-  width: 20px;
+  font-size: 15px;         /* 🔥 dari 18 → 15 */
+  width: 18px;
   text-align: center;
 }
 
@@ -632,4 +637,19 @@ a {
 }
 .logout-item .sidebar-link {
   border: 1px solid rgba(255,255,255,0.2);
+}
+
+
+/* ===== ADMIN LAPANGAN ===== */
+.sidebar-header-pusat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.sidebar-header-pusat img {
+  width: 35px;
 }
