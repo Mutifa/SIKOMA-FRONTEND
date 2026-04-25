@@ -526,3 +526,34 @@ h6,
     object-fit: cover;
     display: block;
 }
+
+/* ===== UPGRADE DASHBOARD (AMAN) ===== */
+
+.white-box.analytics-info {
+  border-radius: 16px !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  transition: 0.3s;
+}
+
+.white-box.analytics-info:hover {
+  transform: translateY(-5px);
+}
+
+.white-box.analytics-info h2 {
+  font-size: 32px;
+  font-weight: bold;
+  color: #2f6f4f;
+}
+
+.white-box.analytics-info h5 {
+  font-size: 14px;
+  color: #666;
+}
+
+.white-box.analytics-info small {
+  font-size: 12px;
+  color: #999;
+}
+.white-box.analytics-info i {
+  opacity: 0.7;
+}

@@ -100,7 +100,7 @@ export default function AdminPusatDashboard() {
           <div className="white-box analytics-info p-4" style={{ borderRadius: '15px' }}>
             <div className="d-flex justify-content-between align-items-start">
               <div>
-                <h5 className="mb-1">Pelaporan Konservasi</h5>
+                <h5 className="mb-1 text-muted">Pelaporan Konservasi</h5>
               </div>
               <div className="text-primary fs-2">
                 <i className="fas fa-archive"></i>
@@ -117,7 +117,7 @@ export default function AdminPusatDashboard() {
           <div className="white-box analytics-info p-4" style={{ borderRadius: '15px' }}>
             <div className="d-flex justify-content-between align-items-start">
               <div>
-                <h5 className="mb-1">Pelaporan Konservasi</h5>
+                <h5 className="mb-1 text-muted">Pelaporan Konservasi</h5>
               </div>
               <div className="text-success fs-2">
                 <i className="fas fa-check-square"></i>
