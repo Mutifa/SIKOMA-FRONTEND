@@ -162,7 +162,7 @@ export default function Laporan() {
                         </td>
                         <td>
                           <Link
-                            to={`/AdminPusat/laporan/detail/${item.id}`}
+                            to={`/admin-pusat/laporan/detail/${item.id}`}
                             className="btn btn-primary btn-sm"
                           >
                             <i className="fas fa-eye"></i> Detail

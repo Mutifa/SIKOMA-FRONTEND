@@ -135,7 +135,7 @@ export default function App() {
 
           {/* ================= ADMIN PUSAT (PROTECTED) ================= */}
 
-          <Route path="/AdminPusat" element={
+          <Route path="/admin-pusat" element={
             <RoleGuard allowedRoles={['AdminPusat']}>
               <AdminPusatDashboard />
             </RoleGuard>
