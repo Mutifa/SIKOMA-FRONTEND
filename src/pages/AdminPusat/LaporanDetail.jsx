@@ -16,7 +16,7 @@ export default function LaporanDetail() {
     let mounted = true
     const fetchLaporan = async () => {
       try {
-       const res = await api.get('/admin_pusat/laporan-konservasi')
+       const res = await api.get(`/admin_pusat/laporan-konservasi/${id}`)
         if (mounted) {
           setLaporan(res.data.data || res.data)
           setLoading(false)
@@ -116,7 +116,7 @@ const handleStatusUpdate = async (status) => {
         <div className="alert alert-danger">
           {error}
         </div>
-        <Link to="/AdminPusat/laporan" className="btn btn-secondary">
+        <Link to="/admin-pusat/laporan" className="btn btn-secondary">
           <i className="fas fa-arrow-left"></i> Kembali
         </Link>
       </AdminPusatLayout>
@@ -129,7 +129,7 @@ const handleStatusUpdate = async (status) => {
         <div className="alert alert-warning">
           Laporan tidak ditemukan
         </div>
-        <Link to="/AdminPusat/laporan" className="btn btn-secondary">
+        <Link to="/admin-pusat/laporan" className="btn btn-secondary">
           <i className="fas fa-arrow-left"></i> Kembali
         </Link>
       </AdminPusatLayout>
@@ -143,7 +143,7 @@ const handleStatusUpdate = async (status) => {
         <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>}
 
-      <Link to="/AdminPusat/laporan" className="btn btn-secondary btn-sm text-white mb-2">
+      <Link to="/admin-pusat/laporan" className="btn btn-secondary btn-sm text-white mb-2">
         <i className="fas fa-angles-left"></i> Kembali
       </Link>
 
