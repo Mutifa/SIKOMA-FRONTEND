@@ -557,3 +557,35 @@ h6,
 .white-box.analytics-info i {
   opacity: 0.7;
 }
+
+.white-box.analytics-info {
+  border-radius: 16px !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* garis aksen kiri */
+.white-box.analytics-info::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: #2f6f4f;
+  border-radius: 4px;
+}
+
+/* CARD LEBIH HIDUP */
+.white-box.analytics-info {
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* ICON BULAT */
+.white-box.analytics-info i {
+  background: #f1f5f3;
+  padding: 12px;
+  border-radius: 10px;
+}

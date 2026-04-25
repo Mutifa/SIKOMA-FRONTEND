@@ -54,19 +54,31 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
           <div className="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
             <ul className="navbar-nav ms-auto d-flex align-items-center me-3">
               <li>
-                <a 
-  className="profile-pic" 
-  type="button"
-  onClick={handleLogout}
-  style={{ cursor: 'pointer' }}
->
-                  <img className="img-circle" src="/img/user.png" alt="user" width="40px" height="40px" />
+              <div className="user-info">
 
-                  {/* Nama user (fallback jika kosong) */}
-                  <span className="text-dark font-medium">
-                    {user?.name && user.name.trim() !== '' ? user.name : 'Admin Pusat'}
-                  </span>
-                </a>
+  <img
+    className="img-circle"
+    src="/img/user.png"
+    alt="user"
+    width="38"
+    height="38"
+  />
+
+  <div>
+    <div className="name">
+      {user?.name && user.name.trim() !== '' ? user.name : 'Super Admin'}
+    </div>
+    <div className="email">
+      {user?.email || 'admin@email.com'}
+    </div>
+  </div>
+
+  <i
+    className="fas fa-sign-out-alt logout-icon"
+    onClick={handleLogout}
+  ></i>
+
+</div>
               </li>
             </ul>
           </div>
@@ -78,8 +90,12 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
         <div className="scroll-sidebar">
 
           <div className="sidebar-header-pusat horizontal">
-            <img src="/img/logo.png" alt="logo" />
-            <span>SIKOMA</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <img src="/img/logo.png" alt="logo" />
+              <span>SIKOMA</span>
+            </div>
+
+            <i className="fas fa-sign-out-alt logout-icon"></i>
           </div>
 
           <nav className="sidebar-nav">

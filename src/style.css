@@ -309,6 +309,7 @@ a {
 
 /* 🔥 biarkan tanpa animasi biar child bisa animasi */
 #visi-misi .content-box {
+
   /* animation dihapus agar tidak conflict */
 }
 
@@ -493,119 +494,171 @@ a {
 }
 
 /* Layout Admin Pusat */
-/* ================= SIDEBAR ADMIN PUSAT FINAL ================= */
+
+
+/* LOGOUT */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-info img {
+  border-radius: 50%;
+}
+
+.user-info .name {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.user-info .email {
+  font-size: 11px;
+  color: #888;
+}
+
+.logout-icon {
+  margin-left: 10px;
+  cursor: pointer;
+  color: #2f6f4f;
+  font-size: 16px;
+}
+
+.logout-icon:hover {
+  opacity: 0.7;
+}
+
+/* Chrome */
+.left-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.left-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.3);
+  border-radius: 10px;
+}
+
+.left-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ================= SIDEBAR ADMIN PUSAT (FINAL CLEAN & DESIGN) ================= */
 
 .left-sidebar {
   position: fixed;
-  top: 60px; /* biar ga ketimpa header */
+  top: 0;
   left: 0;
 
-  width: 250px;
-  height: calc(100vh - 60px);
+  width: 240px;
+  height: 100vh;
 
   background: #2f6f4f;
   border-radius: 0 20px 20px 0;
 
-  padding: 20px 12px;
+  padding: 12px 8px 20px 8px; /* 🔥 lebih balance */
 
   display: flex;
   flex-direction: column;
-  align-items: center;
+
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* ===== PAGE CONTENT ===== */
+.page-wrapper {
+  margin-left: 240px;
+  margin-top: 60px;
+  border-top: none !important;
+}
+
+/* ===== SCROLLBAR ===== */
+.left-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+.left-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
 }
 
 /* ===== HEADER (LOGO + SIKOMA) ===== */
-
-.sidebar-header-pusat {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-
-.logo-wrapper img {
-  width: 50px;
-  height: auto;
-}
-
-/* HEADER SIDEBAR HORIZONTAL */
 .sidebar-header-pusat.horizontal {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+
   gap: 10px;
-
-  width: 100%;
-  padding: 10px 15px;
-
-  margin-bottom: 25px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
 }
 
-/* LOGO */
 .sidebar-header-pusat.horizontal img {
-  width: 28px;
-  height: auto;
+  width: 26px;
 }
 
-/* TEXT LOGO SIKOMA */
 .sidebar-header-pusat.horizontal span {
-  color: black;
-  font-size: 14px;
-  font-weight: bold;
+  color: #000;
+  font-size: 17px;  /* 🔥 lebih hidup */
+  font-weight: 700;
 }
 
-/* ===== MENU ===== */
-
+/* ===== MENU WRAPPER ===== */
 .sidebar-nav {
   width: 100%;
+  margin-top: 4px;
 }
 
+/* ===== LIST ===== */
 #sidebarnav {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
+/* ITEM */
 .sidebar-item {
-  margin-bottom: 6px;      /* 🔥 dari 10 → 6 */
+  margin-bottom: 4px; /* 🔥 lebih rapat tapi rapi */
 }
 
-/* LINK */
+/* ===== LINK ===== */
 .sidebar-link {
   display: flex;
   align-items: center;
   gap: 10px;
 
-  width: 100%;
-  padding: 10px 14px;      /* 🔥 dari 14 → 10 */
+  padding: 11px 12px;
+  margin: 0 6px;
 
   border-radius: 12px;
 
-  color: white;
-  font-size: 13px;         /* 🔥 dari 14 → 13 */
+  color: rgba(255,255,255,0.92);
+  font-size: 12px;
   font-weight: 500;
 
-  transition: 0.25s ease;
+  transition: all 0.2s ease;
 }
 
 /* ICON */
 .sidebar-link i {
-  font-size: 15px;         /* 🔥 dari 18 → 15 */
-  width: 18px;
+  font-size: 14px;
+  width: 20px;
   text-align: center;
 }
 
 /* TEXT */
 .sidebar-link .hide-menu {
   flex: 1;
+  white-space: nowrap;
 }
 
-/* HOVER */
+/* ===== HOVER ===== */
 .sidebar-link:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.08);
+  transform: translateX(2px); /* 🔥 efek halus */
 }
 
-/* ACTIVE (PUTIH + HIJAU) */
+/* ===== ACTIVE ===== */
 .sidebar-link.active {
-  background: #f1f5f3;
+  background: #e6eeea;
   color: #2f6f4f;
   font-weight: 600;
 }
@@ -615,40 +668,40 @@ a {
   color: #2f6f4f !important;
 }
 
-/* LOGOUT = SAMA KAYAK MENU BIASA */
-.logout-item .sidebar-link {
-  background: transparent;
-  color: white;
+/* ===== LOGOUT (POSISI PALING BAWAH) ===== */
+.logout-item {
+  margin-top: auto;
+  padding: 10px 6px 4px 6px;
 }
 
-/* HOVER */
-.logout-item .sidebar-link:hover {
-  background: rgba(255,255,255,0.1);
+/* ===== HAPUS GARIS ATAS (BIAR CLEAN) ===== */
+.topbar {
+  border-bottom: none !important;
+  box-shadow: none !important;
 }
 
-/* ACTIVE (KALAU DIHALAMAN AKUN / LOGOUT) */
-.logout-item .sidebar-link.active {
-  background: #f1f5f3;
-  color: #2f6f4f;
+hr {
+  display: none;
+}
+
+/* ===== HEADER HALAMAN ===== */
+.page-wrapper {
+  padding: 20px 25px; /* 🔥 kasih ruang dalam */
+}
+.page-wrapper h3,
+.page-wrapper h2 {
+  margin-bottom: 6px;
   font-weight: 600;
 }
-.logout-item .sidebar-link {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-.logout-item .sidebar-link {
-  border: 1px solid rgba(255,255,255,0.2);
+
+.page-wrapper p {
+  margin-bottom: 16px;
+  color: #6c757d;
+  font-size: 13px;
 }
 
 
 /* ===== ADMIN LAPANGAN ===== */
-.sidebar-header-pusat {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 15px;
-  font-weight: bold;
-  font-size: 18px;
-}
 
 .sidebar-header-pusat img {
   width: 35px;
