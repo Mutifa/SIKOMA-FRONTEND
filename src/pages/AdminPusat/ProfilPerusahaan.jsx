@@ -17,7 +17,6 @@ export default function ProfilPerusahaan() {
     jambuka: '',
     visi: '',
     misi: '',
-    icon: null,
     logo: null,
     struktur: null
   })
@@ -34,7 +33,6 @@ export default function ProfilPerusahaan() {
       const timer = setTimeout(() => {
         setSuccess('')
       }, 3000)
-
       return () => clearTimeout(timer)
     }
   }, [success])
@@ -67,9 +65,8 @@ export default function ProfilPerusahaan() {
         jambuka: stripHtmlTags(data.jambuka) || '',
         visi: stripHtmlTags(data.visi) || '',
         misi: stripHtmlTags(data.misi) || '',
-        icon: null,
-        logo: null,
-        struktur: null
+        logo: data.logo || null,
+        struktur: data.struktur || null
       })
       setLoading(false)
     } catch (err) {
@@ -93,11 +90,11 @@ export default function ProfilPerusahaan() {
       [name]: files[0] || null
     }))
   }
-const handleSubmit = async (e) => {
-  e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault()
 
-  // 🔥 TAMBAHKAN INI
-  if (!isEdit) return
+    // 🔥 TAMBAHKAN INI
+    if (!isEdit) return
     setSaving(true)
     setError('')
     setSuccess('')
@@ -106,14 +103,17 @@ const handleSubmit = async (e) => {
       const formDataToSend = new FormData()
 
       Object.keys(formData).forEach(key => {
-        if (key !== 'icon' && key !== 'logo' && key !== 'struktur') {
+        if (key !== 'logo' && key !== 'struktur') {
           formDataToSend.append(key, formData[key] || '')
         }
       })
+if (formData.logo instanceof File) {
+  formDataToSend.append('logo', formData.logo)
+}
 
-      if (formData.icon) formDataToSend.append('icon', formData.icon)
-      if (formData.logo) formDataToSend.append('logo', formData.logo)
-      if (formData.struktur) formDataToSend.append('struktur', formData.struktur)
+if (formData.struktur instanceof File) {
+  formDataToSend.append('struktur', formData.struktur)
+}
 
       // 🔥 INI YANG DIGANTI
       await profilPerusahaanService.update(formDataToSend)
@@ -154,241 +154,226 @@ const handleSubmit = async (e) => {
       </div>}
 
       <div className="white-box">
-        <div className="box-title mb-3">Pengaturan Website</div>
-       <form onSubmit={handleSubmit} autoComplete="off">
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label className="form-label">Nama Website</label>
-              <input
-                type="text"
-                className="form-control"
-                name="nama"
-                value={formData.nama}
-                onChange={handleChange}
-                required
-                disabled={!isEdit} />
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <div className="box-title">Profil Perusahaan</div>
 
+          <button
+            className="btn btn-success"
+            onClick={() => setIsEdit(true)}
+          >
+            Edit
+          </button>
+        </div>
+        <div className="row">
 
-            </div>
+          <div className="col-md-6 mb-3">
+            <label>Nama Website</label>
+            <div className="form-control bg-light">{formData.nama || '-'}</div>
+          </div>
 
-            <div className="col-md-6 mb-3">
-              <label className="form-label">Meta Deskripsi</label>
-              <textarea
-                className="form-control"
-                name="deskripsi"
-                value={formData.deskripsi}
-                onChange={handleChange}
-                rows="3"
-                required
-                disabled={!isEdit} />
-            </div>
+          <div className="col-md-6 mb-3">
+            <label>Meta Deskripsi</label>
+            <div className="form-control bg-light">{formData.deskripsi || '-'}</div>
+          </div>
 
-            <div className="col-md-6 mb-3">
-              <label className="form-label">Meta Keyword</label>
-              <input
-                type="text"
-                className="form-control"
-                name="keyword"
-                value={formData.keyword}
-                onChange={handleChange}
-                required
-                disabled={!isEdit} />
-            </div>
+          <div className="col-md-6 mb-3">
+            <label>Meta Keyword</label>
+            <div className="form-control bg-light">{formData.keyword || '-'}</div>
+          </div>
 
-            <div className="col-md-6 mb-3">
-              <label className="form-label">Alamat</label>
-              <textarea
-                className="form-control"
-                name="alamat"
-                value={formData.alamat}
-                onChange={handleChange}
-                rows="3"
-                required
-                disabled={!isEdit} />
-            </div>
+          <div className="col-md-6 mb-3">
+            <label>Alamat</label>
+            <div className="form-control bg-light">{formData.alamat || '-'}</div>
+          </div>
 
-            <div className="col-md-6 mb-3">
-              <label className="form-label">Telepon</label>
-              <input
-                type="text"
-                className="form-control"
-                name="telepon"
-                value={formData.telepon}
-                onChange={handleChange}
-                required
-                disabled={!isEdit} />
-            </div>
+          <div className="col-md-6 mb-3">
+            <label>Telepon</label>
+            <div className="form-control bg-light">{formData.telepon || '-'}</div>
+          </div>
 
-            <div className="col-md-6 mb-3">
-              <label className="form-label">Email</label>
-              <input
-                type="email"
-                className="form-control"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                disabled={!isEdit} />
-            </div>
+          <div className="col-md-6 mb-3">
+            <label>Email</label>
+            <div className="form-control bg-light">{formData.email || '-'}</div>
+          </div>
 
-            <div className="col-md-6 mb-3">
-              <label className="form-label">Facebook</label>
-              <input
-                type="text"
-                className="form-control"
-                name="facebook"
-                value={formData.facebook}
-                onChange={handleChange}
-                disabled={!isEdit} />
-            </div>
+          <div className="col-md-6 mb-3">
+            <label>Facebook</label>
+            <div className="form-control bg-light">{formData.facebook || '-'}</div>
+          </div>
 
-            <div className="col-md-6 mb-3">
-              <label className="form-label">Instagram</label>
-              <input
-                type="text"
-                className="form-control"
-                name="instagram"
-                value={formData.instagram}
-                onChange={handleChange}
-                disabled={!isEdit} />
-            </div>
+          <div className="col-md-6 mb-3">
+            <label>Instagram</label>
+            <div className="form-control bg-light">{formData.instagram || '-'}</div>
+          </div>
 
-            <div className="col-md-12 mb-3">
-              <label className="form-label">WhatsApp</label>
-              <textarea
-                type="text"
-                className="form-control"
-                name="wa"
-                value={formData.wa}
-                onChange={handleChange}
-                rows="3"
-                disabled={!isEdit} />
-            </div>
+          <div className="col-md-12 mb-3">
+            <label>WhatsApp</label>
+            <div className="form-control bg-light">{formData.wa || '-'}</div>
+          </div>
 
-            <div className="col-md-12 mb-3">
-              <label className="form-label">Google Maps (Embed Link)</label>
-              <textarea
-                className="form-control"
-                name="gmaps"
-                value={formData.gmaps}
-                onChange={handleChange}
-                rows="4"
-                required
-                disabled={!isEdit} />
-            </div>
+          <div className="col-md-12 mb-3">
+            <label>Google Maps</label>
+            <div className="form-control bg-light">{formData.gmaps || '-'}</div>
+          </div>
+        </div> {/* ✅ TUTUP ROW PERTAMA */}
 
-            <div className="col-md-4 mb-3">
-              <label className="form-label">Icon Website</label><br />
-              <input
-                type="file"
-                className="form-control mb-3"
-                name="icon"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              {formData.icon && (
+        <div className="row"> {/* row baru */}
+          <div className="col-md-6 mb-3">
+            <label>Logo Website</label>
+            <div className="form-control bg-light d-flex align-items-center justify-content-center" style={{ height: '120px' }}>
+              {formData.logo ? (
                 <img
-                  src={formData.icon instanceof File ? URL.createObjectURL(formData.icon) : `/img/${formData.icon}`}
-                  alt="Icon"
-                  width="50"
-                  disabled={!isEdit} />
-              )}
-            </div>
-
-            <div className="col-md-4 mb-3">
-              <label className="form-label">Logo Website</label><br />
-              <input
-                type="file"
-                className="form-control mb-3"
-                name="logo"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              {formData.logo && (
-                <img
-                  src={formData.logo instanceof File ? URL.createObjectURL(formData.logo) : `/img/${formData.logo}`}
+                  src={`/img/${formData.logo}`}
                   alt="Logo"
-                  width="100"
-                  disabled={!isEdit} />
-              )}
+                  style={{ maxHeight: '80px' }}
+                />
+              ) : 'Belum ada'}
             </div>
+          </div>
 
-            <div className="col-md-4 mb-3">
-              <label className="form-label">Struktur Organisasi</label><br />
-              <input
-                type="file"
-                className="form-control mb-3"
-                name="struktur"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              {formData.struktur && (
+          <div className="col-md-6 mb-3">
+            <label>Struktur Organisasi</label>
+            <div className="form-control bg-light d-flex align-items-center justify-content-center" style={{ height: '120px' }}>
+              {formData.struktur ? (
                 <img
-                  src={formData.struktur instanceof File ? URL.createObjectURL(formData.struktur) : `/img/${formData.struktur}`}
-                  alt="struktur"
-                  width="100"
-                  disabled={!isEdit} />
-              )}
-            </div>
-
-            <div className="col-12 mb-3">
-              <label className="form-label">Jam Operasional</label>
-              <textarea
-                className="form-control"
-                name="jambuka"
-                value={formData.jambuka}
-                onChange={handleChange}
-                rows="3"
-                required
-                disabled={!isEdit} />
-            </div>
-
-            <div className="col-md-6 mb-3">
-              <label className="form-label">Visi</label>
-              <textarea
-                className="form-control"
-                name="visi"
-                value={formData.visi}
-                onChange={handleChange}
-                rows="3"
-                required
-                disabled={!isEdit} />
-            </div>
-
-            <div className="col-md-6 mb-3">
-              <label className="form-label">Misi</label>
-              <textarea
-                className="form-control"
-                name="misi"
-                value={formData.misi}
-                onChange={handleChange}
-                rows="3"
-                required
-                disabled={!isEdit} />
+                  src={`/img/${formData.struktur}`}
+                  alt="Struktur"
+                  style={{ maxHeight: '80px' }}
+                />
+              ) : 'Belum ada'}
             </div>
           </div>
+        </div>
 
-          <div className="mt-3 text-end">
-            {isEdit ? (
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={saving}
-              >
-                {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={() => setIsEdit(true)}
-              >
-                Edit
-              </button>
-            )}
+
+        {isEdit && (
+          <div className="modal fade show d-block" style={{ background: 'rgba(0,0,0,0.5)' }}>
+            <div className="modal-dialog modal-xl">
+              <div className="modal-content">
+
+                <div className="modal-header">
+                  <h5>Edit Profil Perusahaan</h5>
+                  <button
+                    className="btn-close"
+                    onClick={() => {
+                      setIsEdit(false)
+                      loadWebsiteData()
+                    }}
+                  ></button>
+                </div>
+
+                <form onSubmit={handleSubmit}>
+                  <div className="modal-body">
+
+                    <div className="row">
+
+                      <div className="col-md-6 mb-3">
+                        <label>Nama Website</label>
+                        <input type="text" className="form-control" name="nama" value={formData.nama} onChange={handleChange} />
+                      </div>
+
+                      <div className="col-md-6 mb-3">
+                        <label>Meta Deskripsi</label>
+                        <textarea className="form-control" name="deskripsi" value={formData.deskripsi} onChange={handleChange} />
+                      </div>
+
+                      <div className="col-md-6 mb-3">
+                        <label>Meta Keyword</label>
+                        <input type="text" className="form-control" name="keyword" value={formData.keyword} onChange={handleChange} />
+                      </div>
+
+                      <div className="col-md-6 mb-3">
+                        <label>Alamat</label>
+                        <input type="text" className="form-control" name="alamat" value={formData.alamat} onChange={handleChange} />
+                      </div>
+
+                      <div className="col-md-6 mb-3">
+                        <label>Telepon</label>
+                        <input type="text" className="form-control" name="telepon" value={formData.telepon} onChange={handleChange} />
+                      </div>
+
+                      <div className="col-md-6 mb-3">
+                        <label>Email</label>
+                        <input type="text" className="form-control" name="email" value={formData.email} onChange={handleChange} />
+                      </div>
+
+                      <div className="col-md-6 mb-3">
+                        <label>Facebook</label>
+                        <input type="text" className="form-control" name="facebook" value={formData.facebook} onChange={handleChange} />
+                      </div>
+
+                      <div className="col-md-6 mb-3">
+                        <label>Instagram</label>
+                        <input type="text" className="form-control" name="instagram" value={formData.instagram} onChange={handleChange} />
+                      </div>
+
+                      <div className="col-md-12 mb-3">
+                        <label>WhatsApp</label>
+                        <input type="text" className="form-control" name="wa" value={formData.wa} onChange={handleChange} />
+                      </div>
+
+                      <div className="col-md-12 mb-3">
+                        <label>Google Maps</label>
+                        <input type="text" className="form-control" name="gmaps" value={formData.gmaps} onChange={handleChange} />
+                      </div>
+
+                      <div className="col-md-6 mb-3">
+                        <label>Logo Website</label>
+                        <input type="file" className="form-control" name="logo" onChange={handleFileChange} />
+                      </div>
+
+                      <div className="col-md-6 mb-3">
+                        <label>Struktur Organisasi</label>
+                        <input type="file" className="form-control" name="struktur" onChange={handleFileChange} />
+                      </div>
+
+                      <div className="col-12 mb-3">
+                        <label>Jam Operasional</label>
+                        <textarea className="form-control" name="jambuka" value={formData.jambuka} onChange={handleChange} />
+                      </div>
+
+                      <div className="col-md-6 mb-3">
+                        <label>Visi</label>
+                        <textarea className="form-control" name="visi" value={formData.visi} onChange={handleChange} />
+                      </div>
+
+                      <div className="col-md-6 mb-3">
+                        <label>Misi</label>
+                        <textarea className="form-control" name="misi" value={formData.misi} onChange={handleChange} />
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={() => {
+                        setIsEdit(false)
+                        loadWebsiteData()
+                      }}
+                    >
+                      Batal
+                    </button>
+
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={saving}
+                    >
+                      {saving ? 'Menyimpan...' : 'Simpan'}
+                    </button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
           </div>
-        </form>
+        )}
+
       </div>
-    </AdminPusatLayout>
+    </AdminPusatLayout >
   )
 }

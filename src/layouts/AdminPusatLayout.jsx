@@ -54,31 +54,26 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
           <div className="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
             <ul className="navbar-nav ms-auto d-flex align-items-center me-3">
               <li>
-              <div className="user-info">
-
-  <img
-    className="img-circle"
-    src="/img/user.png"
-    alt="user"
-    width="38"
-    height="38"
-  />
-
-  <div>
-    <div className="name">
-      {user?.name && user.name.trim() !== '' ? user.name : 'Super Admin'}
-    </div>
-    <div className="email">
-      {user?.email || 'admin@email.com'}
-    </div>
-  </div>
-
-  <i
-    className="fas fa-sign-out-alt logout-icon"
-    onClick={handleLogout}
-  ></i>
-
-</div>
+                <div className="user-info">
+                  <img
+                    className="img-circle"
+                    src="/img/user.png"
+                    alt="user"
+                    width="38"
+                    height="38" /> 
+                    <div>
+                    <div className="name">
+                      {user?.name && user.name.trim() !== '' ? user.name : 'Super Admin'}
+                    </div>
+                    <div className="email">
+                      {user?.email || 'admin@email.com'}
+                    </div>
+                  </div>
+                  <i
+                    className="fas fa-sign-out-alt logout-icon"
+                    onClick={handleLogout}
+                  ></i>
+                </div>
               </li>
             </ul>
           </div>

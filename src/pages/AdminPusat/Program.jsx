@@ -223,7 +223,7 @@ export default function Program() {
                         <td className="text-capitalize">
                           {item.foto ? (
                             <img 
-                              src={`http://127.0.0.1:8000/uploads/edukasi/${item.foto}`}
+                              src={`https://codemy.my.id/uploads/edukasi/${item.foto}`}
                               alt="Foto Program" 
                               className="img-fluid" 
                               width="100px"

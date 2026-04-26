@@ -596,9 +596,10 @@ a {
 }
 
 .sidebar-header-pusat.horizontal span {
-  color: #000;
-  font-size: 17px;  /* 🔥 lebih hidup */
-  font-weight: 700;
+  color:  #000000;  /* 🔥 sama kayak landing */
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 /* ===== MENU WRAPPER ===== */
@@ -669,9 +670,10 @@ a {
 }
 
 /* ===== LOGOUT (POSISI PALING BAWAH) ===== */
-.logout-item {
-  margin-top: auto;
-  padding: 10px 6px 4px 6px;
+.logout-item .sidebar-link {
+  padding: 11px 12px;   /* 🔥 samakan */
+  margin: 0 6px;        /* 🔥 samakan */
+  border-radius: 12px;
 }
 
 /* ===== HAPUS GARIS ATAS (BIAR CLEAN) ===== */

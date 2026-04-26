@@ -18,8 +18,8 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
 
   return (
     <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
-         data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
-      
+      data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
+
       {/* Preloader (sudah dimatikan / tidak digunakan) */}
       {/* <div className="preloader">
         <div className="lds-ripple">
@@ -29,49 +29,64 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
       </div> */}
 
       {/* ===== HEADER / TOPBAR ===== */}
+     {/* ===== HEADER / TOPBAR ===== */}
       <header className="topbar" data-navbarbg="skin5">
-        <nav className="navbar top-navbar navbar-expand-md navbar-dark">
+        <nav className="navbar top-navbar navbar-expand-md navbar-dark px-4">
 
-          {/* Logo & brand */}
-        
-          
-          {/* Bagian kanan header (profil user) */}
+          {/* Toggle sidebar (mobile) */}
+          <button
+            type="button"
+            className="nav-toggler waves-effect waves-light text-dark d-block d-md-none mt-2 border-0 bg-transparent"
+            onClick={() => console.log("toggle")}
+          >
+            <i className="fas fa-bars fs-6"></i>
+          </button>
+
+          {/* Profile user di kanan atas */}
           <div className="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
             <ul className="navbar-nav ms-auto d-flex align-items-center me-3">
               <li>
-                <a 
-  className="profile-pic" 
-  type="button"
-  onClick={handleLogout}
-  style={{ cursor: 'pointer' }}
->
-                  <img className="img-circle" src="/img/user.png" alt="user" width="40px" height="40px" />
-
-                  {/* Menampilkan nama user (fallback jika kosong) */}
-                  <span className="text-dark font-medium">
-                    {user?.name && user.name.trim() !== '' ? user.name : 'Admin Lapangan'}
-                  </span>
-                </a>
+                <div className="user-info">
+                  <img
+                    className="img-circle"
+                    src="/img/user.png"
+                    alt="user"
+                    width="38"
+                    height="38" /> 
+                    <div>
+                    <div className="name">
+                      {user?.name && user.name.trim() !== '' ? user.name : 'Super Admin'}
+                    </div>
+                    <div className="email">
+                      {user?.email || 'admin@email.com'}
+                    </div>
+                  </div>
+                  <i
+                    className="fas fa-sign-out-alt logout-icon"
+                    onClick={handleLogout}
+                  ></i>
+                </div>
               </li>
             </ul>
           </div>
         </nav>
       </header>
 
+
       {/* ===== SIDEBAR (MENU KIRI) ===== */}
       <aside className="left-sidebar" data-sidebarbg="skin6">
         <div className="scroll-sidebar">
           <div className="sidebar-header-pusat horizontal">
-  <img src="/img/logo.png" alt="logo" />
-  <span>SIKOMA</span>
-</div>
+            <img src="/img/logo.png" alt="logo" />
+            <span>SIKOMA</span>
+          </div>
           <nav className="sidebar-nav">
             <ul id="sidebarnav">
 
               {/* Menu Dashboard */}
               <li className="sidebar-item pt-2">
-                <Link 
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/admin-lapangan/dashboard'? 'active' : ''}`}
+                <Link
+                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/admin-lapangan/dashboard' ? 'active' : ''}`}
                   to="/admin-lapangan/dashboard"
                 >
                   <i className="fas fa-home me-3" aria-hidden="true"></i>
@@ -81,7 +96,7 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
 
               {/* Menu Laporan */}
               <li className="sidebar-item">
-                <Link 
+                <Link
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/admin-lapangan/laporan' ? 'active' : ''}`}
                   to="/admin-lapangan/laporan"
                 >
@@ -92,7 +107,7 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
 
               {/* Menu Akun */}
               <li className="sidebar-item">
-                <Link 
+                <Link
                   className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/admin-lapangan/akun' ? 'active' : ''}`}
                   to="/admin-lapangan/akun"
                 >
@@ -103,9 +118,9 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
 
               {/* Menu Logout */}
               <li className="sidebar-item">
-                <a 
-                  className="sidebar-link waves-effect waves-dark sidebar-link text-white" 
-                  href="#" 
+                <a
+                  className="sidebar-link waves-effect waves-dark sidebar-link text-white"
+                  href="#"
                   onClick={handleLogout} // Trigger logout saat diklik
                 >
                   <i className="fas fa-lock-open me-3 text-white"></i>
@@ -121,7 +136,7 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
       {/* ===== CONTENT / HALAMAN UTAMA ===== */}
       <div className="page-wrapper">
         <div className="d-lg-none"><br /></div>
-        
+
         {/* Breadcrumb & Judul Halaman */}
         <div className="page-breadcrumb bg-white">
           <div className="row align-items-center">
