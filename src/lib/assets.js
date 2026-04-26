@@ -1,4 +1,4 @@
 export function assetUrl(path) {
-  const base = "http://127.0.0.1:8000"
+  const base = import.meta.env.VITE_API_BASE_URL
   return `${base}${path}`
 }
