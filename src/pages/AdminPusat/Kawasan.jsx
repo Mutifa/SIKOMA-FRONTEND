@@ -141,7 +141,7 @@ export default function Kawasan() {
             >
               {data?.gambar ? (
                 <img
-                  src={`https://codemy.my.id/storage/${data.gambar}?t=${Date.now()}`}
+                  src={`https://codemy.my.id/uploads/${data.gambar}`}
                   alt="Foto Kawasan"
                   style={{ maxHeight: '120px' }}
                 />
