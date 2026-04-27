@@ -146,7 +146,7 @@ export default function Konten() {
             + Konten
           </a>
           <div className="white-box">
-            <div className="box-title mb-3">Konten Informasi & Edukasi</div>
+           <div className="box-title mb-3">Kelola halaman konten informasi & edukasi</div>
 
             <div className="table-responsive">
               <table className="table">

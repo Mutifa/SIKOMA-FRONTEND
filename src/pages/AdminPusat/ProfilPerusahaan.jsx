@@ -155,7 +155,8 @@ if (formData.struktur instanceof File) {
 
       <div className="white-box">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <div className="box-title">Profil Perusahaan</div>
+          <div className="box-title">Kelola halaman profil halaman</div>
+          
 
           <button
             className="btn btn-success"

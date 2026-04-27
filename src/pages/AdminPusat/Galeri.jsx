@@ -125,7 +125,7 @@ export default function Galeri() {
       <div className="row mb-4">
         <div className="col-12">
           <div className="d-flex justify-content-between align-items-center">
-            <h4 className="mb-0">Galeri</h4>
+                        <div className="box-title mb-3">Kelola halaman galeri</div>
             <button 
               className="btn btn-success"
               onClick={() => {
@@ -139,7 +139,7 @@ export default function Galeri() {
                 setShowModal(true)
               }}
             >
-              <i className="fas fa-plus me-2"></i>+ Tambah Galeri
+              <i className="fas fa-plus me-2"></i>Tambah Galeri
             </button>
           </div>
         </div>

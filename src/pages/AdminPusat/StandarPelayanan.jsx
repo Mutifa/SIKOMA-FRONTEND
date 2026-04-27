@@ -200,11 +200,12 @@ export default function StandarPelayanan() {
       <div className="row">
         <div className="col-12">
           <div className="mb-3">
-            <h4 className="mb-0">Manajemen Standar Pelayanan</h4>
+
+            <div className="box-title mb-3">Manajemen standar pelayanan</div>
           </div>
           
           <div className="white-box">
-            <h3 className="box-title">Daftar Standar Pelayanan</h3>
+
             <div className="table-responsive">
               <table className="table table-hover text-nowrap">
                 <thead className="table-light">

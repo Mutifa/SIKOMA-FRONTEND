@@ -120,7 +120,7 @@ export default function Kawasan() {
 
         <div className="d-flex justify-content-between align-items-center mb-3">
           <div>
-            <h5>Kawasan Konservasi</h5>
+            <div className="box-title mb-3">Kelola halaman kawasan konservasi</div>
           </div>
 
           <button

@@ -164,7 +164,7 @@ export default function Program() {
             + Program
           </a>
           <div className="white-box">
-            <div className="box-title mb-3">Program Terdaftar</div>
+            <div className="box-title mb-3">Kelola halaman program</div>
 
             {/* Search and Filter Controls */}
             <div className="row mb-3">

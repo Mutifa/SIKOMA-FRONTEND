@@ -101,8 +101,7 @@ export default function Laporan() {
       <div className="row">
         <div className="col-12">
           <div className="white-box">
-            <h3 className="box-title">Laporan Konservasi</h3>
-
+        
             {/* Filter by Daerah */}
             {daerah.length > 0 && (
               <div className="mb-3">

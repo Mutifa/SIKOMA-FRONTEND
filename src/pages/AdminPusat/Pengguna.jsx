@@ -1,7 +1,6 @@
 import React from 'react'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
-import { ENDPOINTS } from '../../lib/endpoints'
 
 export default function Pengguna() {
   const [data, setData] = React.useState([])
@@ -14,7 +13,7 @@ export default function Pengguna() {
     username: '',
     email: '',
     password: '',
-    role: 'AdminLapangan'
+    role: 'admin_lapangan'
   })
 
   React.useEffect(() => {
@@ -35,6 +34,18 @@ export default function Pengguna() {
     return () => { mounted = false }
   }, [])
 
+  const getRoleBadge = (role) => {
+    const map = {
+      admin_pusat:    { label: 'Admin Pusat',    color: 'primary' },
+      AdminPusat:     { label: 'Admin Pusat',    color: 'primary' },
+      super_admin:    { label: 'Super Admin',    color: 'danger'  },
+      admin_lapangan: { label: 'Admin Lapangan', color: 'success' },
+      AdminLapangan:  { label: 'Admin Lapangan', color: 'success' },
+    }
+    const r = map[role] || { label: role, color: 'secondary' }
+    return <span className={`badge bg-${r.color}`}>{r.label}</span>
+  }
+
   const handleEdit = (user) => {
     setEditingUser(user)
     setFormData({
@@ -42,51 +53,41 @@ export default function Pengguna() {
       username: user.username || '',
       email: user.email || '',
       password: '',
-      role: user.role || 'AdminLapangan'
+      role: user.role || 'admin_lapangan'
     })
     setShowModal(true)
   }
 
   const handleSubmit = async (e) => {
-  e.preventDefault()
-  try {
-    if (editingUser) {
-      const payload = {
-        name: formData.name,
-        username: formData.username,
-        email: formData.email,
-        role: formData.role
+    e.preventDefault()
+    try {
+      if (editingUser) {
+        const payload = {
+          name: formData.name,
+          username: formData.username,
+          email: formData.email,
+          role: formData.role
+        }
+        if (formData.password && formData.password.length >= 8) {
+          payload.password = formData.password
+        }
+        await api.put(`/admin_pusat/pengguna/${editingUser.id}`, payload)
+        setData(data.map(user =>
+          user.id === editingUser.id ? { ...user, ...payload } : user
+        ))
+      } else {
+        const response = await api.post('/admin_pusat/pengguna', formData)
+        setData([response.data, ...data])
       }
 
-      if (formData.password && formData.password.length >= 8) {
-        payload.password = formData.password
-      }
-
-      await api.put(`/admin_pusat/pengguna/${editingUser.id}`, payload)
-
-      setData(data.map(user =>
-        user.id === editingUser.id ? { ...user, ...payload } : user
-      ))
-
-    } else {
-      const response = await api.post('/admin_pusat/pengguna', formData)
-      setData([response.data, ...data])
+      setShowModal(false)
+      setEditingUser(null)
+      setFormData({ name: '', username: '', email: '', password: '', role: 'admin_lapangan' })
+    } catch (err) {
+      setError(err.response?.data?.message || 'Gagal menyimpan data')
     }
-
-    setShowModal(false)
-    setEditingUser(null)
-    setFormData({
-      name: '',
-      username: '',
-      email: '',
-      password: '',
-      role: 'AdminLapangan'
-    })
-
-  } catch (err) {
-    setError(err.response?.data?.message || 'Gagal menyimpan data')
   }
-}
+
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
       try {
@@ -101,9 +102,9 @@ export default function Pengguna() {
   if (loading) {
     return (
       <AdminPusatLayout title="Pengguna">
-        <div className="d-flex justify-content-center">
-          <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+          <div className="spinner-border text-success" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       </AdminPusatLayout>
@@ -112,32 +113,29 @@ export default function Pengguna() {
 
   return (
     <AdminPusatLayout title="Pengguna">
-      {error && <div className="alert alert-danger">{error}</div>}
+      {error && (
+        <div className="alert alert-danger alert-dismissible fade show" role="alert">
+          <i className="fas fa-exclamation-circle me-2"></i>{error}
+          <button type="button" className="btn-close" onClick={() => setError('')}></button>
+        </div>
+      )}
 
-      <div className="row">
+      <div className="row mb-3">
         <div className="col-12">
           <button
-            className="btn btn-primary btn-sm float-end mb-3"
+            className="btn btn-primary btn-sm float-end"
             onClick={() => {
               setEditingUser(null)
-              setFormData({
-                name: '',
-                username: '',
-                email: '',
-                password: '',
-                role: 'AdminLapangan'
-              })
+              setFormData({ name: '', username: '', email: '', password: '', role: 'admin_lapangan' })
               setShowModal(true)
             }}
           >
-            + Tambah Pengguna
+            <i className="fas fa-plus me-1"></i> Tambah Pengguna
           </button>
         </div>
       </div>
 
       <div className="white-box">
-        <h3 className="box-title">Daftar Pengguna</h3>
-
         {data.length === 0 ? (
           <div className="text-center py-4">
             <p className="text-muted">Belum ada pengguna</p>
@@ -162,21 +160,19 @@ export default function Pengguna() {
                     <td>{user.name || 'N/A'}</td>
                     <td>{user.username || 'N/A'}</td>
                     <td>{user.email || 'N/A'}</td>
-                    <td>
-                      <span className={`badge ${user.role === 'AdminPusat' ? 'bg-danger' : 'bg-primary'}`}>
-                        {user.role || 'AdminLapangan'}
-                      </span>
-                    </td>
+                    <td>{getRoleBadge(user.role)}</td>
                     <td>
                       <button
                         className="btn btn-warning btn-sm me-1"
                         onClick={() => handleEdit(user)}
+                        title="Edit"
                       >
                         <i className="fas fa-edit"></i>
                       </button>
                       <button
                         className="btn btn-danger btn-sm text-white"
                         onClick={() => handleDelete(user.id)}
+                        title="Hapus"
                       >
                         <i className="fas fa-trash"></i>
                       </button>
@@ -196,85 +192,83 @@ export default function Pengguna() {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">
+                  <i className={`fas ${editingUser ? 'fa-user-edit' : 'fa-user-plus'} me-2`}></i>
                   {editingUser ? 'Edit Pengguna' : 'Tambah Pengguna'}
                 </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setShowModal(false)}
-                ></button>
+                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
               </div>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} autoComplete="off">
                 <div className="modal-body">
-                  <div className="form-group mb-3">
-                    <label htmlFor="name">Nama</label>
+                  <div className="mb-3">
+                    <label className="form-label fw-semibold">Nama</label>
                     <input
                       type="text"
-                      id="name"
                       className="form-control"
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={e => setFormData({ ...formData, name: e.target.value })}
+                      autoComplete="off"
+                      placeholder="Masukkan nama"
                       required
                     />
                   </div>
-                  <div className="form-group mb-3">
-                    <label htmlFor="username">Username</label>
+                  <div className="mb-3">
+                    <label className="form-label fw-semibold">Username</label>
                     <input
                       type="text"
-                      id="username"
                       className="form-control"
                       value={formData.username}
-                      onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                      onChange={e => setFormData({ ...formData, username: e.target.value })}
+                      autoComplete="off"
+                      placeholder="Masukkan username"
                       required
                     />
                   </div>
-                  <div className="form-group mb-3">
-                    <label htmlFor="email">Email</label>
+                  <div className="mb-3">
+                    <label className="form-label fw-semibold">Email</label>
                     <input
                       type="email"
-                      id="email"
                       className="form-control"
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={e => setFormData({ ...formData, email: e.target.value })}
+                      autoComplete="off"
+                      placeholder="Masukkan email"
                       required
                     />
                   </div>
-                  <div className="form-group mb-3">
-                    <label htmlFor="password">Password</label>
+                  <div className="mb-3">
+                    <label className="form-label fw-semibold">Password</label>
                     <input
                       type="password"
-                      id="password"
                       className="form-control"
                       value={formData.password}
-                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      onChange={e => setFormData({ ...formData, password: e.target.value })}
+                      autoComplete="new-password"
+                      placeholder="Masukkan password"
                       required={!editingUser}
                     />
+                    {/* Teks info hanya muncul saat Edit, tidak di placeholder agar tidak dobel */}
                     {editingUser && (
                       <small className="text-muted">Kosongkan jika tidak ingin mengubah password</small>
                     )}
                   </div>
-                  <div className="form-group mb-3">
-                    <label htmlFor="role">Role</label>
+                  <div className="mb-3">
+                    <label className="form-label fw-semibold">Role</label>
                     <select
-                      id="role"
                       className="form-control"
                       value={formData.role}
-                      onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                      onChange={e => setFormData({ ...formData, role: e.target.value })}
                     >
-                      <option value="AdminLapangan">AdminLapangan</option>
-                      <option value="AdminPusat">Admin Pusat</option>
+                      <option value="admin_lapangan">Admin Lapangan</option>
+                      <option value="admin_pusat">Admin Pusat</option>
                     </select>
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Batal
+                  <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>
+                    <i className="fas fa-times me-1"></i> Batal
                   </button>
                   <button type="submit" className="btn btn-primary">
+                    <i className="fas fa-save me-1"></i>
                     {editingUser ? 'Update' : 'Simpan'}
                   </button>
                 </div>
