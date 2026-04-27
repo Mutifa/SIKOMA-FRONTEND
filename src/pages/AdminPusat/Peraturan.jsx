@@ -120,10 +120,8 @@ export default function Peraturan() {
 
       <div className="row">
         <div className="col-12">
-          <a
-            href="#tambahperaturan"
+          <button
             type="button"
-            data-bs-toggle="modal"
             className="btn btn-primary btn-sm float-end"
             onClick={() => {
               setEditingItem(null)
@@ -132,7 +130,8 @@ export default function Peraturan() {
             }}
           >
             + Peraturan
-          </a>
+          </button>
+
           <div className="white-box">
             <h3 className="box-title">Peraturan</h3>
             <div className="table-responsive">
@@ -162,10 +161,9 @@ export default function Peraturan() {
                         <td>
                           {item.file && (
                             <a
-                              href={`/uploads/peraturan/${item.file}`}
+                              href={`https://codemy.my.id/uploads/peraturan/${item.file}`}
                               target="_blank"
-                              rel="noopener noreferrer"
-                            >
+                              rel="noopener noreferrer"  >
                               Lihat File
                             </a>
                           )}
@@ -195,95 +193,102 @@ export default function Peraturan() {
       </div>
 
       {/* Modal Tambah peraturan */}
+
       {showModal && (
-        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
-            <form onSubmit={handleSubmit}>
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">
-                    {editingItem ? 'Edit Peraturan' : 'Tambah Peraturan'}
-                  </h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={() => setShowModal(false)}
-                  ></button>
-                </div>
-                <div className="modal-body">
-                  <div className="mb-3">
-                    <label className="form-label">Nama</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={formData.nama}
-                      onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
-                      required
-                    />
+        <>
+          <div className="modal fade show d-block" tabIndex="-1">
+            <div className="modal-dialog">
+              <form onSubmit={handleSubmit}>
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">
+                      {editingItem ? 'Edit Peraturan' : 'Tambah Peraturan'}
+                    </h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={() => setShowModal(false)}
+                    ></button>
                   </div>
 
-                  <div className="mb-3">
-                    <label className="form-label">Deskripsi</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={formData.deskripsi}
-                      onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
-                    />
-                  </div>
+                  <div className="modal-body">
+                    <div className="mb-3">
+                      <label className="form-label">Nama</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={formData.nama}
+                        onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
+                        required
+                      />
+                    </div>
 
-                  <div className="row">
-                    <div className="col-6">
-                      <div className="mb-3">
-                        <label className="form-label">Tahun</label>
-                        <input
-                          type="number"
-                          className="form-control"
-                          value={formData.tahun}
-                          onChange={(e) => setFormData({ ...formData, tahun: e.target.value })}
-                        />
+                    <div className="mb-3">
+                      <label className="form-label">Deskripsi</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={formData.deskripsi}
+                        onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="row">
+                      <div className="col-6">
+                        <div className="mb-3">
+                          <label className="form-label">Tahun</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            value={formData.tahun}
+                            onChange={(e) => setFormData({ ...formData, tahun: e.target.value })}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-6">
+                        <div className="mb-3">
+                          <label className="form-label">Nomor</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            value={formData.nomor}
+                            onChange={(e) => setFormData({ ...formData, nomor: e.target.value })}
+                          />
+                        </div>
                       </div>
                     </div>
 
-                    <div className="col-6">
-                      <div className="mb-3">
-                        <label className="form-label">Nomor</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={formData.nomor}
-                          onChange={(e) => setFormData({ ...formData, nomor: e.target.value })}
-                        />
-                      </div>
+                    <div className="mb-3">
+                      <label className="form-label">File</label>
+                      <input
+                        type="file"
+                        className="form-control"
+                        accept=".pdf,.doc,.docx"
+                        onChange={(e) => setFormData({ ...formData, file: e.target.files[0] })}
+                      />
                     </div>
                   </div>
 
-                  <div className="mb-3">
-                    <label className="form-label">File</label>
-                    <input
-                      type="file"
-                      className="form-control"
-                      accept=".pdf,.doc,.docx"
-                      onChange={(e) => setFormData({ ...formData, file: e.target.files[0] })}
-                    />
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Batal
+                    </button>
+                    <button type="submit" className="btn btn-primary">
+                      {editingItem ? 'Update' : 'Simpan'}
+                    </button>
                   </div>
                 </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Batal
-                  </button>
-                  <button type="submit" className="btn btn-primary">
-                    {editingItem ? 'Update' : 'Simpan'}
-                  </button>
-                </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
-        </div>
+          {/* 🔥 backdrop */}
+          <div className="modal-backdrop fade show"></div>
+        </>
       )}
     </AdminPusatLayout>
   )
