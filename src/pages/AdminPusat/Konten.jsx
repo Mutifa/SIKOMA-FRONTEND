@@ -2,6 +2,7 @@ import React from 'react'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 import { kontenService } from '../../services/kontenService'
+import { assetUrl } from '../../lib/assets.js'
 
 export default function Konten() {
   const [data, setData] = React.useState([])
@@ -170,7 +171,7 @@ export default function Konten() {
                         <td className="text-capitalize">
                           {item.foto ? (
                             <img
-                              src={`/uploads/edukasi/${item.foto}`}
+                              src={assetUrl(`/uploads/edukasi/${item.foto}`)}
                               alt="Foto Konten"
                               className="img-fluid"
                               width="100px"
@@ -289,7 +290,7 @@ export default function Konten() {
                           <label className="form-label">Foto Saat Ini:</label>
                           <div className="text-center">
                             <img
-                              src={`/uploads/edukasi/${editingItem.foto}`}
+                              src={assetUrl(`/uploads/edukasi/${editingItem.foto}`)}
                               alt="Current"
                               className="img-thumbnail"
                               style={{ maxHeight: '200px' }}
