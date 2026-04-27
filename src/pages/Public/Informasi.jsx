@@ -149,7 +149,7 @@ export default function Informasi() {
                 <p>Tahun: {p.tahun} | Nomor: {p.nomor}</p>
               </div>
               <div className="text-md-end">
-                <a href={`/uploads/peraturan/${p.file}`} download className="btn btn-primary">Unduh PDF</a>
+                <a href={`https://codemy.my.id/uploads/peraturan/${p.file}`} download className="btn btn-primary">Unduh PDF</a>
               </div>
             </div>
           </div>
