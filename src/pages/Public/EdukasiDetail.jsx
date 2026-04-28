@@ -12,7 +12,7 @@ export default function EdukasiDetail() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get(`/api/edukasi/${slug}`)
+    api.get(`/edukasi/${slug}`)
       .then(res => { if (mounted) { setData(res.data); setLoading(false) } })
       .catch(err => { if (mounted) { setError(err.message); setLoading(false) } })
     return () => { mounted = false }

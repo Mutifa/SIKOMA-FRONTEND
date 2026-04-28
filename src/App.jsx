@@ -13,6 +13,7 @@ import RoleGuard from './components/RoleGuard.jsx'
 import PublicHome from './pages/Public/Home.jsx'
 import PublicEdukasi from './pages/Public/Edukasi.jsx'
 import PublicEdukasiDetail from './pages/Public/EdukasiDetail.jsx'
+import InformasiDetail from './pages/Public/InformasiDetail.jsx'
 import PublicInformasi from './pages/Public/Informasi.jsx'
 import PublicStandarPelayanan from './pages/Public/StandarPelayanan.jsx'
 import Profil from './pages/Public/Profil.jsx'
@@ -75,6 +76,7 @@ export default function App() {
 
           {/* Halaman lain */}
           <Route path="/informasi" element={<PublicInformasi />} />
+          <Route path="/informasi/:slug" element={<InformasiDetail />} />
           <Route path="/standar-pelayanan" element={<PublicStandarPelayanan />} />
           <Route path="/profil" element={<Profil />} />
           <Route path="/kontak" element={<Kontak />} />

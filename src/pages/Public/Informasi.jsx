@@ -101,7 +101,7 @@ export default function Informasi() {
                   <span className="truncate-4 mb-3 px-3" dangerouslySetInnerHTML={{ __html: p.deskripsi }} />
                 </div>
                 <div className="mb-3 px-3 mt-auto">
-                  <a href={`/edukasi/${p.slug}`} className="btn btn-primary">Selengkapnya</a>
+                  <a href={`/informasi/${p.slug}`} className="btn btn-primary">Selengkapnya</a>
                 </div>
               </div>
             </div>
@@ -128,7 +128,7 @@ export default function Informasi() {
                   <span className="truncate-4 mb-3 px-3" dangerouslySetInnerHTML={{ __html: p.deskripsi }} />
                 </div>
                 <div className="mb-3 px-3 mt-auto">
-                  <a href={`/edukasi/${p.slug}`} className="btn btn-primary">Selengkapnya</a>
+                  <a href={`/informasi/${p.slug}`} className="btn btn-primary">Selengkapnya</a>
                 </div>
               </div>
             </div>
