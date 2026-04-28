@@ -12,7 +12,7 @@ export default function LaporanDetail() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get(`/admin_lapangan/laporanKonservasi/${id}`)
+    api.get(`/laporan-konservasi/${id}`)
       .then(res => {
         if (mounted) {
           console.log('Raw laporan data:', res.data)

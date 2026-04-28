@@ -40,7 +40,7 @@ export default function Laporan() {
   React.useEffect(() => {
     let mounted = true
 
-    api.get('/admin_pusat/laporan-konservasi')
+    api.get('/laporan-konservasi')
       .then(res => {
         if (mounted) {
           const data = res.data.data || res.data

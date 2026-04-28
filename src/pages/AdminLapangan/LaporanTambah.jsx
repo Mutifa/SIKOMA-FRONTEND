@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import AdminLapanganLayout from '../../layouts/AdminLapanganLayout.jsx'
 import api from '../../lib/api.js'
+import { laporanKonservasiService } from '../../services/laporanKonservasi'
 
 export default function LaporanTambah() {
   const navigate = useNavigate()
@@ -118,56 +119,45 @@ export default function LaporanTambah() {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+  e.preventDefault()
+  setLoading(true)
+  setError('')
 
-    console.log('=== DEBUGGING FORM SUBMISSION ===')
-    console.log('formData state:', formData)
-    console.log('suratTugas files:', formData.suratTugas)
-    console.log('fotoSebelum files:', formData.fotoSebelum)
-    console.log('fotoSetelah files:', formData.fotoSetelah)
+  console.log('=== DEBUGGING FORM SUBMISSION ===')
+  console.log('formData state:', formData)
 
-    const formDataToSend = new FormData()
-    Object.keys(formData).forEach(key => {
-      if (formData[key] !== null && formData[key] !== '') {
-        if (Array.isArray(formData[key]) && ['suratTugas', 'fotoSebelum', 'fotoSetelah'].includes(key)) {
-          // Handle multiple files - use array notation for Laravel
-          console.log(`Appending ${formData[key].length} files for ${key}:`)
-          formData[key].forEach((file, index) => {
-            console.log(`  File ${index + 1}:`, file.name, file.size, 'bytes')
-            formDataToSend.append(`${key}[${index}]`, file)
-          })
-        } else if (!Array.isArray(formData[key])) {
-          formDataToSend.append(key, formData[key])
-        }
-      }
-    })
+  const formDataToSend = new FormData()
 
-    // Debug FormData contents
-    console.log('=== FormData contents ===')
-    for (let [key, value] of formDataToSend.entries()) {
-      if (value instanceof File) {
-        console.log(key, ':', value.name, '(', value.size, 'bytes )')
-      } else {
-        console.log(key, ':', value)
-      }
+  Object.keys(formData).forEach(key => {
+
+    // HANDLE FILE
+    if (Array.isArray(formData[key]) && ['suratTugas', 'fotoSebelum', 'fotoSetelah'].includes(key)) {
+      formData[key].forEach(file => {
+        formDataToSend.append(key, file) // ✅ FIX (tanpa [])
+      })
+    } 
+    // HANDLE TEXT
+    else {
+      formDataToSend.append(key, formData[key] ?? '') // ✅ FIX (tanpa mapping)
     }
+  })
 
-    try {
-      await laporanKonservasiService.create(formDataToSend), {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }
-      navigate('/admin-lapangan/laporan')
-    } catch (err) {
-      setError(err.response?.data?.message || 'Gagal menyimpan laporan')
-    } finally {
-      setLoading(false)
-    }
+  // DEBUG isi FormData
+  console.log('=== FormData contents ===')
+  for (let [key, value] of formDataToSend.entries()) {
+    console.log(key, value)
   }
 
+  try {
+    await laporanKonservasiService.create(formDataToSend)
+    navigate('/admin-lapangan/laporan')
+  } catch (err) {
+    setError(err.response?.data?.message || 'Gagal menyimpan laporan')
+  } finally {
+    setLoading(false)
+  }
+}
+ 
   return (
     <AdminLapanganLayout title="Tambah Laporan Konservasi">
       {error && <div className="alert alert-danger">{error}</div>}

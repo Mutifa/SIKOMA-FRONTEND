@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
-import { ENDPOINTS } from '../../lib/endpoints'
+import { ENDPOINTS } from '../../lib/endpoints.js'
 
 export default function LaporanDetail() {
   const { id } = useParams()
@@ -11,22 +11,28 @@ export default function LaporanDetail() {
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(true)
   const [processing, setProcessing] = React.useState(false)
+const BASE_URL = 'https://codemy.my.id'
 
   React.useEffect(() => {
     let mounted = true
     const fetchLaporan = async () => {
-      try {
-       const res = await api.get(`/admin_pusat/laporan-konservasi/${id}`)
-        if (mounted) {
-          setLaporan(res.data.data || res.data)
-          setLoading(false)
-        }
-      } catch (err) {
-        if (mounted) {
-          setError(err.response?.data?.message || 'Gagal memuat detail laporan')
-          setLoading(false)
-        }
-      }
+     try {
+  const res = await api.get(`/laporan-konservasi/${id}`)
+
+// ✅ SESUDAH
+const detail = res.data.data || res.data
+if (!detail) throw new Error('Data tidak ditemukan')
+if (mounted) {
+  setLaporan(detail)
+  setLoading(false)
+}
+
+} catch (err) {
+  if (mounted) {
+    setError(err.response?.data?.message || err.message)
+    setLoading(false)
+  }
+}
     }
 
     fetchLaporan()
@@ -39,7 +45,10 @@ const handleStatusUpdate = async (status) => {
   setProcessing(true)
 
   try {
-    await api.put(`/admin_pusat/laporan-konservasi/${id}/status`, { status })
+await api.put(
+  ENDPOINTS.LAPORAN_ADMIN.UPDATE_STATUS(id),
+  { status }
+)
 
     // 🔥 UPDATE LANGSUNG TANPA RELOAD
     setLaporan(prev => ({
@@ -73,7 +82,7 @@ const handleStatusUpdate = async (status) => {
     if (isPdfFile(file)) {
       return (
         <a 
-          href={`/uploads/laporan/${file}`}
+          href={`${BASE_URL}/uploads/laporan/${file}`}
           target="_blank"
           rel="noopener noreferrer"
           className="btn btn-outline-primary btn-sm"
@@ -83,17 +92,17 @@ const handleStatusUpdate = async (status) => {
       )
     } else {
       return (
-        <img 
-          src={`/uploads/laporan/${file}`}
-          alt={alt}
-          className="img-fluid"
-          style={{ maxWidth: '100px', maxHeight: '100px' }}
-          onError={(e) => {
-            e.target.style.display = 'none'
-            const fallback = e.target.parentNode.querySelector('.fallback-text')
-            if (fallback) fallback.style.display = 'block'
-          }}
-        />
+       <img 
+  src={`${BASE_URL}/uploads/laporan/${file}`}
+  alt={alt}
+  className="img-fluid"
+  style={{ maxWidth: '100px', maxHeight: '100px' }}
+  onError={(e) => {
+    e.target.style.display = 'none'
+    const fallback = e.target.parentNode.querySelector('.fallback-text')
+    if (fallback) fallback.style.display = 'block'
+  }}
+/>
       )
     }
   }

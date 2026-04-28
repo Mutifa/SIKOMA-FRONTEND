@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
       const endpoint =
         role === 'admin_pusat'
           ? '/admin_pusat/profile'
-          : '/admin_lapangan/profile'
+          : '/profile'
 
       const res = await api.get(endpoint)
 
@@ -76,11 +76,15 @@ export const AuthProvider = ({ children }) => {
   //  LOGIN
   const login = async (email, password) => {
     try {
+
       // 🔥 PANGGIL API LOGIN
-      const res = await authService.login({
-        email,
-        password
-      })
+     const res = await authService.login({
+  email,
+  password
+})
+
+console.log('FULL RESPONSE:', res.data)
+console.log('TOKEN:', res.data?.data?.token)
 
       console.log('LOGIN RESPONSE:', res.data)
 

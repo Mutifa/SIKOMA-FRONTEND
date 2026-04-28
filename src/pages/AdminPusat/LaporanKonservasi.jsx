@@ -1,6 +1,7 @@
 import React from 'react'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
+import { ENDPOINTS } from '../../lib/endpoints.js'
 
 
 export default function LaporanKonservasi() {
@@ -20,7 +21,7 @@ export default function LaporanKonservasi() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/admin_pusat/laporan-konservasi')
+    api.get(ENDPOINTS.LAPORAN_ADMIN.GET)
       .then(res => { 
         if (mounted) {
           setData(res.data.data || res.data)
@@ -50,11 +51,11 @@ export default function LaporanKonservasi() {
 
     try {
       if (editingItem) {
-        await api.put(`/api/admin_pusat/laporan-konservasi/${editingItem.id}`, formDataToSend, {
+await api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE(editingItem.id), formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       } else {
-        await api.post('/admin_pusat/laporan-konservasi', formDataToSend, {
+        await api.post(ENDPOINTS.LAPORAN_ADMIN.CREATE, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       }
@@ -69,7 +70,7 @@ export default function LaporanKonservasi() {
         file: null 
       })
       // Reload data
-      const res = await api.get('/admin_pusat/laporan-konservasi')
+      const res = await api.get(ENDPOINTS.LAPORAN_ADMIN.GET)
       setData(res.data.data || res.data)
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal menyimpan laporan')
@@ -92,7 +93,7 @@ export default function LaporanKonservasi() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus laporan ini?')) {
       try {
-        await api.delete(`/admin_pusat/laporan-konservasi/${id}`)
+        await api.delete(ENDPOINTS.LAPORAN_ADMIN.DELETE(id))
         setData(data.filter(item => item.id !== id))
       } catch (err) {
         setError(err.response?.data?.message || 'Gagal menghapus laporan')
@@ -102,7 +103,7 @@ export default function LaporanKonservasi() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      await api.put(`/admin_pusat/laporan-konservasi/${id}/status`, { status: newStatus })
+      await api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE_STATUS(id), { status: newStatus })
       setData(data.map(item => 
         item.id === id ? { ...item, status: newStatus } : item
       ))
@@ -219,7 +220,7 @@ export default function LaporanKonservasi() {
                         <td>
                           {item.file && (
                             <a 
-                              href={`/uploads/laporan/${item.file}`} 
+                              href={`https://codemy.my.id/uploads/laporan/${item.file}`} 
                               target="_blank" 
                               rel="noopener noreferrer"
                             >

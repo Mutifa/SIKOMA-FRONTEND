@@ -13,12 +13,9 @@ export const laporanService = {
 export const laporanKonservasiService = {
   getAll: () => api.get(ENDPOINTS.ADMIN_LAPANGAN_LAPORAN.GET),
 
- create: (data) =>
-  api.post('/admin_lapangan/laporanKonservasi', data, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  }),
+  // ✅ DIPERBAIKI: pakai endpoint yang benar
+ // ✅ SESUDAH
+create: (data) => api.post(ENDPOINTS.ADMIN_LAPANGAN_LAPORAN.CREATE, data),
 
   delete: (id) =>
     api.delete(ENDPOINTS.ADMIN_LAPANGAN_LAPORAN.DELETE(id))

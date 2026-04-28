@@ -53,12 +53,12 @@ KAWASAN: {
   DELETE: (id) => `/admin_pusat/kawasan/${id}`
 },
 LAPORAN_ADMIN: {
-  GET: '/admin_pusat/laporan-konservasi',
-  CREATE: '/admin_pusat/laporan-konservasi',
-  UPDATE: (id) => `/admin_pusat/laporan-konservasi/${id}`,
-  DELETE: (id) => `/admin_pusat/laporan-konservasi/${id}`,
-  UPDATE_STATUS: (id) => `/admin_pusat/laporan-konservasi/${id}/status`,
-  DETAIL_LAPORAN: (id) => `/detail-konservasi/${id}`
+  GET: '/laporan-konservasi',
+  CREATE: '/laporan-konservasi',
+  UPDATE: (id) => `/laporan-konservasi/${id}`,
+  DELETE: (id) => `/laporan-konservasi/${id}`,
+  UPDATE_STATUS: (id) => `/laporan-konservasi/${id}/status`,
+  DETAIL_LAPORAN: (id) => `/laporan-konservasi/${id}`
 },
 PERATURAN: {
   GET: '/admin_pusat/peraturan',
@@ -77,15 +77,12 @@ PENGGUNA: {
   UPDATE: (id) => `/admin_pusat/pengguna/${id}`,
   DELETE: (id) => `/admin_pusat/pengguna/${id}`
 },
- ADMIN_LAPANGAN_LAPORAN: {
-    GET: '/admin_lapangan/laporanKonservasi',
-    DELETE: (id) => `/admin_lapangan/laporanKonservasi/${id}`,
-    UPDATE: (id) => `/admin_lapangan/laporanKonservasi/${id}`,
-  },
-LAPORAN_LAPANGAN: {
-  GET: '/admin_lapangan/laporan-konservasi',
-  DETAIL: (id) => `/admin_lapangan/laporan-konservasi/${id}`,
-  UPDATE: (id) => `/admin_lapangan/laporan-konservasi/${id}`,
-  DELETE: (id) => `/admin_lapangan/laporan-konservasi/${id}`
-}
+ADMIN_LAPANGAN_LAPORAN: {
+  GET: '/laporan-konservasi',
+  CREATE: '/laporan-konservasi',        // ← tambahkan ini
+  DETAIL: (id) => `/laporan-konservasi/${id}`,
+  DELETE: (id) => `/laporan-konservasi/${id}`,
+  UPDATE: (id) => `/laporan-konservasi/${id}`,
+},
+
 }

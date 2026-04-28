@@ -30,10 +30,10 @@ export default function LaporanEdit() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get(`/admin_lapangan/laporanKonservasi/${id}`)
+    api.get(`/laporan-konservasi/${id}`)
       .then(res => {
         if (mounted) {
-          const laporan = res.data
+          const laporan = res.data.data
           setOriginalData(laporan)
           setFormData({
             judulLaporan: laporan.judulLaporan || '',
@@ -117,44 +117,65 @@ export default function LaporanEdit() {
 
     const formDataToSend = new FormData()
 
-    const mapping = {
-      judulLaporan: 'judul_laporan',
-      jenisKegiatan: 'jenis_kegiatan',
-      tanggalMulai: 'tanggal_mulai',
-      tanggalSelesai: 'tanggal_selesai',
-      keterangan: 'keterangan',
-      daerahLokasi: 'daerah_lokasi',
-      kabupaten: 'kabupaten',
-      kecamatan: 'kecamatan',
-      latitude: 'latitude',
-      longitude: 'longitude',
-      luasArea: 'luas_area',
-      suratTugas: 'surat_tugas',
-      fotoSebelum: 'foto_sebelum',
-      fotoSetelah: 'foto_setelah'
+    //const mapping = {
+     // judulLaporan: 'judul_laporan',
+     // jenisKegiatan: 'jenis_kegiatan',
+     // tanggalMulai: 'tanggal_mulai',
+     // tanggalSelesai: 'tanggal_selesai',
+     // keterangan: 'keterangan',
+     // daerahLokasi: 'daerah_lokasi',
+      //kabupaten: 'kabupaten',
+     // kecamatan: 'kecamatan',
+      //latitude: 'latitude',
+      //longitude: 'longitude',
+      //luasArea: 'luas_area',
+      //suratTugas: 'surat_tugas',
+      //fotoSebelum: 'foto_sebelum',
+      //fotoSetelah: 'foto_setelah'
+   // }
+
+  Object.keys(formData).forEach(key => {
+
+  // HANDLE FILE
+  if (['suratTugas', 'fotoSebelum', 'fotoSetelah'].includes(key)) {
+    if (
+      Array.isArray(formData[key]) &&
+      formData[key].length > 0 &&
+      formData[key][0] instanceof File
+    ) {
+      formDataToSend.append(key, formData[key][0])
     }
+    // ❗ kalau kosong → jangan kirim sama sekali
+  }
 
-    Object.keys(formData).forEach(key => {
-      const backendKey = mapping[key]
+  // HANDLE TEXT
+  else {
+    if (formData[key] !== null && formData[key] !== '') {
+      formDataToSend.append(key, formData[key])
+    }
+  }
 
-      if (Array.isArray(formData[key])) {
-        if (formData[key].length > 0) {
-          formData[key].forEach(file => {
-            formDataToSend.append(backendKey, file)
-          })
-        }
-      } else {
-        formDataToSend.append(backendKey, formData[key] ?? '')
-      }
-    })
+})
 
     try {
-      await api.put(`/admin_lapangan/laporanKonservasi/${id}`, formDataToSend, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
+
+
+      // 🔥 TAMBAH INI
+      for (let pair of formDataToSend.entries()) {
+        console.log(pair[0], pair[1])
+      }
+
+      //await api.post(
+       // `/admin_lapangan/laporanKonservasi/${id}?_method=PUT`,
+       // formDataToSend
+      //)
+      await api.post(
+        `/laporan-konservasi/${id}?_method=PUT`,
+        formDataToSend
+      )
+
       navigate('/admin-lapangan/laporan')
+
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal memperbarui laporan')
     } finally {
@@ -162,9 +183,23 @@ export default function LaporanEdit() {
     }
   }
 
-  const fotoSetelahList = originalData?.fotoSetelah
-    ? JSON.parse(originalData.fotoSetelah || '[]')
-    : []
+const suratTugasList = originalData?.suratTugas
+  ? Array.isArray(originalData.suratTugas)
+    ? originalData.suratTugas
+    : [originalData.suratTugas]
+  : []
+
+const fotoSebelumList = originalData?.fotoSebelum
+  ? Array.isArray(originalData.fotoSebelum)
+    ? originalData.fotoSebelum
+    : [originalData.fotoSebelum]
+  : []
+
+const fotoSetelahList = originalData?.fotoSetelah
+  ? Array.isArray(originalData.fotoSetelah)
+    ? originalData.fotoSetelah
+    : [originalData.fotoSetelah]
+  : []
 
   if (loading) {
     return (
@@ -195,12 +230,12 @@ export default function LaporanEdit() {
                   <label className="form-label">Judul Laporan</label>
                   <input
                     type="text"
+                    name="judulLaporan"   // 🔥 INI WAJIB
                     className="form-control"
                     value={formData.judulLaporan}
-                    onChange={(e) =>
-                      setFormData({ ...formData, judulLaporan: e.target.value })
-                    }
+                    onChange={handleChange}
                   />
+
                 </div>
                 <div className="col-md-6 mb-3">
                   <label className="form-label">Jenis Kegiatan</label>
@@ -335,7 +370,7 @@ export default function LaporanEdit() {
                   {originalData?.suratTugas && (
                     <div className="mt-1">
                       <small className="text-muted">File saat ini:</small>
-                      {JSON.parse(originalData.suratTugas || '[]').map((filename, index) => (
+                      {suratTugasList.map((filename, index) => (
                         <a
                           key={index}
                           href={`/uploads/laporan/${filename}`}
@@ -379,7 +414,7 @@ export default function LaporanEdit() {
                   {originalData?.fotoSebelum && (
                     <div className="mt-1">
                       <small className="text-muted">File saat ini:</small>
-                      {JSON.parse(originalData.fotoSebelum || '[]').map((filename, index) => (
+                      {fotoSebelumList.map((filename, index) => (
                         <a
                           key={index}
                           href={`/uploads/laporan/${filename}`}
@@ -411,7 +446,7 @@ export default function LaporanEdit() {
                   {originalData?.fotoSetelah && (
                     <div className="mt-1">
                       <small className="text-muted">File saat ini:</small>
-                      {JSON.parse(originalData.fotoSetelah || '[]').map((filename, index) => (
+                      {fotoSetelahList.map((filename, index) => (
                         <a
                           key={index}
                           href={`/uploads/laporan/${filename}`}

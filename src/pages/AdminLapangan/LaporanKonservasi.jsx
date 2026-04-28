@@ -13,39 +13,40 @@ export default function LaporanKonservasi() {
   const [loading, setLoading] = React.useState(true)
   const [selectedDaerah, setSelectedDaerah] = React.useState('')
 
- React.useEffect(() => {
-  let mounted = true
+  React.useEffect(() => {
+    let mounted = true
 
-  laporanKonservasiService.getAll()
-    .then(res => {
-      if (mounted) {
-        console.log('RESPON LAPORAN:', res.data)
+    laporanKonservasiService.getAll()
+      .then(res => {
+        if (mounted) {
+          console.log('RESPON LAPORAN:', res.data)
 
-        const laporanData =
-          res.data?.laporan?.data ||
-          res.data?.laporan ||
-          res.data?.data ||
-          []
+          const laporanData =
+            res.data?.laporan?.data ||
+            res.data?.laporan ||
+            res.data?.data ||
+            []
 
-        setData({
-          laporan: Array.isArray(laporanData) ? laporanData : [],
-          daerah: []
-        })
+          setData({
+            laporan: Array.isArray(laporanData) ? laporanData : [],
+            daerah: []
+          })
 
-        setLoading(false)
-      }
-    })
-    .catch(err => {
-      if (mounted) {
-        setError(err.response?.data?.message || 'Gagal memuat data')
-        setLoading(false)
-      }
-    })
+          setLoading(false)
+        }
+      })
+      .catch(err => {
+        if (mounted) {
+          setError(err.response?.data?.message || 'Gagal memuat data')
+          setLoading(false)
+        }
+      })
 
-  return () => {
-    mounted = false
-  }
-}, [])
+    return () => {
+      mounted = false
+    }
+  }, [])
+
   const formatDate = (dateString) => {
     const date = new Date(dateString)
     const day = date.getDate().toString().padStart(2, '0')
@@ -70,13 +71,21 @@ export default function LaporanKonservasi() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus laporan ini?')) {
       try {
-        await api.delete(`/admin_lapangan/laporan/${id}`)
-        // Refresh data
-       const endpoint = selectedDaerah 
-  ? `/admin_lapangan/laporan-konservasi?daerah=${selectedDaerah}`
-  : `/admin_lapangan/laporan-konservasi`
-        const res = await api.get(endpoint)
-        setData(res.data)
+        // ✅ DIPERBAIKI: pakai route yang benar
+        await api.delete(`/laporan-konservasi/${id}`)
+
+        // ✅ DIPERBAIKI: refresh pakai service, bukan URL salah
+        const res = await laporanKonservasiService.getAll()
+        const laporanData =
+          res.data?.laporan?.data ||
+          res.data?.laporan ||
+          res.data?.data ||
+          []
+
+        setData({
+          laporan: Array.isArray(laporanData) ? laporanData : [],
+          daerah: []
+        })
       } catch (err) {
         setError(err.response?.data?.message || 'Gagal menghapus laporan')
       }
@@ -128,32 +137,32 @@ export default function LaporanKonservasi() {
                     data.laporan.map((item, index) => (
                       <tr key={item.id} className="align-middle">
                         <td>{index + 1}.</td>
-                        <td>{item.judulLaporan || 'N/A'}</td>
-                        <td>{item.jenisKegiatan || 'N/A'}</td>
+                        <td>{item.judulLaporan || item.judul_laporan || 'N/A'}</td>
+                        <td>{item.jenisKegiatan || item.jenis_kegiatan || 'N/A'}</td>
                         <td>{item.created_at ? new Date(item.created_at).toLocaleDateString('id-ID', {
                           day: '2-digit',
-                          month: '2-digit', 
+                          month: '2-digit',
                           year: 'numeric',
                           hour: '2-digit',
                           minute: '2-digit',
                           second: '2-digit'
                         }) : 'N/A'}</td>
                         <td>
-                          <Link 
+                          <Link
                             to={`/admin-lapangan/laporan/detail/${item.id}`}
                             className="btn btn-primary btn-sm"
                           >
                             <i className="fas fa-eye"></i> Detail
                           </Link>
                           {' '}
-                          <Link 
+                          <Link
                             to={`/admin-lapangan/laporan/edit/${item.id}`}
                             className="btn btn-warning btn-sm"
                           >
                             <i className="fas fa-edit"></i>
                           </Link>
                           {' '}
-                          <button 
+                          <button
                             className="btn btn-danger btn-sm text-white"
                             onClick={() => handleDelete(item.id)}
                           >
