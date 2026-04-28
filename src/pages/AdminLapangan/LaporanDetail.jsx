@@ -3,6 +3,161 @@ import { useParams, useNavigate } from 'react-router-dom'
 import AdminLapanganLayout from '../../layouts/AdminLapanganLayout.jsx'
 import api from '../../lib/api.js'
 
+const styles = {
+  btnBack: {
+    background: '#f5f5f5',
+    color: '#444',
+    border: '1px solid #e0e0e0',
+    padding: '7px 16px',
+    borderRadius: '8px',
+    fontSize: '13px',
+    fontWeight: '500',
+    cursor: 'pointer',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '6px',
+    marginBottom: '1.25rem',
+  },
+  card: {
+    background: '#fff',
+    border: '1px solid #e8e8e8',
+    borderRadius: '12px',
+    padding: '1.5rem',
+    marginBottom: '1rem',
+  },
+  sectionTitle: {
+    fontSize: '13px',
+    fontWeight: '700',
+    color: '#1a5c35',
+    textTransform: 'uppercase',
+    letterSpacing: '0.07em',
+    marginBottom: '1rem',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+  },
+  sectionTitleDot: {
+    width: '6px',
+    height: '6px',
+    borderRadius: '50%',
+    background: '#1a5c35',
+    display: 'inline-block',
+  },
+  divider: {
+    height: '1px',
+    background: '#f0f0f0',
+    margin: '1.25rem 0',
+  },
+  grid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+    gap: '16px',
+  },
+  gridFull: {
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    gap: '16px',
+  },
+  fieldLabel: {
+    fontSize: '11px',
+    fontWeight: '600',
+    color: '#999',
+    textTransform: 'uppercase',
+    letterSpacing: '0.06em',
+    marginBottom: '5px',
+  },
+  fieldValue: {
+    fontSize: '14px',
+    color: '#1a1a1a',
+    fontWeight: '400',
+    lineHeight: '1.5',
+  },
+  fieldValueMuted: {
+    fontSize: '14px',
+    color: '#bbb',
+    fontStyle: 'italic',
+  },
+  btnLocation: {
+    background: '#1a5c35',
+    color: '#fff',
+    border: 'none',
+    padding: '6px 14px',
+    borderRadius: '7px',
+    fontSize: '12px',
+    fontWeight: '500',
+    cursor: 'pointer',
+    textDecoration: 'none',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '5px',
+  },
+  fileItem: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    background: '#f8f9fa',
+    border: '1px solid #efefef',
+    borderRadius: '8px',
+    padding: '8px 12px',
+    fontSize: '13px',
+    color: '#444',
+    marginBottom: '6px',
+    cursor: 'pointer',
+    textDecoration: 'none',
+  },
+  fileIcon: {
+    width: '28px',
+    height: '28px',
+    borderRadius: '6px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '12px',
+    flexShrink: 0,
+  },
+  imgThumb: {
+    width: '80px',
+    height: '80px',
+    objectFit: 'cover',
+    borderRadius: '8px',
+    border: '1px solid #efefef',
+    cursor: 'pointer',
+    display: 'block',
+    marginBottom: '4px',
+  },
+  thumbGrid: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '8px',
+  },
+  statusWrap: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '1.5rem',
+    paddingTop: '1.25rem',
+    borderTop: '1px solid #f0f0f0',
+  },
+  statusPill: {
+    padding: '10px 32px',
+    borderRadius: '999px',
+    fontSize: '14px',
+    fontWeight: '600',
+    letterSpacing: '0.02em',
+  },
+}
+
+const statusStyles = {
+  0: { background: '#FAEEDA', color: '#854F0B' },
+  1: { background: '#EAF3DE', color: '#3B6D11' },
+  2: { background: '#FCEBEB', color: '#A32D2D' },
+}
+
+const statusLabel = {
+  0: 'Laporan Pending',
+  1: 'Laporan Disetujui',
+  2: 'Laporan Ditolak',
+}
+
 export default function LaporanDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -40,25 +195,107 @@ export default function LaporanDetail() {
     return `${day}-${month}-${year}`
   }
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 0:
-        return <span className="badge bg-warning">Pending</span>
-      case 1:
-        return <span className="badge bg-success">Disetujui</span>
-      case 2:
-        return <span className="badge bg-danger">Ditolak</span>
-      default:
-        return <span className="badge bg-secondary">Unknown</span>
+  const renderMultipleFiles = (filesJson, label) => {
+    console.log(`renderMultipleFiles called for ${label}:`, filesJson)
+    console.log(`Type of filesJson:`, typeof filesJson)
+    console.log(`Raw value:`, JSON.stringify(filesJson))
+
+    if (!filesJson) return <span style={styles.fieldValueMuted}>Tidak ada file</span>
+
+    let files = []
+    try {
+      if (Array.isArray(filesJson)) {
+        files = filesJson
+        console.log(`Already an array for ${label}:`, files)
+      } else {
+        files = JSON.parse(filesJson)
+        console.log(`Parsed JSON for ${label}:`, files)
+      }
+    } catch (e) {
+      console.log(`Not JSON for ${label}, treating as single file:`, filesJson)
+      files = [filesJson]
     }
+
+    if (!Array.isArray(files) || files.length === 0) {
+      console.log(`No files or empty array for ${label}:`, files)
+      return <span style={styles.fieldValueMuted}>Tidak ada file</span>
+    }
+
+    console.log(`Rendering ${files.length} files for ${label}:`, files)
+
+    const images = files.filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f))
+    const pdfs = files.filter(f => /\.pdf$/i.test(f))
+    const others = files.filter(f => !/\.(jpg|jpeg|png|gif|webp|pdf)$/i.test(f))
+
+    return (
+      <div>
+        {images.length > 0 && (
+          <div style={styles.thumbGrid}>
+            {images.map((filename, index) => (
+              <div key={index} style={{ textAlign: 'center' }}>
+                <img
+                  src={`/uploads/laporan/${filename}`}
+                  alt={`${label} ${index + 1}`}
+                  style={styles.imgThumb}
+                  onClick={() => window.open(`/uploads/laporan/${filename}`, '_blank')}
+                />
+                <span style={{ fontSize: '11px', color: '#aaa' }}>#{index + 1}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {pdfs.map((filename, index) => (
+          <a
+            key={index}
+            href={`/uploads/laporan/${filename}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={styles.fileItem}
+          >
+            <div style={{ ...styles.fileIcon, background: '#fee2e2' }}>
+              <i className="fas fa-file-pdf" style={{ color: '#dc2626', fontSize: '13px' }}></i>
+            </div>
+            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {filename.length > 30 ? filename.substring(0, 30) + '...' : filename}
+            </span>
+            <i className="fas fa-external-link-alt" style={{ fontSize: '11px', color: '#aaa' }}></i>
+          </a>
+        ))}
+
+        {others.map((filename, index) => (
+          <a
+            key={index}
+            href={`/uploads/laporan/${filename}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={styles.fileItem}
+          >
+            <div style={{ ...styles.fileIcon, background: '#f0f0f0' }}>
+              <i className="fas fa-file" style={{ color: '#888', fontSize: '13px' }}></i>
+            </div>
+            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {filename.length > 30 ? filename.substring(0, 30) + '...' : filename}
+            </span>
+            <i className="fas fa-external-link-alt" style={{ fontSize: '11px', color: '#aaa' }}></i>
+          </a>
+        ))}
+
+        <div style={{ marginTop: '6px' }}>
+          <span style={{ fontSize: '11px', color: '#aaa' }}>
+            Total: {files.length} file — klik gambar untuk perbesar
+          </span>
+        </div>
+      </div>
+    )
   }
 
   if (loading) {
     return (
       <AdminLapanganLayout title="Detail Laporan">
-        <div className="d-flex justify-content-center">
-          <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+          <div className="spinner-border text-success" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       </AdminLapanganLayout>
@@ -68,224 +305,134 @@ export default function LaporanDetail() {
   if (error) {
     return (
       <AdminLapanganLayout title="Detail Laporan">
-        <div className="alert alert-danger">{error}</div>
-        <button className="btn btn-secondary" onClick={() => navigate('/admin_lapangan/laporan')}>
-          Kembali
+        <div className="alert alert-danger" style={{ borderRadius: '10px', fontSize: '14px' }}>{error}</div>
+        <button style={styles.btnBack} onClick={() => navigate('/admin-lapangan/laporan')}>
+          <i className="fas fa-angles-left" style={{ fontSize: '11px' }}></i> Kembali
         </button>
       </AdminLapanganLayout>
     )
   }
 
-  const getStatusBadgeDetail = (status) => {
-    switch (status) {
-      case 0:
-        return <span className="badge bg-secondary px-4 py-2 rounded-pill fs-5">Laporan Pending</span>
-      case 1:
-        return <span className="badge bg-success px-4 py-2 rounded-pill fs-5">Laporan Disetujui</span>
-      case 2:
-        return <span className="badge bg-danger px-4 py-2 rounded-pill fs-5">Laporan Ditolak</span>
-      default:
-        return <span className="badge bg-secondary px-4 py-2 rounded-pill fs-5">Status Unknown</span>
-    }
-  }
-
-  const renderMultipleFiles = (filesJson, label) => {
-    console.log(`renderMultipleFiles called for ${label}:`, filesJson)
-    console.log(`Type of filesJson:`, typeof filesJson)
-    console.log(`Raw value:`, JSON.stringify(filesJson))
-    
-    if (!filesJson) return <span>Tidak ada file</span>
-    
-    let files = []
-    try {
-      // Check if it's already an array (sometimes API returns parsed JSON)
-      if (Array.isArray(filesJson)) {
-        files = filesJson
-        console.log(`Already an array for ${label}:`, files)
-      } else {
-        files = JSON.parse(filesJson)
-        console.log(`Parsed JSON for ${label}:`, files)
-      }
-    } catch (e) {
-      // If it's not JSON, treat as single file (backward compatibility)
-      console.log(`Not JSON for ${label}, treating as single file:`, filesJson)
-      files = [filesJson]
-    }
-    
-    if (!Array.isArray(files) || files.length === 0) {
-      console.log(`No files or empty array for ${label}:`, files)
-      return <span>Tidak ada file</span>
-    }
-    
-    console.log(`Rendering ${files.length} files for ${label}:`, files)
-    
-    return (
-      <div className="d-flex flex-wrap gap-2">
-        {files.map((filename, index) => {
-          const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(filename)
-          const isPdf = /\.pdf$/i.test(filename)
-          
-          return (
-            <div key={index} className="text-center">
-              {isImage ? (
-                <div className="border rounded p-2">
-                  <img 
-                    src={`/uploads/laporan/${filename}`} 
-                    alt={`${label} ${index + 1}`}
-                    style={{ width: '120px', height: '120px', objectFit: 'cover', cursor: 'pointer' }}
-                    className="img-thumbnail mb-1"
-                    onClick={() => window.open(`/uploads/laporan/${filename}`, '_blank')}
-                  />
-                  <br />
-                  <small className="text-muted d-block" style={{ fontSize: '10px', wordBreak: 'break-all' }}>
-                    {filename.length > 20 ? filename.substring(0, 20) + '...' : filename}
-                  </small>
-                  <small className="text-primary d-block">#{index + 1}</small>
-                </div>
-              ) : isPdf ? (
-                <div className="border rounded p-2 text-center" style={{ width: '120px' }}>
-                  <div className="mb-2">
-                    <i className="fas fa-file-pdf fa-3x text-danger"></i>
-                  </div>
-                  <a 
-                    href={`/uploads/laporan/${filename}`} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="btn btn-sm btn-outline-danger"
-                  >
-                    PDF #{index + 1}
-                  </a>
-                  <small className="text-muted d-block mt-1" style={{ fontSize: '10px', wordBreak: 'break-all' }}>
-                    {filename.length > 15 ? filename.substring(0, 15) + '...' : filename}
-                  </small>
-                </div>
-              ) : (
-                <div className="border rounded p-2 text-center" style={{ width: '120px' }}>
-                  <div className="mb-2">
-                    <i className="fas fa-file fa-3x text-secondary"></i>
-                  </div>
-                  <a 
-                    href={`/uploads/laporan/${filename}`} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="btn btn-sm btn-outline-secondary"
-                  >
-                    File #{index + 1}
-                  </a>
-                  <small className="text-muted d-block mt-1" style={{ fontSize: '10px', wordBreak: 'break-all' }}>
-                    {filename.length > 15 ? filename.substring(0, 15) + '...' : filename}
-                  </small>
-                </div>
-              )}
-            </div>
-          )
-        })}
-        <div className="w-100 mt-2">
-          <small className="text-info">
-            <i className="fas fa-info-circle"></i> Total: {files.length} file(s) | Klik gambar untuk memperbesar
-          </small>
-        </div>
-      </div>
-    )
-  }
+  const statusStyle = statusStyles[laporan?.status] ?? { background: '#f0f0f0', color: '#888' }
+  const statusText = statusLabel[laporan?.status] ?? 'Status Unknown'
 
   return (
+    // ✅ Title sudah dirender oleh AdminLapanganLayout — tidak perlu manual lagi
     <AdminLapanganLayout title="Detail Laporan Konservasi">
-      <button 
-        className="btn btn-secondary btn-sm text-white mb-2"
+      <button
+        style={styles.btnBack}
         onClick={() => navigate('/admin-lapangan/laporan')}
       >
-        <i className="fas fa-angles-left"></i> Kembali
+        <i className="fas fa-angles-left" style={{ fontSize: '11px' }}></i> Kembali
       </button>
 
-      <div className="row">
-        <div className="col-12">
-          <div className="white-box">
-            <h4 className="fw-bold">Deskripsi Kegiatan</h4>
-            <div className="table-responsive">
-              <table className="table table-borderless">
-                <thead className="bg-light">
-                  <tr>
-                    <th>Judul Laporan</th>
-                    <th>Jenis Kegiatan</th>
-                    <th>Tanggal Kegiatan</th>
-                    <th>Tanggal Selesai</th>
-                    <th>Keterangan</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="align-middle">
-                    <td>{laporan?.judulLaporan || 'N/A'}</td>
-                    <td>{laporan?.jenisKegiatan || 'N/A'}</td>
-                    <td>{laporan?.tanggalMulai ? formatDate(laporan.tanggalMulai) : 'N/A'}</td>
-                    <td>{laporan?.tanggalSelesai ? formatDate(laporan.tanggalSelesai) : 'N/A'}</td>
-                    <td>{laporan?.keterangan || 'N/A'}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+      <div style={styles.card}>
 
-            <br /><br />
-            <h4 className="fw-bold">Daerah Kawasan</h4>
-            <div className="table-responsive">
-              <table className="table table-borderless">
-                <thead>
-                  <tr>
-                    <th>Daerah Lokasi</th>
-                    <th>Kabupaten</th>
-                    <th>Kecamatan</th>
-                    <th>Lokasi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="align-middle">
-                    <td>{laporan?.daerahLokasi || 'N/A'}</td>
-                    <td>{laporan?.kabupaten || 'N/A'}</td>
-                    <td>{laporan?.kecamatan || 'N/A'}</td>
-                    <td>
-                      {laporan?.latitude && laporan?.longitude ? (
-                        <a 
-                          href={`https://www.google.com/maps?q=${laporan.latitude},${laporan.longitude}`}
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="btn btn-success text-white"
-                        >
-                          Lihat Lokasi
-                        </a>
-                      ) : 'N/A'}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <br /><br />
-            <h4 className="fw-bold">Dokumentasi Kegiatan</h4>
-            <div className="table-responsive">
-              <table className="table table-borderless">
-                <thead>
-                  <tr>
-                    <th>Surat Tugas</th>
-                    <th>Foto Sebelum Kegiatan</th>
-                    <th>Foto Setelah Kegiatan</th>
-                    <th>Luas Area</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="align-middle">
-                    <td>{renderMultipleFiles(laporan?.suratTugas, 'Surat Tugas')}</td>
-                    <td>{renderMultipleFiles(laporan?.fotoSebelum, 'Foto Sebelum')}</td>
-                    <td>{renderMultipleFiles(laporan?.fotoSetelah, 'Foto Setelah')}</td>
-                    <td>{laporan?.luasArea ? `${laporan.luasArea} ha` : 'N/A'}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="text-center mt-4">
-              {laporan && getStatusBadgeDetail(laporan.status)}
+        {/* ── Deskripsi Kegiatan ── */}
+        <div style={styles.sectionTitle}>
+          <span style={styles.sectionTitleDot}></span>
+          Deskripsi Kegiatan
+        </div>
+        <div style={styles.grid}>
+          <div>
+            <div style={styles.fieldLabel}>Judul Laporan</div>
+            <div style={styles.fieldValue}>{laporan?.judulLaporan || <span style={styles.fieldValueMuted}>N/A</span>}</div>
+          </div>
+          <div>
+            <div style={styles.fieldLabel}>Jenis Kegiatan</div>
+            <div style={styles.fieldValue}>{laporan?.jenisKegiatan || <span style={styles.fieldValueMuted}>N/A</span>}</div>
+          </div>
+          <div>
+            <div style={styles.fieldLabel}>Tanggal Mulai</div>
+            <div style={styles.fieldValue}>
+              {laporan?.tanggalMulai ? formatDate(laporan.tanggalMulai) : <span style={styles.fieldValueMuted}>N/A</span>}
             </div>
           </div>
+          <div>
+            <div style={styles.fieldLabel}>Tanggal Selesai</div>
+            <div style={styles.fieldValue}>
+              {laporan?.tanggalSelesai ? formatDate(laporan.tanggalSelesai) : <span style={styles.fieldValueMuted}>N/A</span>}
+            </div>
+          </div>
+          <div style={{ gridColumn: '1 / -1' }}>
+            <div style={styles.fieldLabel}>Keterangan</div>
+            <div style={styles.fieldValue}>{laporan?.keterangan || <span style={styles.fieldValueMuted}>N/A</span>}</div>
+          </div>
+        </div>
+
+        <div style={styles.divider}></div>
+
+        {/* ── Daerah Kawasan ── */}
+        <div style={styles.sectionTitle}>
+          <span style={styles.sectionTitleDot}></span>
+          Daerah Kawasan
+        </div>
+        <div style={styles.grid}>
+          <div>
+            <div style={styles.fieldLabel}>Daerah Lokasi</div>
+            <div style={styles.fieldValue}>{laporan?.daerahLokasi || <span style={styles.fieldValueMuted}>N/A</span>}</div>
+          </div>
+          <div>
+            <div style={styles.fieldLabel}>Kabupaten</div>
+            <div style={styles.fieldValue}>{laporan?.kabupaten || <span style={styles.fieldValueMuted}>N/A</span>}</div>
+          </div>
+          <div>
+            <div style={styles.fieldLabel}>Kecamatan</div>
+            <div style={styles.fieldValue}>{laporan?.kecamatan || <span style={styles.fieldValueMuted}>N/A</span>}</div>
+          </div>
+          <div>
+            <div style={styles.fieldLabel}>Lokasi</div>
+            <div style={styles.fieldValue}>
+              {laporan?.latitude && laporan?.longitude ? (
+                <a
+                  href={`https://www.google.com/maps?q=${laporan.latitude},${laporan.longitude}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={styles.btnLocation}
+                >
+                  <i className="fas fa-map-marker-alt" style={{ fontSize: '11px' }}></i>
+                  Lihat Lokasi
+                </a>
+              ) : (
+                <span style={styles.fieldValueMuted}>N/A</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div style={styles.divider}></div>
+
+        {/* ── Dokumentasi Kegiatan ── */}
+        <div style={styles.sectionTitle}>
+          <span style={styles.sectionTitleDot}></span>
+          Dokumentasi Kegiatan
+        </div>
+        <div style={styles.grid}>
+          <div>
+            <div style={styles.fieldLabel}>Surat Tugas</div>
+            {renderMultipleFiles(laporan?.suratTugas, 'Surat Tugas')}
+          </div>
+          <div>
+            <div style={styles.fieldLabel}>Foto Sebelum Kegiatan</div>
+            {renderMultipleFiles(laporan?.fotoSebelum, 'Foto Sebelum')}
+          </div>
+          <div>
+            <div style={styles.fieldLabel}>Foto Setelah Kegiatan</div>
+            {renderMultipleFiles(laporan?.fotoSetelah, 'Foto Setelah')}
+          </div>
+          <div>
+            <div style={styles.fieldLabel}>Luas Area</div>
+            <div style={styles.fieldValue}>
+              {laporan?.luasArea ? `${laporan.luasArea} ha` : <span style={styles.fieldValueMuted}>N/A</span>}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Status ── */}
+        <div style={styles.statusWrap}>
+          <span style={{ ...styles.statusPill, ...statusStyle }}>
+            {statusText}
+          </span>
         </div>
       </div>
     </AdminLapanganLayout>
