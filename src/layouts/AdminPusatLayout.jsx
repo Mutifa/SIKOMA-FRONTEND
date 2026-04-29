@@ -5,22 +5,16 @@ import '../assets/css/AdminLapangan.css'
 
 export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
 
-  // Mengambil path URL saat ini (untuk menentukan menu aktif)
   const location = useLocation()
-
-  // Mengambil data user & fungsi logout dari auth context
   const { user, logout } = useAuth()
+  const [sidebarOpen, setSidebarOpen] = React.useState(false)
 
   // ===== LOAD CKEDITOR =====
   React.useEffect(() => {
-
-    // Membuat elemen script untuk load CKEditor dari CDN
     const script = document.createElement('script')
     script.src = 'https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js'
     script.async = true
     document.head.appendChild(script)
-
-    // Cleanup: hapus script saat component unmount
     return () => {
       if (document.head.contains(script)) {
         document.head.removeChild(script)
@@ -28,203 +22,124 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
     }
   }, [])
 
-  // Function logout
+  // Tutup sidebar saat route berubah (mobile)
+  React.useEffect(() => {
+    setSidebarOpen(false)
+  }, [location.pathname])
+
   const handleLogout = async () => {
-    await logout() // Menghapus session/token user
+    await logout()
   }
 
+  const menuItems = [
+    { to: '/admin-pusat/dashboard',          icon: 'fa-home',           label: 'Dashboard' },
+    { to: '/admin-pusat/profil-perusahaan',  icon: 'fa-building',       label: 'Profil Perusahaan' },
+    { to: '/admin-pusat/program',            icon: 'fa-list-ul',        label: 'Program' },
+    { to: '/admin-pusat/konten',             icon: 'fa-newspaper',      label: 'Konten Informasi & Edukasi' },
+    { to: '/admin-pusat/kawasan',            icon: 'fa-map-marker-alt', label: 'Kawasan Konservasi' },
+    { to: '/admin-pusat/laporan',            icon: 'fa-file-lines',     label: 'Laporan Konservasi' },
+    { to: '/admin-pusat/peraturan',          icon: 'fa-gavel',          label: 'Peraturan' },
+    { to: '/admin-pusat/standar-pelayanan',  icon: 'fa-clipboard-list', label: 'Standar Pelayanan' },
+    { to: '/admin-pusat/galeri',             icon: 'fa-images',         label: 'Galeri' },
+    { to: '/admin-pusat/pengguna',           icon: 'fa-users',          label: 'Pengguna' },
+    { to: '/admin-pusat/akun',               icon: 'fa-user-cog',       label: 'Akun' },
+  ]
+
   return (
-    <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="mini-sidebar"
-      data-sidebar-position="fixed" data-header-position="absolute" data-boxed-layout="full">
+    <div id="main-wrapper">
 
-      {/* ===== HEADER / TOPBAR ===== */}
-      <header className="topbar" data-navbarbg="skin5">
-        <nav className="navbar top-navbar navbar-expand-md navbar-dark px-4">
+      {/* ===== OVERLAY (mobile) ===== */}
+      <div
+        className={`sidebar-overlay ${sidebarOpen ? 'visible' : ''}`}
+        onClick={() => setSidebarOpen(false)}
+      />
 
-          {/* Toggle sidebar (mobile) */}
-          <button
-            type="button"
-            className="nav-toggler waves-effect waves-light text-dark d-block d-md-none mt-2 border-0 bg-transparent"
-            onClick={() => console.log("toggle")}
-          >
-            <i className="fas fa-bars fs-6"></i>
-          </button>
+     {/* ===== TOPBAR ===== */}
+<header className="topbar">
+  <nav className="navbar top-navbar navbar-expand-md navbar-dark">
 
-          {/* Profile user di kanan atas */}
-          <div className="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
-            <ul className="navbar-nav ms-auto d-flex align-items-center me-3">
-              <li>
-                <div className="user-info">
-                  <img
-                    className="img-circle"
-                    src="/img/user.png"
-                    alt="user"
-                    width="38"
-                    height="38" /> 
-                    <div>
-                    <div className="name">
-                      {user?.name && user.name.trim() !== '' ? user.name : 'Super Admin'}
-                    </div>
-                    <div className="email">
-                      {user?.email || 'admin@email.com'}
-                    </div>
-                  </div>
-                  <i
-                    className="fas fa-sign-out-alt logout-icon"
-                    onClick={handleLogout}
-                  ></i>
-                </div>
-              </li>
-            </ul>
+    {/* Logo di topbar — tampil saat sidebar tertutup di mobile */}
+    <div className="topbar-brand">
+      <img src="/img/logo.png" alt="logo" />
+      <span>SIKOMA</span>
+    </div>
+
+    {/* Hamburger — mobile only */}
+    <button
+      type="button"
+      className="nav-toggler"
+      onClick={() => setSidebarOpen(prev => !prev)}
+      aria-label="Toggle sidebar"
+    >
+      <i className={`fas ${sidebarOpen ? 'fa-times' : 'fa-bars'}`}></i>
+    </button>
+
+    {/* Profile chip */}
+    <div className="navbar-collapse collapse" id="navbarSupportedContent">
+      <ul className="navbar-nav ms-auto d-flex align-items-center me-3">
+        <li>
+          <div className="user-info">
+            <img
+              className="img-circle"
+              src="/img/user.png"
+              alt="user"
+              width="36"
+              height="36"
+            />
+            <div>
+              <div className="name">
+                {user?.name && user.name.trim() !== '' ? user.name : 'Admin Pusat'}
+              </div>
+              <div className="email">
+                {user?.email || 'admin@email.com'}
+              </div>
+            </div>
+            <i
+              className="fas fa-sign-out-alt logout-icon"
+              onClick={handleLogout}
+              title="Logout"
+            ></i>
           </div>
-        </nav>
-      </header>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
 
       {/* ===== SIDEBAR ===== */}
-      <aside className="left-sidebar sidebar-admin-pusat">
+      <aside className={`left-sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="scroll-sidebar">
 
+          {/* Logo */}
           <div className="sidebar-header-pusat horizontal">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <img src="/img/logo.png" alt="logo" />
-              <span>SIKOMA</span>
-            </div>
-
-            <i className="fas fa-sign-out-alt logout-icon"></i>
+            <img src="/img/logo.png" alt="logo" />
+            <span>SIKOMA</span>
           </div>
 
+          {/* Nav */}
           <nav className="sidebar-nav">
             <ul id="sidebarnav">
 
-              {/* Dashboard */}
-              <li className="sidebar-item">
-                <Link
-                  className={`sidebar-link ${location.pathname === '/admin-pusat/dashboard' ? 'active' : ''}`}
-                  to="/admin-pusat/dashboard"
-                >
-                  <i className="fas fa-home"></i>
-                  <span className="hide-menu">Dashboard</span>
-                </Link>
-              </li>
-
-              {/* Profil Perusahaan */}
-              <li className="sidebar-item">
-                <Link
-                  className={`sidebar-link ${location.pathname === '/admin-pusat/profil-perusahaan' ? 'active' : ''}`}
-                  to="/admin-pusat/profil-perusahaan"
-                >
-                  <i className="fas fa-building" aria-hidden="true"></i>
-                  <span className="hide-menu">Profil Perusahaan</span>
-                </Link>
-              </li>
-
-              {/* Program */}
-              <li className="sidebar-item">
-                <Link
-                  className={`sidebar-link ${location.pathname === '/admin-pusat/program' ? 'active' : ''}`}
-                  to="/admin-pusat/program"
-                >
-                  <i className="fas fa-list-ul" aria-hidden="true"></i>
-                  <span className="hide-menu">Program</span>
-                </Link>
-              </li>
-
-              {/* Konten (pakai CKEditor nanti) */}
-              <li className="sidebar-item">
-                <Link
-                  className={`sidebar-link ${location.pathname === '/admin-pusat/konten' ? 'active' : ''}`}
-                  to="/admin-pusat/konten"
-                >
-                  <i className="fas fa-newspaper" aria-hidden="true"></i>
-                  <span className="hide-menu">Konten Informasi & Edukasi</span>
-                </Link>
-              </li>
-
-              {/* Kawasan */}
-              <li className="sidebar-item">
-                <Link
-                  className={`sidebar-link ${location.pathname === '/admin-pusat/kawasan' ? 'active' : ''}`}
-                  to="/admin-pusat/kawasan"
-                >
-                  <i className="fas fa-map-marker-alt" aria-hidden="true"></i>
-                  <span className="hide-menu">Kawasan Konservasi</span>
-                </Link>
-              </li>
-
-              {/* Laporan */}
-              <li className="sidebar-item">
-                <Link
-                  className={`sidebar-link ${location.pathname === '/admin-pusat/laporan' ? 'active' : ''}`}
-                  to="/admin-pusat/laporan"
-                >
-                  <i className="fas fa-file-lines" aria-hidden="true"></i>
-                  <span className="hide-menu">Laporan Konservasi</span>
-                </Link>
-              </li>
-
-              {/* Peraturan */}
-              <li className="sidebar-item">
-                <Link
-                  className={`sidebar-link ${location.pathname === '/admin-pusat/peraturan' ? 'active' : ''}`}
-                  to="/admin-pusat/peraturan"
-                >
-                  <i className="fas fa-gavel" aria-hidden="true"></i>
-                  <span className="hide-menu">Peraturan</span>
-                </Link>
-              </li>
-
-              {/* Standar Pelayanan */}
-              <li className="sidebar-item">
-                <Link
-                  className={`sidebar-link ${location.pathname === '/admin-pusat/standar-pelayanan' ? 'active' : ''}`}
-                  to="/admin-pusat/standar-pelayanan"
-                >
-                  <i className="fas fa-clipboard-list" aria-hidden="true"></i>
-                  <span className="hide-menu">Standar Pelayanan</span>
-                </Link>
-              </li>
-
-              {/* Galeri */}
-              <li className="sidebar-item">
-                <Link
-                  className={`sidebar-link ${location.pathname === '/admin-pusat/galeri' ? 'active' : ''}`}
-                  to="/admin-pusat/galeri"
-                >
-                  <i className="fas fa-images" aria-hidden="true"></i>
-                  <span className="hide-menu">Galeri</span>
-                </Link>
-              </li>
-
-              {/* Pengguna */}
-              <li className="sidebar-item">
-                <Link
-                  className={`sidebar-link ${location.pathname === '/admin-pusat/pengguna' ? 'active' : ''}`}
-                  to="/admin-pusat/pengguna"
-                >
-                  <i className="fas fa-users" aria-hidden="true"></i>
-                  <span className="hide-menu">Pengguna</span>
-                </Link>
-              </li>
-
-              {/* Akun */}
-              <li className="sidebar-item">
-                <Link
-                  className={`sidebar-link ${location.pathname === '/admin-pusat/akun' ? 'active' : ''}`}
-                  to="/admin-pusat/akun"
-                >
-                  <i className="fas fa-user-cog" aria-hidden="true"></i>
-                  <span className="hide-menu">Akun</span>
-                </Link>
-              </li>
+              {menuItems.map((item) => (
+                <li className="sidebar-item" key={item.to}>
+                  <Link
+                    className={`sidebar-link ${location.pathname === item.to ? 'active' : ''}`}
+                    to={item.to}
+                  >
+                    <i className={`fas ${item.icon}`}></i>
+                    <span className="hide-menu">{item.label}</span>
+                  </Link>
+                </li>
+              ))}
 
               {/* Logout */}
               <li className="sidebar-item logout-item">
                 <a
-                  className="sidebar-link text-white"
+                  className="sidebar-link"
                   href="#"
-                  onClick={handleLogout} // Trigger logout
+                  onClick={handleLogout}
                 >
-                  <i className="fas fa-lock-open text-white"></i>
+                  <i className="fas fa-sign-out-alt"></i>
                   <span className="hide-menu">Logout</span>
                 </a>
               </li>
@@ -236,37 +151,28 @@ export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
 
       {/* ===== CONTENT ===== */}
       <div className="page-wrapper">
-        <div className="d-lg-none"><br /></div>
 
-        {/* Judul & Breadcrumb */}
-        <div className="page-breadcrumb bg-white">
+        {/* Breadcrumb */}
+        <div className="page-breadcrumb">
           <div className="row align-items-center">
             <div className="col-md-6 col-8 align-self-center">
-
-              {/* Title dinamis */}
-              <h3 className="page-title mb-0 p-0">{title}</h3>
-
-              {/* Breadcrumb */}
-              <div className="d-flex align-items-center">
-                <nav aria-label="breadcrumb">
-                  <ol className="breadcrumb">
-                    <li className="breadcrumb-item"><a href="#">Home</a></li>
-                    <li className="breadcrumb-item active" aria-current="page">{title}</li>
-                  </ol>
-                </nav>
-              </div>
-
+              <h3 className="page-title">{title}</h3>
+              <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item"><a href="#">Home</a></li>
+                  <li className="breadcrumb-item active" aria-current="page">{title}</li>
+                </ol>
+              </nav>
             </div>
           </div>
         </div>
 
-        {/* Tempat render halaman */}
+        {/* Page content */}
         <div className="container-fluid">
           {children}
         </div>
 
-        {/* Footer */}
-        <footer className="footer text-center">
+        <footer className="footer">
           © 2026 SIKOMA. All rights reserved.
         </footer>
       </div>

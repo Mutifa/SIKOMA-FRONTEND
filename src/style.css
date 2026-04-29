@@ -1,7 +1,7 @@
 /* ================= ROOT ================= */
 :root {
   --primary-green: #2f6f4f;
---primary-green-dark: #255c42;
+  --primary-green-dark: #255c42;
 
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -242,43 +242,33 @@ a {
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   padding: 80px 20px;
-  position: relative; /* 🔥 penting untuk overlay */
+  position: relative;
   overflow: hidden;
 }
 
-/* OVERLAY GRADIENT (lebih hidup) */
-#visi-misi {
-  position: relative; /* 🔥 WAJIB */
-}
 #visi-misi::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    rgba(255, 255, 255, 0.7),
-    rgba(255, 254, 254, 0.85),
-    rgba(110, 101, 101, 0.95)
-  );
+  background: rgba(255,255,255,0.5);
   z-index: 1;
 }
-/* KONTEN DI ATAS OVERLAY */
+
 #visi-misi .content-box {
   position: relative;
   z-index: 2;
   max-width: 900px;
   margin: auto;
   line-height: 1.7;
+  padding: 25px;
 }
 
-
-/* JUDUL */
 #visi-misi h1 {
   font-size: 42px;
   font-weight: 700;
   text-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
-/* GARIS BAWAH (aksen) */
 #visi-misi h1::after {
   content: "";
   width: 60px;
@@ -289,7 +279,6 @@ a {
   border-radius: 2px;
 }
 
-/* TEXT */
 #visi-misi p,
 #visi-misi span,
 #visi-misi div {
@@ -303,22 +292,10 @@ a {
 #visi-misi li {
   margin-bottom: 6px;
 }
-#visi-misi .content-box {
-  padding: 25px;
-}
-
-/* 🔥 biarkan tanpa animasi biar child bisa animasi */
-#visi-misi .content-box {
-
-  /* animation dihapus agar tidak conflict */
-}
 
 .visi-misi-section * {
   color: black !important;
 }
-#visi-misi::before {
-  background: rgba(255,255,255,0.5);
-} 
 
 /* ================= MOBILE FIX ================= */
 @media (max-width: 768px) {
@@ -335,13 +312,13 @@ a {
     line-height: 1.7;
   }
 
-#visi-misi .content-box {
-  position: relative;
-  z-index: 2;
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: left; /* 🔥 ini penting */
-}
+  #visi-misi .content-box {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: left;
+  }
 
   #visi-misi span,
   #visi-misi div,
@@ -376,8 +353,6 @@ a {
 /* ================= HEADING ================= */
 .heading-green {
   color: var(--primary-green) !important;
-
-
   font-weight: 700;
   text-align: center;
 }
@@ -391,6 +366,7 @@ a {
   margin: 10px auto 0;
   border-radius: 2px;
 }
+
 .animate-title {
   opacity: 0;
   transform: translateY(40px);
@@ -405,18 +381,21 @@ a {
     transform: translateY(0);
   }
 }
+
 .section-title {
-  font-size: 2rem; /* 🔥 kecilkan di sini */
+  font-size: 2rem;
   font-weight: 700;
   color: var(--primary-green);
   text-align: center;
   line-height: 1.3;
 }
+
 .fade-slide-up {
   opacity: 0;
   transform: translateY(40px);
   animation: fadeSlideUp 0.8s ease forwards;
 }
+
 /* ================= BUTTON CUSTOM ================= */
 .btn-primary {
   background-color: var(--primary-green) !important;
@@ -427,6 +406,7 @@ a {
   background-color: var(--primary-green-dark) !important;
 }
 
+/* ================= STAT CARD (landing page) ================= */
 .card-stat {
   width: 100%;
   padding: 20px;
@@ -434,20 +414,20 @@ a {
   border-radius: 10px;
 }
 
-/* 🔥 biar ga geser keluar layar */
 .row {
   overflow-x: hidden;
 }
+
 .stat-card {
-  background: #f4b400;
-  padding: 15px;
-  border-radius: 10px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 12px;
   text-align: center;
   color: white;
-  min-height: 100px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-height: 140px;
 }
 
 .stat-card h5 {
@@ -460,251 +440,13 @@ a {
   font-size: 14px;
 }
 
-/* warna beda tiap card */
-.stat-card.yellow {
-  background: #f4b400;
-}
+.stat-card.yellow { background: #f4b400; }
+.stat-card.brown  { background: #c89b6d; }
+.stat-card.orange { background: #d2691e; }
 
-.stat-card.brown {
-  background: #c89b6d;
-}
-
-.stat-card.orange {
-  background: #d2691e;
-}
-
-.stat-card {
-  width: 100%;
-  padding: 20px;
-  border-radius: 12px;
-  text-align: center;
-  color: white;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  min-height: 140px; /* 🔥 INI YANG BUAT SAMA */
-}
-
+/* ================= MISC ================= */
 .text-justify {
   text-align: justify;
   line-height: 1.7;
-  font-size: inherit; /* 🔥 ikut font bawaan */
-}
-
-/* Layout Admin Pusat */
-
-
-/* LOGOUT */
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.user-info img {
-  border-radius: 50%;
-}
-
-.user-info .name {
-  font-weight: 600;
-  font-size: 13px;
-}
-
-.user-info .email {
-  font-size: 11px;
-  color: #888;
-}
-
-.logout-icon {
-  margin-left: 10px;
-  cursor: pointer;
-  color: #2f6f4f;
-  font-size: 16px;
-}
-
-.logout-icon:hover {
-  opacity: 0.7;
-}
-
-/* Chrome */
-.left-sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.left-sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.3);
-  border-radius: 10px;
-}
-
-.left-sidebar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* ================= SIDEBAR ADMIN PUSAT (FINAL CLEAN & DESIGN) ================= */
-
-.left-sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  width: 240px;
-  height: 100vh;
-
-  background: #2f6f4f;
-  border-radius: 0 20px 20px 0;
-
-  padding: 12px 8px 20px 8px; /* 🔥 lebih balance */
-
-  display: flex;
-  flex-direction: column;
-
-  overflow-y: auto;
-  z-index: 1000;
-}
-
-/* ===== PAGE CONTENT ===== */
-.page-wrapper {
-  margin-left: 240px;
-  margin-top: 60px;
-  border-top: none !important;
-}
-
-/* ===== SCROLLBAR ===== */
-.left-sidebar::-webkit-scrollbar {
-  width: 4px;
-}
-.left-sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.2);
-  border-radius: 10px;
-}
-
-/* ===== HEADER (LOGO + SIKOMA) ===== */
-.sidebar-header-pusat.horizontal {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-
-  gap: 10px;
-  padding: 16px 20px;
-  margin-bottom: 16px;
-}
-
-.sidebar-header-pusat.horizontal img {
-  width: 26px;
-}
-
-.sidebar-header-pusat.horizontal span {
-  color:  #000000;  /* 🔥 sama kayak landing */
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-/* ===== MENU WRAPPER ===== */
-.sidebar-nav {
-  width: 100%;
-  margin-top: 4px;
-}
-
-/* ===== LIST ===== */
-#sidebarnav {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-/* ITEM */
-.sidebar-item {
-  margin-bottom: 4px; /* 🔥 lebih rapat tapi rapi */
-}
-
-/* ===== LINK ===== */
-.sidebar-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  padding: 11px 12px;
-  margin: 0 6px;
-
-  border-radius: 12px;
-
-  color: rgba(255,255,255,0.92);
-  font-size: 12px;
-  font-weight: 500;
-
-  transition: all 0.2s ease;
-}
-
-/* ICON */
-.sidebar-link i {
-  font-size: 14px;
-  width: 20px;
-  text-align: center;
-}
-
-/* TEXT */
-.sidebar-link .hide-menu {
-  flex: 1;
-  white-space: nowrap;
-}
-
-/* ===== HOVER ===== */
-.sidebar-link:hover {
-  background: rgba(255,255,255,0.08);
-  transform: translateX(2px); /* 🔥 efek halus */
-}
-
-/* ===== ACTIVE ===== */
-.sidebar-link.active {
-  background: #e6eeea;
-  color: #2f6f4f;
-  font-weight: 600;
-}
-
-.sidebar-link.active i,
-.sidebar-link.active .hide-menu {
-  color: #2f6f4f !important;
-}
-
-/* ===== LOGOUT (POSISI PALING BAWAH) ===== */
-.logout-item .sidebar-link {
-  padding: 11px 12px;   /* 🔥 samakan */
-  margin: 0 6px;        /* 🔥 samakan */
-  border-radius: 12px;
-}
-
-/* ===== HAPUS GARIS ATAS (BIAR CLEAN) ===== */
-.topbar {
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
-
-hr {
-  display: none;
-}
-
-/* ===== HEADER HALAMAN ===== */
-.page-wrapper {
-  padding: 20px 25px; /* 🔥 kasih ruang dalam */
-}
-.page-wrapper h3,
-.page-wrapper h2 {
-  margin-bottom: 6px;
-  font-weight: 600;
-}
-
-.page-wrapper p {
-  margin-bottom: 16px;
-  color: #6c757d;
-  font-size: 13px;
-}
-
-
-/* ===== ADMIN LAPANGAN ===== */
-
-.sidebar-header-pusat img {
-  width: 35px;
+  font-size: inherit;
 }

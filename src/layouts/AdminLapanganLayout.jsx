@@ -3,127 +3,134 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.jsx'
 import '../assets/css/AdminLapangan.css'
 
-export default function AdminLapanganLayout({ children, title = "Dashboard AdminLapangan" }) {
+export default function AdminLapanganLayout({ children, title = "Dashboard Admin Lapangan" }) {
 
-  // Mengambil lokasi URL saat ini (untuk menandai menu aktif)
   const location = useLocation()
-
-  // Mengambil data user & fungsi logout dari auth context
   const { user, logout } = useAuth()
+  const [sidebarOpen, setSidebarOpen] = React.useState(false)
 
-  // Function untuk logout user
+  // Tutup sidebar saat route berubah (mobile)
+  React.useEffect(() => {
+    setSidebarOpen(false)
+  }, [location.pathname])
+
   const handleLogout = async () => {
-    await logout() // Panggil logout (biasanya hapus token/session)
+    await logout()
   }
 
   return (
     <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
       data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
 
-      {/* Preloader (sudah dimatikan / tidak digunakan) */}
-      {/* <div className="preloader">
-        <div className="lds-ripple">
-          <div className="lds-pos"></div>
-          <div className="lds-pos"></div>
-        </div>
-      </div> */}
+      {/* ===== OVERLAY (mobile) ===== */}
+      <div
+        className={`sidebar-overlay ${sidebarOpen ? 'visible' : ''}`}
+        onClick={() => setSidebarOpen(false)}
+      />
 
-      {/* ===== HEADER / TOPBAR ===== */}
-     {/* ===== HEADER / TOPBAR ===== */}
-      <header className="topbar" data-navbarbg="skin5">
-        <nav className="navbar top-navbar navbar-expand-md navbar-dark px-4">
+    {/* ===== TOPBAR ===== */}
+<header className="topbar">
+  <nav className="navbar top-navbar navbar-expand-md navbar-dark">
 
-          {/* Toggle sidebar (mobile) */}
-          <button
-            type="button"
-            className="nav-toggler waves-effect waves-light text-dark d-block d-md-none mt-2 border-0 bg-transparent"
-            onClick={() => console.log("toggle")}
-          >
-            <i className="fas fa-bars fs-6"></i>
-          </button>
+    {/* Logo di topbar — tampil saat sidebar tertutup di mobile */}
+    <div className="topbar-brand">
+      <img src="/img/logo.png" alt="logo" />
+      <span>SIKOMA</span>
+    </div>
 
-          {/* Profile user di kanan atas */}
-          <div className="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
-            <ul className="navbar-nav ms-auto d-flex align-items-center me-3">
-              <li>
-                <div className="user-info">
-                  <img
-                    className="img-circle"
-                    src="/img/user.png"
-                    alt="user"
-                    width="38"
-                    height="38" /> 
-                    <div>
-                    <div className="name">
-                      {user?.name && user.name.trim() !== '' ? user.name : 'Super Admin'}
-                    </div>
-                    <div className="email">
-                      {user?.email || 'admin@email.com'}
-                    </div>
-                  </div>
-                  <i
-                    className="fas fa-sign-out-alt logout-icon"
-                    onClick={handleLogout}
-                  ></i>
-                </div>
-              </li>
-            </ul>
+    {/* Hamburger — mobile only */}
+    <button
+      type="button"
+      className="nav-toggler"
+      onClick={() => setSidebarOpen(prev => !prev)}
+      aria-label="Toggle sidebar"
+    >
+      <i className={`fas ${sidebarOpen ? 'fa-times' : 'fa-bars'}`}></i>
+    </button>
+
+    {/* Profile chip */}
+    <div className="navbar-collapse collapse" id="navbarSupportedContent">
+      <ul className="navbar-nav ms-auto d-flex align-items-center me-3">
+        <li>
+          <div className="user-info">
+            <img
+              className="img-circle"
+              src="/img/user.png"
+              alt="user"
+              width="36"
+              height="36"
+            />
+            <div>
+              <div className="name">
+                {user?.name && user.name.trim() !== '' ? user.name : 'Admin Pusat'}
+              </div>
+              <div className="email">
+                {user?.email || 'admin@email.com'}
+              </div>
+            </div>
+            <i
+              className="fas fa-sign-out-alt logout-icon"
+              onClick={handleLogout}
+              title="Logout"
+            ></i>
           </div>
-        </nav>
-      </header>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
 
-
-      {/* ===== SIDEBAR (MENU KIRI) ===== */}
-      <aside className="left-sidebar" data-sidebarbg="skin6">
+      {/* ===== SIDEBAR ===== */}
+      <aside className={`left-sidebar ${sidebarOpen ? 'open' : ''}`} data-sidebarbg="skin6">
         <div className="scroll-sidebar">
+
+          {/* Logo */}
           <div className="sidebar-header-pusat horizontal">
             <img src="/img/logo.png" alt="logo" />
             <span>SIKOMA</span>
           </div>
+
+          {/* Nav */}
           <nav className="sidebar-nav">
             <ul id="sidebarnav">
 
-              {/* Menu Dashboard */}
-              <li className="sidebar-item pt-2">
+              <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/admin-lapangan/dashboard' ? 'active' : ''}`}
+                  className={`sidebar-link ${location.pathname === '/admin-lapangan/dashboard' ? 'active' : ''}`}
                   to="/admin-lapangan/dashboard"
                 >
-                  <i className="fas fa-home me-3" aria-hidden="true"></i>
+                  <i className="fas fa-home"></i>
                   <span className="hide-menu">Dashboard</span>
                 </Link>
               </li>
 
-              {/* Menu Laporan */}
               <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/admin-lapangan/laporan' ? 'active' : ''}`}
+                  className={`sidebar-link ${location.pathname === '/admin-lapangan/laporan' ? 'active' : ''}`}
                   to="/admin-lapangan/laporan"
                 >
-                  <i className="fas fa-file-lines me-3" aria-hidden="true"></i>
+                  <i className="fas fa-file-lines"></i>
                   <span className="hide-menu">Laporan Konservasi</span>
                 </Link>
               </li>
 
-              {/* Menu Akun */}
               <li className="sidebar-item">
                 <Link
-                  className={`sidebar-link waves-effect waves-dark sidebar-link ${location.pathname === '/admin-lapangan/akun' ? 'active' : ''}`}
+                  className={`sidebar-link ${location.pathname === '/admin-lapangan/akun' ? 'active' : ''}`}
                   to="/admin-lapangan/akun"
                 >
-                  <i className="fas fa-user-cog me-3" aria-hidden="true"></i>
+                  <i className="fas fa-user-cog"></i>
                   <span className="hide-menu">Akun</span>
                 </Link>
               </li>
 
-              {/* Menu Logout */}
-              <li className="sidebar-item">
+              <li className="sidebar-item logout-item">
                 <a
-                  className="sidebar-link waves-effect waves-dark sidebar-link text-white"
+                  className="sidebar-link"
                   href="#"
-                  onClick={handleLogout} // Trigger logout saat diklik
+                  onClick={handleLogout}
                 >
-                  <i className="fas fa-lock-open me-3 text-white"></i>
+                  <i className="fas fa-sign-out-alt"></i>
                   <span className="hide-menu">Logout</span>
                 </a>
               </li>
@@ -133,39 +140,30 @@ export default function AdminLapanganLayout({ children, title = "Dashboard Admin
         </div>
       </aside>
 
-      {/* ===== CONTENT / HALAMAN UTAMA ===== */}
+      {/* ===== CONTENT ===== */}
       <div className="page-wrapper">
-        <div className="d-lg-none"><br /></div>
 
-        {/* Breadcrumb & Judul Halaman */}
-        <div className="page-breadcrumb bg-white">
+        {/* Breadcrumb */}
+        <div className="page-breadcrumb">
           <div className="row align-items-center">
             <div className="col-md-6 col-8 align-self-center">
-
-              {/* Title dinamis */}
-              <h3 className="page-title mb-0 p-0">{title}</h3>
-
-              {/* Breadcrumb navigation */}
-              <div className="d-flex align-items-center">
-                <nav aria-label="breadcrumb">
-                  <ol className="breadcrumb">
-                    <li className="breadcrumb-item"><a href="#">Home</a></li>
-                    <li className="breadcrumb-item active" aria-current="page">{title}</li>
-                  </ol>
-                </nav>
-              </div>
-
+              <h3 className="page-title">{title}</h3>
+              <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item"><a href="#">Home</a></li>
+                  <li className="breadcrumb-item active" aria-current="page">{title}</li>
+                </ol>
+              </nav>
             </div>
           </div>
         </div>
 
-        {/* Tempat render halaman (children dari route) */}
+        {/* Page content */}
         <div className="container-fluid">
           {children}
         </div>
 
-        {/* Footer */}
-        <footer className="footer text-center">
+        <footer className="footer">
           © 2026 SIKOMA. All rights reserved.
         </footer>
       </div>
