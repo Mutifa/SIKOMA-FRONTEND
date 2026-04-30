@@ -10,6 +10,7 @@ export default function LaporanKonservasi() {
   const [loading, setLoading] = React.useState(true)
   const [showModal, setShowModal] = React.useState(false)
   const [editingItem, setEditingItem] = React.useState(null)
+  const [searchQuery, setSearchQuery] = React.useState('')
   const [formData, setFormData] = React.useState({
     namaLaporan: '',
     daerahLokasi: '',
@@ -51,7 +52,7 @@ export default function LaporanKonservasi() {
 
     try {
       if (editingItem) {
-await api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE(editingItem.id), formDataToSend, {
+        await api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE(editingItem.id), formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
       } else {
@@ -69,7 +70,6 @@ await api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE(editingItem.id), formDataToSend, {
         status: 'pending', 
         file: null 
       })
-      // Reload data
       const res = await api.get(ENDPOINTS.LAPORAN_ADMIN.GET)
       setData(res.data.data || res.data)
     } catch (err) {
@@ -101,17 +101,6 @@ await api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE(editingItem.id), formDataToSend, {
     }
   }
 
-  const handleStatusChange = async (id, newStatus) => {
-    try {
-      await api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE_STATUS(id), { status: newStatus })
-      setData(data.map(item => 
-        item.id === id ? { ...item, status: newStatus } : item
-      ))
-    } catch (err) {
-      setError(err.response?.data?.message || 'Gagal mengubah status')
-    }
-  }
-
   const formatDate = (dateString) => {
     const date = new Date(dateString)
     const day = date.getDate().toString().padStart(2, '0')
@@ -138,10 +127,17 @@ await api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE(editingItem.id), formDataToSend, {
     return texts[status] || status
   }
 
-  const stripHtmlTags = (html) => {
-    if (!html) return ''
-    return html.replace(/<[^>]*>/g, '')
-  }
+  // ── Filter berdasarkan search query ──
+  const filteredData = data.filter(item => {
+    if (!searchQuery.trim()) return true
+    const q = searchQuery.toLowerCase()
+    return (
+      (item.namaLaporan || '').toLowerCase().includes(q) ||
+      (item.daerahLokasi || '').toLowerCase().includes(q) ||
+      (item.deskripsi || '').toLowerCase().includes(q) ||
+      (item.status || '').toLowerCase().includes(q)
+    )
+  })
 
   if (loading) {
     return (
@@ -186,6 +182,19 @@ await api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE(editingItem.id), formDataToSend, {
           </a>
           <div className="white-box">
             <div className="box-title mb-3">Laporan Konservasi</div>
+
+            {/* ── Search Bar ── */}
+            <div className="d-flex justify-content-end align-items-center mb-3">
+              <label className="me-2 mb-0 fw-semibold" style={{ fontSize: '14px', whiteSpace: 'nowrap' }}>Cari:</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ maxWidth: '200px', fontSize: '14px' }}
+              />
+            </div>
         
             <div className="table-responsive">
               <table className="table">
@@ -201,12 +210,17 @@ await api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE(editingItem.id), formDataToSend, {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.length === 0 ? (
+                  {filteredData.length === 0 ? (
                     <tr>
-                      <td colSpan="7" className="text-center">Belum ada laporan</td>
+                      <td colSpan="7" className="text-center py-4 text-muted">
+                        {searchQuery
+                          ? <>Tidak ada laporan yang cocok dengan "<strong>{searchQuery}</strong>"</>
+                          : 'Belum ada laporan'
+                        }
+                      </td>
                     </tr>
                   ) : (
-                    data.map((item, index) => (
+                    filteredData.map((item, index) => (
                       <tr key={item.id} className="align-middle">
                         <td>{index + 1}.</td>
                         <td>{item.namaLaporan}</td>

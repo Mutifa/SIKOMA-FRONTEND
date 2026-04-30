@@ -53,11 +53,6 @@ const styles = {
     gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
     gap: '16px',
   },
-  gridFull: {
-    display: 'grid',
-    gridTemplateColumns: '1fr',
-    gap: '16px',
-  },
   fieldLabel: {
     fontSize: '11px',
     fontWeight: '600',
@@ -144,6 +139,65 @@ const styles = {
     fontWeight: '600',
     letterSpacing: '0.02em',
   },
+
+  // ── ALASAN PENOLAKAN — diperbesar & lebih prominent ──
+  rejectBox: {
+    background: '#fef2f2',
+    border: '1.5px solid #fca5a5',
+    borderRadius: '12px',
+    padding: '20px 24px',
+    marginTop: '1.5rem',
+  },
+  rejectBoxHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    marginBottom: '12px',
+    paddingBottom: '12px',
+    borderBottom: '1px solid #fecaca',
+  },
+  rejectBoxIcon: {
+    width: '36px',
+    height: '36px',
+    borderRadius: '50%',
+    background: '#fee2e2',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  rejectBoxTitle: {
+    fontSize: '14px',
+    fontWeight: '700',
+    color: '#b91c1c',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    margin: 0,
+  },
+  rejectBoxSubtitle: {
+    fontSize: '12px',
+    color: '#ef4444',
+    marginTop: '2px',
+  },
+  rejectBoxText: {
+    fontSize: '14px',
+    color: '#7f1d1d',
+    lineHeight: '1.7',
+    whiteSpace: 'pre-wrap',
+    background: '#fff5f5',
+    borderRadius: '8px',
+    padding: '12px 16px',
+    border: '1px solid #fecaca',
+  },
+  rejectBoxNote: {
+    marginTop: '12px',
+    fontSize: '12px',
+    color: '#b91c1c',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    fontStyle: 'italic',
+  },
 }
 
 const statusStyles = {
@@ -171,10 +225,9 @@ export default function LaporanDetail() {
       .then(res => {
         if (mounted) {
           console.log('Raw laporan data:', res.data)
-          console.log('suratTugas:', res.data.suratTugas)
-          console.log('fotoSebelum:', res.data.fotoSebelum)
-          console.log('fotoSetelah:', res.data.fotoSetelah)
-          setLaporan(res.data)
+          // ── FIX: unwrap data jika ada wrapper ──
+          const detail = res.data?.data || res.data
+          setLaporan(detail)
           setLoading(false)
         }
       })
@@ -188,6 +241,7 @@ export default function LaporanDetail() {
   }, [id])
 
   const formatDate = (dateString) => {
+    if (!dateString) return null
     const date = new Date(dateString)
     const day = date.getDate().toString().padStart(2, '0')
     const month = (date.getMonth() + 1).toString().padStart(2, '0')
@@ -196,32 +250,22 @@ export default function LaporanDetail() {
   }
 
   const renderMultipleFiles = (filesJson, label) => {
-    console.log(`renderMultipleFiles called for ${label}:`, filesJson)
-    console.log(`Type of filesJson:`, typeof filesJson)
-    console.log(`Raw value:`, JSON.stringify(filesJson))
-
     if (!filesJson) return <span style={styles.fieldValueMuted}>Tidak ada file</span>
 
     let files = []
     try {
       if (Array.isArray(filesJson)) {
         files = filesJson
-        console.log(`Already an array for ${label}:`, files)
       } else {
         files = JSON.parse(filesJson)
-        console.log(`Parsed JSON for ${label}:`, files)
       }
     } catch (e) {
-      console.log(`Not JSON for ${label}, treating as single file:`, filesJson)
       files = [filesJson]
     }
 
     if (!Array.isArray(files) || files.length === 0) {
-      console.log(`No files or empty array for ${label}:`, files)
       return <span style={styles.fieldValueMuted}>Tidak ada file</span>
     }
-
-    console.log(`Rendering ${files.length} files for ${label}:`, files)
 
     const images = files.filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f))
     const pdfs = files.filter(f => /\.pdf$/i.test(f))
@@ -244,15 +288,8 @@ export default function LaporanDetail() {
             ))}
           </div>
         )}
-
         {pdfs.map((filename, index) => (
-          <a
-            key={index}
-            href={`/uploads/laporan/${filename}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={styles.fileItem}
-          >
+          <a key={index} href={`/uploads/laporan/${filename}`} target="_blank" rel="noopener noreferrer" style={styles.fileItem}>
             <div style={{ ...styles.fileIcon, background: '#fee2e2' }}>
               <i className="fas fa-file-pdf" style={{ color: '#dc2626', fontSize: '13px' }}></i>
             </div>
@@ -262,15 +299,8 @@ export default function LaporanDetail() {
             <i className="fas fa-external-link-alt" style={{ fontSize: '11px', color: '#aaa' }}></i>
           </a>
         ))}
-
         {others.map((filename, index) => (
-          <a
-            key={index}
-            href={`/uploads/laporan/${filename}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={styles.fileItem}
-          >
+          <a key={index} href={`/uploads/laporan/${filename}`} target="_blank" rel="noopener noreferrer" style={styles.fileItem}>
             <div style={{ ...styles.fileIcon, background: '#f0f0f0' }}>
               <i className="fas fa-file" style={{ color: '#888', fontSize: '13px' }}></i>
             </div>
@@ -280,11 +310,8 @@ export default function LaporanDetail() {
             <i className="fas fa-external-link-alt" style={{ fontSize: '11px', color: '#aaa' }}></i>
           </a>
         ))}
-
         <div style={{ marginTop: '6px' }}>
-          <span style={{ fontSize: '11px', color: '#aaa' }}>
-            Total: {files.length} file — klik gambar untuk perbesar
-          </span>
+          <span style={{ fontSize: '11px', color: '#aaa' }}>Total: {files.length} file — klik gambar untuk perbesar</span>
         </div>
       </div>
     )
@@ -317,14 +344,46 @@ export default function LaporanDetail() {
   const statusText = statusLabel[laporan?.status] ?? 'Status Unknown'
 
   return (
-    // ✅ Title sudah dirender oleh AdminLapanganLayout — tidak perlu manual lagi
     <AdminLapanganLayout title="Detail Laporan Konservasi">
-      <button
-        style={styles.btnBack}
-        onClick={() => navigate('/admin-lapangan/laporan')}
-      >
+      <button style={styles.btnBack} onClick={() => navigate('/admin-lapangan/laporan')}>
         <i className="fas fa-angles-left" style={{ fontSize: '11px' }}></i> Kembali
       </button>
+
+      {/* ── BANNER PENOLAKAN — muncul paling atas jika ditolak ── */}
+      {laporan?.status === 2 && (
+        <div style={styles.rejectBox}>
+          <div style={styles.rejectBoxHeader}>
+            <div style={styles.rejectBoxIcon}>
+              <i className="fas fa-times-circle" style={{ color: '#b91c1c', fontSize: '16px' }}></i>
+            </div>
+            <div>
+              <div style={styles.rejectBoxTitle}>Laporan Ditolak</div>
+              <div style={styles.rejectBoxSubtitle}>
+                Admin Pusat telah menolak laporan ini
+              </div>
+            </div>
+          </div>
+
+          {laporan?.alasan ? (
+            <>
+              <div style={{ fontSize: '12px', fontWeight: '600', color: '#b91c1c', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Alasan Penolakan:
+              </div>
+              <div style={styles.rejectBoxText}>
+                {laporan.alasan}
+              </div>
+              <div style={styles.rejectBoxNote}>
+                <i className="fas fa-info-circle"></i>
+                Silakan perbaiki laporan sesuai alasan di atas, lalu kirim ulang.
+              </div>
+            </>
+          ) : (
+            <div style={{ fontSize: '14px', color: '#7f1d1d', fontStyle: 'italic' }}>
+              Admin Pusat belum memberikan alasan penolakan.
+            </div>
+          )}
+        </div>
+      )}
 
       <div style={styles.card}>
 
@@ -428,12 +487,13 @@ export default function LaporanDetail() {
           </div>
         </div>
 
-        {/* ── Status ── */}
+        {/* ── Status Badge ── */}
         <div style={styles.statusWrap}>
           <span style={{ ...styles.statusPill, ...statusStyle }}>
             {statusText}
           </span>
         </div>
+
       </div>
     </AdminLapanganLayout>
   )

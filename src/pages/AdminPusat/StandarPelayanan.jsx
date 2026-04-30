@@ -2,6 +2,7 @@ import React from 'react'
 import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import api from '../../lib/api.js'
 import { getStandar } from '../../services/standarPelayanan'
+import { ENDPOINTS } from '../../lib/endpoints'
 
 export default function StandarPelayanan() {
   const [data, setData] = React.useState([])
@@ -24,17 +25,21 @@ export default function StandarPelayanan() {
     loadData()
   }, [])
 
-  const loadData = async () => {
-    setLoading(true)
-    try {
-      const res = await api.get('/admin_pusat/standar-pelayanan')
-      setData(res.data.data || res.data)
-    } catch (err) {
-      setError(err.response?.data?.message || 'Gagal memuat data standar pelayanan')
-    } finally {
-      setLoading(false)
-    }
+const loadData = async () => {
+  console.log('LOAD DATA JALAN') // ← TAMBAH INI
+
+  setLoading(true)
+  try {
+    const res = await getStandar()
+    console.log('RESPONSE API:', res.data)
+    setData(res.data.data || res.data)
+  } catch (err) {
+    console.error('ERROR LOAD:', err)
+    setError(err.response?.data?.message || 'Gagal memuat data standar pelayanan')
+  } finally {
+    setLoading(false)
   }
+}
 
   const validateForm = () => {
     const errors = {}
@@ -52,51 +57,42 @@ export default function StandarPelayanan() {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    
-    if (!validateForm()) {
-      return
+  e.preventDefault()
+
+  if (!validateForm()) return
+
+  setSaving(true)
+  setError('')
+  setSuccess('')
+
+  try {
+  if (editingItem) {
+  await updateStandar(editingItem.id, formData)
+  setSuccess('Standar pelayanan berhasil diperbarui')
+} else {
+  await createStandar(formData)
+  setSuccess('Standar pelayanan berhasil ditambahkan')
+}
+
+    setShowModal(false)
+    resetForm()
+    await loadData()
+
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message ||
+      'Gagal menyimpan standar pelayanan'
+
+    setError(errorMessage)
+
+    if (err.response?.data?.errors) {
+      setFormErrors(err.response.data.errors)
     }
 
-    setSaving(true)
-    setError('')
-    setSuccess('')
-
-    const formDataToSend = new FormData()
-    formDataToSend.append('judul', formData.judul.trim())
-    formDataToSend.append('deskripsi', formData.deskripsi.trim())
-    formDataToSend.append('kategori', formData.kategori.trim())
-
-    try {
-      if (editingItem) {
-        // Laravel workaround: use POST with _method for consistency
-        formDataToSend.append('_method', 'PUT')
-        await api.post(`/admin_pusat/standar-pelayanan/${editingItem.id}`, formDataToSend, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        })
-        setSuccess('Standar pelayanan berhasil diperbarui')
-      } else {
-        await api.post('/admin_pusat/standar-pelayanan', formDataToSend, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        })
-        setSuccess('Standar pelayanan berhasil ditambahkan')
-      }
-      
-      setShowModal(false)
-      resetForm()
-      await loadData()
-    } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Gagal menyimpan standar pelayanan'
-      setError(errorMessage)
-      
-      // Handle validation errors from Laravel
-      if (err.response?.data?.errors) {
-        setFormErrors(err.response.data.errors)
-      }
-    } finally {
-      setSaving(false)
-    }
+  } finally {
+    setSaving(false)
   }
+}
 
   const resetForm = () => {
     setEditingItem(null)
@@ -118,7 +114,7 @@ export default function StandarPelayanan() {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus standar pelayanan ini?')) {
       try {
-        await api.delete(`/admin_pusat/standar-pelayanan/${id}`)
+        await deleteStandar(id)`/admin_pusat/standar-pelayanan/${id}`
         setSuccess('Standar pelayanan berhasil dihapus')
         await loadData()
       } catch (err) {

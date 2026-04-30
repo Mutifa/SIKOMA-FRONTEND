@@ -138,6 +138,71 @@ const styles = {
     color: '#bbb',
     fontSize: '14px',
   },
+  badgePending: {
+    background: '#FAEEDA',
+    color: '#854F0B',
+    padding: '3px 10px',
+    borderRadius: '999px',
+    fontSize: '11px',
+    fontWeight: '600',
+    display: 'inline-block',
+    whiteSpace: 'nowrap',
+  },
+  badgeApproved: {
+    background: '#EAF3DE',
+    color: '#3B6D11',
+    padding: '3px 10px',
+    borderRadius: '999px',
+    fontSize: '11px',
+    fontWeight: '600',
+    display: 'inline-block',
+    whiteSpace: 'nowrap',
+  },
+  badgeRejected: {
+    background: '#FCEBEB',
+    color: '#A32D2D',
+    padding: '3px 10px',
+    borderRadius: '999px',
+    fontSize: '11px',
+    fontWeight: '600',
+    display: 'inline-block',
+    whiteSpace: 'nowrap',
+  },
+  trRejected: {
+    background: '#fff8f8',
+  },
+  alasanHint: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '4px',
+    fontSize: '11px',
+    color: '#b91c1c',
+    marginTop: '4px',
+    fontStyle: 'italic',
+  },
+  // ── BARU: tooltip/popup alasan di list ──
+  rejectReasonInline: {
+    marginTop: '6px',
+    background: '#fef2f2',
+    border: '1px solid #fecaca',
+    borderRadius: '6px',
+    padding: '6px 10px',
+    fontSize: '12px',
+    color: '#7f1d1d',
+    lineHeight: '1.5',
+    maxWidth: '320px',
+  },
+  rejectReasonLabel: {
+    fontWeight: '700',
+    color: '#b91c1c',
+    fontSize: '11px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '5px',
+    marginBottom: '3px',
+  },
 }
 
 export default function LaporanKonservasi() {
@@ -147,7 +212,6 @@ export default function LaporanKonservasi() {
   })
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(true)
-  const [selectedDaerah, setSelectedDaerah] = React.useState('')
 
   React.useEffect(() => {
     let mounted = true
@@ -178,9 +242,7 @@ export default function LaporanKonservasi() {
         }
       })
 
-    return () => {
-      mounted = false
-    }
+    return () => { mounted = false }
   }, [])
 
   const handleDelete = async (id) => {
@@ -205,6 +267,13 @@ export default function LaporanKonservasi() {
     }
   }
 
+  const getStatusBadge = (status) => {
+    if (status === 0) return <span style={styles.badgePending}>Pending</span>
+    if (status === 1) return <span style={styles.badgeApproved}>Disetujui</span>
+    if (status === 2) return <span style={styles.badgeRejected}>Ditolak</span>
+    return <span style={styles.badgePending}>-</span>
+  }
+
   if (loading) {
     return (
       <AdminLapanganLayout title="Laporan Konservasi">
@@ -226,7 +295,6 @@ export default function LaporanKonservasi() {
         </div>
       )}
 
-      {/* ✅ Hanya tombol tambah, title sudah dirender oleh AdminLapanganLayout */}
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.25rem' }}>
         <Link to="/admin-lapangan/laporan/tambah" style={styles.btnAdd}>
           <i className="fas fa-plus" style={{ fontSize: '11px' }}></i> Laporan
@@ -243,13 +311,14 @@ export default function LaporanKonservasi() {
                 <th style={styles.th}>Judul</th>
                 <th style={styles.th}>Jenis Laporan</th>
                 <th style={styles.th}>Tanggal</th>
+                <th style={styles.th}>Status</th>
                 <th style={{ ...styles.th, width: '120px' }}>Aksi</th>
               </tr>
             </thead>
             <tbody>
               {data.laporan.length === 0 ? (
                 <tr>
-                  <td colSpan="5">
+                  <td colSpan="6">
                     <div style={styles.emptyState}>
                       <div style={{ fontSize: '32px', marginBottom: '8px' }}>📋</div>
                       <div>Belum ada laporan konservasi</div>
@@ -258,10 +327,39 @@ export default function LaporanKonservasi() {
                 </tr>
               ) : (
                 data.laporan.map((item, index) => (
-                  <tr key={item.id}>
+                  <tr key={item.id} style={item.status === 2 ? styles.trRejected : {}}>
                     <td style={styles.tdMuted}>{index + 1}.</td>
                     <td style={{ ...styles.td, fontWeight: '500' }}>
-                      {item.judulLaporan || item.judul_laporan || 'N/A'}
+                      <div>{item.judulLaporan || item.judul_laporan || 'N/A'}</div>
+
+                      {/* ── HINT + PREVIEW ALASAN PENOLAKAN ── */}
+                      {item.status === 2 && (
+                        <>
+                          {item.alasan ? (
+                            // Tampilkan preview alasan langsung di list
+                            <div style={styles.rejectReasonInline}>
+                              <div style={styles.rejectReasonLabel}>
+                                <i className="fas fa-times-circle" style={{ fontSize: '10px' }}></i>
+                                Alasan Penolakan
+                              </div>
+                              <div>
+                                {item.alasan.length > 100
+                                  ? item.alasan.substring(0, 100) + '...'
+                                  : item.alasan}
+                              </div>
+                              <div style={{ marginTop: '4px', fontSize: '11px', color: '#b91c1c', fontStyle: 'italic' }}>
+                                Lihat Detail untuk informasi lengkap
+                              </div>
+                            </div>
+                          ) : (
+                            // Jika belum ada alasan dari API
+                            <div style={styles.alasanHint}>
+                              <i className="fas fa-circle-exclamation" style={{ fontSize: '10px' }}></i>
+                              Laporan ditolak — lihat Detail
+                            </div>
+                          )}
+                        </>
+                      )}
                     </td>
                     <td style={styles.td}>
                       {item.jenisKegiatan || item.jenis_kegiatan || 'N/A'}
@@ -279,7 +377,9 @@ export default function LaporanKonservasi() {
                         : 'N/A'}
                     </td>
                     <td style={styles.td}>
-                      {/* ✅ Icon-only buttons */}
+                      {getStatusBadge(item.status)}
+                    </td>
+                    <td style={styles.td}>
                       <div style={styles.actionGroup}>
                         <Link
                           to={`/admin-lapangan/laporan/detail/${item.id}`}
