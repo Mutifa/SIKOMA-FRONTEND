@@ -10,7 +10,7 @@ baseURL: 'https://codemy.my.id/api',
   timeout: 15000,
 
   // Mengirim cookie (biasanya untuk auth/session Laravel Sanctum)
-  withCredentials: true,
+ // withCredentials: true,
 
   // Header default untuk semua request
   headers: {
