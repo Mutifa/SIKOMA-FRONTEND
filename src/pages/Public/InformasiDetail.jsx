@@ -24,8 +24,6 @@ export default function InformasiDetail() {
 
                     const found = allData.find(item => item.slug === slug)
 
-                    console.log(found) // 🔥 TAMBAHKAN DI SINI
-
                     if (!found) {
                         setError('Data tidak ditemukan')
                     } else {
@@ -45,8 +43,22 @@ export default function InformasiDetail() {
         return () => { mounted = false }
     }, [slug])
 
+    // ✅ FORMAT DESKRIPSI JADI LIST RAPI
+    const formatDeskripsi = (text) => {
+        if (!text) return null
+
+        return text.split('\n').map((item, index) => {
+            if (!item.trim()) return null
+            return (
+                <li key={index}>
+                    {item.replace('• ', '')}
+                </li>
+            )
+        })
+    }
+
     return (
-        <Template title={`Detail Informasi`} active="informasi">
+        <Template title="Detail Informasi" active="informasi">
             <div className="container my-5">
 
                 {loading && <p>Memuat...</p>}
@@ -54,8 +66,9 @@ export default function InformasiDetail() {
                 {error && <div className="alert alert-danger">{error}</div>}
 
                 {!loading && !error && data && (
-                    <div className="row">
-                        {/* KIRI - GAMBAR */}
+                    <div className="row align-items-start">
+
+                        {/* GAMBAR */}
                         <div className="col-lg-6 mb-4">
                             {data?.foto && (
                                 <img
@@ -65,22 +78,39 @@ export default function InformasiDetail() {
                                         width: '100%',
                                         height: 400,
                                         objectFit: 'cover',
-                                        borderRadius: 10
+                                        borderRadius: 12,
+                                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                                     }}
                                 />
                             )}
                         </div>
 
-                        {/* KANAN - KONTEN */}
+                        {/* KONTEN */}
                         <div className="col-lg-6 mb-4">
-                            <h1 className="mb-2">{data?.judul}</h1>
-                            <hr />
+                            <h1 style={{ fontWeight: 'bold' }}>
+                                {data?.judul}
+                            </h1>
 
-                            {data?.deskripsi ? (
-                                <div dangerouslySetInnerHTML={{ __html: data.deskripsi }} />
-                            ) : (
-                                <p>{data?.lokasi || 'Tidak ada deskripsi'}</p>
-                            )}
+                            <div
+                                style={{
+                                    width: 60,
+                                    height: 4,
+                                    backgroundColor: '#2e7d32',
+                                    marginBottom: 15,
+                                    borderRadius: 2
+                                }}
+                            />
+
+                            {/* DESKRIPSI */}
+                            <div className="deskripsi-content">
+                                {data?.deskripsi ? (
+                                    <ul>
+                                        {formatDeskripsi(data.deskripsi)}
+                                    </ul>
+                                ) : (
+                                    <p>{data?.lokasi || 'Tidak ada deskripsi'}</p>
+                                )}
+                            </div>
                         </div>
                     </div>
                 )}
