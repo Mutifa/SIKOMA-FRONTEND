@@ -19,7 +19,6 @@ baseURL: 'https://codemy.my.id/api',
   },
 })
 
-
 // ===== REQUEST INTERCEPTOR =====
 api.interceptors.request.use((config) => {
 
@@ -34,7 +33,6 @@ api.interceptors.request.use((config) => {
   // Kembalikan config yang sudah dimodifikasi
   return config
 })
-
 
 // ===== RESPONSE INTERCEPTOR =====
 api.interceptors.response.use(

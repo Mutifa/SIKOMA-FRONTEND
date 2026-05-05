@@ -149,10 +149,10 @@ export default function AdminPusatDashboard() {
       </div>
 
       <div className="row mt-4">
-        {/* Laporan Tahun 2025 Chart */}
+        {/* Laporan Tahun 2026 hart */}
         <div className="col-lg-8 col-md-12">
           <div className="white-box">
-            <h3 className="box-title">Laporan Tahun 2025</h3>
+            <h3 className="box-title">Laporan Tahun 2026</h3>
             <div style={{ height: '400px' }}>
               <Bar
                 data={tahunanChartData}
