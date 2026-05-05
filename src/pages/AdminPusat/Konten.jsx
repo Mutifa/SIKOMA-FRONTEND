@@ -143,7 +143,7 @@ export default function Konten() {
               setShowModal(true)
             }}
           >
-            + Konten
+            + Tambah Konten
           </a>
           <div className="white-box">
            <div className="box-title mb-3">Kelola halaman konten informasi & edukasi</div>

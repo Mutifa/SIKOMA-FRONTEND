@@ -395,15 +395,11 @@ export default function Akun() {
     <AdminPusatLayout title="Akun">
 
       {/* ── Header ── */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '12px' }}>
-        <div>
-          <div style={s.pageTitle}>Akun</div>
-          <div style={s.breadcrumb}>Home / Akun</div>
-        </div>
-        <button style={s.btnEdit} onClick={handleOpenModal}>
-          <i className="fas fa-pen" style={{ fontSize: '11px' }}></i> Edit Profil
-        </button>
-      </div>
+     <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
+  <button style={s.btnEdit} onClick={handleOpenModal}>
+    <i className="fas fa-pen" style={{ fontSize: '11px' }}></i> Edit Profil
+  </button>
+</div>
 
       {/* ── Alerts ── */}
       {error && !showModal && (

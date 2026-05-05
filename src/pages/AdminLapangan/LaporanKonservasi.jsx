@@ -297,7 +297,7 @@ export default function LaporanKonservasi() {
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.25rem' }}>
         <Link to="/admin-lapangan/laporan/tambah" style={styles.btnAdd}>
-          <i className="fas fa-plus" style={{ fontSize: '11px' }}></i> Laporan
+          <i className="fas fa-plus" style={{ fontSize: '11px' }}></i> Tambah Laporan
         </Link>
       </div>
 

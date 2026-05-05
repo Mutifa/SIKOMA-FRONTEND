@@ -328,8 +328,9 @@ export default function ProfilPerusahaan() {
         <div className="profil-box-header">
           <div className="profil-box-title">Kelola halaman profil halaman</div>
           <button className="btn-add-style" onClick={() => setIsEdit(true)}>
-            <i className="fas fa-pencil-alt" style={{ marginRight: '6px', fontSize: '12px' }}></i>Edit
+            <i className="fas fa-pencil-alt" style={{ marginRight: '6px', fontSize: '12px' }}></i>Edit Profil 
           </button>
+          
         </div>
         <hr className="profil-divider" />
 
@@ -378,6 +379,9 @@ export default function ProfilPerusahaan() {
                 onClick={() => { setIsEdit(false); loadWebsiteData() }}
               >×</button>
             </div>
+
+
+            
 
             <form onSubmit={handleSubmit}>
               <div className="profil-modal-body">

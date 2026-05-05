@@ -130,7 +130,7 @@ export default function Pengguna() {
               setShowModal(true)
             }}
           >
-            <i className="fas fa-plus me-1"></i> Pengguna
+            <i className="fas fa-plus me-1"></i> Tambah Pengguna
           </button>
         </div>
       </div>

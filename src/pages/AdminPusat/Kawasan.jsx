@@ -122,12 +122,12 @@ export default function Kawasan() {
           <div>
             <div className="box-title mb-3">Kelola halaman kawasan konservasi</div>
           </div>
-
-          <button
-            className="btn btn-success"
-            onClick={() => setIsEdit(true)} >
-            Edit
-          </button>
+<button
+  className="btn btn-success"
+  onClick={() => setIsEdit(true)}
+>
+  <i className="fas fa-pen me-2"></i> Edit Kawasan
+</button>
         </div>
 
 
