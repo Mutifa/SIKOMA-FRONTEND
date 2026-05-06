@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import AdminLapanganLayout from '../../layouts/AdminLapanganLayout.jsx'
 import api from '../../lib/api.js'
 
+const FILE_URL = 'https://codemy.my.id'
 const styles = {
   btnBack: {
     background: '#f5f5f5',
