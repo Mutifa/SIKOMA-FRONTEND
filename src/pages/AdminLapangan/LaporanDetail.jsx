@@ -279,10 +279,10 @@ export default function LaporanDetail() {
             {images.map((filename, index) => (
               <div key={index} style={{ textAlign: 'center' }}>
                 <img
-                  src={`${FILE_URL}/uploads/laporan/${filename}`}
+                  src={`/uploads/laporan/${filename}`}
                   alt={`${label} ${index + 1}`}
                   style={styles.imgThumb}
-                  onClick={() => window.open(`${FILE_URL}/uploads/laporan/${filename}`, '_blank')}
+                  onClick={() => window.open(`/uploads/laporan/${filename}`, '_blank')}
                 />
                 <span style={{ fontSize: '11px', color: '#aaa' }}>#{index + 1}</span>
               </div>
@@ -290,7 +290,7 @@ export default function LaporanDetail() {
           </div>
         )}
         {pdfs.map((filename, index) => (
-          <a key={index} href={`${FILE_URL}/uploads/laporan/${filename}`} target="_blank" rel="noopener noreferrer" style={styles.fileItem}>
+          <a key={index} href={`/uploads/laporan/${filename}`} target="_blank" rel="noopener noreferrer" style={styles.fileItem}>
             <div style={{ ...styles.fileIcon, background: '#fee2e2' }}>
               <i className="fas fa-file-pdf" style={{ color: '#dc2626', fontSize: '13px' }}></i>
             </div>
@@ -301,7 +301,7 @@ export default function LaporanDetail() {
           </a>
         ))}
         {others.map((filename, index) => (
-          <a key={index} href={`${FILE_URL}/uploads/laporan/${filename}`} target="_blank" rel="noopener noreferrer" style={styles.fileItem}>
+          <a key={index} href={`/uploads/laporan/${filename}`} target="_blank" rel="noopener noreferrer" style={styles.fileItem}>
             <div style={{ ...styles.fileIcon, background: '#f0f0f0' }}>
               <i className="fas fa-file" style={{ color: '#888', fontSize: '13px' }}></i>
             </div>
