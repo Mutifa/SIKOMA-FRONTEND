@@ -392,8 +392,8 @@ export default function Akun() {
       {/* ── Header ── */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <div style={s.pageTitle}>Akun</div>
-          <div style={s.breadcrumb}>Home / Akun</div>
+          <div style={s.pageTitle}></div>
+          <div style={s.breadcrumb}></div>
         </div>
         <button style={s.btnEdit} onClick={handleOpenModal}>
           <i className="fas fa-pen" style={{ fontSize: '11px' }}></i> Edit Profil

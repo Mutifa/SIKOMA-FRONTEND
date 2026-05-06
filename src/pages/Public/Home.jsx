@@ -85,7 +85,7 @@ export default function Home() {
               ))
             ) : (
               <div className="carousel-item active">
-                <img className="w-100" src="/img/carousel-1.jpg" alt="Default" />
+      
                 <div className="carousel-caption">
                   <div className="container-fluid p-0">
                     <div className="row justify-content-center">

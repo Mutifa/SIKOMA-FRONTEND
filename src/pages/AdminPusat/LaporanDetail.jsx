@@ -6,10 +6,14 @@ import { ENDPOINTS } from '../../lib/endpoints.js'
 
 // ─── GANTI sesuai base URL backend kamu ───────────────────────────────────────
 const BASE_URL = 'https://codemy.my.id'
+
 // Path uploads — sesuaikan jika berbeda di server
 const UPLOAD_PATH = `${BASE_URL}/uploads/laporan`
 // ─────────────────────────────────────────────────────────────────────────────
 
+// CSS KHUSUS PRINT / PDF
+// Digunakan saat tombol Download PDF ditekan
+// Browser akan memakai style ini ketika mode print
 const printStyles = `
   @media print {
     @page { size: A4; margin: 15mm 15mm 20mm 15mm; }
@@ -105,9 +109,11 @@ export default function LaporanDetail() {
   const [showRejectModal, setShowRejectModal] = React.useState(false)
   const [alasanTolak, setAlasanTolak] = React.useState('')
 
-  // Nomor laporan auto-generate (bisa diganti dari API)
+  // Nomor laporan otomatis berdasarkan tahun sekarang
+  // Bisa diganti dari backend jika diperlukan
   const nomorLaporan = `001/LK-KONS/UPT-KPH/TB-SERKAP/V/${new Date().getFullYear()}`
 
+    // Mengambil detail laporan ketika halaman dibuka
   React.useEffect(() => {
     let mounted = true
     const fetch = async () => {
@@ -134,11 +140,18 @@ export default function LaporanDetail() {
     } finally { setProcessing(false) }
   }
 
+    // Fungsi submit penolakan laporan
   const handleRejectSubmit = async () => {
+
+        // Jika alasan kosong maka stop
     if (!alasanTolak.trim()) return
     setProcessing(true)
     try {
+
+       // Mengirim status ditolak + alasan penolakan
       await api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE_STATUS(id), { status: 2, alasan: alasanTolak })
+
+       // Update state laporan setelah berhasil ditolak
       setLaporan(prev => ({ ...prev, status: 2, alasan: alasanTolak }))
       setShowRejectModal(false)
       setAlasanTolak('')
@@ -148,6 +161,10 @@ export default function LaporanDetail() {
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
+   // Format tanggal:
+  // 2026-05-06
+  // menjadi:
+  // 06-05-2026
   const formatDate = (ds) => {
     if (!ds) return '-'
     const d = new Date(ds)
@@ -156,22 +173,36 @@ export default function LaporanDetail() {
     return `${dd}-${mm}-${d.getFullYear()}`
   }
 
+  // Format tanggal panjang Indonesia
+  // Contoh:
+  // 06 Mei 2026
   const formatDateLong = (ds) => {
     if (!ds) return '-'
     return new Date(ds).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })
   }
 
+  // Mengubah data file dari backend menjadi array
+  // Karena backend biasanya menyimpan:
+  // ["foto1.jpg","foto2.jpg"]
+  // dalam bentuk string JSON
   const parseFiles = (val) => {
     if (!val) return []
     try {
+
+         // Mengubah string JSON menjadi array
       const p = JSON.parse(val)
       return Array.isArray(p) ? p : [p]
     } catch { return [val] }
   }
 
-  // Buat URL file — coba langsung dari nama file
+  // Membuat URL file upload
+  // Contoh:
+  // foto.jpg
+  // menjadi:
+  // https://codemy.my.id/uploads/laporan/foto.jpg
   const fileUrl = (filename) => `${UPLOAD_PATH}/${filename}`
 
+    // Mengecek apakah file adalah gambar
   const isImage = (f) => /\.(jpg|jpeg|png|gif|webp)$/i.test(f)
   const isPdf = (f) => /\.pdf$/i.test(f)
 

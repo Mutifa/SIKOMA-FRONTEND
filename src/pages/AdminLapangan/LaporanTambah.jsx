@@ -6,36 +6,53 @@ import { laporanKonservasiService } from '../../services/laporanKonservasi'
 
 export default function LaporanTambah() {
   const navigate = useNavigate()
+    // State utama untuk menyimpan seluruh data form laporan
   const [formData, setFormData] = React.useState({
     judulLaporan: '',
     jenisKegiatan: '',
     tanggalMulai: '',
     tanggalSelesai: '',
     keterangan: '',
+
+   // Data lokasi hasil verifikasi GPS
     daerahLokasi: '',
     kabupaten: '',
     kecamatan: '',
     latitude: '',
     longitude: '',
     luasArea: '',
+
+   // Menyimpan file upload dalam bentuk array
     suratTugas: [],
     fotoSebelum: [],
     fotoSetelah: []
   })
+
+   // Loading saat proses submit
   const [loading, setLoading] = React.useState(false)
+   // Menyimpan pesan error dari backend
   const [error, setError] = React.useState('')
+  // Status proses verifikasi lokasi
   const [locationStatus, setLocationStatus] = React.useState('Belum diverifikasi')
 
+    // Handle semua perubahan input form
   const handleChange = (e) => {
     const { name, value, type, files } = e.target
     
+       // Jika input berupa file
     if (type === 'file') {
+
+         // Debug melihat file yang dipilih
       console.log(`Files selected for ${name}:`, files.length, files)
       setFormData(prev => ({
         ...prev,
+
+          // FileList diubah menjadi array biasa agar mudah diproses React
         [name]: Array.from(files)
       }))
     } else {
+
+         // Untuk input text/date/number biasa
       setFormData(prev => ({
         ...prev,
         [name]: value
@@ -44,13 +61,19 @@ export default function LaporanTambah() {
   }
 
   const getLocation = () => {
+        // Cek apakah browser mendukung geolocation
     if (navigator.geolocation) {
       setLocationStatus('📍 Sedang mengambil lokasi...')
+
+         // Mengambil lokasi user saat ini
       navigator.geolocation.getCurrentPosition(
+          // Jika berhasil mendapatkan lokasi
         async (position) => {
+             // Ambil latitude & longitude dari GPS browser
           const lat = position.coords.latitude
           const lng = position.coords.longitude
           
+            // Simpan koordinat ke state React
           setFormData(prev => ({
             ...prev,
             latitude: lat.toString(),
@@ -60,14 +83,25 @@ export default function LaporanTambah() {
           setLocationStatus('🗺️ Sedang mendapatkan informasi daerah...')
           
           try {
+
+             // Reverse Geocoding:
+            // Mengubah koordinat GPS menjadi nama daerah/alamat
             const response = await fetch(
               `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1&accept-language=id`
             )
             const data = await response.json()
             
+                  // Jika data alamat berhasil ditemukan
             if (data && data.address) {
               const address = data.address
               
+              /* Mengambil informasi wilayah dari hasil OpenStreetMap
+
+                Kenapa lokasi bisa muncul otomatis?
+                Karena latitude & longitude dikirim ke API OpenStreetMap,
+                lalu API mengembalikan nama provinsi, kabupaten, kecamatan, dll.
+              */
+
               const daerahLokasi = address.state || address.region || address.province || 'Tidak diketahui'
               const kabupaten = address.county || address.city || address.town || address.municipality || 'Tidak diketahui'
               const kecamatan = address.suburb || address.village || address.hamlet || address.neighbourhood || 'Tidak diketahui'
