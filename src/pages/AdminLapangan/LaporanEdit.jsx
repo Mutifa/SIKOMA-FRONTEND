@@ -452,7 +452,7 @@ export default function LaporanEdit() {
                         {fotoSebelumList.map((filename, index) => (
                           <a
                             key={index}
-                            href={`/uploads/laporan/${filename}`}
+                            href={`https://codemy.my.id/uploads/laporan/${filename}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="d-block"
