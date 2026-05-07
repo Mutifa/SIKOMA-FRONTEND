@@ -104,20 +104,15 @@ console.log('TOKEN:', res.data?.data?.token)
       localStorage.setItem('role', role) // ✅ TAMBAH INI
 
       // redirect berdasarkan role
-      let redirect = '/'
+// redirect dashboard baru
+let redirect = '/dashboard'
 
-      if (role === 'admin_pusat') {
-        redirect = '/admin-pusat/dashboard'
-      } else if (role === 'admin_lapangan') {
-        redirect = '/admin-lapangan/dashboard'
-      }
-
-      return {
-        success: true,
-        user: userData,
-        role,
-        redirect,
-      }
+return {
+  success: true,
+  user: userData,
+  role,
+  redirect,
+}
 
     } catch (error) {
       console.log('LOGIN ERROR:', error.response)

@@ -27,7 +27,7 @@ import ResetPassword from './pages/Auth/ResetPassword.jsx'
 import VerifyEmail from './pages/Auth/VerifyEmail.jsx'
 
 // ================= ADMIN LAPANGAN =================
-import DashboardAdminLapangan from './pages/AdminLapangan/Dashboard'
+// import DashboardAdminLapangan from './pages/AdminLapangan/Dashboard'
 import LaporanKonservasi from './pages/AdminLapangan/LaporanKonservasi.jsx'
 import LaporanTambah from './pages/AdminLapangan/LaporanTambah.jsx'
 import LaporanDetail from './pages/AdminLapangan/LaporanDetail.jsx'
@@ -35,11 +35,14 @@ import LaporanEdit from './pages/AdminLapangan/LaporanEdit.jsx'
 import Akun from './pages/AdminLapangan/Akun.jsx'
 
 // ================= ADMIN PUSAT =================
-import AdminPusatDashboard from './pages/AdminPusat/Dashboard.jsx'
-import AdminPusatPengguna from './pages/AdminPusat/Pengguna.jsx'
-import AdminPusatGaleri from './pages/AdminPusat/Galeri.jsx'
-import AdminPusatCustomer from './pages/AdminPusat/Customer.jsx'
-import AdminPusatProfilPerusahaan from './pages/AdminPusat/ProfilPerusahaan.jsx'
+// import AdminPusatDashboard from './pages/AdminPusat/Dashboard.jsx'
+// import AdminPusatPengguna from './pages/AdminPusat/Pengguna.jsx'
+import Pengguna from './pages/Main/Pengguna/index'
+// import AdminPusatGaleri from './pages/AdminPusat/Galeri.jsx'
+import Galeri from './pages/Main/Galeri'
+// import AdminPusatCustomer from './pages/AdminPusat/Customer.jsx'
+// import AdminPusatProfilPerusahaan from './pages/AdminPusat/ProfilPerusahaan.jsx'
+import ProfilPerusahaan from './pages/Main/ProfilPerusahaan'
 import AdminPusatProgram from './pages/AdminPusat/Program.jsx'
 import AdminPusatKonten from './pages/AdminPusat/Konten.jsx'
 import AdminPusatKawasan from './pages/AdminPusat/Kawasan.jsx'
@@ -48,6 +51,15 @@ import AdminPusatLaporanDetail from './pages/AdminPusat/LaporanDetail.jsx'
 import AdminPusatPeraturan from './pages/AdminPusat/Peraturan.jsx'
 import AdminPusatStandarPelayanan from './pages/AdminPusat/StandarPelayanan.jsx'
 import AdminPusatAkun from './pages/AdminPusat/Akun.jsx'
+import Dashboard from './pages/AdminPusat/Dashboard.jsx'
+
+
+
+
+
+
+
+
 
 // ================= UTIL =================
 import NotFound from './pages/NotFound.jsx'
@@ -92,20 +104,23 @@ export default function App() {
           {/* ================= ADMIN PUSAT ================= */}
 
           {/* Dashboard admin pusat (tanpa guard - bisa kamu tambah nanti) */}
-          <Route path="/admin-pusat/dashboard" element={<AdminPusatDashboard />} />
+          {/* <Route path="/admin-pusat/dashboard" element={<AdminPusatDashboard />} /> */}
 
           {/* ================= ADMIN LAPANGAN ================= */}
-
           {/* Dashboard admin lapangan (pakai RoleGuard) */}
-          <Route path="/admin-lapangan/dashboard" element={
+          {/* <Route path="/admin-lapangan/dashboard" element={
             <RoleGuard allowedRoles={['admin_lapangan']}>
               <DashboardAdminLapangan />
             </RoleGuard>
-          } />
+          } /> */}
+
+          <Route path="/dashboard" element={<Dashboard />} />
+
+
 
           {/* CRUD laporan konservasi */}
-          <Route path="/admin-lapangan/laporan" element={
-            <RoleGuard allowedRoles={['admin_lapangan']}>
+          <Route path="/laporan-konservasi" element={
+            <RoleGuard allowedRoles={['admin_pusat', 'admin_lapangan']}>
               <LaporanKonservasi />
             </RoleGuard>
           } />
@@ -137,17 +152,31 @@ export default function App() {
 
           {/* ================= ADMIN PUSAT (PROTECTED) ================= */}
 
-          <Route path="/admin-pusat" element={
+          {/* <Route path="/admin-pusat" element={
             <RoleGuard allowedRoles={['AdminPusat']}>
               <AdminPusatDashboard />
             </RoleGuard>
-          } />
+          } /> */}
 
           {/* halaman admin pusat lainnya */}
-          <Route path="/admin-pusat/pengguna" element={<AdminPusatPengguna />} />
-          <Route path="/admin-pusat/galeri" element={<AdminPusatGaleri />} />
-          <Route path="/admin-pusat/customer" element={<AdminPusatCustomer />} />
-          <Route path="/admin-pusat/profil-perusahaan" element={<AdminPusatProfilPerusahaan />} />
+          <Route path="/pengguna" element={
+            <RoleGuard allowedRoles={['admin_pusat']}>
+              <Pengguna />
+            </RoleGuard>
+          } />
+          {/* <Route path="/admin-pusat/galeri" element={<AdminPusatGaleri />} /> */}
+          <Route path="/galeri" element={
+            <RoleGuard allowedRoles={['admin_pusat', 'admin_lapangan']}>
+              <Galeri />
+            </RoleGuard>
+          } />
+          {/* <Route path="/admin-pusat/customer" element={<AdminPusatCustomer />} /> */}
+          {/* <Route path="/admin-pusat/profil-perusahaan" element={<AdminPusatProfilPerusahaan />} /> */}
+          <Route path="/profil-perusahaan" element={
+            <RoleGuard allowedRoles={['admin_pusat']}>
+              <ProfilPerusahaan />
+            </RoleGuard>
+          } />
           <Route path="/admin-pusat/program" element={<AdminPusatProgram />} />
           <Route path="/admin-pusat/konten" element={<AdminPusatKonten />} />
           <Route path="/admin-pusat/kawasan" element={<AdminPusatKawasan />} />
@@ -156,6 +185,7 @@ export default function App() {
           <Route path="/admin-pusat/peraturan" element={<AdminPusatPeraturan />} />
           <Route path="/admin-pusat/standar-pelayanan" element={<AdminPusatStandarPelayanan />} />
           <Route path="/admin-pusat/akun" element={<AdminPusatAkun />} />
+
 
           {/* ================= UTIL ================= */}
 

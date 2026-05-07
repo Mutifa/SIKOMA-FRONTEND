@@ -1,7 +1,7 @@
 import React from 'react'
 
-import api from '../../lib/api.js'
-import DashboardLayout from '../../layouts/DashboardLayout'
+import api from '../../../lib/api'
+import DashboardLayout from '../../../layouts/DashboardLayout'
 
 export default function Pengguna() {
   const [data, setData] = React.useState([])

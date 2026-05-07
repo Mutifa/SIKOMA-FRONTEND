@@ -22,12 +22,12 @@ export default function RoleGuard({ children, allowedRoles }) {
   // 🔥 kalau role tidak sesuai
   if (allowedRoles && !allowedRoles.includes(user.role)) {
 
-    if (user.role === 'admin_pusat') {
-      return <Navigate to="/admin-pusat/dashboard" replace />
-    }
+    // if (user.role === 'admin_pusat') {
+    //   return <Navigate to="/admin-pusat/dashboard" replace />
+    // }
 
     if (user.role === 'admin_lapangan') {
-      return <Navigate to="/admin-lapangan/dashboard" replace />
+      return <Navigate to="/dashboard" replace />
     }
 
     return <Navigate to="/" replace />

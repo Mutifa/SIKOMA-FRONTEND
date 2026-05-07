@@ -1,8 +1,9 @@
 import React from 'react'
-import AdminPusatLayout from '../../layouts/AdminPusatLayout.jsx'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
 import { dashboardService } from '../../services/dashboardService.js'
+import DashboardLayout from '../../layouts/DashboardLayout'
+
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -79,19 +80,17 @@ export default function AdminPusatDashboard() {
     ]
   }
   if (loading) {
-    return (
-      <AdminPusatLayout title="Admin Pusat">
-        <div className="d-flex justify-content-center">
-          <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div>
-      </AdminPusatLayout>
-    )
+ return (
+  <DashboardLayout>
+    <div style={{ padding: '20px' }}>
+      <h1>DASHBOARD BERHASIL 😭🔥</h1>
+    </div>
+  </DashboardLayout>
+)
   }
 
   return (
-    <AdminPusatLayout title="Admin Pusat">
+    <DashboardLayout title="Dashboard">
       {error && <div className="alert alert-danger">{error}</div>}
       <div className="row">
 
@@ -209,6 +208,6 @@ export default function AdminPusatDashboard() {
           </div>
         </div>
       </div>
-    </AdminPusatLayout>
+    </DashboardLayout>
   )
 }
