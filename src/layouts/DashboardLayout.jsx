@@ -35,7 +35,31 @@ const menuItems = [
       icon: 'fa-building',
       label: 'Galeri'
     },
-    
+    {
+      to: '/kawasan',
+      icon: 'fa-map',
+      label: 'Kawasan'
+    },
+    {
+      to: '/konten',
+      icon: 'fa-map',
+      label: 'Konten'
+    },
+    {
+      to: '/peraturan',
+      icon: 'fa-map',
+      label: 'Peraturan'
+    },
+       {
+      to: '/program',
+      icon: 'fa-map',
+      label: 'Program'
+    },
+ {
+      to: '/standar-pelayanan',
+      icon: 'fa-map',
+      label: 'Standar Pelayanan'
+    },
 
   ] : []),
 

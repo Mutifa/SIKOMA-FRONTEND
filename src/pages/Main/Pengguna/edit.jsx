@@ -1,0 +1,233 @@
+import React from 'react'
+import { useNavigate, useParams, Link } from 'react-router-dom'
+
+import DashboardLayout from '../../../layouts/DashboardLayout'
+import api from '../../../lib/api'
+
+export default function PenggunaEdit() {
+
+  const navigate = useNavigate()
+  const { id } = useParams()
+
+  const [loading, setLoading] = React.useState(true)
+
+  const [formData, setFormData] = React.useState({
+    name: '',
+    username: '',
+    email: '',
+    password: '',
+    role: ''
+  })
+
+  React.useEffect(() => {
+
+    let mounted = true
+
+    api.get(`/admin_pusat/pengguna/${id}`)
+
+      .then(res => {
+
+        const data = res.data.data || res.data
+console.log(data)
+        if (mounted) {
+
+          setFormData({
+            name: data.name || '',
+            username: data.username || '',
+            email: data.email || '',
+            password: '',
+            role: data.role || ''
+          })
+
+          setLoading(false)
+        }
+
+      })
+
+      .catch(err => {
+
+        console.log(err)
+
+        setLoading(false)
+
+      })
+
+    return () => { mounted = false }
+
+  }, [id])
+
+  const handleSubmit = async (e) => {
+
+    e.preventDefault()
+
+    try {
+
+      await api.put(
+        `/admin_pusat/pengguna/${id}`,
+        formData
+      )
+
+      navigate('/pengguna')
+
+    } catch (err) {
+
+      console.log(err)
+
+    }
+
+  }
+
+  if (loading) {
+    return (
+      <DashboardLayout title="Edit Pengguna">
+      </DashboardLayout>
+    )
+  }
+
+  return (
+
+    <DashboardLayout title="Edit Pengguna">
+
+      <form onSubmit={handleSubmit}>
+
+        <div className="white-box">
+
+          <div className="mb-3">
+
+            <label className="form-label">
+              Nama
+            </label>
+
+            <input
+              type="text"
+              className="form-control"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  name: e.target.value
+                })
+              }
+            />
+
+          </div>
+
+          <div className="mb-3">
+
+            <label className="form-label">
+              Username
+            </label>
+
+            <input
+              type="text"
+              className="form-control"
+              value={formData.username}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  username: e.target.value
+                })
+              }
+            />
+
+          </div>
+
+          <div className="mb-3">
+
+            <label className="form-label">
+              Email
+            </label>
+
+            <input
+              type="email"
+              className="form-control"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  email: e.target.value
+                })
+              }
+            />
+
+          </div>
+
+          <div className="mb-3">
+
+            <label className="form-label">
+              Password Baru
+            </label>
+
+            <input
+              type="password"
+              className="form-control"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  password: e.target.value
+                })
+              }
+            />
+
+            <small className="text-muted">
+              Kosongkan jika tidak ingin mengubah password
+            </small>
+
+          </div>
+
+          <div className="mb-3">
+
+            <label className="form-label">
+              Role
+            </label>
+
+            <select
+              className="form-select"
+              value={formData.role}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  role: e.target.value
+                })
+              }
+            >
+
+              <option value="admin_lapangan">
+                Admin Lapangan
+              </option>
+
+              <option value="admin_pusat">
+                Admin Pusat
+              </option>
+
+            </select>
+
+          </div>
+
+          <div className="d-flex gap-2">
+
+            <button
+              type="submit"
+              className="btn btn-success"
+            >
+              Update
+            </button>
+
+            <Link
+              to="/pengguna"
+              className="btn btn-secondary"
+            >
+              Kembali
+            </Link>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </DashboardLayout>
+
+  )
+}

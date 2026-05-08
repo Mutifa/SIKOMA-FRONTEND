@@ -335,7 +335,7 @@ export default function LaporanDetail() {
     return (
       <AdminLapanganLayout title="Detail Laporan">
         <div className="alert alert-danger" style={{ borderRadius: '10px', fontSize: '14px' }}>{error}</div>
-        <button style={styles.btnBack} onClick={() => navigate('/admin-lapangan/laporan')}>
+        <button style={styles.btnBack} onClick={() => navigate('/laporan-konservasi')}>
           <i className="fas fa-angles-left" style={{ fontSize: '11px' }}></i> Kembali
         </button>
       </AdminLapanganLayout>
@@ -347,7 +347,7 @@ export default function LaporanDetail() {
 
   return (
     <AdminLapanganLayout title="Detail Laporan Konservasi">
-      <button style={styles.btnBack} onClick={() => navigate('/admin-lapangan/laporan')}>
+      <button style={styles.btnBack} onClick={() => navigate('/laporan-konservasi')}>
         <i className="fas fa-angles-left" style={{ fontSize: '11px' }}></i> Kembali
       </button>
 

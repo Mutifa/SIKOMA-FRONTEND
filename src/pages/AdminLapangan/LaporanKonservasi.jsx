@@ -296,7 +296,7 @@ export default function LaporanKonservasi() {
       )}
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.25rem' }}>
-        <Link to="/admin-lapangan/laporan/tambah" style={styles.btnAdd}>
+        <Link to="/laporan-konservasi/create" style={styles.btnAdd}>
           <i className="fas fa-plus" style={{ fontSize: '11px' }}></i> Tambah Laporan
         </Link>
       </div>
@@ -382,14 +382,14 @@ export default function LaporanKonservasi() {
                     <td style={styles.td}>
                       <div style={styles.actionGroup}>
                         <Link
-                          to={`/admin-lapangan/laporan/detail/${item.id}`}
+                          to={`/laporan-konservasi/detail/${item.id}`}
                           style={styles.btnDetail}
                           title="Detail"
                         >
                           <i className="fas fa-eye"></i>
                         </Link>
                         <Link
-                          to={`/admin-lapangan/laporan/edit/${item.id}`}
+                          to={`/laporan-konservasi/edit/${item.id}`}
                           style={styles.btnEdit}
                           title="Edit"
                         >

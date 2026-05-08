@@ -2,7 +2,7 @@ export const ENDPOINTS = {
 AUTH: {
   LOGIN: '/auth/login',
   LOGOUT: '/auth/logout',
-  ME: '/admin_lapangan/profile' // ✅ FIX
+  ME: '/admin_lapangan/profile' 
 },
 
   LAPORAN: {
@@ -74,6 +74,7 @@ GALERI: {
 PENGGUNA: {
   GET: '/admin_pusat/pengguna',
   CREATE: '/admin_pusat/pengguna',
+  DETAIL: (id) => `/admin_pusat/pengguna/${id}`,
   UPDATE: (id) => `/admin_pusat/pengguna/${id}`,
   DELETE: (id) => `/admin_pusat/pengguna/${id}`
 },
