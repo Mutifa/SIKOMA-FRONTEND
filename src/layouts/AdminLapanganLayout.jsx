@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.jsx'
-import '../assets/css/dashboard.css'
+import '../assets/css/Dashboard.css'
 
 export default function AdminLapanganLayout({ children, title = "Dashboard Admin Lapangan" }) {
 
