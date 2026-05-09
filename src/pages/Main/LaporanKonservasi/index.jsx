@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import api from '../../../lib/api.js'
 import { laporanKonservasiService } from '../../../services/laporanKonservasi'
+import { useAuth } from '../../../contexts/AuthContext'
 
 const styles = {
   topBar: {
@@ -213,6 +214,14 @@ export default function LaporanKonservasi() {
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(true)
 
+  const { user } = useAuth()
+
+  const isAdminPusat =
+    user?.role === 'admin_pusat'
+
+  const isAdminLapangan =
+    user?.role === 'admin_lapangan'
+
   React.useEffect(() => {
     let mounted = true
 
@@ -261,10 +270,73 @@ export default function LaporanKonservasi() {
           laporan: Array.isArray(laporanData) ? laporanData : [],
           daerah: []
         })
+
       } catch (err) {
-        setError(err.response?.data?.message || 'Gagal menghapus laporan')
+
+        setError(
+          err.response?.data?.message ||
+          'Gagal menghapus laporan'
+        )
+
       }
     }
+  }
+
+
+  // =============================
+  // VALIDASI STATUS
+  // =============================
+  const handleUpdateStatus = async (id, status) => {
+
+    try {
+
+      let payload = { status }
+
+      // kalau ditolak → wajib isi alasan
+      if (status === 2) {
+
+        const alasan = prompt(
+          'Masukkan alasan penolakan'
+        )
+
+        if (!alasan) {
+          return
+        }
+
+        payload.alasan = alasan
+
+      }
+
+      await api.put(
+        `/laporan-konservasi/${id}/status`,
+        payload
+      )
+
+      // reload data
+      const res = await laporanKonservasiService.getAll()
+
+      const laporanData =
+        res.data?.laporan?.data ||
+        res.data?.laporan ||
+        res.data?.data ||
+        []
+
+      setData({
+        laporan: Array.isArray(laporanData)
+          ? laporanData
+          : [],
+        daerah: []
+      })
+
+    } catch (err) {
+
+      setError(
+        err.response?.data?.message ||
+        'Gagal update status'
+      )
+
+    }
+
   }
 
   const getStatusBadge = (status) => {
@@ -296,9 +368,17 @@ export default function LaporanKonservasi() {
       )}
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.25rem' }}>
-        <Link to="/laporan-konservasi/create" style={styles.btnAdd}>
-          <i className="fas fa-plus" style={{ fontSize: '11px' }}></i> Tambah Laporan
-        </Link>
+        {isAdminLapangan && (
+
+          <Link
+            to="/laporan-konservasi/create"
+            style={styles.btnAdd}
+          >
+            <i className="fas fa-plus"></i>
+            Tambah Laporan
+          </Link>
+
+        )}
       </div>
 
       <div style={styles.card}>
@@ -367,13 +447,13 @@ export default function LaporanKonservasi() {
                     <td style={{ ...styles.td, color: '#555', fontSize: '13px' }}>
                       {item.created_at
                         ? new Date(item.created_at).toLocaleDateString('id-ID', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit'
-                          })
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          second: '2-digit'
+                        })
                         : 'N/A'}
                     </td>
                     <td style={styles.td}>
@@ -381,6 +461,8 @@ export default function LaporanKonservasi() {
                     </td>
                     <td style={styles.td}>
                       <div style={styles.actionGroup}>
+
+                        {/* DETAIL → semua role boleh */}
                         <Link
                           to={`/laporan-konservasi/detail/${item.id}`}
                           style={styles.btnDetail}
@@ -388,21 +470,60 @@ export default function LaporanKonservasi() {
                         >
                           <i className="fas fa-eye"></i>
                         </Link>
-                        <Link
-                          to={`/laporan-konservasi/edit/${item.id}`}
-                          style={styles.btnEdit}
-                          title="Edit"
-                        >
-                          <i className="fas fa-pen"></i>
-                        </Link>
-                        <button
-                          style={styles.btnDel}
-                          onClick={() => handleDelete(item.id)}
-                          title="Hapus"
-                        >
-                          <i className="fas fa-trash"></i>
-                        </button>
+
+
+                        {/* VALIDASI → hanya admin pusat */}
+                        {isAdminPusat && item.status === 0 && (
+
+                          <>
+                            <button
+                              className="btn btn-success btn-sm"
+                              onClick={() =>
+                                handleUpdateStatus(item.id, 1)
+                              }
+                              title="Setujui"
+                            >
+                              <i className="fas fa-check"></i>
+                            </button>
+
+                            <button
+                              className="btn btn-danger btn-sm"
+                              onClick={() =>
+                                handleUpdateStatus(item.id, 2)
+                              }
+                              title="Tolak"
+                            >
+                              <i className="fas fa-times"></i>
+                            </button>
+
+                          </>
+                        )}
+
+                        {/* EDIT + DELETE → hanya admin lapangan */}
+                        {isAdminLapangan && item.status !== 1 && (
+                          <>
+
+                            <Link
+                              to={`/laporan-konservasi/edit/${item.id}`}
+                              style={styles.btnEdit}
+                              title="Edit"
+                            >
+                              <i className="fas fa-pen"></i>
+                            </Link>
+
+                            <button
+                              style={styles.btnDel}
+                              onClick={() => handleDelete(item.id)}
+                              title="Hapus"
+                            >
+                              <i className="fas fa-trash"></i>
+                            </button>
+
+                          </>
+                        )}
+
                       </div>
+
                     </td>
                   </tr>
                 ))

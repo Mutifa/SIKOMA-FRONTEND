@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.jsx'
-import '../assets/css/AdminLapangan.css'
+import '../assets/css/dashboard.css'
 
 
 export default function DashboardLayout({ children, title = "Admin Pusat" }) {
@@ -10,14 +10,36 @@ export default function DashboardLayout({ children, title = "Admin Pusat" }) {
   const { user, logout } = useAuth()
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
 
+  const isAdminPusat =
+    user?.role === 'admin_pusat'
 
-const isAdminPusat = user?.role === 'admin_pusat'
+  const isAdminLapangan =
+    user?.role === 'admin_lapangan'
 
+  const menuItems = [
 
-const menuItems = [
-  { to: '/dashboard', icon: 'fa-home', label: 'Dashboard' },
+  // ===== MENU SEMUA ROLE =====
+  {
+    to: '/dashboard',
+    icon: 'fa-home',
+    label: 'Dashboard'
+  },
 
+  {
+    to: '/laporan-konservasi',
+    icon: 'fa-file-lines',
+    label: 'Laporan Konservasi'
+  },
+
+  {
+    to: '/akun',
+    icon: 'fa-user-cog',
+    label: 'Akun'
+  },
+
+  // ===== KHUSUS ADMIN PUSAT =====
   ...(isAdminPusat ? [
+
     {
       to: '/pengguna',
       icon: 'fa-users',
@@ -29,64 +51,46 @@ const menuItems = [
       icon: 'fa-building',
       label: 'Profil Perusahaan'
     },
-     {
 
-      to: '/galeri',
-      icon: 'fa-building',
-      label: 'Galeri'
-    },
     {
-      to: '/kawasan',
-      icon: 'fa-map',
-      label: 'Kawasan'
-    },
-    {
-      to: '/konten',
-      icon: 'fa-map',
-      label: 'Konten'
-    },
-    {
-      to: '/peraturan',
-      icon: 'fa-map',
-      label: 'Peraturan'
-    },
-       {
       to: '/program',
-      icon: 'fa-map',
+      icon: 'fa-list-ul',
       label: 'Program'
     },
- {
+
+    {
+      to: '/konten',
+      icon: 'fa-newspaper',
+      label: 'Konten Informasi & Edukasi'
+    },
+
+    {
+      to: '/kawasan',
+      icon: 'fa-map-marker-alt',
+      label: 'Kawasan Konservasi'
+    },
+
+    {
+      to: '/peraturan',
+      icon: 'fa-gavel',
+      label: 'Peraturan'
+    },
+
+    {
       to: '/standar-pelayanan',
-      icon: 'fa-map',
+      icon: 'fa-clipboard-list',
       label: 'Standar Pelayanan'
+    },
+
+    {
+      to: '/galeri',
+      icon: 'fa-images',
+      label: 'Galeri'
     },
 
   ] : []),
 
-  {
-    to: '/laporan-konservasi',
-    icon: 'fa-file-lines',
-    label: 'Laporan Konservasi'
-  },
 ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   // ===== LOAD CKEDITOR =====

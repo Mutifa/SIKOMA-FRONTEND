@@ -5,10 +5,10 @@ import api from '../lib/api'
 // BUAT CONTEXT
 const AuthContext = createContext()
 
-//  HOOK CUSTOM
+//  HOOK CUSTOM // mengambil data login dari authentication
 export const useAuth = () => {
   const context = useContext(AuthContext)
-  if (!context) {
+  if (!context) { //keamanan
     throw new Error('useAuth harus dipakai dalam AuthProvider')
   }
   return context
@@ -104,8 +104,8 @@ console.log('TOKEN:', res.data?.data?.token)
       localStorage.setItem('role', role) // ✅ TAMBAH INI
 
       // redirect berdasarkan role
-// redirect dashboard baru
-let redirect = '/dashboard'
+      // redirect dashboard baru
+      let redirect = '/dashboard'
 
 return {
   success: true,

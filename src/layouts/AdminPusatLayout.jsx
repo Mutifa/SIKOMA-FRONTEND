@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext.jsx'
-import '../assets/css/AdminLapangan.css'
+import '../assets/css/dashboard.css'
 
 export default function AdminPusatLayout({ children, title = "Admin Pusat" }) {
 

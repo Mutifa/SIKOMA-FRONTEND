@@ -83,7 +83,6 @@ export default function AdminPusatDashboard() {
  return (
   <DashboardLayout>
     <div style={{ padding: '20px' }}>
-      <h1>DASHBOARD BERHASIL 😭🔥</h1>
     </div>
   </DashboardLayout>
 )
