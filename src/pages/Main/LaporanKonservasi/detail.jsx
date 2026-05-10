@@ -2,6 +2,7 @@ import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import api from '../../../lib/api.js'
+import { useAuth } from '../../../contexts/AuthContext'
 
 const FILE_URL = 'https://codemy.my.id'
 const styles = {
@@ -217,30 +218,109 @@ const statusLabel = {
 export default function LaporanDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+
+const { user } = useAuth()
+
+const role = user?.role?.trim()?.toLowerCase()
+
+const isAdminPusat =
+  role === 'admin_pusat' ||
+  role === 'super_admin'
+
+const isAdminLapangan =
+  role === 'admin_lapangan'
+
+console.log('ROLE:', user?.role)
+
+console.log('isAdminPusat:', isAdminPusat)
+console.log('isAdminLapangan:', isAdminLapangan)
+
   const [laporan, setLaporan] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState('')
 
-  React.useEffect(() => {
-    let mounted = true
-    api.get(`/laporan-konservasi/${id}`)
-      .then(res => {
-        if (mounted) {
-          console.log('Raw laporan data:', res.data)
-          // ── FIX: unwrap data jika ada wrapper ──
-          const detail = res.data?.data || res.data
-          setLaporan(detail)
-          setLoading(false)
-        }
-      })
-      .catch(err => {
-        if (mounted) {
-          setError(err.response?.data?.message || 'Gagal memuat detail laporan')
-          setLoading(false)
-        }
-      })
-    return () => { mounted = false }
-  }, [id])
+  console.log('isAdminPusat:', isAdminPusat)
+  console.log('isAdminLapangan:', isAdminLapangan)
+
+React.useEffect(() => {
+
+  let mounted = true
+
+  api.get(`/laporan-konservasi/${id}`)
+
+    .then(res => {
+
+      if (mounted) {
+
+        console.log('Raw laporan data:', res.data)
+
+        const detail =
+          res.data?.data || res.data
+
+        setLaporan(detail)
+
+        setLoading(false)
+
+      }
+
+    })
+
+    .catch(err => {
+
+      if (mounted) {
+
+        setError(
+          err.response?.data?.message ||
+          'Gagal memuat detail laporan'
+        )
+
+        setLoading(false)
+
+      }
+
+    })
+
+  return () => { mounted = false }
+
+}, [id])
+
+
+// =============================
+// VALIDASI STATUS
+// =============================
+const handleUpdateStatus = async (id, status) => {
+
+  try {
+
+    let payload = { status }
+
+    // kalau ditolak → wajib isi alasan
+    if (status === 2) {
+
+      const alasan = prompt(
+        'Masukkan alasan penolakan'
+      )
+
+      if (!alasan) return
+
+      payload.alasan = alasan
+
+    }
+
+    await api.put(
+      `/laporan-konservasi/${id}/status`,
+      payload
+    )
+
+    window.location.reload()
+
+  } catch (err) {
+
+    console.log(err)
+
+  }
+
+}
 
   const formatDate = (dateString) => {
     if (!dateString) return null
@@ -488,6 +568,38 @@ export default function LaporanDetail() {
             </div>
           </div>
         </div>
+
+        {/* VALIDASI KHUSUS ADMIN PUSAT */}
+{isAdminPusat && laporan?.status === 0 && (
+
+  <div className="d-flex gap-2 mt-4">
+
+    <button
+      className="btn btn-success"
+      onClick={() =>
+        handleUpdateStatus(laporan.id, 1)
+      }
+    >
+      <i className="fas fa-check me-1"></i>
+      Setujui
+    </button>
+
+    <button
+      className="btn btn-danger"
+      onClick={() =>
+        handleUpdateStatus(laporan.id, 2)
+      }
+    >
+      <i className="fas fa-times me-1"></i>
+      Tolak
+    </button>
+
+  </div>
+
+)}
+
+
+
 
         {/* ── Status Badge ── */}
         <div style={styles.statusWrap}>

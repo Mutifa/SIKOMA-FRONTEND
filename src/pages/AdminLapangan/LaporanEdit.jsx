@@ -142,7 +142,7 @@ export default function LaporanEdit() {
         formDataToSend
       )
 
-      navigate('/admin-lapangan/laporan')
+      navigate('/laporan-konservasi')
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal memperbarui laporan')
     } finally {
@@ -193,7 +193,7 @@ export default function LaporanEdit() {
         <button
           type="button"
           className="btn btn-outline-secondary"
-          onClick={() => navigate('/admin-lapangan/laporan')}
+          onClick={() => navigate('/laporan-konservasi')}
           style={{ borderRadius: '6px', fontWeight: 500 }}
         >
           &#171; Kembali
@@ -510,7 +510,7 @@ export default function LaporanEdit() {
                 <button
                   type="button"
                   className="btn btn-outline-secondary me-2"
-                  onClick={() => navigate('/admin-lapangan/laporan')}
+                  onClick={() => navigate('/laporan-konservasi')}
                   style={{ borderRadius: '6px', fontWeight: 500, fontSize: '14px' }}
                 >
                   Batal

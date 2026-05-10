@@ -49,10 +49,14 @@ export const AuthProvider = ({ children }) => {
 
       const res = await api.get(endpoint)
 
-      const userData = res.data
+        const userData = res.data
 
-      setUser(userData)
-      setIsAuthenticated(true)
+        setUser({
+          ...userData,
+          role
+        })
+
+        setIsAuthenticated(true)
     }
     catch (error) {
       console.error('CHECK AUTH ERROR:', error)

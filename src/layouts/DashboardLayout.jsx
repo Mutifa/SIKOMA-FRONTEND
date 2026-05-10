@@ -8,37 +8,37 @@ export default function DashboardLayout({ children, title = "Admin Pusat" }) {
 
   const location = useLocation()
   const { user, logout } = useAuth()
+  console.log('USER LOGIN:', user)
+  console.log('ROLE:', user?.role)
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
 
+
   const isAdminPusat =
-    user?.role === 'admin_pusat'
+  user?.role === 'admin_pusat' ||
+  user?.role === 'AdminPusat' ||
+  user?.role === 'super_admin' ||
+  user?.role === 'Super Admin'
 
-  const isAdminLapangan =
-    user?.role === 'admin_lapangan'
+const isAdminLapangan =
+  user?.role === 'admin_lapangan' ||
+  user?.role === 'AdminLapangan'
 
-  const menuItems = [
 
-  // ===== MENU SEMUA ROLE =====
-  {
-    to: '/dashboard',
-    icon: 'fa-home',
-    label: 'Dashboard'
-  },
+console.log('ROLE:', user?.role)
+console.log('isAdminPusat:', isAdminPusat)
+console.log('isAdminLapangan:', isAdminLapangan)
 
-  {
-    to: '/laporan-konservasi',
-    icon: 'fa-file-lines',
-    label: 'Laporan Konservasi'
-  },
+let menuItems = []
 
-  {
-    to: '/akun',
-    icon: 'fa-user-cog',
-    label: 'Akun'
-  },
+if (isAdminPusat) {
 
-  // ===== KHUSUS ADMIN PUSAT =====
-  ...(isAdminPusat ? [
+  menuItems = [
+
+    {
+      to: '/dashboard',
+      icon: 'fa-home',
+      label: 'Dashboard'
+    },
 
     {
       to: '/pengguna',
@@ -88,10 +88,45 @@ export default function DashboardLayout({ children, title = "Admin Pusat" }) {
       label: 'Galeri'
     },
 
-  ] : []),
+    {
+      to: '/laporan-konservasi',
+      icon: 'fa-file-lines',
+      label: 'Laporan Konservasi'
+    },
 
-]
+    {
+      to: '/akun',
+      icon: 'fa-user-cog',
+      label: 'Akun'
+    },
 
+  ]
+
+} else {
+
+  menuItems = [
+
+    {
+      to: '/dashboard',
+      icon: 'fa-home',
+      label: 'Dashboard'
+    },
+
+    {
+      to: '/laporan-konservasi',
+      icon: 'fa-file-lines',
+      label: 'Laporan Konservasi'
+    },
+
+    {
+      to: '/akun',
+      icon: 'fa-user-cog',
+      label: 'Akun'
+    },
+
+  ]
+
+}
 
   // ===== LOAD CKEDITOR =====
   React.useEffect(() => {

@@ -175,7 +175,7 @@ export default function LaporanTambah() {
 
     try {
       await laporanKonservasiService.create(formDataToSend)
-      navigate('/admin-lapangan/laporan')
+      navigate('/laporan-konservasi')
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal menyimpan laporan')
     } finally {
@@ -196,7 +196,7 @@ export default function LaporanTambah() {
         <button
           type="button"
           className="btn btn-outline-secondary"
-          onClick={() => navigate('/admin-lapangan/laporan')}
+          onClick={() => navigate('/laporan-konservasi')}
           style={{ borderRadius: '6px', fontWeight: 500 }}
         >
           &#171; Kembali
@@ -472,7 +472,7 @@ export default function LaporanTambah() {
                 <button
                   type="button"
                   className="btn btn-outline-secondary me-2"
-                  onClick={() => navigate('/admin-lapangan/laporan')}
+                  onClick={() => navigate('/laporan-konservasi')}
                   style={{ borderRadius: '6px', fontWeight: 500, fontSize: '14px' }}
                 >
                   Batal

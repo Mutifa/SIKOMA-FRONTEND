@@ -31,8 +31,8 @@ import VerifyEmail from './pages/Auth/VerifyEmail.jsx'
 // import LaporanKonservasi from './pages/AdminLapangan/LaporanKonservasi.jsx'
 import LaporanKonservasi from './pages/Main/LaporanKonservasi'
 import LaporanTambah from './pages/AdminLapangan/LaporanTambah.jsx'
-import LaporanDetail from './pages/AdminLapangan/LaporanDetail.jsx'
-import LaporanEdit from './pages/AdminLapangan/LaporanEdit.jsx'
+import LaporanDetail from './pages/Main/LaporanKonservasi/detail.jsx'
+import LaporanEdit from './pages/Main/LaporanKonservasi/edit.jsx'
 // import Akun from './pages/AdminLapangan/Akun.jsx'
 
 // ================= ADMIN PUSAT =================
@@ -70,8 +70,8 @@ import KontenEdit from './pages/Main/Konten/edit'
 
 // import AdminPusatKawasan from './pages/AdminPusat/Kawasan.jsx'
 import Kawasan from './pages/Main/Kawasan'
-import AdminPusatLaporan from './pages/AdminPusat/Laporan.jsx'
-import AdminPusatLaporanDetail from './pages/AdminPusat/LaporanDetail.jsx'
+// import AdminPusatLaporan from './pages/AdminPusat/Laporan.jsx'
+// import AdminPusatLaporanDetail from './pages/AdminPusat/LaporanDetail.jsx'
 
 // import AdminPusatPeraturan from './pages/AdminPusat/Peraturan.jsx'
 import Peraturan from './pages/Main/Peraturan'
