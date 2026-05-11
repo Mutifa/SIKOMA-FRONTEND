@@ -4,7 +4,7 @@ import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import api from '../../../lib/api.js'
 import { laporanKonservasiService } from '../../../services/laporanKonservasi'
 
-export default function LaporanTambah() {
+export default function create() {
   const navigate = useNavigate()
     // State utama untuk menyimpan seluruh data form laporan
   const [formData, setFormData] = React.useState({

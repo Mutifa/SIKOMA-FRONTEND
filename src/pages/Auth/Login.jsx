@@ -1,119 +1,207 @@
 import React from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+
 import Template from '../../layouts/Template.jsx'
 import { useAuth } from '../../contexts/AuthContext.jsx'
-import api from '../../lib/api.js'
 
 export default function Login() {
 
-  // State untuk menyimpan input email
-  const [email, setEmail] = React.useState('')
+  // ── State form ──────────────────────────────────────────────
+  const [email, setEmail]             = React.useState('')       // nilai input email
+  const [password, setPassword]       = React.useState('')       // nilai input password
+  const [showPassword, setShowPassword] = React.useState(false)  // toggle tampil/sembunyikan password
+  const [rememberMe, setRememberMe]   = React.useState(false)   // status checkbox "Ingat Saya"
 
-  // State untuk menyimpan input password
-  const [password, setPassword] = React.useState('')
+  // ── State UI ─────────────────────────────────────────────────
+  const [error, setError]     = React.useState('')   // pesan error login
+  const [loading, setLoading] = React.useState(false) // status loading saat proses login
 
-  // State untuk menampilkan pesan error
-  const [error, setError] = React.useState('')
+  // ── Hooks ────────────────────────────────────────────────────
+  const { login }    = useAuth()       // fungsi login dari AuthContext
+  const navigate     = useNavigate()   // untuk redirect setelah login berhasil
+  const location     = useLocation()   // untuk membaca halaman asal sebelum diarahkan ke login
 
-  // State untuk loading saat proses login
-  const [loading, setLoading] = React.useState(false)
-  
-  // Mengambil fungsi login dari context auth
-  const { login } = useAuth()
-
-  // Hook untuk navigasi halaman
-  const navigate = useNavigate()
-
-  // Mengambil lokasi saat ini (digunakan untuk redirect)
-  const location = useLocation()
-  
-  // Menentukan halaman tujuan setelah login (default ke '/')
-  const from = location.state?.from?.pathname || '/'
+  // Halaman tujuan setelah login — kembali ke halaman sebelumnya atau default ke /dashboard
+  const from = location.state?.from?.pathname || '/dashboard'
 
 
-  // Function ketika form disubmit
+  // ── Handler submit form ──────────────────────────────────────
   async function onSubmit(e) {
-    e.preventDefault() // Mencegah reload halaman
-    setError('') // Reset error
-    setLoading(true) // Aktifkan loading
+
+    e.preventDefault() // cegah reload halaman saat form disubmit
+
+    setError('')        // reset pesan error
+    setLoading(true)    // aktifkan loading spinner
 
     try {
-      // Panggil fungsi login (biasanya ke API backend)
-      const result = await login(email, password)
 
-      // Jika login berhasil
+      const result = await login(email, password) // panggil fungsi login
+
       if (result.success) {
-        // Redirect ke halaman sesuai role / response backend
-        navigate(result.redirect)
+
+        // Login berhasil → arahkan ke halaman tujuan
+        navigate(result.redirect || from)
+
       } else {
-        // Jika gagal, tampilkan pesan error dari backend
+
+        // Login gagal → tampilkan pesan error dari server
         setError(result.message)
+
       }
 
     } catch (err) {
-      // Jika terjadi error sistem (server/down/dll)
+
+      // Error tak terduga (jaringan, server down, dll)
       console.error(err)
-      setError('Terjadi kesalahan saat login')
+      setError('Terjadi kesalahan saat login. Silakan coba lagi.')
+
     } finally {
-      // Matikan loading apapun hasilnya
-      setLoading(false)
+
+      setLoading(false) // matikan loading spinner (berhasil maupun gagal)
+
     }
   }
 
+
+  // ── Render ───────────────────────────────────────────────────
   return (
+
     <Template title="Login">
-      <section className="container py-5" style={{maxWidth:480}}>
 
-        {/* Judul halaman */}
-        <h1 className="mb-4">Login</h1>
+      <section className="login-wrapper">
 
-        {/* Menampilkan error jika ada */}
-        {error && <div className="alert alert-danger">{error}</div>}
+        {/* ── KIRI: Form Login ── */}
+        <div className="login-left">
 
-        {/* Form login */}
-        <form onSubmit={onSubmit}>
+          <div className="login-box">
 
-          {/* Input Email */}
-          <div className="mb-3">
-            <label className="form-label">Email</label>
-            <input 
-              type="email" 
-              className="form-control" 
-              value={email} 
-              onChange={e=>setEmail(e.target.value)} 
-            />
-          </div>
+            {/* Judul halaman */}
+            <h1 className="login-title">
+              Login
+            </h1>
 
-          {/* Input Password */}
-          <div className="mb-3">
-            <label className="form-label">Password</label>
-            <input 
-              type="password" 
-              className="form-control" 
-              value={password} 
-              onChange={e=>setPassword(e.target.value)} 
-            />
-          </div>
+            {/* Subjudul */}
+            <p className="login-subtitle">
+              Silakan isi detail data Anda untuk mengakses akun.
+            </p>
 
-          {/* Tombol submit */}
-          <button 
-            type="submit" 
-            className="btn btn-success w-100" 
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                {/* Spinner saat loading */}
-                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                Loading...
-              </>
-            ) : (
-              // Teks tombol normal
-              'Masuk'
+            {/* Pesan error — hanya muncul jika ada error */}
+            {error && (
+              <div className="alert alert-danger">
+                {error}
+              </div>
             )}
-          </button>
-        </form>
+
+            <form onSubmit={onSubmit}>
+
+              {/* ── Input Email ── */}
+              <div className="mb-3">
+
+                <label className="form-label fw-semibold">
+                  Email
+                </label>
+
+                <input
+                  type="email"
+                  className="form-control login-input"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="contoh@email.com"
+                  required
+                />
+
+              </div>
+
+              {/* ── Input Password ── */}
+              <div className="mb-3">
+
+                <label className="form-label fw-semibold">
+                  Kata Sandi
+                </label>
+
+                <div className="position-relative">
+
+                  {/* type berubah antara "text" dan "password" sesuai showPassword */}
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    className="form-control login-input pe-5"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                  />
+
+                  {/* Tombol toggle tampil/sembunyikan password */}
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                  </button>
+
+                </div>
+
+              </div>
+
+              {/* ── Ingat Saya + Lupa Kata Sandi ── */}
+              <div className="login-remember-row mb-4">
+
+                <label className="login-remember-label">
+                  <input
+                    type="checkbox"
+                    className="login-remember-check"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                  />
+                  Ingat Saya
+                </label>
+
+                <Link to="/forgot-password" className="forgot-link">
+                  Lupa Kata Sandi?
+                </Link>
+
+              </div>
+
+              {/* ── Tombol Masuk ── */}
+              <button
+                type="submit"
+                className="btn-login"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    {/* Spinner muncul saat proses login berlangsung */}
+                    <span className="spinner-border spinner-border-sm me-2"></span>
+                    Memuat...
+                  </>
+                ) : (
+                  'Masuk'
+                )}
+              </button>
+
+            
+
+            </form>
+
+          </div>
+
+        </div>
+
+        {/* ── KANAN: Ilustrasi ── */}
+        <div className="login-right">
+
+          <img
+            src="/img/login-illustration.png"
+            alt="Ilustrasi Login"
+            className="login-image"
+          />
+
+        </div>
+
       </section>
+
     </Template>
+
   )
 }

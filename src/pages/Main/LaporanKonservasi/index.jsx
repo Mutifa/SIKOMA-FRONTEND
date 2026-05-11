@@ -11,7 +11,7 @@ const badgePending  = { background: '#FAEEDA', color: '#854F0B', padding: '3px 1
 const badgeApproved = { background: '#EAF3DE', color: '#3B6D11', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: '600', display: 'inline-block', whiteSpace: 'nowrap' }
 const badgeRejected = { background: '#FCEBEB', color: '#A32D2D', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: '600', display: 'inline-block', whiteSpace: 'nowrap' }
 
-// ── Style tabel — dipertahankan karena tabel custom (bukan .table Bootstrap) ──
+// ── Style tabel — dipertahankan karena tabel custom ──
 const th = { padding: '10px 14px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#888', textTransform: 'uppercase', letterSpacing: '0.06em', borderBottom: '1px solid #efefef' }
 const td = { padding: '13px 14px', color: '#1a1a1a', borderBottom: '1px solid #f5f5f5', verticalAlign: 'middle' }
 const tdMuted = { ...td, color: '#aaa', fontSize: '13px' }

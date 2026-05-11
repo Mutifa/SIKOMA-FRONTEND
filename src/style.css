@@ -464,3 +464,214 @@ a {
 .deskripsi-content li {
   margin-bottom: 10px;
 }
+
+/* =========================
+   LOGIN PAGE — replace the existing LOGIN section in style.css
+========================= */
+
+/* Paksa section login full width dari parent apapun */
+.login-wrapper {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);   /* keluar dari container parent yang sempit */
+  min-height: calc(100vh - 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+   gap: 60px;
+  padding: 60px 40px;
+  box-sizing: border-box;
+}
+
+.login-left {
+  flex: 0 0 400px;
+  max-width: 400px;
+}
+
+.login-right {
+   flex: 0 1 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-image {
+  width: 100%;
+  max-width: 500px;
+  object-fit: contain;
+}
+
+.login-box {
+  width: 100%;
+}
+
+.login-title {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: #2f6f4f;
+}
+
+.login-subtitle {
+  color: #6b7280;
+  margin-bottom: 28px;
+  font-size: 14px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.login-input {
+  height: 48px;
+  border-radius: 8px;
+  border: 1.5px solid #d1d5db;
+  font-size: 14px;
+  padding: 0 14px;
+  width: 100%;
+  box-sizing: border-box;
+  background: #f0f4f8;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-input:focus {
+  border-color: #2f6f4f;
+  box-shadow: 0 0 0 3px rgba(47,111,79,0.12);
+  outline: none;
+  background: #fff;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.password-toggle:hover {
+  color: #6b7280;
+}
+
+/* Remember Me + Forgot row */
+.login-remember-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.login-remember-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+}
+
+.login-remember-check {
+  width: 16px;
+  height: 16px;
+  accent-color: #2f6f4f;
+  cursor: pointer;
+}
+
+.forgot-link {
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* Sign in button */
+.btn-login {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 8px;
+  background: #2f6f4f;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  letter-spacing: 0.3px;
+}
+
+.btn-login:hover:not(:disabled) {
+  background: #255c42;
+}
+
+.btn-login:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Applicant login link */
+.applicant-link {
+  color: #2f6f4f;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.applicant-link:hover {
+  color: #255c42;
+}
+
+.register-link {
+  color: #2f6f4f;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 991px) {
+
+  .login-wrapper {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 32px;
+    padding: 40px 24px;
+  }
+
+  .login-left {
+    flex: none;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .login-right {
+    order: -1;
+    width: 100%;
+  }
+
+  .login-image {
+    max-width: 260px;
+  }
+
+  .login-title {
+    font-size: 36px;
+  }
+
+  .login-remember-row {
+    justify-content: space-between;
+    text-align: left;
+  }
+}
