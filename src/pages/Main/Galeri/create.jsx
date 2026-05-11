@@ -4,19 +4,29 @@ import { Link, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout'
 import api from '../../../lib/api.js'
 
+// ─────────────────────────────────────────────
+// Halaman Tambah Galeri
+// Form untuk membuat entri galeri baru dengan upload gambar
+// ─────────────────────────────────────────────
 export default function GaleriCreate() {
 
   const navigate = useNavigate()
 
+  // State loading saat proses simpan berlangsung
   const [saving, setSaving] = React.useState(false)
 
+  // State data form galeri
   const [formData, setFormData] = React.useState({
-    keygaleri: '',
-    judul: '',
-    deskripsi: '',
-    gambar: null
+    keygaleri: '',   // Kategori galeri (banner, galeri, program, edukasi)
+    judul: '',       // Judul gambar/konten
+    deskripsi: '',   // Deskripsi opsional
+    gambar: null     // File gambar yang akan diupload
   })
 
+  // ─────────────────────────────────────────────
+  // Handler submit form
+  // Mengirim data galeri sebagai multipart/form-data (karena ada file gambar)
+  // ─────────────────────────────────────────────
   const handleSubmit = async (e) => {
 
     e.preventDefault()
@@ -25,16 +35,19 @@ export default function GaleriCreate() {
 
     try {
 
+      // Gunakan FormData untuk mengirim data beserta file gambar
       const formDataToSend = new FormData()
 
       formDataToSend.append('keygaleri', formData.keygaleri)
       formDataToSend.append('judul', formData.judul)
       formDataToSend.append('deskripsi', formData.deskripsi)
 
+      // Hanya append gambar jika user memilih file
       if (formData.gambar) {
         formDataToSend.append('gambar', formData.gambar)
       }
 
+      // Kirim request POST dengan header multipart/form-data
       await api.post(
         '/admin_pusat/galeri',
         formDataToSend,
@@ -45,10 +58,12 @@ export default function GaleriCreate() {
         }
       )
 
+      // Redirect ke halaman daftar galeri setelah berhasil simpan
       navigate('/galeri')
 
     } catch (err) {
 
+      // Log error ke console (belum ada UI feedback error)
       console.log(err)
 
     } finally {
@@ -59,6 +74,9 @@ export default function GaleriCreate() {
 
   }
 
+  // ─────────────────────────────────────────────
+  // Render utama: form tambah galeri
+  // ─────────────────────────────────────────────
   return (
 
     <DashboardLayout title="Tambah Galeri">
@@ -67,6 +85,7 @@ export default function GaleriCreate() {
 
         <div className="white-box">
 
+          {/* Select: Kategori / Key Galeri */}
           <div className="mb-3">
 
             <label className="form-label">
@@ -109,6 +128,7 @@ export default function GaleriCreate() {
 
           </div>
 
+          {/* Input: Judul */}
           <div className="mb-3">
 
             <label className="form-label">
@@ -130,6 +150,7 @@ export default function GaleriCreate() {
 
           </div>
 
+          {/* Textarea: Deskripsi (opsional) */}
           <div className="mb-3">
 
             <label className="form-label">
@@ -150,6 +171,7 @@ export default function GaleriCreate() {
 
           </div>
 
+          {/* Input: Upload Gambar (hanya menerima file image) */}
           <div className="mb-3">
 
             <label className="form-label">
@@ -163,7 +185,7 @@ export default function GaleriCreate() {
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  gambar: e.target.files[0]
+                  gambar: e.target.files[0]   // Ambil file pertama yang dipilih
                 })
               }
               required
@@ -171,18 +193,19 @@ export default function GaleriCreate() {
 
           </div>
 
+          {/* Tombol Aksi: Simpan & Kembali */}
           <div className="d-flex gap-2">
 
+            {/* Tombol submit: disabled saat proses simpan berlangsung */}
             <button
               type="submit"
               className="btn btn-success"
               disabled={saving}
             >
-
               {saving ? 'Menyimpan...' : 'Simpan'}
-
             </button>
 
+            {/* Tombol kembali ke daftar galeri */}
             <Link
               to="/galeri"
               className="btn btn-secondary"

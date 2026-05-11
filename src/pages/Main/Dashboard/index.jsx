@@ -17,8 +17,10 @@ import { dashboardService } from '../../../services/dashboardService.js'
 import DashboardLayout from '../../../layouts/DashboardLayout'
 import { useAuth } from '../../../contexts/AuthContext'
 
-
-// Register Chart.js components
+// ─────────────────────────────────────────────
+// Registrasi komponen Chart.js yang digunakan
+// (wajib dilakukan sebelum render chart apapun)
+// ─────────────────────────────────────────────
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -31,7 +33,15 @@ ChartJS.register(
   Legend
 )
 
+// ─────────────────────────────────────────────
+// Halaman Dashboard
+// Menampilkan tampilan berbeda berdasarkan role user:
+// - Admin Pusat: summary card, bar chart, tabel daerah
+// - Admin Lapangan: summary card, pie chart status, line chart
+// ─────────────────────────────────────────────
 export default function AdminPusatDashboard() {
+
+  // State data dashboard dari API
   const [data, setData] = React.useState({
     customer: 0,
     laporanTerakhir: 0,
@@ -40,59 +50,75 @@ export default function AdminPusatDashboard() {
     daerah: []
   })
 
+  // State pesan error & loading
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(true)
 
-  // ✅ INI POINT 1 (TAMBAHKAN DI SINI)
+  // Ringkasan data yang digunakan di summary card
   const summary = {
     total_laporan: data.laporanTerakhir,
     disetujui: data.laporanDisetujui
   }
 
+  // Data chart tahunan dan daftar daerah (dengan fallback ke default kosong)
   const chart = data.laporanTahunan || {}
   const daerahList = data.daerah || []
 
+  // Ambil data user dari context dan tentukan role-nya
   const { user } = useAuth()
+
   const isAdminPusat =
-  user?.role === 'admin_pusat' ||
-  user?.role === 'AdminPusat'
+    user?.role === 'admin_pusat' ||
+    user?.role === 'AdminPusat'
 
   const isAdminLapangan =
-  user?.role === 'admin_lapangan' ||
-  user?.role === 'AdminLapangan'
+    user?.role === 'admin_lapangan' ||
+    user?.role === 'AdminLapangan'
 
-  // ⬇️ BARU INI useEffect
+  // ─────────────────────────────────────────────
+  // Fetch data dashboard saat komponen pertama kali dimuat
+  // Menggunakan flag `mounted` untuk mencegah setState setelah unmount
+  // ─────────────────────────────────────────────
   React.useEffect(() => {
     let mounted = true
 
     dashboardService.getAdminPusat()
       .then(res => {
         if (mounted) {
-
-          setData(res.data.data || res.data) // ✅ FIX
+          // Ambil data dari struktur response yang mungkin berbeda
+          setData(res.data.data || res.data)
           setLoading(false)
         }
       })
       .catch(err => {
         if (mounted) {
+          // Tampilkan pesan error dari server atau pesan default
           setError(err.response?.data?.message || 'Gagal memuat')
           setLoading(false)
         }
       })
 
+    // Cleanup: set mounted = false saat komponen di-unmount
     return () => { mounted = false }
   }, [])
 
-  // Chart data untuk laporan tahunan
+  // ─────────────────────────────────────────────
+  // Persiapan data chart laporan tahunan
+  // ─────────────────────────────────────────────
+
+  // Total semua laporan dari seluruh bulan (tidak dipakai di render, bisa untuk debug)
   const totalSemua = Object.values(chart).reduce((a, b) => a + b, 0)
 
+  // Mapping nama bulan ke index array (tidak digunakan langsung, tersedia sebagai referensi)
   const bulanMap = {
     Jan: 0, Feb: 1, Mar: 2, Apr: 3, Mei: 4, Jun: 5,
     Jul: 6, Agu: 7, Sep: 8, Okt: 9, Nov: 10, Des: 11
   }
 
+  // Inisialisasi array 12 bulan dengan nilai 0
   const chartDataFix = Array(12).fill(0)
 
+  // Isi array berdasarkan data dari API (key = angka bulan "1"-"12")
   Object.entries(chart).forEach(([bulan, total]) => {
     const index = parseInt(bulan) - 1
     if (index >= 0 && index < 12) {
@@ -100,6 +126,7 @@ export default function AdminPusatDashboard() {
     }
   })
 
+  // Konfigurasi data Bar chart untuk Admin Pusat
   const tahunanChartData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
     datasets: [
@@ -112,6 +139,10 @@ export default function AdminPusatDashboard() {
       }
     ]
   }
+
+  // ─────────────────────────────────────────────
+  // Tampilkan layout kosong saat data sedang dimuat
+  // ─────────────────────────────────────────────
   if (loading) {
     return (
       <DashboardLayout>
@@ -121,451 +152,430 @@ export default function AdminPusatDashboard() {
     )
   }
 
+  // ─────────────────────────────────────────────
+  // Render utama: konten dashboard berdasarkan role
+  // ─────────────────────────────────────────────
   return (
     <DashboardLayout title="Dashboard">
+
+      {/* Pesan error (muncul jika fetch gagal) */}
       {error && <div className="alert alert-danger">{error}</div>}
+
       <div className="row">
 
-        {/* --------------Summary Cards -------------*/}
-          {/* =============================
-    DASHBOARD ADMIN PUSAT
-============================= */}
-{isAdminPusat && (
+        {/* ══════════════════════════════════════
+            DASHBOARD ADMIN PUSAT
+        ══════════════════════════════════════ */}
+        {isAdminPusat && (
 
-  <>
+          <>
 
-    {/* SUMMARY */}
-    <div className="row">
+            {/* ── SUMMARY CARDS ── */}
+            <div className="row">
 
-      <div className="col-lg-4 col-md-6 col-sm-12">
+              {/* Card: Total Laporan (30 Hari Terakhir) */}
+              <div className="col-lg-4 col-md-6 col-sm-12">
 
-        <div className="white-box analytics-info p-4" style={{ borderRadius: '15px' }}>
+                <div className="white-box analytics-info p-4" style={{ borderRadius: '15px' }}>
 
-          <div className="d-flex justify-content-between align-items-start">
+                  <div className="d-flex justify-content-between align-items-start">
 
-            <div>
-              <h5 className="mb-1 text-muted">
-                Pelaporan Konservasi
-              </h5>
-            </div>
+                    <div>
+                      <h5 className="mb-1 text-muted">
+                        Pelaporan Konservasi
+                      </h5>
+                    </div>
 
-            <div className="text-primary fs-2">
-              <i className="fas fa-archive"></i>
-            </div>
+                    <div className="text-primary fs-2">
+                      <i className="fas fa-archive"></i>
+                    </div>
 
-          </div>
+                  </div>
 
-          <div className="mt-3">
+                  <div className="mt-3">
 
-            <h2 className="fw-bold">
-              {summary.total_laporan || 0}
-            </h2>
+                    <h2 className="fw-bold">
+                      {summary.total_laporan || 0}
+                    </h2>
 
-            <small className="text-muted">
-              30 Hari Terakhir
-            </small>
+                    <small className="text-muted">
+                      30 Hari Terakhir
+                    </small>
 
-          </div>
+                  </div>
 
-        </div>
+                </div>
 
-      </div>
+              </div>
 
-      <div className="col-lg-4 col-md-6 col-sm-12">
+              {/* Card: Laporan Disetujui */}
+              <div className="col-lg-4 col-md-6 col-sm-12">
 
-        <div className="white-box analytics-info p-4" style={{ borderRadius: '15px' }}>
+                <div className="white-box analytics-info p-4" style={{ borderRadius: '15px' }}>
 
-          <div className="d-flex justify-content-between align-items-start">
+                  <div className="d-flex justify-content-between align-items-start">
 
-            <div>
-              <h5 className="mb-1 text-muted">
-                Pelaporan Konservasi
-              </h5>
-            </div>
+                    <div>
+                      <h5 className="mb-1 text-muted">
+                        Pelaporan Konservasi
+                      </h5>
+                    </div>
 
-            <div className="text-success fs-2">
-              <i className="fas fa-check-square"></i>
-            </div>
+                    <div className="text-success fs-2">
+                      <i className="fas fa-check-square"></i>
+                    </div>
 
-          </div>
+                  </div>
 
-          <div className="mt-3">
+                  <div className="mt-3">
 
-            <h2 className="fw-bold">
-              {summary.disetujui || 0}
-            </h2>
+                    <h2 className="fw-bold">
+                      {summary.disetujui || 0}
+                    </h2>
 
-            <small className="text-muted">
-              Laporan Disetujui
-            </small>
+                    <small className="text-muted">
+                      Laporan Disetujui
+                    </small>
 
-          </div>
+                  </div>
 
-        </div>
+                </div>
 
-      </div>
+              </div>
 
-      <div className="col-lg-4 col-md-6 col-sm-12">
+              {/* Card: Feedback (nilai statis 0, placeholder) */}
+              <div className="col-lg-4 col-md-6 col-sm-12">
 
-        <div className="white-box analytics-info p-4" style={{ borderRadius: '15px' }}>
+                <div className="white-box analytics-info p-4" style={{ borderRadius: '15px' }}>
 
-          <div className="d-flex justify-content-between align-items-start">
+                  <div className="d-flex justify-content-between align-items-start">
 
-            <div>
-              <h5 className="mb-1">
-                Feedback
-              </h5>
-            </div>
+                    <div>
+                      <h5 className="mb-1">
+                        Feedback
+                      </h5>
+                    </div>
 
-            <div className="text-warning fs-2">
-              <i className="fas fa-file-alt"></i>
-            </div>
+                    <div className="text-warning fs-2">
+                      <i className="fas fa-file-alt"></i>
+                    </div>
 
-          </div>
+                  </div>
 
-          <div className="mt-3">
+                  <div className="mt-3">
 
-            <h2 className="fw-bold">
-              0
-            </h2>
+                    <h2 className="fw-bold">
+                      0
+                    </h2>
 
-            <small className="text-muted">
-              Standar Pelayanan
-            </small>
+                    <small className="text-muted">
+                      Standar Pelayanan
+                    </small>
 
-          </div>
+                  </div>
 
-        </div>
+                </div>
 
-      </div>
-
-    </div>
-
-    {/* CHART + DAERAH */}
-    <div className="row mt-4">
-
-      {/* CHART */}
-      <div className="col-lg-8 col-md-12">
-
-        <div className="white-box">
-
-          <h3 className="box-title">
-            Laporan Tahun 2026
-          </h3>
-
-          <div style={{ height: '400px' }}>
-
-            <Bar
-              data={tahunanChartData}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    position: 'top'
-                  }
-                },
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                    ticks: {
-                      stepSize: 1
-                    }
-                  }
-                }
-              }}
-            />
-
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* DAERAH */}
-      <div className="col-lg-4 col-md-12">
-
-        <div className="white-box">
-
-          <h3 className="box-title">
-            Daerah
-          </h3>
-
-          <div className="table-responsive">
-
-            <table className="table">
-
-              <thead>
-                <tr>
-                  <th>Daerah Konservasi</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-
-              <tbody>
-
-                {daerahList && daerahList.length > 0 ? (
-
-                  daerahList.map((item, index) => (
-
-                    <tr key={index}>
-                      <td>{item}</td>
-                      <td>-</td>
-                    </tr>
-
-                  ))
-
-                ) : (
-
-                  <tr>
-                    <td colSpan="2">
-                      Tidak ada data
-                    </td>
-                  </tr>
-
-                )}
-
-              </tbody>
-
-            </table>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </>
-
-)}
-
-
-{/* =============================
-    DASHBOARD ADMIN LAPANGAN
-============================= */}
-{isAdminLapangan && (
-
-  <>
-
-    {/* CARD SUMMARY */}
-    <div className="row">
-
-      {/* TOTAL LAPORAN */}
-      <div className="col-lg-6 col-md-6 col-sm-12">
-
-        <div
-          className="white-box p-4"
-          style={{
-            borderRadius: '18px',
-            minHeight: '170px'
-          }}
-        >
-
-          <div className="d-flex justify-content-between align-items-start">
-
-            <div>
-
-              <h5
-                className="mb-1 text-muted"
-                style={{
-                  fontWeight: '600'
-                }}
-              >
-                Jumlah Laporan Kegiatan
-              </h5>
+              </div>
 
             </div>
 
-            <div
-              style={{
-                background: '#1f3a68',
-                width: '58px',
-                height: '58px',
-                borderRadius: '10px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
+            {/* ── CHART + TABEL DAERAH ── */}
+            <div className="row mt-4">
 
-              <i
-                className="fas fa-archive"
-                style={{
-                  color: '#fff',
-                  fontSize: '26px'
-                }}
-              ></i>
+              {/* Bar Chart: Laporan Tahunan */}
+              <div className="col-lg-8 col-md-12">
+
+                <div className="white-box">
+
+                  <h3 className="box-title">
+                    Laporan Tahun 2026
+                  </h3>
+
+                  <div style={{ height: '400px' }}>
+
+                    <Bar
+                      data={tahunanChartData}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                          legend: {
+                            position: 'top'
+                          }
+                        },
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                            ticks: {
+                              stepSize: 1
+                            }
+                          }
+                        }
+                      }}
+                    />
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              {/* Tabel: Daftar Daerah Konservasi */}
+              <div className="col-lg-4 col-md-12">
+
+                <div className="white-box">
+
+                  <h3 className="box-title">
+                    Daerah
+                  </h3>
+
+                  <div className="table-responsive">
+
+                    <table className="table">
+
+                      <thead>
+                        <tr>
+                          <th>Daerah Konservasi</th>
+                          <th>Aksi</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+
+                        {/* Tampilkan list daerah jika ada, atau pesan kosong */}
+                        {daerahList && daerahList.length > 0 ? (
+
+                          daerahList.map((item, index) => (
+
+                            <tr key={index}>
+                              <td>{item}</td>
+                              <td>-</td>
+                            </tr>
+
+                          ))
+
+                        ) : (
+
+                          <tr>
+                            <td colSpan="2">
+                              Tidak ada data
+                            </td>
+                          </tr>
+
+                        )}
+
+                      </tbody>
+
+                    </table>
+
+                  </div>
+
+                </div>
+
+              </div>
 
             </div>
 
-          </div>
+          </>
 
-          <div className="mt-4">
+        )}
 
-            <h2
-              className="fw-bold"
-              style={{
-                fontSize: '42px',
-                color: '#2d0c73'
-              }}
-            >
-              {summary.total_laporan || 0}
-            </h2>
+        {/* ══════════════════════════════════════
+            DASHBOARD ADMIN LAPANGAN
+        ══════════════════════════════════════ */}
+        {isAdminLapangan && (
 
-            <small className="text-muted">
-              Jumlah laporan kegiatan
-            </small>
+          <>
 
-          </div>
+            {/* ── SUMMARY CARDS ── */}
+            <div className="row">
 
-        </div>
+              {/* Card: Total Laporan Kegiatan */}
+              <div className="col-lg-6 col-md-6 col-sm-12">
+
+                <div
+                  className="white-box p-4"
+                  style={{
+                    borderRadius: '18px',
+                    minHeight: '170px'
+                  }}
+                >
+
+                  <div className="d-flex justify-content-between align-items-start">
+
+                    <div>
+                      <h5
+                        className="mb-1 text-muted"
+                        style={{ fontWeight: '600' }}
+                      >
+                        Jumlah Laporan Kegiatan
+                      </h5>
+                    </div>
+
+                    {/* Ikon arsip dengan background biru gelap */}
+                    <div
+                      style={{
+                        background: '#1f3a68',
+                        width: '58px',
+                        height: '58px',
+                        borderRadius: '10px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <i
+                        className="fas fa-archive"
+                        style={{
+                          color: '#fff',
+                          fontSize: '26px'
+                        }}
+                      ></i>
+                    </div>
+
+                  </div>
+
+                  <div className="mt-4">
+
+                    <h2
+                      className="fw-bold"
+                      style={{
+                        fontSize: '42px',
+                        color: '#2d0c73'
+                      }}
+                    >
+                      {summary.total_laporan || 0}
+                    </h2>
+
+                    <small className="text-muted">
+                      Jumlah laporan kegiatan
+                    </small>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              {/* Card: Pie Chart Status Laporan (Diterima vs Ditolak) */}
+              <div className="col-lg-6 col-md-6 col-sm-12">
+
+                <div
+                  className="white-box p-4"
+                  style={{
+                    borderRadius: '18px',
+                    minHeight: '170px'
+                  }}
+                >
+
+                  <h5
+                    className="mb-3"
+                    style={{ fontWeight: '600' }}
+                  >
+                    Status Laporan
+                  </h5>
+
+                  <div style={{ height: '220px' }}>
+
+                    <Pie
+                      data={{
+                        labels: ['Diterima', 'Ditolak'],
+                        datasets: [
+                          {
+                            data: [
+                              // Diterima: dari summary disetujui
+                              summary.disetujui || 0,
+                              // Ditolak: filter laporan dengan status = 2
+                              (data.laporan || []).filter(item => item.status === 2).length
+                            ],
+                            backgroundColor: [
+                              '#2563eb',
+                              '#e11d48'
+                            ]
+                          }
+                        ]
+                      }}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                          legend: {
+                            position: 'right'
+                          }
+                        }
+                      }}
+                    />
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            {/* ── LINE CHART: Pelaporan Kegiatan per Bulan ── */}
+            <div className="row mt-4">
+
+              <div className="col-12">
+
+                <div
+                  className="white-box p-4"
+                  style={{ borderRadius: '18px' }}
+                >
+
+                  <h5
+                    className="mb-3"
+                    style={{ fontWeight: '600' }}
+                  >
+                    Pelaporan Kegiatan
+                  </h5>
+
+                  <div style={{ height: '420px' }}>
+
+                    <Line
+                      data={{
+                        labels: [
+                          'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+                          'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+                        ],
+                        datasets: [
+                          {
+                            label: 'Jumlah Laporan',
+                            data: chartDataFix,
+                            borderColor: '#0ea5e9',
+                            backgroundColor: 'rgba(14,165,233,0.2)',
+                            tension: 0.4,
+                            fill: true
+                          }
+                        ]
+                      }}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                          legend: {
+                            position: 'bottom'
+                          }
+                        }
+                      }}
+                    />
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </>
+
+        )}
 
       </div>
 
-      {/* STATUS PIE */}
-      <div className="col-lg-6 col-md-6 col-sm-12">
-
-        <div
-          className="white-box p-4"
-          style={{
-            borderRadius: '18px',
-            minHeight: '170px'
-          }}
-        >
-
-          <h5
-            className="mb-3"
-            style={{
-              fontWeight: '600'
-            }}
-          >
-            Status Laporan
-          </h5>
-
-          <div
-            style={{
-              height: '220px'
-            }}
-          >
-
-            <Pie
-              data={{
-                labels: ['Diterima', 'Ditolak'],
-                datasets: [
-                  {
-                    data: [
-                      summary.disetujui || 0,
-                      (data.laporan || []).filter(item => item.status === 2).length
-                    ],
-                    backgroundColor: [
-                      '#2563eb',
-                      '#e11d48'
-                    ]
-                  }
-                ]
-              }}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    position: 'right'
-                  }
-                }
-              }}
-            />
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    {/* CHART */}
-    <div className="row mt-4">
-
-      <div className="col-12">
-
-        <div
-          className="white-box p-4"
-          style={{
-            borderRadius: '18px'
-          }}
-        >
-
-          <h5
-            className="mb-3"
-            style={{
-              fontWeight: '600'
-            }}
-          >
-            Pelaporan Kegiatan
-          </h5>
-
-          <div
-            style={{
-              height: '420px'
-            }}
-          >
-
-            <Line
-              data={{
-                labels: [
-                  'Jan',
-                  'Feb',
-                  'Mar',
-                  'Apr',
-                  'Mei',
-                  'Jun',
-                  'Jul',
-                  'Agu',
-                  'Sep',
-                  'Okt',
-                  'Nov',
-                  'Des'
-                ],
-
-                datasets: [
-                  {
-                    label: 'Jumlah Laporan',
-                    data: chartDataFix,
-                    borderColor: '#0ea5e9',
-                    backgroundColor: 'rgba(14,165,233,0.2)',
-                    tension: 0.4,
-                    fill: true
-                  }
-                ]
-              }}
-
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    position: 'bottom'
-                  }
-                }
-              }}
-            />
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </>
-
-)}
-              
-        </div>
-    
     </DashboardLayout>
   )
 }

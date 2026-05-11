@@ -1,9 +1,9 @@
 import React from 'react'
 import DashboardLayout from '../../../layouts/DashboardLayout'
 import api from '../../../lib/api.js'
-import kawasanService from '../../../services/kawasanService.js'
 
 export default function Kawasan() {
+
   const [data, setData] = React.useState(null)
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(true)
@@ -72,10 +72,7 @@ export default function Kawasan() {
       formDataToSend.append('alamat', formData.alamat)
       formDataToSend.append('kondisi', formData.kondisi)
       formDataToSend.append('status', formData.status)
-
-      if (formData.gambar) {
-        formDataToSend.append('gambar', formData.gambar)
-      }
+      if (formData.gambar) formDataToSend.append('gambar', formData.gambar)
 
       if (data) {
         formDataToSend.append('_method', 'PUT')
@@ -101,43 +98,48 @@ export default function Kawasan() {
   if (loading) {
     return (
       <DashboardLayout title="Kawasan Konservasi">
-        <div className="text-center">
+        <div className="d-flex justify-content-center">
           <div className="spinner-border"></div>
         </div>
-   </DashboardLayout>
+      </DashboardLayout>
     )
   }
 
   return (
+
     <DashboardLayout title="Kawasan Konservasi">
 
+      {/* Alert — pakai class dari Dashboard.css */}
       {success && <div className="alert alert-success">{success}</div>}
       {error && <div className="alert alert-danger">{error}</div>}
 
-      {/* ================= VIEW ================= */}
-
+      {/* ── VIEW ── */}
       <div className="white-box">
 
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <div>
-            <div className="box-title mb-3">Kelola halaman kawasan konservasi</div>
+
+          <div className="box-title mb-0">
+            Kelola halaman kawasan konservasi
           </div>
-<button
-  className="btn btn-success"
-  onClick={() => setIsEdit(true)}
->
-  <i className="fas fa-pen me-2"></i> Edit Kawasan
-</button>
+
+          {/* Tombol Edit — btn-primary-custom */}
+          <button
+            className="btn-primary-custom"
+            onClick={() => setIsEdit(true)}
+          >
+            <i className="fas fa-pen"></i>
+            Edit Kawasan
+          </button>
+
         </div>
 
-
-        {/* FOTO */}
+        {/* Foto */}
         <div className="row mt-3">
           <div className="col-md-12 mb-3">
-            <label>Foto Kawasan</label>
+            <label className="form-label">Foto Kawasan</label>
             <div
-              className="form-control bg-white d-flex align-items-center justify-content-center"
-              style={{ height: '150px' }}
+              className="form-control d-flex align-items-center justify-content-center"
+              style={{ height: '150px', background: '#f8f9fa' }}
             >
               {data?.gambar ? (
                 <img
@@ -152,44 +154,36 @@ export default function Kawasan() {
           </div>
         </div>
 
-
-
         <div className="row mt-3">
           <div className="col-md-6 mb-3">
-            <label>Luas Kawasan</label>
-            <div className="form-control bg-white">{formData.luasKawasan}</div>
+            <label className="form-label">Luas Kawasan</label>
+            <div className="form-control" style={{ background: '#f8f9fa' }}>{formData.luasKawasan || '-'}</div>
           </div>
-
           <div className="col-md-6 mb-3">
-            <label>Jenis Kawasan</label>
-            <div className="form-control bg-white">{formData.jenisKawasan}</div>
+            <label className="form-label">Jenis Kawasan</label>
+            <div className="form-control" style={{ background: '#f8f9fa' }}>{formData.jenisKawasan || '-'}</div>
           </div>
-
           <div className="col-md-6 mb-3">
-            <label>Kondisi</label>
-            <div className="form-control bg-white">{formData.kondisi}</div>
+            <label className="form-label">Kondisi</label>
+            <div className="form-control" style={{ background: '#f8f9fa' }}>{formData.kondisi || '-'}</div>
           </div>
-
           <div className="col-md-6 mb-3">
-            <label>Alamat</label>
-            <div className="form-control bg-white">{formData.alamat}</div>
+            <label className="form-label">Alamat</label>
+            <div className="form-control" style={{ background: '#f8f9fa' }}>{formData.alamat || '-'}</div>
           </div>
-
           <div className="col-md-12 mb-3">
-            <label>Status</label>
-            <div className="form-control bg-white">{formData.status}</div>
+            <label className="form-label">Status</label>
+            <div className="form-control" style={{ background: '#f8f9fa' }}>{formData.status || '-'}</div>
           </div>
-
           <div className="col-md-12 mb-3">
-            <label>Deskripsi</label>
-            <div className="form-control bg-white">{formData.deskripsi}</div>
+            <label className="form-label">Deskripsi</label>
+            <div className="form-control" style={{ background: '#f8f9fa' }}>{formData.deskripsi || '-'}</div>
           </div>
-       </div>
+        </div>
+
       </div>
 
-
-      {/* ================= EDIT ================= */}
-
+      {/* ── MODAL EDIT ── */}
       {isEdit && (
         <>
           <div className="modal fade show d-block">
@@ -198,113 +192,82 @@ export default function Kawasan() {
 
                 <div className="modal-header">
                   <h5 className="modal-title">Edit Kawasan Konservasi</h5>
-                  <button
-                    className="btn-close"
-                    onClick={() => setIsEdit(false)}
-                  ></button>
+                  <button className="btn-close" onClick={() => setIsEdit(false)}></button>
                 </div>
 
                 <form onSubmit={handleSubmit}>
                   <div className="modal-body">
-
                     <div className="row">
+
                       <div className="col-md-6 mb-3">
-                        <label>Luas Kawasan</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="luasKawasan"
-                          value={formData.luasKawasan}
-                          onChange={handleChange}
-                        />
+                        <label className="form-label">Luas Kawasan</label>
+                        <input type="text" className="form-control" name="luasKawasan" value={formData.luasKawasan} onChange={handleChange} />
                       </div>
 
                       <div className="col-md-6 mb-3">
-                        <label>Jenis Kawasan</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="jenisKawasan"
-                          value={formData.jenisKawasan}
-                          onChange={handleChange}
-                        />
+                        <label className="form-label">Jenis Kawasan</label>
+                        <input type="text" className="form-control" name="jenisKawasan" value={formData.jenisKawasan} onChange={handleChange} />
                       </div>
 
                       <div className="col-md-6 mb-3">
-                        <label>Kondisi</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="kondisi"
-                          value={formData.kondisi}
-                          onChange={handleChange}
-                        />
+                        <label className="form-label">Kondisi</label>
+                        <input type="text" className="form-control" name="kondisi" value={formData.kondisi} onChange={handleChange} />
                       </div>
 
                       <div className="col-md-6 mb-3">
-                        <label>Alamat</label>
-                        <textarea
-                          className="form-control"
-                          name="alamat"
-                          value={formData.alamat}
-                          onChange={handleChange}
-                        />
+                        <label className="form-label">Alamat</label>
+                        <textarea className="form-control" name="alamat" value={formData.alamat} onChange={handleChange} />
                       </div>
 
                       <div className="col-md-12 mb-3">
-                        <label>Status</label>
-                        <textarea
-                          className="form-control"
-                          name="status"
-                          value={formData.status}
-                          onChange={handleChange}
-                        />
+                        <label className="form-label">Status</label>
+                        <textarea className="form-control" name="status" value={formData.status} onChange={handleChange} />
                       </div>
 
                       <div className="col-md-12 mb-3">
-                        <label>Deskripsi</label>
-                        <textarea
-                          className="form-control"
-                          name="deskripsi"
-                          value={formData.deskripsi}
-                          onChange={handleChange}
-                        />
+                        <label className="form-label">Deskripsi</label>
+                        <textarea className="form-control" name="deskripsi" value={formData.deskripsi} onChange={handleChange} />
                       </div>
 
                       <div className="col-md-12 mb-3">
-                        <label>Foto</label>
-                        <input
-                          type="file"
-                          className="form-control"
-                          name="gambar"
-                          onChange={handleFileChange}
-                        />
+                        <label className="form-label">Foto</label>
+                        <input type="file" className="form-control" name="gambar" onChange={handleFileChange} />
                       </div>
+
                     </div>
                   </div>
 
                   <div className="modal-footer">
+
+                    {/* Batal — btn-secondary-custom */}
                     <button
                       type="button"
-                      className="btn btn-secondary"
+                      className="btn-secondary-custom"
                       onClick={() => setIsEdit(false)}
                     >
                       Batal
                     </button>
-                    <button type="submit" className="btn btn-success">
-                      Simpan
+
+                    {/* Simpan — btn-primary-custom */}
+                    <button
+                      type="submit"
+                      className="btn-primary-custom"
+                      disabled={saving}
+                    >
+                      {saving ? 'Menyimpan...' : 'Simpan'}
                     </button>
+
                   </div>
                 </form>
 
               </div>
             </div>
           </div>
-
-          {/* backdrop */}
           <div className="modal-backdrop fade show"></div>
         </>
       )}
-</DashboardLayout>
+
+    </DashboardLayout>
+
   )
 }

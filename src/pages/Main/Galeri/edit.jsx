@@ -4,22 +4,35 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout'
 import api from '../../../lib/api.js'
 
+// ─────────────────────────────────────────────
+// Halaman Edit Galeri
+// Form untuk mengubah data galeri yang sudah ada berdasarkan ID dari URL
+// ─────────────────────────────────────────────
 export default function GaleriEdit() {
 
   const navigate = useNavigate()
+
+  // Ambil ID galeri dari parameter URL
   const { id } = useParams()
 
+  // State loading saat fetch data awal berlangsung
   const [loading, setLoading] = React.useState(true)
 
+  // State data form galeri yang akan diedit
   const [formData, setFormData] = React.useState({
-    keygaleri: '',
-    judul: '',
-    deskripsi: '',
-    gambar: null
+    keygaleri: '',   // Kategori galeri (banner, galeri, program, edukasi)
+    judul: '',       // Judul gambar/konten
+    deskripsi: '',   // Deskripsi konten
+    gambar: null     // File gambar baru (null = tidak mengganti gambar lama)
   })
 
+  // State untuk menampilkan preview gambar yang sudah ada sebelumnya
   const [preview, setPreview] = React.useState('')
 
+  // ─────────────────────────────────────────────
+  // Fetch data galeri berdasarkan ID saat komponen dimuat
+  // Mengisi form dengan data yang sudah ada
+  // ─────────────────────────────────────────────
   React.useEffect(() => {
 
     let mounted = true
@@ -30,15 +43,19 @@ export default function GaleriEdit() {
 
         if (mounted) {
 
+          // Ambil data dari struktur response yang mungkin berbeda
           const data = res.data.data || res.data
 
+          // Isi form dengan data existing dari API
           setFormData({
             keygaleri: data.keygaleri || '',
             judul: data.judul || '',
+            // Fallback ke `keterangan` jika field `deskripsi` tidak tersedia
             deskripsi: data.deskripsi || data.keterangan || '',
-            gambar: null
+            gambar: null   // Selalu null saat awal; user harus pilih ulang jika ingin ganti
           })
 
+          // Simpan nama file gambar lama untuk ditampilkan sebagai preview
           setPreview(data.gambar || '')
 
           setLoading(false)
@@ -49,32 +66,41 @@ export default function GaleriEdit() {
 
       .catch(err => {
 
+        // Log error ke console (belum ada UI feedback error)
         console.log(err)
 
         setLoading(false)
 
       })
 
+    // Cleanup: set mounted = false saat komponen di-unmount
     return () => { mounted = false }
 
   }, [id])
 
+  // ─────────────────────────────────────────────
+  // Handler submit form
+  // Mengirim data update galeri sebagai multipart/form-data
+  // ─────────────────────────────────────────────
   const handleSubmit = async (e) => {
 
     e.preventDefault()
 
     try {
 
+      // Gunakan FormData untuk mengirim data beserta file gambar (jika ada)
       const formDataToSend = new FormData()
 
       formDataToSend.append('keygaleri', formData.keygaleri)
       formDataToSend.append('judul', formData.judul)
       formDataToSend.append('deskripsi', formData.deskripsi)
 
+      // Hanya append gambar jika user memilih file baru
       if (formData.gambar) {
         formDataToSend.append('gambar', formData.gambar)
       }
 
+      // Kirim request POST (method override) ke endpoint update galeri
       await api.post(
         `/admin_pusat/galeri/${id}`,
         formDataToSend,
@@ -85,16 +111,21 @@ export default function GaleriEdit() {
         }
       )
 
+      // Redirect ke halaman daftar galeri setelah berhasil update
       navigate('/galeri')
 
     } catch (err) {
 
+      // Log error ke console (belum ada UI feedback error)
       console.log(err)
 
     }
 
   }
 
+  // ─────────────────────────────────────────────
+  // Tampilkan spinner saat data sedang dimuat
+  // ─────────────────────────────────────────────
   if (loading) {
 
     return (
@@ -111,6 +142,9 @@ export default function GaleriEdit() {
 
   }
 
+  // ─────────────────────────────────────────────
+  // Render utama: form edit galeri
+  // ─────────────────────────────────────────────
   return (
 
     <DashboardLayout title="Edit Galeri">
@@ -119,6 +153,7 @@ export default function GaleriEdit() {
 
         <div className="white-box">
 
+          {/* Select: Kategori / Key Galeri */}
           <div className="mb-3">
 
             <label className="form-label">
@@ -160,6 +195,7 @@ export default function GaleriEdit() {
 
           </div>
 
+          {/* Input: Judul */}
           <div className="mb-3">
 
             <label className="form-label">
@@ -180,6 +216,7 @@ export default function GaleriEdit() {
 
           </div>
 
+          {/* Textarea: Deskripsi */}
           <div className="mb-3">
 
             <label className="form-label">
@@ -200,6 +237,7 @@ export default function GaleriEdit() {
 
           </div>
 
+          {/* Input: Upload Gambar Baru (opsional, tidak wajib diisi ulang) */}
           <div className="mb-3">
 
             <label className="form-label">
@@ -213,13 +251,14 @@ export default function GaleriEdit() {
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  gambar: e.target.files[0]
+                  gambar: e.target.files[0]   // Ambil file pertama yang dipilih
                 })
               }
             />
 
           </div>
 
+          {/* Preview gambar lama (hanya tampil jika ada gambar sebelumnya) */}
           {preview && (
 
             <div className="mb-3">
@@ -230,6 +269,7 @@ export default function GaleriEdit() {
 
               <div>
 
+                {/* Gambar diambil dari storage server berdasarkan nama file */}
                 <img
                   src={`http://127.0.0.1:8000/uploads/galeri/${preview}`}
                   alt="Preview"
@@ -243,8 +283,10 @@ export default function GaleriEdit() {
 
           )}
 
+          {/* Tombol Aksi: Update & Kembali */}
           <div className="d-flex gap-2">
 
+            {/* Tombol submit untuk menyimpan perubahan */}
             <button
               type="submit"
               className="btn btn-success"
@@ -252,6 +294,7 @@ export default function GaleriEdit() {
               Update
             </button>
 
+            {/* Tombol kembali ke daftar galeri tanpa menyimpan */}
             <Link
               to="/galeri"
               className="btn btn-secondary"
