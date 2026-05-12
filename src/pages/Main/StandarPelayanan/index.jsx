@@ -1,8 +1,11 @@
 import React from 'react'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import api from '../../../lib/api.js'
-import { getStandar } from '../../../services/standarPelayanan'
-import { ENDPOINTS } from '../../../lib/endpoints'
+import {
+  createStandar,
+  deleteStandar,
+  getStandar,
+  updateStandar
+} from '../../../services/standarPelayanan'
 
 export default function StandarPelayanan() {
   const [data, setData] = React.useState([])
@@ -114,7 +117,7 @@ const loadData = async () => {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus standar pelayanan ini?')) {
       try {
-        await deleteStandar(id)`/admin_pusat/standar-pelayanan/${id}`
+        await deleteStandar(id)
         setSuccess('Standar pelayanan berhasil dihapus')
         await loadData()
       } catch (err) {

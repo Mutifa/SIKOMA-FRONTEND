@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }) => {
 
     }
 
-    // Jika ada token → cek auth ke backend
+    // Jika ada token → cek auth ke backend  
 if (savedUser) {
 
   setUser(JSON.parse(savedUser))

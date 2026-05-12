@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import api from '../../../lib/api.js'
+import '../../../assets/css/LaporanKonservasi.css'
 import { laporanKonservasiService } from '../../../services/laporanKonservasi'
 import { useAuth } from '../../../contexts/AuthContext'
 import {
@@ -10,128 +9,132 @@ import {
   successAlert,
   errorAlert,
   rejectionReasonAlert
-} from '../../../utils/alert'
-
-
-// ── Badge status — tetap pakai inline style karena ini data-driven, bukan UI button ──
-const badgePending = { background: '#FAEEDA', color: '#854F0B', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: '600', display: 'inline-block', whiteSpace: 'nowrap' }
-const badgeApproved = { background: '#EAF3DE', color: '#3B6D11', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: '600', display: 'inline-block', whiteSpace: 'nowrap' }
-const badgeRejected = { background: '#FCEBEB', color: '#A32D2D', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: '600', display: 'inline-block', whiteSpace: 'nowrap' }
-
-// ── Style tabel — dipertahankan karena tabel custom ──
-const th = { padding: '10px 14px', textAlign: 'left', fontSize: '11px', fontWeight: '600', color: '#888', textTransform: 'uppercase', letterSpacing: '0.06em', borderBottom: '1px solid #efefef' }
-const td = { padding: '13px 14px', color: '#1a1a1a', borderBottom: '1px solid #f5f5f5', verticalAlign: 'middle' }
-const tdMuted = { ...td, color: '#aaa', fontSize: '13px' }
-const trRejected = { background: '#fff8f8' }
-
-const rejectReasonInline = { marginTop: '6px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', padding: '6px 10px', fontSize: '12px', color: '#7f1d1d', lineHeight: '1.5', maxWidth: '320px' }
-const rejectReasonLabel = { fontWeight: '700', color: '#b91c1c', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '3px' }
-const alasanHint = { display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: '#b91c1c', marginTop: '4px', fontStyle: 'italic' }
+}
+ from '../../../utils/alert'
 
 export default function LaporanKonservasi() {
 
-  const [data, setData] = React.useState({ laporan: [], daerah: [] })
-  const [error, setError] = React.useState('')
+  // ── State ────────────────────────────────────────────────────────────────
+  const [data,    setData]    = React.useState({ laporan: [], daerah: [] })
+  const [error,   setError]   = React.useState('')
   const [loading, setLoading] = React.useState(true)
 
+  // ── Auth: cek role user ─────────────────────────────────────────────────
   const { user } = useAuth()
-  const isAdminPusat = user?.role === 'admin_pusat'
+
+  /*
+   * Cek role dengan exact match string.
+   * Catatan: di detail.jsx pakai .trim().toLowerCase() untuk toleransi spasi.
+   * Sesuaikan dengan format role yang dikembalikan backend.
+   */
+  const isAdminPusat    = user?.role === 'admin_pusat'
   const isAdminLapangan = user?.role === 'admin_lapangan'
 
-  const loadData = async () => {
-    const res = await laporanKonservasiService.getAll()
+  // ── Fetch semua laporan ─────────────────────────────────────────────────
+
+const loadData = async () => {
+  try {
+    // Meminta semua data laporan dari backend
+    const res =
+      await laporanKonservasiService.getAll() // backend mengambil: semua laporan -- index()
+
+    /*
+      Struktur response backend bisa berbeda-beda.
+      Maka dibuat fallback agar tetap aman.
+    */
     const laporanData =
       res.data?.laporan?.data ||
       res.data?.laporan ||
       res.data?.data ||
       []
-    setData({ laporan: Array.isArray(laporanData) ? laporanData : [], daerah: [] })
-  }
 
-  React.useEffect(() => {
-    let mounted = true
-    laporanKonservasiService.getAll()
-      .then(res => {
-        if (mounted) {
-          const laporanData =
-            res.data?.laporan?.data ||
-            res.data?.laporan ||
-            res.data?.data ||
-            []
-          setData({ laporan: Array.isArray(laporanData) ? laporanData : [], daerah: [] })
-          setLoading(false)
-        }
-      })
-      .catch(err => {
-        if (mounted) {
-          setError(err.response?.data?.message || 'Gagal memuat data')
-          setLoading(false)
-        }
-      })
-    return () => { mounted = false }
-  }, [])
+    // Simpan data laporan ke state React
+    setData({
+      laporan: Array.isArray(laporanData)
+        ? laporanData
+        : [],
+      daerah: []
+    })
 
-  const handleDelete = async (id) => {
+  } catch (err) {
 
-    const result = await confirmDelete(
-      'Hapus Laporan?',
-      'Laporan akan dihapus permanen'
+    // Menampilkan error jika request gagal
+    setError(
+      err.response?.data?.message ||
+      'Gagal memuat data'
     )
 
-    if (result.isConfirmed) {
+  } finally {
 
-      try {
-
-        await api.delete(`/laporan-konservasi/${id}`)
-
-        await successAlert(
-          'Berhasil',
-          'Laporan berhasil dihapus'
-        )
-
-        await loadData()
-
-      } catch (err) {
-
-        await errorAlert(
-          'Gagal',
-          err.response?.data?.message ||
-          'Gagal menghapus laporan'
-        )
-
-      }
-
-    }
+    // Matikan loading setelah proses selesai
+    setLoading(false)
 
   }
 
+}
+
+// ======================================================
+// LOAD DATA SAAT HALAMAN PERTAMA DIBUKA
+// ======================================================
+React.useEffect(() => {
+  loadData()   //Ambil semua laporan
+}, [])
+
+
+  // ── Hapus laporan ────────────────────────────────────────────────────────
+  const handleDelete = async (id) => {
+    /* Tampilkan dialog konfirmasi SweetAlert sebelum menghapus */
+    const result = await confirmDelete('Hapus Laporan?', 'Laporan akan dihapus permanen')
+
+    if (result.isConfirmed) {
+      try {
+        await laporanKonservasiService.delete(id) // backend menghapus laporan -- destroy($id)
+        await successAlert('Berhasil', 'Laporan berhasil dihapus')
+        await loadData()   // Refresh tabel setelah hapus
+      } catch (err) {
+        await errorAlert('Gagal', err.response?.data?.message || 'Gagal menghapus laporan')
+      }
+    }
+  }
+
+  // ── Update status laporan (Admin Pusat) ──────────────────────────────────
   const handleUpdateStatus = async (id, status) => {
     try {
       let payload = { status }
+
       if (status === 2) {
-
-        const result =
-          await rejectionReasonAlert()
-
+        /*
+         * Status 2 = ditolak → tampilkan dialog isi alasan via SweetAlert.
+         * Jika user cancel, proses dihentikan.
+         */
+        const result = await rejectionReasonAlert()
         if (!result.isConfirmed) return
-
         payload.alasan = result.value
-
       }
-      await api.put(`/laporan-konservasi/${id}/status`, payload)
-      await loadData()
+
+      await laporanKonservasiService.validasi(id, payload) // backend update status laporan -- validasi($id) atau updateStatus($id)
+      await loadData()   // Refresh tabel setelah update status
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal update status')
     }
   }
 
+  /**
+   * getStatusBadge — Render badge status laporan
+   * Menggunakan class .lk-badge + modifier dari LaporanKonservasi.css
+   * @param {number} status — 0: pending | 1: disetujui | 2: ditolak
+   */
   const getStatusBadge = (status) => {
-    if (status === 0) return <span style={badgePending}>Pending</span>
-    if (status === 1) return <span style={badgeApproved}>Disetujui</span>
-    if (status === 2) return <span style={badgeRejected}>Ditolak</span>
-    return <span style={badgePending}>-</span>
+    const map = {
+      0: ['lk-badge--pending',  'Pending'],
+      1: ['lk-badge--approved', 'Disetujui'],
+      2: ['lk-badge--rejected', 'Ditolak'],
+    }
+    const [cls, label] = map[status] ?? ['lk-badge--pending', '-']
+    return <span className={`lk-badge ${cls}`}>{label}</span>
   }
 
+  // ── Loading spinner ──────────────────────────────────────────────────────
   if (loading) {
     return (
       <DashboardLayout title="Laporan Konservasi">
@@ -142,10 +145,11 @@ export default function LaporanKonservasi() {
     )
   }
 
+  // ── Render ───────────────────────────────────────────────────────────────
   return (
-
     <DashboardLayout title="Laporan Konservasi">
 
+      {/* Pesan error jika fetch gagal */}
       {error && (
         <div className="alert alert-danger">
           <i className="fas fa-circle-exclamation me-2"></i>
@@ -153,7 +157,7 @@ export default function LaporanKonservasi() {
         </div>
       )}
 
-      {/* Tombol Tambah — hanya Admin Lapangan, btn-primary-custom */}
+      {/* Tombol Tambah — hanya tampil untuk Admin Lapangan */}
       {isAdminLapangan && (
         <div className="d-flex justify-content-end mb-3">
           <Link to="/laporan-konservasi/create" className="btn-primary-custom">
@@ -163,24 +167,26 @@ export default function LaporanKonservasi() {
         </div>
       )}
 
+      {/* White box / card tabel */}
       <div className="white-box">
-
         <div className="box-title mb-3">Semua Laporan</div>
 
+        {/* Wrapper overflow agar tabel bisa di-scroll horizontal di mobile */}
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px', minWidth: '560px' }}>
+          <table className="lk-table">
             <thead>
               <tr>
-                <th style={{ ...th, width: '48px' }}>No</th>
-                <th style={th}>Judul</th>
-                <th style={th}>Jenis Laporan</th>
-                <th style={th}>Tanggal</th>
-                <th style={th}>Status</th>
-                <th style={{ ...th, width: '140px' }}>Aksi</th>
+                <th style={{ width: '48px' }}>No</th>
+                <th>Judul</th>
+                <th>Jenis Laporan</th>
+                <th>Tanggal</th>
+                <th>Status</th>
+                <th style={{ width: '140px' }}>Aksi</th>
               </tr>
             </thead>
             <tbody>
 
+              {/* ── Kosong state ── */}
               {data.laporan.length === 0 ? (
                 <tr>
                   <td colSpan="6">
@@ -192,28 +198,40 @@ export default function LaporanKonservasi() {
                 </tr>
               ) : (
                 data.laporan.map((item, index) => (
-                  <tr key={item.id} style={item.status === 2 ? trRejected : {}}>
+                  /*
+                   * Row berwarna merah muda jika laporan ditolak.
+                   * Class .lk-row-rejected dari LaporanKonservasi.css
+                   */
+                  <tr key={item.id} className={item.status === 2 ? 'lk-row-rejected' : ''}>
 
-                    <td style={tdMuted}>{index + 1}.</td>
+                    {/* Nomor urut — pakai .lk-td-muted (abu, lebih kecil) */}
+                    <td className="lk-td-muted">{index + 1}.</td>
 
-                    <td style={{ ...td, fontWeight: '500' }}>
+                    {/* Judul + box alasan penolakan jika status ditolak */}
+                    <td style={{ fontWeight: '500' }}>
                       <div>{item.judulLaporan || item.judul_laporan || 'N/A'}</div>
+
                       {item.status === 2 && (
                         item.alasan ? (
-                          <div style={rejectReasonInline}>
-                            <div style={rejectReasonLabel}>
+                          /* Box kecil alasan penolakan — class .lk-reject-inline */
+                          <div className="lk-reject-inline">
+                            <div className="lk-reject-inline__label">
                               <i className="fas fa-times-circle" style={{ fontSize: '10px' }}></i>
                               Alasan Penolakan
                             </div>
                             <div>
-                              {item.alasan.length > 100 ? item.alasan.substring(0, 100) + '...' : item.alasan}
+                              {/* Truncate teks panjang agar tabel tidak jebol */}
+                              {item.alasan.length > 100
+                                ? item.alasan.substring(0, 100) + '...'
+                                : item.alasan}
                             </div>
                             <div style={{ marginTop: '4px', fontSize: '11px', color: '#b91c1c', fontStyle: 'italic' }}>
                               Lihat Detail untuk informasi lengkap
                             </div>
                           </div>
                         ) : (
-                          <div style={alasanHint}>
+                          /* Hint jika alasan belum diisi */
+                          <div className="lk-reject-hint">
                             <i className="fas fa-circle-exclamation" style={{ fontSize: '10px' }}></i>
                             Laporan ditolak — lihat Detail
                           </div>
@@ -221,20 +239,26 @@ export default function LaporanKonservasi() {
                       )}
                     </td>
 
-                    <td style={td}>{item.jenisKegiatan || item.jenis_kegiatan || 'N/A'}</td>
+                    <td>{item.jenisKegiatan || item.jenis_kegiatan || 'N/A'}</td>
 
-                    <td style={{ ...td, color: '#555', fontSize: '13px' }}>
+                    {/* Tanggal dibuat — format lokal Indonesia */}
+                    <td style={{ color: '#555', fontSize: '13px' }}>
                       {item.created_at
-                        ? new Date(item.created_at).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })
+                        ? new Date(item.created_at).toLocaleDateString('id-ID', {
+                            day: '2-digit', month: '2-digit', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit', second: '2-digit'
+                          })
                         : 'N/A'}
                     </td>
 
-                    <td style={td}>{getStatusBadge(item.status)}</td>
+                    {/* Badge status */}
+                    <td>{getStatusBadge(item.status)}</td>
 
-                    <td style={td}>
+                    {/* Tombol aksi */}
+                    <td>
                       <div className="d-flex gap-1">
 
-                        {/* Detail — semua role, btn-primary-custom */}
+                        {/* ── Detail — semua role bisa melihat ── */}
                         <Link
                           to={`/laporan-konservasi/detail/${item.id}`}
                           className="btn-primary-custom btn-sm"
@@ -243,7 +267,7 @@ export default function LaporanKonservasi() {
                           <i className="fas fa-eye"></i>
                         </Link>
 
-                        {/* Setujui & Tolak — hanya Admin Pusat, status pending */}
+                        {/* ── Setujui & Tolak — hanya Admin Pusat, hanya status pending ── */}
                         {isAdminPusat && item.status === 0 && (
                           <>
                             <button
@@ -253,7 +277,6 @@ export default function LaporanKonservasi() {
                             >
                               <i className="fas fa-check"></i>
                             </button>
-
                             <button
                               className="btn-danger-custom btn-sm"
                               onClick={() => handleUpdateStatus(item.id, 2)}
@@ -264,7 +287,7 @@ export default function LaporanKonservasi() {
                           </>
                         )}
 
-                        {/* Edit & Hapus — hanya Admin Lapangan, bukan disetujui */}
+                        {/* ── Edit & Hapus — hanya Admin Lapangan, bukan laporan disetujui ── */}
                         {isAdminLapangan && item.status !== 1 && (
                           <>
                             <Link
@@ -274,31 +297,24 @@ export default function LaporanKonservasi() {
                             >
                               <i className="fas fa-pen"></i>
                             </Link>
-
                             <button
                               className="btn-danger-custom btn-sm"
-                              onClick={() => handleDelete(item.id)}
+                              onClick={() => handleDelete(item.id)} //Hapus laporan -- destroy($id)
                               title="Hapus"
                             >
                               <i className="fas fa-trash"></i>
                             </button>
                           </>
                         )}
-
                       </div>
                     </td>
-
                   </tr>
                 ))
               )}
-
             </tbody>
           </table>
         </div>
-
       </div>
-
     </DashboardLayout>
-
   )
 }

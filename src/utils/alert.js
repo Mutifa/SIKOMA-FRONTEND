@@ -20,11 +20,8 @@ export const confirmDelete = async (
 
     confirmButtonText: 'Ya, Hapus',
     cancelButtonText: 'Batal',
-
   })
-
 }
-
 
 // ALERT SUKSES
 export const successAlert = (
@@ -35,10 +32,8 @@ export const successAlert = (
   return Swal.fire({
 
     icon: 'success',
-
     title,
     text,
-
     timer: 1800,
     showConfirmButton: false,
 
@@ -56,12 +51,10 @@ export const errorAlert = (
   return Swal.fire({
 
     icon: 'error',
-
     title,
     text,
 
   })
-
 }
 
 

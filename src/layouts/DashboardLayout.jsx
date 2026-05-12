@@ -153,7 +153,7 @@ export default function DashboardLayout({
       },
 
       {
-        to: '/standar-pelayanan',
+        to: '/admin-pusat/standar-pelayanan',
         icon: 'fa-clipboard-list',
         label: 'Standar Pelayanan'
       },

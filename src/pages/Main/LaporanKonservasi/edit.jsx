@@ -1,11 +1,18 @@
 import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import api from '../../../lib/api.js'
+import '../../../assets/css/LaporanKonservasi.css'
+import { laporanKonservasiService } from '../../../services/laporanKonservasi'
+import { successAlert, errorAlert } from '../../../utils/alert'
+
+/* URL base server untuk preview file yang sudah ada */
+const FILE_URL = 'https://codemy.my.id'
 
 export default function LaporanEdit() {
   const { id } = useParams()
   const navigate = useNavigate()
+
+  // ── State ───────────────────────────────────────────────────────────────
   const [formData, setFormData] = React.useState({
     judulLaporan: '',
     jenisKegiatan: '',
@@ -18,56 +25,64 @@ export default function LaporanEdit() {
     latitude: '',
     longitude: '',
     luasArea: '',
+    // File baru yang dipilih user (kosong = tidak mengganti file lama)
     suratTugas: [],
     fotoSebelum: [],
     fotoSetelah: []
   })
+
+  // Data asli dari server — dipakai untuk menampilkan file lama
   const [originalData, setOriginalData] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
   const [saving, setSaving] = React.useState(false)
   const [error, setError] = React.useState('')
   const [locationStatus, setLocationStatus] = React.useState('Belum diverifikasi')
 
+  // ── Fetch data laporan saat komponen mount ──────────────────────────────
   React.useEffect(() => {
     let mounted = true
-    api.get(`/laporan-konservasi/${id}`)
+
+    laporanKonservasiService.getById(id) // Ambil detail 1 laporan --show($id)
       .then(res => {
-        if (mounted) {
-          const laporan = res.data.data
-          setOriginalData(laporan)
-          setFormData({
-            judulLaporan: laporan.judulLaporan || '',
-            jenisKegiatan: laporan.jenisKegiatan || '',
-            tanggalMulai: laporan.tanggalMulai || '',
-            tanggalSelesai: laporan.tanggalSelesai || '',
-            keterangan: laporan.keterangan || '',
-            daerahLokasi: laporan.daerahLokasi || '',
-            kabupaten: laporan.kabupaten || '',
-            kecamatan: laporan.kecamatan || '',
-            latitude: laporan.latitude || '',
-            longitude: laporan.longitude || '',
-            luasArea: laporan.luasArea || '',
-            suratTugas: [],
-            fotoSebelum: [],
-            fotoSetelah: []
-          })
+        const laporan = res.data?.data || res.data
 
-          if (laporan.latitude && laporan.longitude) {
-            setLocationStatus('✅ Lokasi sudah diverifikasi')
-          }
+        setOriginalData(laporan)
 
-          setLoading(false)
+        // Isi form dengan data yang sudah ada
+        setFormData({
+          judulLaporan: laporan.judulLaporan || '',
+          jenisKegiatan: laporan.jenisKegiatan || '',
+          tanggalMulai: laporan.tanggalMulai || '',
+          tanggalSelesai: laporan.tanggalSelesai || '',
+          keterangan: laporan.keterangan || '',
+          daerahLokasi: laporan.daerahLokasi || '',
+          kabupaten: laporan.kabupaten || '',
+          kecamatan: laporan.kecamatan || '',
+          latitude: laporan.latitude || '',
+          longitude: laporan.longitude || '',
+          luasArea: laporan.luasArea || '',
+          suratTugas: [],
+          fotoSebelum: [],
+          fotoSetelah: []
+        })
+
+        // Jika koordinat sudah ada, tandai sebagai terverifikasi
+        if (laporan.latitude && laporan.longitude) {
+          setLocationStatus('✅ Lokasi sudah diverifikasi')
         }
+
+        setLoading(false)
       })
       .catch(err => {
-        if (mounted) {
-          setError(err.response?.data?.message || 'Gagal memuat data laporan')
-          setLoading(false)
-        }
+        if (!mounted) return
+        setError(err.response?.data?.message || 'Gagal memuat data laporan')
+        setLoading(false)
       })
+
     return () => { mounted = false }
   }, [id])
 
+  // ── Handler perubahan input ─────────────────────────────────────────────
   const handleChange = (e) => {
     const { name, value, type, files } = e.target
     setFormData(prev => ({
@@ -76,125 +91,115 @@ export default function LaporanEdit() {
     }))
   }
 
+  // ── Ambil koordinat GPS (tanpa reverse geocoding) ───────────────────────
   const getLocation = () => {
-    if (navigator.geolocation) {
-      setLocationStatus('📍 Sedang mengambil lokasi...')
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setFormData(prev => ({
-            ...prev,
-            latitude: position.coords.latitude.toString(),
-            longitude: position.coords.longitude.toString()
-          }))
-          setLocationStatus('✅ Lokasi berhasil diverifikasi!')
-        },
-        (error) => {
-          switch (error.code) {
-            case error.PERMISSION_DENIED:
-              setLocationStatus('❌ Akses lokasi ditolak!')
-              break
-            case error.POSITION_UNAVAILABLE:
-              setLocationStatus('❌ Informasi lokasi tidak tersedia!')
-              break
-            case error.TIMEOUT:
-              setLocationStatus('❌ Permintaan lokasi timeout!')
-              break
-            default:
-              setLocationStatus('❌ Gagal mendapatkan lokasi!')
-          }
-        }
-      )
-    } else {
+    if (!navigator.geolocation) {
       setLocationStatus('❌ Browser tidak mendukung geolocation!')
+      return
     }
+
+    setLocationStatus('📍 Sedang mengambil lokasi...')
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setFormData(prev => ({
+          ...prev,
+          latitude: position.coords.latitude.toString(),
+          longitude: position.coords.longitude.toString()
+        }))
+        setLocationStatus('✅ Lokasi berhasil diverifikasi!')
+      },
+      (err) => {
+        const msgs = {
+          [err.PERMISSION_DENIED]: '❌ Akses lokasi ditolak!',
+          [err.POSITION_UNAVAILABLE]: '❌ Informasi lokasi tidak tersedia!',
+          [err.TIMEOUT]: '❌ Permintaan lokasi timeout!',
+        }
+        setLocationStatus(msgs[err.code] || '❌ Gagal mendapatkan lokasi!')
+      }
+    )
   }
 
-  const handleSubmit = async (e) => {
+  // ── Submit update ke backend ────────────────────────────────────────────
+  const handleSubmit = async (e) => { // Update/edit laporan -- update($id)
     e.preventDefault()
     setSaving(true)
     setError('')
 
-    const formDataToSend = new FormData()
+    const fd = new FormData()
 
     Object.keys(formData).forEach(key => {
       if (['suratTugas', 'fotoSebelum', 'fotoSetelah'].includes(key)) {
-        if (
-          Array.isArray(formData[key]) &&
-          formData[key].length > 0 &&
-          formData[key][0] instanceof File
-        ) {
-          formDataToSend.append(key, formData[key][0])
+        /*
+         * Hanya kirim file baru jika user memang memilih file.
+         * Kalau kosong, backend akan mempertahankan file lama.
+         */
+        if (formData[key].length > 0 && formData[key][0] instanceof File) {
+          formData[key].forEach(file => fd.append(key, file))
         }
-      } else {
-        if (formData[key] !== null && formData[key] !== '') {
-          formDataToSend.append(key, formData[key])
-        }
+      } else if (formData[key] !== null && formData[key] !== '') {
+        fd.append(key, formData[key])
       }
     })
 
     try {
-      for (let pair of formDataToSend.entries()) {
-        console.log(pair[0], pair[1])
-      }
+      // ✅ pakai service, bukan api langsung
+      await laporanKonservasiService.update(id, fd) // backend memperbarui laporan -- update($id)
 
-      await api.post(
-        `/laporan-konservasi/${id}?_method=PUT`,
-        formDataToSend
-      )
-
+      await successAlert('Berhasil!', 'Laporan konservasi berhasil diperbarui')
       navigate('/laporan-konservasi')
+
     } catch (err) {
+      await errorAlert(
+        'Gagal Memperbarui',
+        err.response?.data?.message || 'Terjadi kesalahan saat memperbarui laporan'
+      )
       setError(err.response?.data?.message || 'Gagal memperbarui laporan')
     } finally {
       setSaving(false)
     }
   }
 
-  const suratTugasList = originalData?.suratTugas
-    ? Array.isArray(originalData.suratTugas)
-      ? originalData.suratTugas
-      : [originalData.suratTugas]
-    : []
+  // ── Parsing file lama dari JSON (bisa string JSON atau array biasa) ──────
+  const parseFileList = (raw) => {
+    if (!raw) return []
+    if (Array.isArray(raw)) return raw
+    try { return JSON.parse(raw) } catch { return [raw] }
+  }
 
-  const fotoSebelumList = originalData?.fotoSebelum
-    ? Array.isArray(originalData.fotoSebelum)
-      ? originalData.fotoSebelum
-      : [originalData.fotoSebelum]
-    : []
+  const suratTugasList = parseFileList(originalData?.suratTugas)
+  const fotoSebelumList = parseFileList(originalData?.fotoSebelum)
+  const fotoSetelahList = parseFileList(originalData?.fotoSetelah)
 
-  const fotoSetelahList = originalData?.fotoSetelah
-    ? Array.isArray(originalData.fotoSetelah)
-      ? originalData.fotoSetelah
-      : [originalData.fotoSetelah]
-    : []
-
+  // ── Loading spinner ─────────────────────────────────────────────────────
   if (loading) {
     return (
       <DashboardLayout title="Edit Laporan">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       </DashboardLayout>
     )
   }
 
+  // ── Render ──────────────────────────────────────────────────────────────
   return (
     <DashboardLayout title="Edit Laporan Konservasi">
+
+      {/* Pesan error dari backend */}
       {error && (
-        <div className="alert alert-danger mb-4" role="alert">
-          {error}
-        </div>
+        <div className="alert alert-danger mb-4" role="alert">{error}</div>
       )}
 
-      {/* Back button */}
+      {/* Tombol Kembali */}
       <div className="mb-3">
         <button
           type="button"
-          className="btn btn-outline-secondary"
-          onClick={() => navigate('/laporan-konservasi')}
+          className="btn btn-outline-secondary btn-laporan"
           style={{ borderRadius: '6px', fontWeight: 500 }}
+          onClick={() => navigate('/laporan-konservasi')}
         >
           &#171; Kembali
         </button>
@@ -202,207 +207,195 @@ export default function LaporanEdit() {
 
       <div className="row">
         <div className="col-12">
-          <div className="white-box" style={{ borderRadius: '10px', border: '1px solid #e0e0e0', padding: '28px 32px' }}>
+
+          {/* Card / box putih utama */}
+          <div className="lk-card">
             <form onSubmit={handleSubmit} encType="multipart/form-data">
 
-              {/* ── DESKRIPSI KEGIATAN ── */}
+              {/* ══════════════════════════════════════════
+                  SEKSI 1 — DESKRIPSI KEGIATAN
+                  ══════════════════════════════════════════ */}
               <div className="mb-4">
-                <h6
-                  className="fw-bold text-uppercase mb-3"
-                  style={{ color: '#2e7d32', fontSize: '13px', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '8px' }}
-                >
-                  <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#2e7d32', display: 'inline-block' }}></span>
+                <h6 className="lk-section-title">
+                  <span className="lk-section-dot"></span>
                   Deskripsi Kegiatan
                 </h6>
 
                 <div className="row">
+
                   <div className="col-md-6 mb-3">
-                    <label className="form-label fw-semibold" style={{ fontSize: '13px', color: '#555' }}>
-                      JUDUL LAPORAN
-                    </label>
+                    <label className="lk-label">JUDUL LAPORAN</label>
                     <input
                       type="text"
                       name="judulLaporan"
-                      className="form-control"
+                      className="form-control lk-input"
                       value={formData.judulLaporan}
                       onChange={handleChange}
-                      style={{ borderRadius: '6px', fontSize: '14px' }}
                     />
                   </div>
+
                   <div className="col-md-6 mb-3">
-                    <label className="form-label fw-semibold" style={{ fontSize: '13px', color: '#555' }}>
-                      JENIS KEGIATAN
-                    </label>
+                    <label className="lk-label">JENIS KEGIATAN</label>
                     <input
                       type="text"
                       name="jenisKegiatan"
-                      className="form-control"
+                      className="form-control lk-input"
                       value={formData.jenisKegiatan}
                       onChange={handleChange}
                       required
-                      style={{ borderRadius: '6px', fontSize: '14px' }}
                     />
                   </div>
+
                   <div className="col-md-6 mb-3">
-                    <label className="form-label fw-semibold" style={{ fontSize: '13px', color: '#555' }}>
-                      TANGGAL MULAI
-                    </label>
+                    <label className="lk-label">TANGGAL MULAI</label>
                     <input
                       type="date"
                       name="tanggalMulai"
-                      className="form-control"
+                      className="form-control lk-input"
                       value={formData.tanggalMulai}
                       onChange={handleChange}
                       required
-                      style={{ borderRadius: '6px', fontSize: '14px' }}
                     />
                   </div>
+
                   <div className="col-md-6 mb-3">
-                    <label className="form-label fw-semibold" style={{ fontSize: '13px', color: '#555' }}>
-                      TANGGAL SELESAI
-                    </label>
+                    <label className="lk-label">TANGGAL SELESAI</label>
                     <input
                       type="date"
                       name="tanggalSelesai"
-                      className="form-control"
+                      className="form-control lk-input"
                       value={formData.tanggalSelesai}
                       onChange={handleChange}
                       required
-                      style={{ borderRadius: '6px', fontSize: '14px' }}
                     />
                   </div>
+
                   <div className="col-12 mb-3">
-                    <label className="form-label fw-semibold" style={{ fontSize: '13px', color: '#555' }}>
-                      KETERANGAN
-                    </label>
+                    <label className="lk-label">KETERANGAN</label>
                     <textarea
                       name="keterangan"
-                      className="form-control"
+                      className="form-control lk-input"
                       rows="3"
                       value={formData.keterangan}
                       onChange={handleChange}
-                      style={{ borderRadius: '6px', fontSize: '14px' }}
                     />
                   </div>
+
                 </div>
               </div>
 
-              <hr style={{ borderColor: '#e8e8e8' }} />
+              <hr className="lk-form-divider" />
 
-              {/* ── DAERAH KAWASAN ── */}
+              {/* ══════════════════════════════════════════
+                  SEKSI 2 — DAERAH KAWASAN
+                  ══════════════════════════════════════════ */}
               <div className="mb-4">
-                <h6
-                  className="fw-bold text-uppercase mb-3"
-                  style={{ color: '#2e7d32', fontSize: '13px', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '8px' }}
-                >
-                  <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#2e7d32', display: 'inline-block' }}></span>
+                <h6 className="lk-section-title">
+                  <span className="lk-section-dot"></span>
                   Daerah Kawasan
                 </h6>
 
                 <div className="row">
+
                   <div className="col-md-4 mb-3">
-                    <label className="form-label fw-semibold" style={{ fontSize: '13px', color: '#555' }}>
-                      DAERAH LOKASI
-                    </label>
+                    <label className="lk-label">DAERAH LOKASI</label>
                     <input
                       type="text"
                       name="daerahLokasi"
-                      className="form-control"
+                      className="form-control lk-input"
                       value={formData.daerahLokasi}
                       onChange={handleChange}
                       required
-                      style={{ borderRadius: '6px', fontSize: '14px' }}
-                    />
-                  </div>
-                  <div className="col-md-4 mb-3">
-                    <label className="form-label fw-semibold" style={{ fontSize: '13px', color: '#555' }}>
-                      KABUPATEN
-                    </label>
-                    <input
-                      type="text"
-                      name="kabupaten"
-                      className="form-control"
-                      value={formData.kabupaten}
-                      onChange={handleChange}
-                      required
-                      style={{ borderRadius: '6px', fontSize: '14px' }}
-                    />
-                  </div>
-                  <div className="col-md-4 mb-3">
-                    <label className="form-label fw-semibold" style={{ fontSize: '13px', color: '#555' }}>
-                      KECAMATAN
-                    </label>
-                    <input
-                      type="text"
-                      name="kecamatan"
-                      className="form-control"
-                      value={formData.kecamatan}
-                      onChange={handleChange}
-                      required
-                      style={{ borderRadius: '6px', fontSize: '14px' }}
                     />
                   </div>
 
-                  <input type="hidden" name="latitude" value={formData.latitude} required />
-                  <input type="hidden" name="longitude" value={formData.longitude} required />
+                  <div className="col-md-4 mb-3">
+                    <label className="lk-label">KABUPATEN</label>
+                    <input
+                      type="text"
+                      name="kabupaten"
+                      className="form-control lk-input"
+                      value={formData.kabupaten}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="col-md-4 mb-3">
+                    <label className="lk-label">KECAMATAN</label>
+                    <input
+                      type="text"
+                      name="kecamatan"
+                      className="form-control lk-input"
+                      value={formData.kecamatan}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <input type="hidden" name="latitude" value={formData.latitude} />
+                  <input type="hidden" name="longitude" value={formData.longitude} />
 
                   <div className="col-12 mb-3">
                     <button
                       type="button"
-                      className="btn btn-warning"
+                      className="lk-btn-location"
                       onClick={getLocation}
-                      style={{ borderRadius: '6px', fontWeight: 600, fontSize: '14px' }}
                     >
                       Verifikasi Lokasi Saya
                     </button>
-                    <small className="text-muted d-block mt-2">{locationStatus}</small>
+                    <span className="lk-location-status">{locationStatus}</span>
                   </div>
+
                 </div>
               </div>
 
-              <hr style={{ borderColor: '#e8e8e8' }} />
+              <hr className="lk-form-divider" />
 
-              {/* ── DOKUMENTASI KEGIATAN ── */}
+              {/* ══════════════════════════════════════════
+                  SEKSI 3 — DOKUMENTASI KEGIATAN
+                  File lama tetap tampil; pilih file baru untuk mengganti
+                  ══════════════════════════════════════════ */}
               <div className="mb-4">
-                <h6
-                  className="fw-bold text-uppercase mb-3"
-                  style={{ color: '#2e7d32', fontSize: '13px', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '8px' }}
-                >
-                  <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#2e7d32', display: 'inline-block' }}></span>
+                <h6 className="lk-section-title">
+                  <span className="lk-section-dot"></span>
                   Dokumentasi Kegiatan
                 </h6>
 
                 <div className="row">
+
+                  {/* ── Surat Tugas ── */}
                   <div className="col-md-6 mb-3">
-                    <label className="form-label fw-semibold" style={{ fontSize: '13px', color: '#555' }}>
+                    <label className="lk-label">
                       SURAT TUGAS
-                      <span className="text-muted fw-normal ms-1" style={{ fontSize: '12px' }}>(pilih file baru untuk mengganti)</span>
+                      <span className="text-muted fw-normal ms-1" style={{ fontSize: '12px' }}>
+                        (pilih file baru untuk mengganti)
+                      </span>
                     </label>
                     <input
                       type="file"
                       name="suratTugas"
-                      className="form-control"
+                      className="form-control lk-input"
                       accept=".jpg,.jpeg,.png,.pdf"
                       onChange={handleChange}
                       multiple
-                      style={{ borderRadius: '6px', fontSize: '14px' }}
                     />
                     {formData.suratTugas.length > 0 && (
-                      <small className="text-success d-block mt-1">
+                      <span className="lk-file-chosen">
                         ✅ {formData.suratTugas.length} file(s) baru dipilih
-                      </small>
+                      </span>
                     )}
-                    {originalData?.suratTugas && (
+                    {/* Tampilkan file lama yang tersimpan di server */}
+                    {suratTugasList.length > 0 && (
                       <div className="mt-2">
                         <small className="text-muted d-block mb-1">File saat ini:</small>
-                        {suratTugasList.map((filename, index) => (
+                        {suratTugasList.map((filename, i) => (
                           <a
-                            key={index}
-                            href={`/uploads/laporan/${filename}`}
+                            key={i}
+                            href={`${FILE_URL}/uploads/laporan/${filename}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="d-block"
-                            style={{ fontSize: '12px', color: '#2e7d32' }}
+                            className="lk-existing-file"
                           >
                             📂 {filename}
                           </a>
@@ -411,52 +404,51 @@ export default function LaporanEdit() {
                     )}
                   </div>
 
+                  {/* ── Luas Area ── */}
                   <div className="col-md-6 mb-3">
-                    <label className="form-label fw-semibold" style={{ fontSize: '13px', color: '#555' }}>
-                      LUAS AREA (ha)
-                    </label>
+                    <label className="lk-label">LUAS AREA (ha)</label>
                     <input
                       type="number"
                       name="luasArea"
                       step="0.01"
-                      className="form-control"
+                      className="form-control lk-input"
                       value={formData.luasArea}
                       onChange={handleChange}
                       required
-                      style={{ borderRadius: '6px', fontSize: '14px' }}
                     />
                   </div>
 
+                  {/* ── Foto Sebelum ── */}
                   <div className="col-md-6 mb-3">
-                    <label className="form-label fw-semibold" style={{ fontSize: '13px', color: '#555' }}>
+                    <label className="lk-label">
                       FOTO SEBELUM KEGIATAN
-                      <span className="text-muted fw-normal ms-1" style={{ fontSize: '12px' }}>(pilih file baru untuk mengganti)</span>
+                      <span className="text-muted fw-normal ms-1" style={{ fontSize: '12px' }}>
+                        (pilih file baru untuk mengganti)
+                      </span>
                     </label>
                     <input
                       type="file"
                       name="fotoSebelum"
-                      className="form-control"
+                      className="form-control lk-input"
                       accept=".jpg,.jpeg,.png,.pdf"
                       onChange={handleChange}
                       multiple
-                      style={{ borderRadius: '6px', fontSize: '14px' }}
                     />
                     {formData.fotoSebelum.length > 0 && (
-                      <small className="text-success d-block mt-1">
+                      <span className="lk-file-chosen">
                         ✅ {formData.fotoSebelum.length} file(s) baru dipilih
-                      </small>
+                      </span>
                     )}
-                    {originalData?.fotoSebelum && (
+                    {fotoSebelumList.length > 0 && (
                       <div className="mt-2">
                         <small className="text-muted d-block mb-1">File saat ini:</small>
-                        {fotoSebelumList.map((filename, index) => (
+                        {fotoSebelumList.map((filename, i) => (
                           <a
-                            key={index}
-                            href={`https://codemy.my.id/uploads/laporan/${filename}`}
+                            key={i}
+                            href={`${FILE_URL}/uploads/laporan/${filename}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="d-block"
-                            style={{ fontSize: '12px', color: '#2e7d32' }}
+                            className="lk-existing-file"
                           >
                             📂 {filename}
                           </a>
@@ -465,36 +457,37 @@ export default function LaporanEdit() {
                     )}
                   </div>
 
+                  {/* ── Foto Setelah ── */}
                   <div className="col-md-6 mb-3">
-                    <label className="form-label fw-semibold" style={{ fontSize: '13px', color: '#555' }}>
+                    <label className="lk-label">
                       FOTO SETELAH KEGIATAN
-                      <span className="text-muted fw-normal ms-1" style={{ fontSize: '12px' }}>(pilih file baru untuk mengganti)</span>
+                      <span className="text-muted fw-normal ms-1" style={{ fontSize: '12px' }}>
+                        (pilih file baru untuk mengganti)
+                      </span>
                     </label>
                     <input
                       type="file"
                       name="fotoSetelah"
-                      className="form-control"
+                      className="form-control lk-input"
                       accept=".jpg,.jpeg,.png,.pdf"
                       onChange={handleChange}
                       multiple
-                      style={{ borderRadius: '6px', fontSize: '14px' }}
                     />
                     {formData.fotoSetelah.length > 0 && (
-                      <small className="text-success d-block mt-1">
+                      <span className="lk-file-chosen">
                         ✅ {formData.fotoSetelah.length} file(s) baru dipilih
-                      </small>
+                      </span>
                     )}
-                    {originalData?.fotoSetelah && (
+                    {fotoSetelahList.length > 0 && (
                       <div className="mt-2">
                         <small className="text-muted d-block mb-1">File saat ini:</small>
-                        {fotoSetelahList.map((filename, index) => (
+                        {fotoSetelahList.map((filename, i) => (
                           <a
-                            key={index}
-                            href={`/uploads/laporan/${filename}`}
+                            key={i}
+                            href={`${FILE_URL}/uploads/laporan/${filename}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="d-block"
-                            style={{ fontSize: '12px', color: '#2e7d32' }}
+                            className="lk-existing-file"
                           >
                             📂 {filename}
                           </a>
@@ -502,32 +495,26 @@ export default function LaporanEdit() {
                       </div>
                     )}
                   </div>
+
                 </div>
               </div>
 
-              {/* ── ACTION BUTTONS ── */}
+              {/* ══════════════════════════════════════════
+                  ACTION BUTTONS
+                  ══════════════════════════════════════════ */}
               <div className="mt-2 text-end">
                 <button
                   type="button"
                   className="btn btn-outline-secondary me-2"
-                  onClick={() => navigate('/laporan-konservasi')}
                   style={{ borderRadius: '6px', fontWeight: 500, fontSize: '14px' }}
+                  onClick={() => navigate('/laporan-konservasi')}
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="btn"
+                  className="lk-btn-primary"
                   disabled={saving}
-                  style={{
-                    borderRadius: '6px',
-                    fontWeight: 600,
-                    fontSize: '14px',
-                    backgroundColor: '#2e7d32',
-                    color: '#fff',
-                    border: 'none',
-                    padding: '8px 20px'
-                  }}
                 >
                   {saving ? 'Menyimpan...' : 'Update Laporan'}
                 </button>
@@ -535,8 +522,10 @@ export default function LaporanEdit() {
 
             </form>
           </div>
+
         </div>
       </div>
+
     </DashboardLayout>
   )
 }

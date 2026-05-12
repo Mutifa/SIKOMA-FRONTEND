@@ -126,12 +126,7 @@ export default function App() {
           <Route path="/informasi" element={<PublicInformasi />} />
           <Route path="/informasi/:slug" element={<InformasiDetail />} />
 
-          {/* <Route path="/standar-pelayanan" element={<PublicStandarPelayanan />} /> */}
-          <Route path="/standar-pelayanan" element={
-            <RoleGuard allowedRoles={['admin_pusat']}>
-              <PublicStandarPelayanan />
-            </RoleGuard>
-          } />
+          <Route path="/standar-pelayanan" element={<PublicStandarPelayanan />} />
 
           <Route path="/profil" element={<Profil />} />
           <Route path="/kontak" element={<Kontak />} />
@@ -413,9 +408,7 @@ export default function App() {
 
 
 
-          {/* 
-          <Route path="/admin-pusat/standar-pelayanan" element={<AdminPusatStandarPelayanan />} /> */}
-          <Route path="/standar-pelayanan" element={
+          <Route path="/admin-pusat/standar-pelayanan" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
               <StandarPelayanan />
             </RoleGuard>

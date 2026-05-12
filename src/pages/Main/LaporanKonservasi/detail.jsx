@@ -1,378 +1,160 @@
 import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import api from '../../../lib/api.js'
+import '../../../assets/css/LaporanKonservasi.css'
+import { laporanKonservasiService } from '../../../services/laporanKonservasi'
 import { useAuth } from '../../../contexts/AuthContext'
 
+/* URL base file di server */
 const FILE_URL = 'https://codemy.my.id'
-const styles = {
-  btnBack: {
-    background: '#f5f5f5',
-    color: '#444',
-    border: '1px solid #e0e0e0',
-    padding: '7px 16px',
-    borderRadius: '8px',
-    fontSize: '13px',
-    fontWeight: '500',
-    cursor: 'pointer',
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '6px',
-    marginBottom: '1.25rem',
-  },
-  card: {
-    background: '#fff',
-    border: '1px solid #e8e8e8',
-    borderRadius: '12px',
-    padding: '1.5rem',
-    marginBottom: '1rem',
-  },
-  sectionTitle: {
-    fontSize: '13px',
-    fontWeight: '700',
-    color: '#1a5c35',
-    textTransform: 'uppercase',
-    letterSpacing: '0.07em',
-    marginBottom: '1rem',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  sectionTitleDot: {
-    width: '6px',
-    height: '6px',
-    borderRadius: '50%',
-    background: '#1a5c35',
-    display: 'inline-block',
-  },
-  divider: {
-    height: '1px',
-    background: '#f0f0f0',
-    margin: '1.25rem 0',
-  },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-    gap: '16px',
-  },
-  fieldLabel: {
-    fontSize: '11px',
-    fontWeight: '600',
-    color: '#999',
-    textTransform: 'uppercase',
-    letterSpacing: '0.06em',
-    marginBottom: '5px',
-  },
-  fieldValue: {
-    fontSize: '14px',
-    color: '#1a1a1a',
-    fontWeight: '400',
-    lineHeight: '1.5',
-  },
-  fieldValueMuted: {
-    fontSize: '14px',
-    color: '#bbb',
-    fontStyle: 'italic',
-  },
-  btnLocation: {
-    background: '#1a5c35',
-    color: '#fff',
-    border: 'none',
-    padding: '6px 14px',
-    borderRadius: '7px',
-    fontSize: '12px',
-    fontWeight: '500',
-    cursor: 'pointer',
-    textDecoration: 'none',
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '5px',
-  },
-  fileItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    background: '#f8f9fa',
-    border: '1px solid #efefef',
-    borderRadius: '8px',
-    padding: '8px 12px',
-    fontSize: '13px',
-    color: '#444',
-    marginBottom: '6px',
-    cursor: 'pointer',
-    textDecoration: 'none',
-  },
-  fileIcon: {
-    width: '28px',
-    height: '28px',
-    borderRadius: '6px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '12px',
-    flexShrink: 0,
-  },
-  imgThumb: {
-    width: '80px',
-    height: '80px',
-    objectFit: 'cover',
-    borderRadius: '8px',
-    border: '1px solid #efefef',
-    cursor: 'pointer',
-    display: 'block',
-    marginBottom: '4px',
-  },
-  thumbGrid: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '8px',
-  },
-  statusWrap: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: '1.5rem',
-    paddingTop: '1.25rem',
-    borderTop: '1px solid #f0f0f0',
-  },
-  statusPill: {
-    padding: '10px 32px',
-    borderRadius: '999px',
-    fontSize: '14px',
-    fontWeight: '600',
-    letterSpacing: '0.02em',
-  },
 
-  // ── ALASAN PENOLAKAN — diperbesar & lebih prominent ──
-  rejectBox: {
-    background: '#fef2f2',
-    border: '1.5px solid #fca5a5',
-    borderRadius: '12px',
-    padding: '20px 24px',
-    marginTop: '1.5rem',
-  },
-  rejectBoxHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    marginBottom: '12px',
-    paddingBottom: '12px',
-    borderBottom: '1px solid #fecaca',
-  },
-  rejectBoxIcon: {
-    width: '36px',
-    height: '36px',
-    borderRadius: '50%',
-    background: '#fee2e2',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  rejectBoxTitle: {
-    fontSize: '14px',
-    fontWeight: '700',
-    color: '#b91c1c',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    margin: 0,
-  },
-  rejectBoxSubtitle: {
-    fontSize: '12px',
-    color: '#ef4444',
-    marginTop: '2px',
-  },
-  rejectBoxText: {
-    fontSize: '14px',
-    color: '#7f1d1d',
-    lineHeight: '1.7',
-    whiteSpace: 'pre-wrap',
-    background: '#fff5f5',
-    borderRadius: '8px',
-    padding: '12px 16px',
-    border: '1px solid #fecaca',
-  },
-  rejectBoxNote: {
-    marginTop: '12px',
-    fontSize: '12px',
-    color: '#b91c1c',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    fontStyle: 'italic',
-  },
-}
-
-const statusStyles = {
-  0: { background: '#FAEEDA', color: '#854F0B' },
-  1: { background: '#EAF3DE', color: '#3B6D11' },
-  2: { background: '#FCEBEB', color: '#A32D2D' },
-}
-
-const statusLabel = {
-  
+/* ── Mapping status angka → label teks ── */
+const STATUS_LABEL = {
   0: 'Laporan Pending',
   1: 'Laporan Disetujui',
   2: 'Laporan Ditolak',
+}
+
+/* ── Mapping status angka → class badge CSS ── */
+const STATUS_BADGE_CLASS = {
+  0: 'lk-badge--pending',
+  1: 'lk-badge--approved',
+  2: 'lk-badge--rejected',
 }
 
 export default function LaporanDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
 
-const { user } = useAuth()
+  // ── Auth: cek role user yang sedang login ────────────────────────────────
+  const { user } = useAuth()
+  const role = user?.role?.trim()?.toLowerCase()
 
-const role = user?.role?.trim()?.toLowerCase()
+  /*
+   * isAdminPusat: berhak menyetujui/menolak laporan
+   * isAdminLapangan: hanya bisa lihat & submit laporan
+   */
+  const isAdminPusat = role === 'admin_pusat' || role === 'super_admin'
+  const isAdminLapangan = role === 'admin_lapangan'
 
-const isAdminPusat =
-  role === 'admin_pusat' ||
-  role === 'super_admin'
-
-const isAdminLapangan =
-  role === 'admin_lapangan'
-
-console.log('ROLE:', user?.role)
-
-console.log('isAdminPusat:', isAdminPusat)
-console.log('isAdminLapangan:', isAdminLapangan)
-
+  // ── State ────────────────────────────────────────────────────────────────
   const [laporan, setLaporan] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState('')
 
-  console.log('isAdminPusat:', isAdminPusat)
-  console.log('isAdminLapangan:', isAdminLapangan)
+  // ── Fetch detail laporan ─────────────────────────────────────────────────
+  React.useEffect(() => {
+    let mounted = true
 
-React.useEffect(() => {
-
-  let mounted = true
-
-  api.get(`/laporan-konservasi/${id}`)
-
-    .then(res => {
-
-      if (mounted) {
-
-        console.log('Raw laporan data:', res.data)
-
-        const detail =
-          res.data?.data || res.data
-
-        setLaporan(detail)
-
+    laporanKonservasiService.getById(id) // backend mengambil: detail 1 laporan -- show($id)
+      .then(res => {
+        if (!mounted) return
+        setLaporan(res.data?.data || res.data)
         setLoading(false)
+      })
+      .catch(err => {
+        if (!mounted) return
+        setError(err.response?.data?.message || 'Gagal memuat detail laporan')
+        setLoading(false)
+      })
 
+    return () => { mounted = false }
+  }, [id])
+
+  // ── Update status laporan (Admin Pusat) ──────────────────────────────────
+  const handleUpdateStatus = async (laporanId, status) => { //Setujui/tolak laporan -- validasi($id)/updateStatus($id)
+    try {
+      let payload = { status }
+
+      if (status === 2) {
+        /*
+         * Status 2 = ditolak → wajib isi alasan.
+         * TODO: Ganti prompt() dengan modal SweetAlert agar UX lebih baik.
+         */
+        const alasan = prompt('Masukkan alasan penolakan')
+        if (!alasan) return
+        payload.alasan = alasan
       }
 
-    })
-
-    .catch(err => {
-
-      if (mounted) {
-
-        setError(
-          err.response?.data?.message ||
-          'Gagal memuat detail laporan'
-        )
-
-        setLoading(false)
-
-      }
-
-    })
-
-  return () => { mounted = false }
-
-}, [id])
-
-
-// =============================
-// VALIDASI STATUS
-// =============================
-const handleUpdateStatus = async (id, status) => {
-
-  try {
-
-    let payload = { status }
-
-    // kalau ditolak → wajib isi alasan
-    if (status === 2) {
-
-      const alasan = prompt(
-        'Masukkan alasan penolakan'
-      )
-
-      if (!alasan) return
-
-      payload.alasan = alasan
-
+      await laporanKonservasiService.validasi(laporanId, payload)
+      window.location.reload()
+    } catch (err) {
+      console.error('Gagal update status:', err)
     }
-
-    await api.put(
-      `/laporan-konservasi/${id}/status`,
-      payload
-    )
-
-    window.location.reload()
-
-  } catch (err) {
-
-    console.log(err)
-
   }
 
-}
-
+  // ── Format tanggal → DD-MM-YYYY ─────────────────────────────────────────
   const formatDate = (dateString) => {
     if (!dateString) return null
-    const date = new Date(dateString)
-    const day = date.getDate().toString().padStart(2, '0')
-    const month = (date.getMonth() + 1).toString().padStart(2, '0')
-    const year = date.getFullYear()
-    return `${day}-${month}-${year}`
+    const d = new Date(dateString)
+    return [
+      d.getDate().toString().padStart(2, '0'),
+      (d.getMonth() + 1).toString().padStart(2, '0'),
+      d.getFullYear()
+    ].join('-')
   }
 
+  /**
+   * renderMultipleFiles — Render daftar file (gambar / PDF / lainnya)
+   * @param {string|Array} filesJson  — data file dari backend (JSON string atau array)
+   * @param {string}       label      — label untuk alt text gambar
+   *
+   * Gambar  → ditampilkan sebagai thumbnail grid, klik untuk buka di tab baru
+   * PDF     → ditampilkan sebagai baris file dengan ikon merah
+   * Lainnya → ditampilkan sebagai baris file dengan ikon abu
+   */
   const renderMultipleFiles = (filesJson, label) => {
-    if (!filesJson) return <span style={styles.fieldValueMuted}>Tidak ada file</span>
+    if (!filesJson) return <span className="lk-field-muted">Tidak ada file</span>
 
     let files = []
     try {
-      if (Array.isArray(filesJson)) {
-        files = filesJson
-      } else {
-        files = JSON.parse(filesJson)
-      }
-    } catch (e) {
+      files = Array.isArray(filesJson) ? filesJson : JSON.parse(filesJson)
+    } catch {
       files = [filesJson]
     }
 
     if (!Array.isArray(files) || files.length === 0) {
-      return <span style={styles.fieldValueMuted}>Tidak ada file</span>
+      return <span className="lk-field-muted">Tidak ada file</span>
     }
 
-    const images = files.filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f))
-    const pdfs = files.filter(f => /\.pdf$/i.test(f))
-    const others = files.filter(f => !/\.(jpg|jpeg|png|gif|webp|pdf)$/i.test(f))
+    const isImage = f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f)
+    const isPdf = f => /\.pdf$/i.test(f)
+
+    const images = files.filter(isImage)
+    const pdfs = files.filter(isPdf)
+    const others = files.filter(f => !isImage(f) && !isPdf(f))
 
     return (
       <div>
+
+        {/* ── Thumbnail gambar ── */}
         {images.length > 0 && (
-          <div style={styles.thumbGrid}>
-            {images.map((filename, index) => (
-              <div key={index} style={{ textAlign: 'center' }}>
+          <div className="lk-thumb-grid">
+            {images.map((filename, i) => (
+              <div key={i} style={{ textAlign: 'center' }}>
                 <img
                   src={`${FILE_URL}/uploads/laporan/${filename}`}
-                  alt={`${label} ${index + 1}`}
-                  style={styles.imgThumb}
+                  alt={`${label} ${i + 1}`}
+                  className="lk-img-thumb"
                   onClick={() => window.open(`${FILE_URL}/uploads/laporan/${filename}`, '_blank')}
                 />
-                <span style={{ fontSize: '11px', color: '#aaa' }}>#{index + 1}</span>
+                <span style={{ fontSize: '11px', color: '#aaa' }}>#{i + 1}</span>
               </div>
             ))}
           </div>
         )}
-        {pdfs.map((filename, index) => (
-          <a key={index} href={`${FILE_URL}/uploads/laporan/${filename}`} target="_blank" rel="noopener noreferrer" style={styles.fileItem}>
-            <div style={{ ...styles.fileIcon, background: '#fee2e2' }}>
+
+        {/* ── File PDF ── */}
+        {pdfs.map((filename, i) => (
+          <a
+            key={i}
+            href={`${FILE_URL}/uploads/laporan/${filename}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="lk-file-item"
+          >
+            {/* Kotak ikon merah untuk PDF */}
+            <div className="lk-file-icon" style={{ background: '#fee2e2' }}>
               <i className="fas fa-file-pdf" style={{ color: '#dc2626', fontSize: '13px' }}></i>
             </div>
             <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -381,9 +163,18 @@ const handleUpdateStatus = async (id, status) => {
             <i className="fas fa-external-link-alt" style={{ fontSize: '11px', color: '#aaa' }}></i>
           </a>
         ))}
-        {others.map((filename, index) => (
-          <a key={index} href={`${FILE_URL}/uploads/laporan/${filename}`} target="_blank" rel="noopener noreferrer" style={styles.fileItem}>
-            <div style={{ ...styles.fileIcon, background: '#f0f0f0' }}>
+
+        {/* ── File lainnya ── */}
+        {others.map((filename, i) => (
+          <a
+            key={i}
+            href={`${FILE_URL}/uploads/laporan/${filename}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="lk-file-item"
+          >
+            {/* Kotak ikon abu untuk file lainnya */}
+            <div className="lk-file-icon" style={{ background: '#f0f0f0' }}>
               <i className="fas fa-file" style={{ color: '#888', fontSize: '13px' }}></i>
             </div>
             <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -392,13 +183,17 @@ const handleUpdateStatus = async (id, status) => {
             <i className="fas fa-external-link-alt" style={{ fontSize: '11px', color: '#aaa' }}></i>
           </a>
         ))}
-        <div style={{ marginTop: '6px' }}>
-          <span style={{ fontSize: '11px', color: '#aaa' }}>Total: {files.length} file — klik gambar untuk perbesar</span>
-        </div>
+
+        {/* Total file */}
+        <span className="lk-file-count">
+          Total: {files.length} file — klik gambar untuk perbesar
+        </span>
+
       </div>
     )
   }
 
+  // ── Loading state ────────────────────────────────────────────────────────
   if (loading) {
     return (
       <DashboardLayout title="Detail Laporan">
@@ -411,36 +206,52 @@ const handleUpdateStatus = async (id, status) => {
     )
   }
 
+  // ── Error state ──────────────────────────────────────────────────────────
   if (error) {
     return (
       <DashboardLayout title="Detail Laporan">
         <div className="alert alert-danger" style={{ borderRadius: '10px', fontSize: '14px' }}>{error}</div>
-        <button style={styles.btnBack} onClick={() => navigate('/laporan-konservasi')}>
+        <button className="lk-btn-back" onClick={() => navigate('/laporan-konservasi')}>
           <i className="fas fa-angles-left" style={{ fontSize: '11px' }}></i> Kembali
         </button>
       </DashboardLayout>
     )
   }
 
-  const statusStyle = statusStyles[laporan?.status] ?? { background: '#f0f0f0', color: '#888' }
-  const statusText = statusLabel[laporan?.status] ?? 'Status Unknown'
+  const statusBadgeClass = STATUS_BADGE_CLASS[laporan?.status] ?? 'lk-badge--pending'
+  const statusText = STATUS_LABEL[laporan?.status] ?? 'Status Unknown'
 
+  // ── Warna pill status bawah card (sama dengan badge, tapi lebih besar) ──
+  const pillColorMap = {
+    0: { background: '#FAEEDA', color: '#854F0B' },
+    1: { background: '#EAF3DE', color: '#3B6D11' },
+    2: { background: '#FCEBEB', color: '#A32D2D' },
+  }
+  const pillStyle = pillColorMap[laporan?.status] ?? { background: '#f0f0f0', color: '#888' }
+
+  // ── Render ───────────────────────────────────────────────────────────────
   return (
     <DashboardLayout title="Detail Laporan Konservasi">
-      <button style={styles.btnBack} onClick={() => navigate('/laporan-konservasi')}>
+
+      {/* Tombol Kembali */}
+      <button className="lk-btn-back" onClick={() => navigate('/laporan-konservasi')}>
         <i className="fas fa-angles-left" style={{ fontSize: '11px' }}></i> Kembali
       </button>
 
-      {/* ── BANNER PENOLAKAN — muncul paling atas jika ditolak ── */}
+      {/* ══════════════════════════════════════════
+          BANNER PENOLAKAN
+          Muncul paling atas jika status laporan = 2 (ditolak)
+          ══════════════════════════════════════════ */}
       {laporan?.status === 2 && (
-        <div style={styles.rejectBox}>
-          <div style={styles.rejectBoxHeader}>
-            <div style={styles.rejectBoxIcon}>
+        <div className="lk-reject-box">
+          <div className="lk-reject-box__header">
+            {/* Lingkaran ikon silang */}
+            <div className="lk-reject-box__icon">
               <i className="fas fa-times-circle" style={{ color: '#b91c1c', fontSize: '16px' }}></i>
             </div>
             <div>
-              <div style={styles.rejectBoxTitle}>Laporan Ditolak</div>
-              <div style={styles.rejectBoxSubtitle}>
+              <div className="lk-reject-box__title">Laporan Ditolak</div>
+              <div className="lk-reject-box__sub">
                 Admin Pusat telah menolak laporan ini
               </div>
             </div>
@@ -448,167 +259,183 @@ const handleUpdateStatus = async (id, status) => {
 
           {laporan?.alasan ? (
             <>
-              <div style={{ fontSize: '12px', fontWeight: '600', color: '#b91c1c', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                Alasan Penolakan:
-              </div>
-              <div style={styles.rejectBoxText}>
-                {laporan.alasan}
-              </div>
-              <div style={styles.rejectBoxNote}>
+              <div className="lk-reject-box__label">Alasan Penolakan:</div>
+              {/* Teks alasan penolakan — white-space: pre-wrap agar baris terjaga */}
+              <div className="lk-reject-box__text">{laporan.alasan}</div>
+              <div className="lk-reject-box__note">
                 <i className="fas fa-info-circle"></i>
                 Silakan perbaiki laporan sesuai alasan di atas, lalu kirim ulang.
               </div>
             </>
           ) : (
-            <div style={{ fontSize: '14px', color: '#7f1d1d', fontStyle: 'italic' }}>
-              Admin Pusat belum memberikan alasan penolakan.
-            </div>
+            <div className="lk-field-muted">Admin Pusat belum memberikan alasan penolakan.</div>
           )}
         </div>
       )}
 
-      <div style={styles.card}>
+      {/* ══════════════════════════════════════════
+          CARD DETAIL UTAMA
+          ══════════════════════════════════════════ */}
+      <div className="lk-card">
 
-        {/* ── Deskripsi Kegiatan ── */}
-        <div style={styles.sectionTitle}>
-          <span style={styles.sectionTitleDot}></span>
+        {/* ── SEKSI: Deskripsi Kegiatan ── */}
+        <div className="lk-section-title lk-section-title--dark">
+          <span className="lk-section-dot"></span>
           Deskripsi Kegiatan
         </div>
-        <div style={styles.grid}>
+
+        {/* Grid field: auto-fit min 180px → responsif di semua ukuran layar */}
+        <div className="lk-detail-grid">
           <div>
-            <div style={styles.fieldLabel}>Judul Laporan</div>
-            <div style={styles.fieldValue}>{laporan?.judulLaporan || <span style={styles.fieldValueMuted}>N/A</span>}</div>
-          </div>
-          <div>
-            <div style={styles.fieldLabel}>Jenis Kegiatan</div>
-            <div style={styles.fieldValue}>{laporan?.jenisKegiatan || <span style={styles.fieldValueMuted}>N/A</span>}</div>
-          </div>
-          <div>
-            <div style={styles.fieldLabel}>Tanggal Mulai</div>
-            <div style={styles.fieldValue}>
-              {laporan?.tanggalMulai ? formatDate(laporan.tanggalMulai) : <span style={styles.fieldValueMuted}>N/A</span>}
+            <div className="lk-field-label">Judul Laporan</div>
+            <div className="lk-field-value">
+              {laporan?.judulLaporan || <span className="lk-field-muted">N/A</span>}
             </div>
           </div>
           <div>
-            <div style={styles.fieldLabel}>Tanggal Selesai</div>
-            <div style={styles.fieldValue}>
-              {laporan?.tanggalSelesai ? formatDate(laporan.tanggalSelesai) : <span style={styles.fieldValueMuted}>N/A</span>}
+            <div className="lk-field-label">Jenis Kegiatan</div>
+            <div className="lk-field-value">
+              {laporan?.jenisKegiatan || <span className="lk-field-muted">N/A</span>}
             </div>
           </div>
+          <div>
+            <div className="lk-field-label">Tanggal Mulai</div>
+            <div className="lk-field-value">
+              {laporan?.tanggalMulai
+                ? formatDate(laporan.tanggalMulai)
+                : <span className="lk-field-muted">N/A</span>}
+            </div>
+          </div>
+          <div>
+            <div className="lk-field-label">Tanggal Selesai</div>
+            <div className="lk-field-value">
+              {laporan?.tanggalSelesai
+                ? formatDate(laporan.tanggalSelesai)
+                : <span className="lk-field-muted">N/A</span>}
+            </div>
+          </div>
+          {/* Keterangan di-span full row */}
           <div style={{ gridColumn: '1 / -1' }}>
-            <div style={styles.fieldLabel}>Keterangan</div>
-            <div style={styles.fieldValue}>{laporan?.keterangan || <span style={styles.fieldValueMuted}>N/A</span>}</div>
+            <div className="lk-field-label">Keterangan</div>
+            <div className="lk-field-value">
+              {laporan?.keterangan || <span className="lk-field-muted">N/A</span>}
+            </div>
           </div>
         </div>
 
-        <div style={styles.divider}></div>
+        <hr className="lk-divider" />
 
-        {/* ── Daerah Kawasan ── */}
-        <div style={styles.sectionTitle}>
-          <span style={styles.sectionTitleDot}></span>
+        {/* ── SEKSI: Daerah Kawasan ── */}
+        <div className="lk-section-title lk-section-title--dark">
+          <span className="lk-section-dot"></span>
           Daerah Kawasan
         </div>
-        <div style={styles.grid}>
+
+        <div className="lk-detail-grid">
           <div>
-            <div style={styles.fieldLabel}>Daerah Lokasi</div>
-            <div style={styles.fieldValue}>{laporan?.daerahLokasi || <span style={styles.fieldValueMuted}>N/A</span>}</div>
+            <div className="lk-field-label">Daerah Lokasi</div>
+            <div className="lk-field-value">
+              {laporan?.daerahLokasi || <span className="lk-field-muted">N/A</span>}
+            </div>
           </div>
           <div>
-            <div style={styles.fieldLabel}>Kabupaten</div>
-            <div style={styles.fieldValue}>{laporan?.kabupaten || <span style={styles.fieldValueMuted}>N/A</span>}</div>
+            <div className="lk-field-label">Kabupaten</div>
+            <div className="lk-field-value">
+              {laporan?.kabupaten || <span className="lk-field-muted">N/A</span>}
+            </div>
           </div>
           <div>
-            <div style={styles.fieldLabel}>Kecamatan</div>
-            <div style={styles.fieldValue}>{laporan?.kecamatan || <span style={styles.fieldValueMuted}>N/A</span>}</div>
+            <div className="lk-field-label">Kecamatan</div>
+            <div className="lk-field-value">
+              {laporan?.kecamatan || <span className="lk-field-muted">N/A</span>}
+            </div>
           </div>
           <div>
-            <div style={styles.fieldLabel}>Lokasi</div>
-            <div style={styles.fieldValue}>
+            <div className="lk-field-label">Lokasi GPS</div>
+            <div className="lk-field-value">
               {laporan?.latitude && laporan?.longitude ? (
+                /* Tombol buka Google Maps di tab baru */
                 <a
                   href={`https://www.google.com/maps?q=${laporan.latitude},${laporan.longitude}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={styles.btnLocation}
+                  className="lk-btn-map"
                 >
                   <i className="fas fa-map-marker-alt" style={{ fontSize: '11px' }}></i>
                   Lihat Lokasi
                 </a>
               ) : (
-                <span style={styles.fieldValueMuted}>N/A</span>
+                <span className="lk-field-muted">N/A</span>
               )}
             </div>
           </div>
         </div>
 
-        <div style={styles.divider}></div>
+        <hr className="lk-divider" />
 
-        {/* ── Dokumentasi Kegiatan ── */}
-        <div style={styles.sectionTitle}>
-          <span style={styles.sectionTitleDot}></span>
+        {/* ── SEKSI: Dokumentasi Kegiatan ── */}
+        <div className="lk-section-title lk-section-title--dark">
+          <span className="lk-section-dot"></span>
           Dokumentasi Kegiatan
         </div>
-        <div style={styles.grid}>
+
+        <div className="lk-detail-grid">
           <div>
-            <div style={styles.fieldLabel}>Surat Tugas</div>
+            <div className="lk-field-label">Surat Tugas</div>
             {renderMultipleFiles(laporan?.suratTugas, 'Surat Tugas')}
           </div>
           <div>
-            <div style={styles.fieldLabel}>Foto Sebelum Kegiatan</div>
+            <div className="lk-field-label">Foto Sebelum Kegiatan</div>
             {renderMultipleFiles(laporan?.fotoSebelum, 'Foto Sebelum')}
           </div>
           <div>
-            <div style={styles.fieldLabel}>Foto Setelah Kegiatan</div>
+            <div className="lk-field-label">Foto Setelah Kegiatan</div>
             {renderMultipleFiles(laporan?.fotoSetelah, 'Foto Setelah')}
           </div>
           <div>
-            <div style={styles.fieldLabel}>Luas Area</div>
-            <div style={styles.fieldValue}>
-              {laporan?.luasArea ? `${laporan.luasArea} ha` : <span style={styles.fieldValueMuted}>N/A</span>}
+            <div className="lk-field-label">Luas Area</div>
+            <div className="lk-field-value">
+              {laporan?.luasArea
+                ? `${laporan.luasArea} ha`
+                : <span className="lk-field-muted">N/A</span>}
             </div>
           </div>
         </div>
 
-        {/* VALIDASI KHUSUS ADMIN PUSAT */}
-{isAdminPusat && laporan?.status === 0 && (
+        {/* ══════════════════════════════════════════
+            TOMBOL VALIDASI — hanya Admin Pusat, status pending (0)
+            ══════════════════════════════════════════ */}
+        {isAdminPusat && laporan?.status === 0 && (
+          <div className="d-flex gap-2 mt-4">
+            <button
+              className="btn btn-success"
+              onClick={() => handleUpdateStatus(laporan.id, 1)}
+            >
+              <i className="fas fa-check me-1"></i>
+              Setujui
+            </button>
+            <button
+              className="btn btn-danger"
+              onClick={() => handleUpdateStatus(laporan.id, 2)}
+            >
+              <i className="fas fa-times me-1"></i>
+              Tolak
+            </button>
+          </div>
+        )}
 
-  <div className="d-flex gap-2 mt-4">
-
-    <button
-      className="btn btn-success"
-      onClick={() =>
-        handleUpdateStatus(laporan.id, 1)
-      }
-    >
-      <i className="fas fa-check me-1"></i>
-      Setujui
-    </button>
-
-    <button
-      className="btn btn-danger"
-      onClick={() =>
-        handleUpdateStatus(laporan.id, 2)
-      }
-    >
-      <i className="fas fa-times me-1"></i>
-      Tolak
-    </button>
-
-  </div>
-
-)}
-
-
-
-
-        {/* ── Status Badge ── */}
-        <div style={styles.statusWrap}>
-          <span style={{ ...styles.statusPill, ...statusStyle }}>
+        {/* ══════════════════════════════════════════
+            STATUS PILL — ditampilkan di tengah bawah card
+            Ukurannya lebih besar dari badge di tabel
+            ══════════════════════════════════════════ */}
+        <div className="lk-status-wrap">
+          <span className="lk-status-pill" style={pillStyle}>
             {statusText}
           </span>
         </div>
 
       </div>
+
     </DashboardLayout>
   )
 }

@@ -1,22 +1,63 @@
 import api from '../lib/api'
 import { ENDPOINTS } from '../lib/endpoints'
 
-export const laporanService = {
-  getAll: () => api.get(ENDPOINTS.LAPORAN_ADMIN.GET),
-  create: (data) => api.post(ENDPOINTS.LAPORAN_ADMIN.CREATE, data),
-  update: (id, data) => api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE(id), data),
-  delete: (id) => api.delete(ENDPOINTS.LAPORAN_ADMIN.DELETE(id)),
-  updateStatus: (id, status) =>
-    api.put(ENDPOINTS.LAPORAN_ADMIN.UPDATE_STATUS(id), { status })
-}
-
 export const laporanKonservasiService = {
-  getAll: () => api.get(ENDPOINTS.ADMIN_LAPANGAN_LAPORAN.GET),
-
-  // ✅ DIPERBAIKI: pakai endpoint yang benar
- // ✅ SESUDAH
-create: (data) => api.post(ENDPOINTS.ADMIN_LAPANGAN_LAPORAN.CREATE, data),
-
-  delete: (id) =>
-    api.delete(ENDPOINTS.ADMIN_LAPANGAN_LAPORAN.DELETE(id))
+  // ====================================================
+  // GET ALL DATA LAPORAN
+  // Backend:
+  // index()
+  // ====================================================
+  getAll() {
+    return api.get('/laporan-konservasi')
+  },
+  // ====================================================
+  // GET DETAIL LAPORAN
+  // Backend:
+  // show($id)
+  // ====================================================
+  getById(id) {
+    return api.get(`/laporan-konservasi/${id}`)
+  },
+  // ====================================================
+  // CREATE LAPORAN
+  // Backend:
+  // store()
+  // ====================================================
+  create(data) {
+    return api.post(
+      '/laporan-konservasi',
+      data
+    )
+  },
+  // ====================================================
+  // UPDATE LAPORAN
+  // Backend:
+  // update()
+  // ====================================================
+  update(id, data) {
+    return api.post(
+      `/laporan-konservasi/${id}?_method=PUT`,
+      data
+    )
+  },
+  // ====================================================
+  // DELETE LAPORAN
+  // Backend:
+  // destroy()
+  // ====================================================
+  delete(id) {
+    return api.delete(
+      `/laporan-konservasi/${id}`
+    )
+  },
+  // ====================================================
+  // VALIDASI LAPORAN
+  // ====================================================
+  validasi(id, data) {
+    return api.post(
+      `/laporan-konservasi/${id}/validasi`,
+      data
+    )
+  }
 }
+

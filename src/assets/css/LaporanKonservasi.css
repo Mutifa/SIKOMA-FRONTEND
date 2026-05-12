@@ -1,0 +1,633 @@
+/* =========================================================
+   LAPORAN KONSERVASI — UNIVERSAL CSS
+   File ini dipakai oleh SEMUA halaman CRUD:
+     - index.jsx   (List / Read)
+     - create.jsx  (Create)
+     - edit.jsx    (Update)
+     - detail.jsx  (Read Detail)
+
+   STRUKTUR KOMENTAR:
+   1. CSS Variables / Token Warna
+   2. Card / Box Utama
+   3. Section Title & Dot
+   4. Form & Label
+   5. Button
+   6. Tabel (index)
+   7. Status Badge
+   8. Detail View (field label & value)
+   9. Reject Box (alasan penolakan)
+   10. File Item & Thumbnail (detail)
+   11. Back Button
+   12. Status Pill (detail bawah)
+   13. Divider
+   14. Lokasi
+   15. Responsive Mobile
+   ========================================================= */
+
+
+/* =========================================================
+   1. CSS VARIABLES — TOKEN WARNA UTAMA
+   Ganti nilai di sini kalau mau ubah tema warna seluruh modul
+   ========================================================= */
+:root {
+  --lk-green:        #2e7d32;   /* Warna utama hijau                    */
+  --lk-green-dark:   #1a5c35;   /* Hijau lebih gelap (detail view)      */
+  --lk-green-bg:     #EAF3DE;   /* Background badge disetujui           */
+  --lk-green-text:   #3B6D11;   /* Teks badge disetujui                 */
+
+  --lk-pending-bg:   #FAEEDA;   /* Background badge pending             */
+  --lk-pending-text: #854F0B;   /* Teks badge pending                   */
+
+  --lk-reject-bg:    #FCEBEB;   /* Background badge ditolak             */
+  --lk-reject-text:  #A32D2D;   /* Teks badge ditolak                   */
+
+  --lk-border:       #e0e0e0;   /* Border card / input                  */
+  --lk-divider:      #f0f0f0;   /* Garis pemisah section                */
+  --lk-label-color:  #555;      /* Warna label form                     */
+  --lk-text:         #1a1a1a;   /* Warna teks isi                       */
+  --lk-muted:        #bbb;      /* Teks kosong / N/A                    */
+  --lk-radius:       8px;       /* Border radius umum                   */
+  --lk-radius-sm:    6px;       /* Border radius kecil (input, button)  */
+}
+
+
+/* =========================================================
+   2. CARD / BOX UTAMA
+   Dipakai di: create.jsx, edit.jsx, detail.jsx
+   Class: .lk-card
+   ========================================================= */
+.lk-card {
+  background: #fff;
+  border: 1px solid var(--lk-border);
+  border-radius: var(--lk-radius);
+  padding: 28px 32px;
+  margin-bottom: 1rem;
+}
+
+
+/* =========================================================
+   3. SECTION TITLE & DOT HIJAU
+   Judul tiap seksi form / detail, contoh:
+   "Deskripsi Kegiatan", "Daerah Kawasan", "Dokumentasi"
+   Class: .lk-section-title  →  <h6 className="lk-section-title">
+          .lk-section-dot    →  <span className="lk-section-dot"></span>
+   ========================================================= */
+.lk-section-title {
+  color: var(--lk-green);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+/* Versi hijau gelap untuk halaman detail */
+.lk-section-title--dark {
+  color: var(--lk-green-dark);
+}
+
+/* Dot kecil bulat di depan judul seksi */
+.lk-section-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;   /* otomatis ikut warna teks section title */
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   4. FORM & LABEL
+   Dipakai di: create.jsx, edit.jsx
+   Class: .lk-label   → <label className="lk-label">
+          .lk-input   → <input className="form-control lk-input">
+   ========================================================= */
+
+/* Label form — uppercase kecil, warna abu */
+.lk-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lk-label-color);
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* Input & textarea override (combine dengan class Bootstrap form-control) */
+.lk-input {
+  border-radius: var(--lk-radius-sm) !important;
+  font-size: 14px !important;
+}
+
+/* Teks hint/tip kecil di bawah label file input */
+.lk-input-tip {
+  font-size: 12px;
+  color: #0dcaf0;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Teks sukses setelah file dipilih */
+.lk-file-chosen {
+  font-size: 12px;
+  color: #198754;
+  display: block;
+  margin-top: 4px;
+}
+
+/* Link file yang sudah ada (halaman edit) */
+.lk-existing-file {
+  font-size: 12px;
+  color: var(--lk-green);
+  display: block;
+}
+
+/* HR pemisah antar seksi dalam form */
+.lk-form-divider {
+  border-color: #e8e8e8;
+  margin: 1.5rem 0;
+}
+
+
+/* =========================================================
+   5. BUTTON
+   Dipakai di semua halaman
+   Class: .lk-btn-primary  → Simpan / Update (hijau solid)
+          .lk-btn-back     → Kembali (abu outline-style)
+          .lk-btn-location → Verifikasi Lokasi (kuning/warning)
+   ========================================================= */
+
+/* Tombol primer hijau — Simpan / Update Laporan */
+.lk-btn-primary {
+  background-color: var(--lk-green);
+  color: #fff;
+  border: none;
+  border-radius: var(--lk-radius-sm);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.lk-btn-primary:hover {
+  background-color: var(--lk-green-dark);
+  color: #fff;
+}
+.lk-btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Tombol kembali — abu dengan border */
+.lk-btn-back {
+  background: #f5f5f5;
+  color: #444;
+  border: 1px solid var(--lk-border);
+  padding: 7px 16px;
+  border-radius: var(--lk-radius);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 1.25rem;
+  text-decoration: none;
+}
+.lk-btn-back:hover {
+  background: #ebebeb;
+  color: #222;
+}
+
+/* Tombol verifikasi lokasi — kuning */
+.lk-btn-location {
+  background: #f0ad4e;
+  color: #fff;
+  border: none;
+  border-radius: var(--lk-radius-sm);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.lk-btn-location:hover {
+  background: #d9922e;
+}
+
+/* Teks status verifikasi lokasi di bawah tombol */
+.lk-location-status {
+  font-size: 13px;
+  color: #666;
+  margin-top: 8px;
+  display: block;
+}
+
+/* Tombol hijau kecil (lihat di peta) pada halaman detail */
+.lk-btn-map {
+  background: var(--lk-green-dark);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.15s;
+}
+.lk-btn-map:hover {
+  background: var(--lk-green);
+  color: #fff;
+}
+
+
+/* =========================================================
+   6. TABEL (halaman index / list)
+   Dipakai di: index.jsx
+   Class: .lk-table
+   ========================================================= */
+.lk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 560px;
+}
+
+/* Header tabel */
+.lk-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #efefef;
+}
+
+/* Cell tabel normal */
+.lk-table td {
+  padding: 13px 14px;
+  color: var(--lk-text);
+  border-bottom: 1px solid #f5f5f5;
+  vertical-align: middle;
+}
+
+/* Cell tabel — teks abu/muted (nomor urut, tanggal) */
+.lk-table td.lk-td-muted {
+  color: #aaa;
+  font-size: 13px;
+}
+
+/* Row dengan status ditolak — background merah muda */
+.lk-table tr.lk-row-rejected {
+  background: #fff8f8;
+}
+
+
+/* =========================================================
+   7. STATUS BADGE
+   Dipakai di: index.jsx, detail.jsx
+   Class: .lk-badge  +  modifier .lk-badge--pending / approved / rejected
+   Contoh: <span className="lk-badge lk-badge--pending">Pending</span>
+   ========================================================= */
+.lk-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.lk-badge--pending {
+  background: var(--lk-pending-bg);
+  color: var(--lk-pending-text);
+}
+
+.lk-badge--approved {
+  background: var(--lk-green-bg);
+  color: var(--lk-green-text);
+}
+
+.lk-badge--rejected {
+  background: var(--lk-reject-bg);
+  color: var(--lk-reject-text);
+}
+
+
+/* =========================================================
+   8. DETAIL VIEW — Field Label & Value
+   Dipakai di: detail.jsx
+   Class: .lk-field-label  → judul field (kecil, abu, uppercase)
+          .lk-field-value  → isi field
+          .lk-field-muted  → teks kosong / N/A
+          .lk-detail-grid  → grid otomatis multi kolom
+   ========================================================= */
+
+/* Grid responsif untuk field-field detail */
+.lk-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+/* Label field kecil ala "read-only form" */
+.lk-field-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 5px;
+}
+
+/* Nilai field */
+.lk-field-value {
+  font-size: 14px;
+  color: var(--lk-text);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Nilai kosong / N/A */
+.lk-field-muted {
+  font-size: 14px;
+  color: var(--lk-muted);
+  font-style: italic;
+}
+
+
+/* =========================================================
+   9. REJECT BOX — Alasan Penolakan
+   Dipakai di: detail.jsx (banner atas) & index.jsx (inline tabel)
+   Class: .lk-reject-box        → wrapper utama
+          .lk-reject-box__header → baris ikon + judul
+          .lk-reject-box__icon   → lingkaran ikon merah
+          .lk-reject-box__title  → judul "Laporan Ditolak"
+          .lk-reject-box__sub    → subjudul
+          .lk-reject-box__text   → teks alasan
+          .lk-reject-box__note   → catatan italic bawah
+
+   — Versi inline di tabel (index.jsx) —
+          .lk-reject-inline      → box kecil di dalam <td>
+          .lk-reject-inline__label → label "Alasan Penolakan"
+          .lk-reject-hint        → hint "lihat Detail"
+   ========================================================= */
+
+/* Box besar di halaman detail */
+.lk-reject-box {
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 1rem;
+}
+
+.lk-reject-box__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #fecaca;
+}
+
+.lk-reject-box__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fee2e2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.lk-reject-box__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #b91c1c;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.lk-reject-box__sub {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 2px;
+}
+
+.lk-reject-box__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b91c1c;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.lk-reject-box__text {
+  font-size: 14px;
+  color: #7f1d1d;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  background: #fff5f5;
+  border-radius: 8px;
+  padding: 12px 16px;
+  border: 1px solid #fecaca;
+}
+
+.lk-reject-box__note {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #b91c1c;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-style: italic;
+}
+
+/* Box kecil inline di tabel */
+.lk-reject-inline {
+  margin-top: 6px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: #7f1d1d;
+  line-height: 1.5;
+  max-width: 320px;
+}
+
+.lk-reject-inline__label {
+  font-weight: 700;
+  color: #b91c1c;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 3px;
+}
+
+/* Hint "Laporan ditolak — lihat Detail" */
+.lk-reject-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #b91c1c;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+
+/* =========================================================
+   10. FILE ITEM & THUMBNAIL (halaman detail)
+   Dipakai di: detail.jsx — renderMultipleFiles()
+   Class: .lk-file-item    → baris file PDF / lainnya
+          .lk-file-icon    → kotak ikon file
+          .lk-thumb-grid   → flex wrap untuk thumbnail gambar
+          .lk-img-thumb    → thumbnail gambar kecil
+          .lk-file-count   → teks "Total: X file"
+   ========================================================= */
+
+/* Baris file (PDF / file lain) — klik untuk buka */
+.lk-file-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8f9fa;
+  border: 1px solid #efefef;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #444;
+  margin-bottom: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.1s;
+}
+.lk-file-item:hover {
+  background: #f0f0f0;
+  color: #222;
+}
+
+/* Kotak kecil ikon file */
+.lk-file-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* Wrapper thumbnail gambar (flex wrap) */
+.lk-thumb-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+/* Thumbnail gambar kecil */
+.lk-img-thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #efefef;
+  cursor: pointer;
+  display: block;
+  margin-bottom: 4px;
+  transition: opacity 0.15s;
+}
+.lk-img-thumb:hover {
+  opacity: 0.85;
+}
+
+/* Teks jumlah file */
+.lk-file-count {
+  font-size: 11px;
+  color: #aaa;
+  margin-top: 4px;
+  display: block;
+}
+
+
+/* =========================================================
+   11. STATUS PILL (bawah halaman detail)
+   Versi lebih besar dari badge, ditaruh di tengah bawah card
+   Class: .lk-status-wrap  → wrapper tengah
+          .lk-status-pill  → pill besar
+   ========================================================= */
+.lk-status-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--lk-divider);
+}
+
+.lk-status-pill {
+  padding: 10px 32px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+
+/* =========================================================
+   12. DIVIDER antar seksi dalam card
+   Class: .lk-divider
+   ========================================================= */
+.lk-divider {
+  height: 1px;
+  background: var(--lk-divider);
+  margin: 1.25rem 0;
+  border: none;
+}
+
+
+/* =========================================================
+   13. RESPONSIVE MOBILE
+   Penyesuaian untuk layar kecil (tablet & HP)
+   ========================================================= */
+@media (max-width: 768px) {
+
+  /* Card padding lebih kecil di mobile */
+  .lk-card {
+    padding: 18px 16px;
+  }
+
+  /* Tabel bisa di-scroll horizontal */
+  .lk-table {
+    min-width: 100%;
+  }
+
+  /* Grid detail jadi 1 kolom di mobile */
+  .lk-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Reject box padding lebih kecil */
+  .lk-reject-box {
+    padding: 14px 16px;
+  }
+
+}
