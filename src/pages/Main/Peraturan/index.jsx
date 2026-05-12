@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import api from '../../../lib/api.js'
+import {
+  confirmDelete,
+  successAlert,
+  errorAlert
+} from '../../../utils/alert'
 
 export default function Peraturan() {
 
@@ -29,10 +34,12 @@ export default function Peraturan() {
   }, [])
 
   const handleDelete = async (id) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus peraturan ini?')) {
+    const result = await confirmDelete()
+    if (result.isConfirmed) {
       try {
         await api.delete(`/admin_pusat/peraturan/${id}`)
-        setData(data.filter(item => item.id !== id))
+        setData(prev => prev.filter(item => item.id !== id))
+        await successAlert('Berhasil', 'Peraturan berhasil dihapus')
       } catch (err) {
         setError(err.response?.data?.message || 'Gagal menghapus peraturan')
       }

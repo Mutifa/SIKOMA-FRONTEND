@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom'
 
 import api from '../../../lib/api'
 import DashboardLayout from '../../../layouts/DashboardLayout'
+import {
+  confirmDelete,
+  successAlert,
+  errorAlert
+} from '../../../utils/alert'
 
 export default function Pengguna() {
 
@@ -30,8 +35,8 @@ export default function Pengguna() {
 
   const getRoleBadge = (role) => {
     const map = {
-      admin_pusat:    { label: 'Admin Pusat',    bg: '#EAF3DE', color: '#3B6D11' },
-      super_admin:    { label: 'Super Admin',    bg: '#FCEBEB', color: '#A32D2D' },
+      admin_pusat: { label: 'Admin Pusat', bg: '#EAF3DE', color: '#3B6D11' },
+      super_admin: { label: 'Super Admin', bg: '#FCEBEB', color: '#A32D2D' },
       admin_lapangan: { label: 'Admin Lapangan', bg: '#dbeafe', color: '#1e3a8a' },
     }
     const r = map[role] || { label: role, bg: '#f3f4f6', color: '#374151' }
@@ -43,12 +48,16 @@ export default function Pengguna() {
   }
 
   const handleDelete = async (id) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
+    const result = await confirmDelete()
+    if (result.isConfirmed) {
       try {
         await api.delete(`/admin_pusat/pengguna/${id}`)
-        setData(data.filter(user => user.id !== id))
+        setData(prev =>
+          prev.filter(user => user.id !== id)
+        )
+        await successAlert('Berhasil', 'Pengguna berhasil dihapus')
       } catch (err) {
-        setError(err.response?.data?.message || 'Gagal menghapus data')
+        await errorAlert('Gagal', err.response?.data?.message || 'Gagal menghapus data')
       }
     }
   }

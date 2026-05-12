@@ -5,9 +5,16 @@ import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import api from '../../../lib/api.js'
 import { laporanKonservasiService } from '../../../services/laporanKonservasi'
 import { useAuth } from '../../../contexts/AuthContext'
+import {
+  confirmDelete,
+  successAlert,
+  errorAlert,
+  rejectionReasonAlert
+} from '../../../utils/alert'
+
 
 // ── Badge status — tetap pakai inline style karena ini data-driven, bukan UI button ──
-const badgePending  = { background: '#FAEEDA', color: '#854F0B', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: '600', display: 'inline-block', whiteSpace: 'nowrap' }
+const badgePending = { background: '#FAEEDA', color: '#854F0B', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: '600', display: 'inline-block', whiteSpace: 'nowrap' }
 const badgeApproved = { background: '#EAF3DE', color: '#3B6D11', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: '600', display: 'inline-block', whiteSpace: 'nowrap' }
 const badgeRejected = { background: '#FCEBEB', color: '#A32D2D', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: '600', display: 'inline-block', whiteSpace: 'nowrap' }
 
@@ -18,8 +25,8 @@ const tdMuted = { ...td, color: '#aaa', fontSize: '13px' }
 const trRejected = { background: '#fff8f8' }
 
 const rejectReasonInline = { marginTop: '6px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', padding: '6px 10px', fontSize: '12px', color: '#7f1d1d', lineHeight: '1.5', maxWidth: '320px' }
-const rejectReasonLabel  = { fontWeight: '700', color: '#b91c1c', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '3px' }
-const alasanHint         = { display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: '#b91c1c', marginTop: '4px', fontStyle: 'italic' }
+const rejectReasonLabel = { fontWeight: '700', color: '#b91c1c', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '3px' }
+const alasanHint = { display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: '#b91c1c', marginTop: '4px', fontStyle: 'italic' }
 
 export default function LaporanKonservasi() {
 
@@ -28,7 +35,7 @@ export default function LaporanKonservasi() {
   const [loading, setLoading] = React.useState(true)
 
   const { user } = useAuth()
-  const isAdminPusat   = user?.role === 'admin_pusat'
+  const isAdminPusat = user?.role === 'admin_pusat'
   const isAdminLapangan = user?.role === 'admin_lapangan'
 
   const loadData = async () => {
@@ -65,23 +72,51 @@ export default function LaporanKonservasi() {
   }, [])
 
   const handleDelete = async (id) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus laporan ini?')) {
+
+    const result = await confirmDelete(
+      'Hapus Laporan?',
+      'Laporan akan dihapus permanen'
+    )
+
+    if (result.isConfirmed) {
+
       try {
+
         await api.delete(`/laporan-konservasi/${id}`)
+
+        await successAlert(
+          'Berhasil',
+          'Laporan berhasil dihapus'
+        )
+
         await loadData()
+
       } catch (err) {
-        setError(err.response?.data?.message || 'Gagal menghapus laporan')
+
+        await errorAlert(
+          'Gagal',
+          err.response?.data?.message ||
+          'Gagal menghapus laporan'
+        )
+
       }
+
     }
+
   }
 
   const handleUpdateStatus = async (id, status) => {
     try {
       let payload = { status }
       if (status === 2) {
-        const alasan = prompt('Masukkan alasan penolakan')
-        if (!alasan) return
-        payload.alasan = alasan
+
+        const result =
+          await rejectionReasonAlert()
+
+        if (!result.isConfirmed) return
+
+        payload.alasan = result.value
+
       }
       await api.put(`/laporan-konservasi/${id}/status`, payload)
       await loadData()

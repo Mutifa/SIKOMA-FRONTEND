@@ -88,16 +88,15 @@ export const AuthProvider = ({ children }) => {
     }
 
     // Jika ada token → cek auth ke backend
-    if (token) {
+if (savedUser) {
 
-      checkAuth()
+  setUser(JSON.parse(savedUser))
 
-    } else {
+  setIsAuthenticated(true)
 
-      // Kalau tidak ada token → loading selesai
-      setLoading(false)
+}
 
-    }
+setLoading(false)
 
   }, [])
 

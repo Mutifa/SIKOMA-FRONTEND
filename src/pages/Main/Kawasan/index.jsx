@@ -1,6 +1,11 @@
 import React from 'react'
 import DashboardLayout from '../../../layouts/DashboardLayout'
 import api from '../../../lib/api.js'
+import {
+  confirmDelete,
+  successAlert,
+  errorAlert
+} from '../../../utils/alert'
 
 export default function Kawasan() {
 

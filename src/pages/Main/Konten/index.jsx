@@ -4,6 +4,11 @@ import { Link } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import { kontenService } from '../../../services/kontenService'
 import { assetUrl } from '../../../lib/assets.js'
+import {
+  confirmDelete,
+  successAlert,
+  errorAlert
+} from '../../../utils/alert'
 
 export default function Konten() {
 
@@ -30,10 +35,12 @@ export default function Konten() {
   }, [])
 
   const handleDelete = async (id) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus konten ini?')) {
+    const result = await confirmDelete()
+    if (result.isConfirmed) {
       try {
         await kontenService.delete(id)
-        setData(data.filter(item => item.id !== id))
+        setData(prev => prev.filter(item => item.id !== id))
+        await successAlert('Berhasil', 'Konten berhasil dihapus')
       } catch (err) {
         setError(err.response?.data?.message || 'Gagal menghapus konten')
       }
