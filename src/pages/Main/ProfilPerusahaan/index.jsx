@@ -1,6 +1,6 @@
 import React from 'react'
 import DashboardLayout from '../../../layouts/DashboardLayout'
-import { profilPerusahaanService } from '../../../services/profilPerusahaanService'
+import profilPerusahaanService  from '../../../services/profilPerusahaanService'
 
 // ── Semua style dipindah ke Dashboard.css
 // ── Tidak ada lagi <style>{...}</style> di dalam JSX
