@@ -1,11 +1,7 @@
 import React from 'react'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import {
-  createStandar,
-  deleteStandar,
-  getStandar,
-  updateStandar
-} from '../../../services/standarPelayananServices.js'
+import standarPelayananService from '../../../services/standarPelayananServices.js'
+
 
 export default function StandarPelayanan() {
   const [data, setData] = React.useState([])
@@ -33,7 +29,7 @@ const loadData = async () => {
 
   setLoading(true)
   try {
-    const res = await getStandar()
+    const res = await standarPelayananService.getStandar()
     console.log('RESPONSE API:', res.data)
     setData(res.data.data || res.data)
   } catch (err) {
@@ -70,10 +66,10 @@ const loadData = async () => {
 
   try {
   if (editingItem) {
-  await updateStandar(editingItem.id, formData)
+  await standarPelayananService.updateStandar(editingItem.id, formData)
   setSuccess('Standar pelayanan berhasil diperbarui')
 } else {
-  await createStandar(formData)
+  await standarPelayananService.createStandar(formData)
   setSuccess('Standar pelayanan berhasil ditambahkan')
 }
 
@@ -117,7 +113,7 @@ const loadData = async () => {
   const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus standar pelayanan ini?')) {
       try {
-        await deleteStandar(id)
+        await standarPelayananService.deleteStandar(id)
         setSuccess('Standar pelayanan berhasil dihapus')
         await loadData()
       } catch (err) {
