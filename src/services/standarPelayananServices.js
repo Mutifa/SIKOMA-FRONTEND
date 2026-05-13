@@ -21,10 +21,3 @@ const standarPelayananService = {
 }
 
 export default standarPelayananService
-  api.post('/standar-pelayanan', data)
-
-export const updateStandar = (id, data) =>
-  api.put(`/standar-pelayanan/${id}`, data)
-
-export const deleteStandar = (id) =>
-  api.delete(`/standar-pelayanan/${id}`)
