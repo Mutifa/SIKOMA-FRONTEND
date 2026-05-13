@@ -1,18 +1,33 @@
 import api from '../lib/api'
-import { ENDPOINTS } from '../lib/endpoints'
 
 export const programService = {
-  getAll: () => api.get(ENDPOINTS.PROGRAM.GET),
 
+  // Ambil semua program
+  getAll: () =>
+    api.get('/admin_pusat/program'),
+
+  // Detail program
+  getById: (id) =>
+    api.get(`/admin_pusat/program/${id}`),
+
+  // Tambah program
   create: (data) =>
-    api.post(ENDPOINTS.PROGRAM.CREATE, data, {
-      headers: { 'Content-Type': 'multipart/form-data' }
+    api.post('/admin_pusat/program', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
     }),
 
+  // Update program
   update: (id, data) =>
-    api.post(ENDPOINTS.PROGRAM.UPDATE(id), data, {
-      headers: { 'Content-Type': 'multipart/form-data' }
+    api.post(`/admin_pusat/program/${id}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
     }),
 
-  delete: (id) => api.delete(ENDPOINTS.PROGRAM.DELETE(id))
+  // Hapus program
+  delete: (id) =>
+    api.delete(`/admin_pusat/program/${id}`),
+
 }

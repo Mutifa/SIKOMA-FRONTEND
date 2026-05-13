@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout'
-import api from '../../../lib/api.js'
+import galeriService from '../../../services/galeriService'
 
 // ─────────────────────────────────────────────
 // Halaman Detail Galeri
@@ -27,7 +27,7 @@ export default function GaleriDetail() {
 
     let mounted = true
 
-    api.get(`/admin_pusat/galeri/${id}`)
+    galeriService.get(id)
 
       .then(res => {
 

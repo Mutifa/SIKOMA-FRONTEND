@@ -1,6 +1,5 @@
 //import React from 'react'
 import Template from '../../layouts/Template.jsx'
-import api from '../../lib/api.js'
 import { assetUrl } from '../../lib/assets.js'
 import { homeService } from '../../services/homeService.js'
 import React, { useEffect, useState } from "react";

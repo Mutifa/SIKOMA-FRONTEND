@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import { kontenService } from '../../../services/kontenService'
+import contentInformasiEdukasi from '../../../services/contentInformasiEdukasi.js'
 import { assetUrl } from '../../../lib/assets.js'
 import {
   confirmDelete,
@@ -18,7 +18,7 @@ export default function Konten() {
 
   React.useEffect(() => {
     let mounted = true
-    kontenService.getAll()
+    contentInformasiEdukasi.getAll()
       .then(res => {
         if (mounted) {
           setData(res.data.data || res.data)
@@ -38,7 +38,7 @@ export default function Konten() {
     const result = await confirmDelete()
     if (result.isConfirmed) {
       try {
-        await kontenService.delete(id)
+        await contentInformasiEdukasi.delete(id)
         setData(prev => prev.filter(item => item.id !== id))
         await successAlert('Berhasil', 'Konten berhasil dihapus')
       } catch (err) {

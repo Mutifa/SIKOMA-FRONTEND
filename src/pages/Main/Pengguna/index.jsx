@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
-import api from '../../../lib/api'
+import { penggunaService } from '../../../services/penggunaService.js'
 import DashboardLayout from '../../../layouts/DashboardLayout'
 import {
   confirmDelete,
@@ -17,7 +16,7 @@ export default function Pengguna() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/admin_pusat/pengguna')
+    penggunaService.getAll()
       .then(res => {
         if (mounted) {
           setData(res.data.data || res.data)
@@ -51,7 +50,7 @@ export default function Pengguna() {
     const result = await confirmDelete()
     if (result.isConfirmed) {
       try {
-        await api.delete(`/admin_pusat/pengguna/${id}`)
+        await penggunaService.delete(id)
         setData(prev =>
           prev.filter(user => user.id !== id)
         )

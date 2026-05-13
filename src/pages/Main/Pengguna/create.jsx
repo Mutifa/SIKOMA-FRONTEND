@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout'
-import api from '../../../lib/api'
+import { penggunaService } from '../../../services/penggunaService'
 
 export default function PenggunaCreate() {
     const navigate = useNavigate()
@@ -18,7 +18,7 @@ export default function PenggunaCreate() {
         e.preventDefault()
 
         try {
-            await api.post('/admin_pusat/pengguna', formData)
+            await penggunaService.create(formData)
 
             navigate('/pengguna')
         } catch (err) {

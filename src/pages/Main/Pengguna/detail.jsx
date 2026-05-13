@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link, useParams } from 'react-router-dom'
-import api from '../../../lib/api'
 import DashboardLayout from '../../../layouts/DashboardLayout'
-import { ENDPOINTS } from '../../../lib/endpoints'
+import { penggunaService } from '../../../services/penggunaService'
 
 export default function PenggunaDetail() {
 
@@ -15,7 +14,7 @@ export default function PenggunaDetail() {
 
         let mounted = true
 
-        api.get(ENDPOINTS.PENGGUNA.DETAIL(id))
+        penggunaService.getById(id)
 
             .then(res => {
 

@@ -1,8 +1,7 @@
 import React from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
-
 import DashboardLayout from '../../../layouts/DashboardLayout'
-import api from '../../../lib/api'
+import { penggunaService } from '../../../services/penggunaService'
 
 export default function PenggunaEdit() {
 
@@ -23,7 +22,7 @@ export default function PenggunaEdit() {
 
     let mounted = true
 
-    api.get(`/admin_pusat/pengguna/${id}`)
+    penggunaService.getById(id)
 
       .then(res => {
 
@@ -62,10 +61,7 @@ console.log(data)
 
     try {
 
-      await api.put(
-        `/admin_pusat/pengguna/${id}`,
-        formData
-      )
+      await penggunaService.update(id, formData)
 
       navigate('/pengguna')
 

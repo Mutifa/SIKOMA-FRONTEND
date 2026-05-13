@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import api from '../../../lib/api.js'
+import { programService } from '../../../services/programService.js'
 import {
   confirmDelete,
   successAlert,
@@ -20,7 +20,7 @@ export default function Program() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/admin_pusat/program')
+    programService.getAll()
       .then(res => {
         if (mounted) {
           setData(res.data.data || res.data)
@@ -40,7 +40,7 @@ export default function Program() {
     const result = await confirmDelete()
     if (result.isConfirmed) {
       try {
-        await api.delete(`/admin_pusat/program/${id}`)
+        await programService.delete(id)
         setData(prev => prev.filter(item => item.id !== id))
         await successAlert('Berhasil', 'Program berhasil dihapus')
       } catch (err) {

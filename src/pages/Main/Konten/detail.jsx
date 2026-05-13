@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import { kontenService } from '../../../services/kontenService'
+import contentInformasiEdukasi from '../../../services/contentInformasiEdukasi.js'
 import { assetUrl } from '../../../lib/assets.js'
 
 export default function KontenDetail() {

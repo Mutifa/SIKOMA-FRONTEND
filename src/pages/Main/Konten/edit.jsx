@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import { kontenService } from '../../../services/kontenService'
+import contentInformasiEdukasi from '../../../services/contentInformasiEdukasi.js'
 import { assetUrl } from '../../../lib/assets.js'
 
 export default function KontenEdit() {
@@ -25,7 +25,7 @@ export default function KontenEdit() {
 
     let mounted = true
 
-    kontenService.getDetail(id)
+    contentInformasiEdukasi.get(id)
 
       .then(res => {
 
@@ -85,7 +85,7 @@ export default function KontenEdit() {
 
       formDataToSend.append('_method', 'PUT')
 
-      await kontenService.update(id, formDataToSend)
+      await contentInformasiEdukasi.update(id, formDataToSend)
 
       navigate('/konten')
 

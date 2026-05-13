@@ -1,7 +1,7 @@
 import React from 'react'
 import Template from '../../layouts/Template.jsx'
-import api from '../../lib/api.js'
-import { ENDPOINTS } from '../../lib/endpoints'
+import standarPelayananService from '../../services/standarPelayananServices.js'
+
 
 export default function StandarPelayanan() {
   const [website, setWebsite] = React.useState(null)
@@ -19,7 +19,7 @@ const handleChange = (e) => {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/home').then(res => { if (mounted) setWebsite(res.data.website) })
+    standarPelayananService.getWebsite().then(res => { if (mounted) setWebsite(res.data.website) })
     return () => { mounted = false }
   }, [])
 React.useEffect(() => {
@@ -66,7 +66,7 @@ React.useEffect(() => {
   setError('');
   setLoading(true); // 🔥 mulai loading
 
-  api.post('/simpan-pesan', form)
+  standarPelayananService.sendMessage(form)
     .then(()=>{
       setMessage('Pesan anda telah terkirim.');
       setForm({ nama:'', email:'', nohp:'', judul:'', pesan:'' });

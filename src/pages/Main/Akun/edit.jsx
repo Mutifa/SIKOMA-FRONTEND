@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import api from '../../../lib/api.js'
+import { akunService } from '../../../services/akunService.js'
 
 export default function AkunEdit() {
 
@@ -28,7 +28,7 @@ export default function AkunEdit() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/admin_pusat/dashboard')
+    akunService.getProfile()
       .then(res => {
         if (mounted) {
           const userData = res.data.user || res.data.data || res.data || {}
@@ -54,7 +54,7 @@ export default function AkunEdit() {
     setError('')
     setSuccess('')
     try {
-      await api.put('/admin_pusat/profile', formData)
+      await akunService.updateProfile(formData)
 
       const hasPasswordChange =
         passwordData.current_password ||

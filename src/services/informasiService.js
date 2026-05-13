@@ -1,6 +1,11 @@
 import api from '../lib/api'
-import { ENDPOINTS } from '../lib/endpoints'
 
-export const informasiService = {
-  get: () => api.get(ENDPOINTS.INFORMASI.GET),
+const informasiService = {
+
+  // Ambil semua data informasi
+  getAll: () =>
+    api.get('/informasi'),
+
 }
+
+export default informasiService

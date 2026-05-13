@@ -1,6 +1,6 @@
 import React from 'react'
 import Template from '../../layouts/Template.jsx'
-import api from '../../lib/api.js'
+import informasiService from '../../services/informasiService.js'
 import { assetUrl } from '../../lib/assets.js'
 
 export default function Informasi() {
@@ -10,7 +10,7 @@ export default function Informasi() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/informasi')
+    informasiService.getAll()
       .then(res => { if (mounted) { setData(res.data); setLoading(false) } })
       .catch(err => { if (mounted) { setError(err.message); setLoading(false) } })
     return () => { mounted = false }

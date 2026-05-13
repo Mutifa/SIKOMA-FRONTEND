@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import api from '../../../lib/api.js'
+import { programService } from '../../../services/programService.js'
 
 export default function ProgramCreate() {
 
@@ -35,30 +34,14 @@ export default function ProgramCreate() {
         formDataToSend.append('foto', formData.foto)
       }
 
-      await api.post(
-        '/admin_pusat/program',
-        formDataToSend,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      )
-
+      await programService.create(formDataToSend)
       navigate('/program')
-
     } catch (err) {
-
       console.log(err)
-
     } finally {
-
-      setSaving(false)
-
+      setSaving(false)                                                                              
     }
-
   }
-
   return (
 
     <DashboardLayout title="Tambah Program">

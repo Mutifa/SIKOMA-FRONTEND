@@ -1,6 +1,6 @@
 import React from 'react'
 import DashboardLayout from '../../../layouts/DashboardLayout'
-import api from '../../../lib/api.js'
+import kawasanService from '../../../services/kawasanService'
 import {
   confirmDelete,
   successAlert,
@@ -31,7 +31,7 @@ export default function Kawasan() {
   }
 
   React.useEffect(() => {
-    api.get('/admin_pusat/kawasan')
+    kawasanService.getAll()
       .then(res => {
         const kawasan = res.data.data || res.data
         if (kawasan && kawasan.length > 0) {
@@ -81,15 +81,15 @@ export default function Kawasan() {
 
       if (data) {
         formDataToSend.append('_method', 'PUT')
-        await api.post(`/admin_pusat/kawasan/${data.id}`, formDataToSend)
+        await kawasanService.update(data.id, formDataToSend)
       } else {
-        await api.post('/admin_pusat/kawasan', formDataToSend)
+        await kawasanService.create(formDataToSend)
       }
 
       setSuccess('Berhasil disimpan')
       setIsEdit(false)
 
-      const res = await api.get('/admin_pusat/kawasan')
+      const res = await kawasanService.getAll(  )
       const kawasan = res.data.data || res.data
       setData(kawasan[0])
 

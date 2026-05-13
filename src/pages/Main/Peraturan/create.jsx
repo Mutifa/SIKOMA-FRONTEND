@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import api from '../../../lib/api.js'
+import peraturanService from '../../../services/peraturan.js'
 
 export default function PeraturanCreate() {
 
@@ -37,15 +37,7 @@ export default function PeraturanCreate() {
         formDataToSend.append('file', formData.file)
       }
 
-      await api.post(
-        '/admin_pusat/peraturan',
-        formDataToSend,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      )
+      await peraturanService.create(formDataToSend)
 
       navigate('/peraturan')
 

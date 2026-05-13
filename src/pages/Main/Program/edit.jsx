@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import api from '../../../lib/api.js'
+import { programService } from '../../../services/programService.js'
 
 export default function ProgramEdit() {
 
@@ -24,7 +24,7 @@ export default function ProgramEdit() {
 
     let mounted = true
 
-    api.get(`/admin_pusat/program/${id}`)
+    programService.getById(id)
 
       .then(res => {
 
@@ -77,15 +77,7 @@ export default function ProgramEdit() {
 
       formDataToSend.append('_method', 'PUT')
 
-      await api.post(
-        `/admin_pusat/program/${id}`,
-        formDataToSend,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      )
+      await programService.update(id, formDataToSend)
 
       navigate('/program')
 

@@ -1,11 +1,23 @@
 import api from '../lib/api'
-import { ENDPOINTS } from '../lib/endpoints'
 
 const kawasanService = {
-  getAll: () => api.get(ENDPOINTS.KAWASAN.GET),
-  create: (data) => api.post(ENDPOINTS.KAWASAN.CREATE, data),
-  update: (id, data) => api.post(ENDPOINTS.KAWASAN.UPDATE(id), data),
-  delete: (id) => api.delete(ENDPOINTS.KAWASAN.DELETE(id)),
+
+  // Ambil semua kawasan
+  getAll: () =>
+    api.get('/admin_pusat/kawasan'),
+
+  // Tambah kawasan
+  create: (data) =>
+    api.post('/admin_pusat/kawasan', data),
+
+  // Update kawasan
+  update: (id, data) =>
+    api.post(`/admin_pusat/kawasan/${id}`, data),
+
+  // Hapus kawasan
+  delete: (id) =>
+    api.delete(`/admin_pusat/kawasan/${id}`),
+
 }
 
 export default kawasanService

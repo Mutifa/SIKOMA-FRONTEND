@@ -1,8 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import Template from '../../layouts/Template.jsx'
-import api from '../../lib/api.js'
-
+import informasiService from '../../services/informasiService.js'
 export default function InformasiDetail() {
     const { slug } = useParams()
 
@@ -13,7 +12,7 @@ export default function InformasiDetail() {
     React.useEffect(() => {
         let mounted = true
 
-        api.get('/informasi')
+        informasiService.getAll()
             .then(res => {
                 if (mounted) {
                     const allData = [

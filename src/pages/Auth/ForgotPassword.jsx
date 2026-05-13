@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Template from '../../layouts/Template.jsx'
-import api from '../../lib/api.js'
+import { authService } from '../../services/authService.js'
 
 export default function ForgotPassword() {
 
@@ -18,7 +18,7 @@ export default function ForgotPassword() {
     setMessage('')                 // reset pesan sukses
     setLoading(true)               // aktifkan loading
 
-    api.post('/auth/forgot-password', { email })
+    authService.forgotPassword({ email })
       .then(() => setMessage('Link reset telah dikirim ke email Anda.'))
       .catch(err => setError(err.response?.data?.message || 'Gagal mengirim link reset.'))
       .finally(() => setLoading(false)) // matikan loading setelah selesai

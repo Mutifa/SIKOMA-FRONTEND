@@ -1,8 +1,26 @@
 import api from '../lib/api'
-import { ENDPOINTS } from '../lib/endpoints'
 
 export const authService = {
-  login: (data) => api.post(ENDPOINTS.AUTH.LOGIN, data),
-  logout: () => api.post(ENDPOINTS.AUTH.LOGOUT),
-  me: () => api.get(ENDPOINTS.AUTH.ME),
+
+  login: (data) =>
+    api.post('/auth/login', data),
+
+  logout: () =>
+    api.post('/auth/logout'),
+
+  me: () =>
+    api.get('/admin_lapangan/profile'),
+
+forgotPassword: (data) =>
+    api.post('/auth/forgot-password', data),
+
+  resetPassword: (data) =>
+    api.post('/auth/reset-password', data),
+
+  verifyEmail: (id, hash) =>
+    api.get(`/auth/verify-email/${id}/${hash}`),
+
+  resendVerification: () =>
+    api.post('/auth/email/verification-notification'),
+
 }

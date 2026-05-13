@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import api from '../../../lib/api.js'
+import { akunService } from '../../../services/akunService.js'
 
 // ── Mapping role ke label & warna badge ──
 const roleMap = {
@@ -20,7 +20,7 @@ export default function Akun() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get('/admin_pusat/dashboard')
+    akunService.getProfile()
       .then(res => {
         if (mounted) {
           const userData = res.data.user || res.data.data || res.data || {}

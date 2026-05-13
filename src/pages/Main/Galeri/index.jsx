@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout'
-import api from '../../../lib/api.js'
+import galeriService from '../../../services/galeriService'
 import {
   confirmDelete,
   successAlert,
@@ -21,7 +21,7 @@ export default function Galeri() {
 
     let mounted = true
 
-    api.get('/admin_pusat/galeri')
+    galeriService.getAll()
       .then(res => {
         if (mounted) {
           setData(res.data.data || res.data)
@@ -48,7 +48,7 @@ export default function Galeri() {
     const result = await confirmDelete()
     if (result.isConfirmed) {
       try {
-        await api.delete(`/admin_pusat/galeri/${id}`)
+        await galeriService.delete(id)
         setData(prev => prev.filter(item => item.id !== id))
         await successAlert('Berhasil', 'Galeri berhasil dihapus')
       } catch (err) {

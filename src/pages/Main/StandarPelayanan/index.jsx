@@ -5,7 +5,7 @@ import {
   deleteStandar,
   getStandar,
   updateStandar
-} from '../../../services/standarPelayanan'
+} from '../../../services/standarPelayananServices.js'
 
 export default function StandarPelayanan() {
   const [data, setData] = React.useState([])
@@ -224,7 +224,6 @@ const loadData = async () => {
                         <div className="text-muted">
                           <i className="fas fa-inbox fa-2x mb-3"></i>
                           <p className="mb-0">Belum ada data standar pelayanan</p>
-                          <small>Klik tombol "Tambah Standar Pelayanan" untuk menambah data baru</small>
                         </div>
                       </td>
                     </tr>

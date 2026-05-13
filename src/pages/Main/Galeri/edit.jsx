@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout'
-import api from '../../../lib/api.js'
+import galeriService from '../../../services/galeriService'
 
 // ─────────────────────────────────────────────
 // Halaman Edit Galeri
@@ -37,7 +37,7 @@ export default function GaleriEdit() {
 
     let mounted = true
 
-    api.get(`/admin_pusat/galeri/${id}`)
+    galeriService.get(id)
 
       .then(res => {
 
@@ -101,15 +101,7 @@ export default function GaleriEdit() {
       }
 
       // Kirim request POST (method override) ke endpoint update galeri
-      await api.post(
-        `/admin_pusat/galeri/${id}`,
-        formDataToSend,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      )
+      await galeriService.update(id, formDataToSend)
 
       // Redirect ke halaman daftar galeri setelah berhasil update
       navigate('/galeri')

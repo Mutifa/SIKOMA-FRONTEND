@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import { kontenService } from '../../../services/kontenService'
+import contentInformasiEdukasi from '../../../services/contentInformasiEdukasi.js'
 
 export default function KontenCreate() {
 
@@ -35,7 +35,7 @@ export default function KontenCreate() {
         formDataToSend.append('foto', formData.foto)
       }
 
-      await kontenService.create(formDataToSend)
+      await contentInformasiEdukasi.create(formDataToSend)
 
       navigate('/konten')
 

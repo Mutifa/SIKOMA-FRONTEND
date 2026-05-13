@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout'
-import api from '../../../lib/api.js'
+import galeriService from '../../../services/galeriService'
 
 // ─────────────────────────────────────────────
 // Halaman Tambah Galeri
@@ -48,16 +48,8 @@ export default function GaleriCreate() {
       }
 
       // Kirim request POST dengan header multipart/form-data
-      await api.post(
-        '/admin_pusat/galeri',
-        formDataToSend,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      )
-
+      await galeriService.create(formDataToSend)
+              
       // Redirect ke halaman daftar galeri setelah berhasil simpan
       navigate('/galeri')
 

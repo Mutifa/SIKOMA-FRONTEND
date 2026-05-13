@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import api from '../../../lib/api.js'
+import { programService } from '../../../services/programService.js'
 
 export default function ProgramDetail() {
 
@@ -15,7 +15,7 @@ export default function ProgramDetail() {
 
     let mounted = true
 
-    api.get(`/admin_pusat/program/${id}`)
+    programService.getById(id)
 
       .then(res => {
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Template from '../../layouts/Template.jsx'
-import api from '../../lib/api.js'
+import { authService } from '../../services/authService.js'
 
 export default function ResetPassword() {
 
@@ -26,7 +26,7 @@ export default function ResetPassword() {
     const token = new URLSearchParams(window.location.search).get('token')
     const email = new URLSearchParams(window.location.search).get('email')
 
-    api.post('/auth/reset-password', { token, email, password, password_confirmation })
+    authService.resetPassword({ token, email, password, password_confirmation })
       .then(() => setMessage('Kata sandi berhasil direset. Silakan login kembali.'))
       .catch(err => setError(err.response?.data?.message || 'Gagal mereset kata sandi.'))
       .finally(() => setLoading(false)) // matikan loading setelah selesai

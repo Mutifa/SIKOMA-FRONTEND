@@ -6,7 +6,7 @@ import React, {
 } from 'react'
 
 import { authService } from '../services/authService'
-import api from '../lib/api'
+
 
 
 // =======================================================
@@ -121,7 +121,7 @@ setLoading(false)
           : '/profile'
 
       // Request ke backend
-      const res = await api.get(endpoint)
+      const res = await authService.me()
 
       const userData = res.data
 

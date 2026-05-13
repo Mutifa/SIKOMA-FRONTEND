@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import api from '../../../lib/api.js'
+import peraturanService from '../../../services/peraturan.js'
 
 export default function PeraturanEdit() {
 
@@ -25,7 +25,7 @@ export default function PeraturanEdit() {
 
     let mounted = true
 
-    api.get(`/admin_pusat/peraturan/${id}`)
+    peraturanService.get(id)
 
       .then(res => {
 
@@ -80,15 +80,7 @@ export default function PeraturanEdit() {
 
       formDataToSend.append('_method', 'PUT')
 
-      await api.post(
-        `/admin_pusat/peraturan/${id}`,
-        formDataToSend,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      )
+      await peraturanService.update(id, formDataToSend)
 
       navigate('/peraturan')
 

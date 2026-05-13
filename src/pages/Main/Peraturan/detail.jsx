@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import api from '../../../lib/api.js'
+import peraturanService from '../../../services/peraturan.js'
 
 export default function PeraturanDetail() {
 
@@ -15,7 +15,7 @@ export default function PeraturanDetail() {
 
     let mounted = true
 
-    api.get(`/admin_pusat/peraturan/${id}`)
+    peraturanService.get(id || '')
 
       .then(res => {
 
