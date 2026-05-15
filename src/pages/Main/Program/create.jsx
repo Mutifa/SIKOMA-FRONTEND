@@ -37,7 +37,6 @@ export default function ProgramCreate() {
       await programService.create(formDataToSend)
       navigate('/program')
     } catch (err) {
-      console.log(err)
     } finally {
       setSaving(false)                                                                              
     }

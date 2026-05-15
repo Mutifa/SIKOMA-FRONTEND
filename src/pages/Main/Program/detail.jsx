@@ -33,7 +33,6 @@ export default function ProgramDetail() {
 
       .catch(err => {
 
-        console.log(err)
 
         setLoading(false)
 

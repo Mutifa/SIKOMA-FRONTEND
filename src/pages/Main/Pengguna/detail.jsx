@@ -18,7 +18,6 @@ export default function PenggunaDetail() {
 
             .then(res => {
 
-                console.log(res.data)
 
                 if (mounted) {
 
@@ -33,7 +32,6 @@ export default function PenggunaDetail() {
 
             .catch(err => {
 
-                console.log(err)
 
                 setLoading(false)
 

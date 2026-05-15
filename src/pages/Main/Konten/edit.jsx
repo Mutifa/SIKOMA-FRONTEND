@@ -57,7 +57,6 @@ export default function KontenEdit() {
 
       .catch(err => {
 
-        console.log(err)
 
         setLoading(false)
 
@@ -91,7 +90,6 @@ export default function KontenEdit() {
 
     } catch (err) {
 
-      console.log(err)
 
     }
 

@@ -49,7 +49,6 @@ export default function ProgramEdit() {
 
       .catch(err => {
 
-        console.log(err)
 
         setLoading(false)
 
@@ -83,7 +82,6 @@ export default function ProgramEdit() {
 
     } catch (err) {
 
-      console.log(err)
 
     }
 

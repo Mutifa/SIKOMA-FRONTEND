@@ -25,12 +25,10 @@ export default function StandarPelayanan() {
   }, [])
 
 const loadData = async () => {
-  console.log('LOAD DATA JALAN') // ← TAMBAH INI
 
   setLoading(true)
   try {
     const res = await standarPelayananService.getStandar()
-    console.log('RESPONSE API:', res.data)
     setData(res.data.data || res.data)
   } catch (err) {
     console.error('ERROR LOAD:', err)

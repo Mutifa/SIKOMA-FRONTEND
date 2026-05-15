@@ -43,7 +43,6 @@ export default function PeraturanCreate() {
 
     } catch (err) {
 
-      console.log(err)
 
     } finally {
 

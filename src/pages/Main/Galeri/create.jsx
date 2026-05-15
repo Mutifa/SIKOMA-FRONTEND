@@ -56,7 +56,6 @@ export default function GaleriCreate() {
     } catch (err) {
 
       // Log error ke console (belum ada UI feedback error)
-      console.log(err)
 
     } finally {
 

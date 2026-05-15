@@ -41,7 +41,6 @@ export default function KontenCreate() {
 
     } catch (err) {
 
-      console.log(err)
 
     } finally {
 

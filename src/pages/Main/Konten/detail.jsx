@@ -34,7 +34,6 @@ export default function KontenDetail() {
 
       .catch(err => {
 
-        console.log(err)
 
         setLoading(false)
 

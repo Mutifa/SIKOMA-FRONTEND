@@ -51,7 +51,6 @@ export default function PeraturanEdit() {
 
       .catch(err => {
 
-        console.log(err)
 
         setLoading(false)
 
@@ -86,7 +85,6 @@ export default function PeraturanEdit() {
 
     } catch (err) {
 
-      console.log(err)
 
     }
 

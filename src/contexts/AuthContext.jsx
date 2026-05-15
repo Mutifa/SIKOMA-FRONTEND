@@ -183,8 +183,6 @@ setLoading(false)
         password
       })
 
-      console.log('FULL RESPONSE:', res.data)
-
       // Ambil data dari response backend
       const userData = res.data.data.user
 
@@ -230,11 +228,6 @@ setLoading(false)
       }
 
     } catch (error) {
-
-      console.log(
-        'LOGIN ERROR:',
-        error.response
-      )
 
       return {
         success: false,
@@ -334,4 +327,3 @@ setLoading(false)
     </AuthContext.Provider>
   )
 }
-

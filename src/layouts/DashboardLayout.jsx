@@ -50,12 +50,6 @@ export default function DashboardLayout({
   // ===================================================
   const { user, logout } = useAuth()
 
-
-  // DEBUG ROLE USER
-  console.log('USER LOGIN:', user)
-  console.log('ROLE:', user?.role)
-
-
   // ===================================================
   // STATE SIDEBAR MOBILE
   // ===================================================
@@ -89,12 +83,6 @@ export default function DashboardLayout({
   const isAdminLapangan =
     user?.role === 'admin_lapangan' ||
     user?.role === 'AdminLapangan'
-
-
-  // DEBUG
-  console.log('isAdminPusat:', isAdminPusat)
-  console.log('isAdminLapangan:', isAdminLapangan)
-
 
   // ===================================================
   // MENU SIDEBAR

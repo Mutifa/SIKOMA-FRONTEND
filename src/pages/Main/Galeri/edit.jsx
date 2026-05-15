@@ -67,7 +67,6 @@ export default function GaleriEdit() {
       .catch(err => {
 
         // Log error ke console (belum ada UI feedback error)
-        console.log(err)
 
         setLoading(false)
 
@@ -109,7 +108,6 @@ export default function GaleriEdit() {
     } catch (err) {
 
       // Log error ke console (belum ada UI feedback error)
-      console.log(err)
 
     }
 

@@ -27,7 +27,6 @@ export default function PenggunaEdit() {
       .then(res => {
 
         const data = res.data.data || res.data
-console.log(data)
         if (mounted) {
 
           setFormData({
@@ -45,7 +44,6 @@ console.log(data)
 
       .catch(err => {
 
-        console.log(err)
 
         setLoading(false)
 
@@ -67,7 +65,6 @@ console.log(data)
 
     } catch (err) {
 
-      console.log(err)
 
     }
 

@@ -47,7 +47,6 @@ export default function GaleriDetail() {
       .catch(err => {
 
         // Log error ke console (belum ada UI feedback error)
-        console.log(err)
 
         setLoading(false)
 
