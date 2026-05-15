@@ -621,6 +621,36 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 .gallery-empty { padding: 3rem 1rem; text-align: center; color: #9ca3af; }
 .gallery-empty i { opacity: 0.4; }
 
+/* Empty state */
+.empty-state {
+  padding: 40px 16px;
+  text-align: center;
+  color: #8a9a91;
+}
+.empty-state i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 12px;
+  border-radius: 50%;
+  background: var(--green-50);
+  color: var(--green-700);
+  font-size: 20px;
+}
+.empty-state__title {
+  margin: 0;
+  color: #52645a;
+  font-size: 14px;
+  font-weight: 600;
+}
+.empty-state__text {
+  margin: 4px 0 0;
+  color: #94a39a;
+  font-size: 12.5px;
+}
+
 /* ============================================================
    PROFIL PAGE — dipindah dari inline style di ProfilPerusahaan
    ============================================================ */

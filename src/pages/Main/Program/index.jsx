@@ -152,7 +152,13 @@ export default function Program() {
 
               {currentData.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="text-center">Belum ada program</td>
+                  <td colSpan="5">
+                    <div className="empty-state">
+                      <i className="fas fa-folder-open"></i>
+                      <p className="empty-state__title">Belum ada program</p>
+                      <p className="empty-state__text">Data program yang ditambahkan akan tampil di sini.</p>
+                    </div>
+                  </td>
                 </tr>
               ) : (
                 currentData.map((item, index) => (

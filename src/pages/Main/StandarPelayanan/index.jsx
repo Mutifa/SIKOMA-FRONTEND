@@ -214,10 +214,11 @@ const loadData = async () => {
                 <tbody>
                   {data.length === 0 ? (
                     <tr>
-                      <td colSpan="6" className="text-center py-4">
-                        <div className="text-muted">
-                          <i className="fas fa-inbox fa-2x mb-3"></i>
-                          <p className="mb-0">Belum ada data standar pelayanan</p>
+                      <td colSpan="6">
+                        <div className="empty-state">
+                          <i className="fas fa-clipboard-list"></i>
+                          <p className="empty-state__title">Belum ada data standar pelayanan</p>
+                          <p className="empty-state__text">Standar pelayanan yang dibuat akan tampil di sini.</p>
                         </div>
                       </td>
                     </tr>

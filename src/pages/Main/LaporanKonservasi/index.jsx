@@ -254,9 +254,14 @@ React.useEffect(() => {
               {filteredLaporan.length === 0 ? (
                 <tr>
                   <td colSpan="6">
-                    <div style={{ textAlign: 'center', padding: '40px 0', color: '#bbb', fontSize: '14px' }}>
-                      <div style={{ fontSize: '32px', marginBottom: '8px' }}>📋</div>
-                      <div>{isAdminPusat && searchTerm.trim() ? 'Laporan tidak ditemukan' : 'Belum ada laporan konservasi'}</div>
+                    <div className="empty-state">
+                      <i className="fas fa-file-lines"></i>
+                      <p className="empty-state__title">
+                        {isAdminPusat && searchTerm.trim() ? 'Laporan tidak ditemukan' : 'Belum ada laporan konservasi'}
+                      </p>
+                      <p className="empty-state__text">
+                        {isAdminPusat && searchTerm.trim() ? 'Coba gunakan kata kunci lain.' : 'Laporan konservasi akan tampil di sini.'}
+                      </p>
                     </div>
                   </td>
                 </tr>

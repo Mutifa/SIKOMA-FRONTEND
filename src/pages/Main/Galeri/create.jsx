@@ -14,6 +14,7 @@ export default function GaleriCreate() {
 
   // State loading saat proses simpan berlangsung
   const [saving, setSaving] = React.useState(false)
+  const [error, setError] = React.useState('')
 
   // State data form galeri
   const [formData, setFormData] = React.useState({
@@ -32,6 +33,7 @@ export default function GaleriCreate() {
     e.preventDefault()
 
     setSaving(true)
+    setError('')
 
     try {
 
@@ -55,7 +57,7 @@ export default function GaleriCreate() {
 
     } catch (err) {
 
-      // Log error ke console (belum ada UI feedback error)
+      setError(err.response?.data?.message || 'Gagal menyimpan galeri')
 
     } finally {
 
@@ -71,6 +73,13 @@ export default function GaleriCreate() {
   return (
 
     <DashboardLayout title="Tambah Galeri">
+
+      {error && (
+        <div className="alert alert-danger">
+          <i className="fas fa-circle-exclamation me-2"></i>
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit}>
 
@@ -190,9 +199,10 @@ export default function GaleriCreate() {
             {/* Tombol submit: disabled saat proses simpan berlangsung */}
             <button
               type="submit"
-              className="btn btn-secondary"
+              className="btn-primary-custom"
               disabled={saving}
             >
+              <i className="fas fa-save"></i>
               {saving ? 'Menyimpan...' : 'Simpan'}
             </button>
 

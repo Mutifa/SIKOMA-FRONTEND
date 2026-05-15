@@ -93,8 +93,12 @@ export default function Peraturan() {
 
                   {data.length === 0 ? (
                     <tr>
-                      <td colSpan="5" className="text-center py-5 text-muted">
-                        Belum ada peraturan
+                      <td colSpan="5">
+                        <div className="empty-state">
+                          <i className="fas fa-gavel"></i>
+                          <p className="empty-state__title">Belum ada peraturan</p>
+                          <p className="empty-state__text">Dokumen peraturan akan muncul setelah ditambahkan.</p>
+                        </div>
                       </td>
                     </tr>
                   ) : (

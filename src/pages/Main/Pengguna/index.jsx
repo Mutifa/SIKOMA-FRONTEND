@@ -97,8 +97,10 @@ export default function Pengguna() {
       <div className="white-box">
 
         {data.length === 0 ? (
-          <div className="text-center py-4">
-            <p className="text-muted">Belum ada pengguna</p>
+          <div className="empty-state">
+            <i className="fas fa-users"></i>
+            <p className="empty-state__title">Belum ada pengguna</p>
+            <p className="empty-state__text">Pengguna baru akan tampil setelah dibuat.</p>
           </div>
         ) : (
           <div className="table-responsive">

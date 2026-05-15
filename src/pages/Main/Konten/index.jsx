@@ -100,7 +100,13 @@ export default function Konten() {
 
                   {data.length === 0 ? (
                     <tr>
-                      <td colSpan="5" className="text-center">Belum ada konten</td>
+                      <td colSpan="5">
+                        <div className="empty-state">
+                          <i className="fas fa-newspaper"></i>
+                          <p className="empty-state__title">Belum ada konten</p>
+                          <p className="empty-state__text">Konten informasi dan edukasi akan muncul setelah ditambahkan.</p>
+                        </div>
+                      </td>
                     </tr>
                   ) : (
                     data.map((item, index) => (
