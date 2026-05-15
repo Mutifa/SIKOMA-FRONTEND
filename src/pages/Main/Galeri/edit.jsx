@@ -263,7 +263,7 @@ export default function GaleriEdit() {
 
                 {/* Gambar diambil dari storage server berdasarkan nama file */}
                 <img
-                  src={`http://127.0.0.1:8000/uploads/galeri/${preview}`}
+                  src={`https://codemy.my.id/uploads/galeri/${preview}`}
                   alt="Preview"
                   className="img-thumbnail"
                   style={{ maxHeight: '250px' }}
@@ -281,7 +281,7 @@ export default function GaleriEdit() {
             {/* Tombol submit untuk menyimpan perubahan */}
             <button
               type="submit"
-              className="btn btn-success"
+              className="btn-primary-custom"
             >
               Update
             </button>
@@ -289,7 +289,7 @@ export default function GaleriEdit() {
             {/* Tombol kembali ke daftar galeri tanpa menyimpan */}
             <Link
               to="/galeri"
-              className="btn btn-secondary"
+              className="btn-secondary-custom"
             >
               Kembali
             </Link>

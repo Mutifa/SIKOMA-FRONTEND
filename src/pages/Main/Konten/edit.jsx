@@ -234,7 +234,7 @@ export default function KontenEdit() {
 
             <button
               type="submit"
-              className="btn btn-success"
+              className="btn-primary-custom"
             >
               Update
             </button>

@@ -149,7 +149,7 @@ export default function GaleriDetail() {
 
               // Preview gambar dari storage server
               <img
-                src={`http://127.0.0.1:8000/uploads/galeri/${data.gambar}`}
+               src={`https://codemy.my.id/uploads/galeri/${preview}`}
                 alt="Galeri"
                 className="img-thumbnail"
                 style={{ maxHeight: '250px' }}
@@ -171,7 +171,7 @@ export default function GaleriDetail() {
         {/* Tombol kembali ke daftar galeri */}
         <Link
           to="/galeri"
-          className="btn btn-secondary"
+          className="btn-secondary-custom"
         >
           Kembali
         </Link>

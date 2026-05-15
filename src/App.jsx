@@ -43,6 +43,7 @@ import GaleriEdit from './pages/Main/Galeri/edit'
 
 
 import ProfilPerusahaan from './pages/Main/ProfilPerusahaan'
+import ProfilPerusahaanEdit from './pages/Main/ProfilPerusahaan/edit.jsx'
 
 import Program from './pages/Main/Program'
 import ProgramCreate from './pages/Main/Program/create'
@@ -238,6 +239,11 @@ export default function App() {
           <Route path="/profil-perusahaan" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
               <ProfilPerusahaan />
+            </RoleGuard>
+          } />
+          <Route path="/profil-perusahaan/edit" element={
+            <RoleGuard allowedRoles={['admin_pusat']}>
+              <ProfilPerusahaanEdit />
             </RoleGuard>
           } />
 

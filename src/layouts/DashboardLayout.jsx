@@ -288,7 +288,7 @@ export default function DashboardLayout({
               alt="logo"
             />
 
-            <span>SIKOMA</span>
+            <span className="logo-text">SIKOMA</span>
 
           </div>
 

@@ -16,7 +16,7 @@ export default function KontenDetail() {
 
     let mounted = true
 
-    kontenService.getDetail(id)
+    contentInformasiEdukasi.get(id)
 
       .then(res => {
 
@@ -143,7 +143,7 @@ export default function KontenDetail() {
 
         <Link
           to="/konten"
-          className="btn btn-secondary"
+          className="btn-secondary-custom"
         >
           Kembali
         </Link>

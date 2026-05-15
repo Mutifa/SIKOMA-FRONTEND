@@ -4,6 +4,11 @@ import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import '../../../assets/css/LaporanKonservasi.css'
 import { laporanKonservasiService } from '../../../services/laporanKonservasi'
 import { useAuth } from '../../../contexts/AuthContext'
+import {
+  successAlert,
+  errorAlert,
+  rejectionReasonAlert
+} from '../../../utils/alert'
 
 /* URL base file di server */
 const FILE_URL = 'https://codemy.my.id'
@@ -71,10 +76,10 @@ export default function LaporanDetail() {
          * Status 2 = ditolak → wajib isi alasan.
          * TODO: Ganti prompt() dengan modal SweetAlert agar UX lebih baik.
          */
-        const alasan = prompt('Masukkan alasan penolakan')
-        if (!alasan) return
-        payload.alasan = alasan
-      }
+        const result = await rejectionReasonAlert()
+          if (!result.isConfirmed) return
+      payload.alasan = result.value
+    }
 
       await laporanKonservasiService.validasi(laporanId, payload)
       window.location.reload()

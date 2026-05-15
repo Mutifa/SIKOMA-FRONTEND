@@ -18,6 +18,7 @@ export default function LaporanKonservasi() {
   const [data,    setData]    = React.useState({ laporan: [], daerah: [] })
   const [error,   setError]   = React.useState('')
   const [loading, setLoading] = React.useState(true)
+  const [searchTerm, setSearchTerm] = React.useState('')
 
   // ── Auth: cek role user ─────────────────────────────────────────────────
   const { user } = useAuth()
@@ -119,6 +120,51 @@ React.useEffect(() => {
     }
   }
 
+  const getStatusText = (status) => {
+    const map = {
+      0: 'Pending',
+      1: 'Disetujui',
+      2: 'Ditolak',
+    }
+    return map[status] ?? '-'
+  }
+
+  const formatDate = (date) => {
+    if (!date) return 'N/A'
+    return new Date(date).toLocaleDateString('id-ID', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    })
+  }
+
+  const filteredLaporan = React.useMemo(() => {
+    if (!isAdminPusat) return data.laporan
+
+    const keyword = searchTerm.trim().toLowerCase()
+    if (!keyword) return data.laporan
+
+    return data.laporan.filter(item => {
+      const searchableText = [
+        item.judulLaporan,
+        item.judul_laporan,
+        item.jenisKegiatan,
+        item.jenis_kegiatan,
+        item.daerahLokasi,
+        item.daerah_lokasi,
+        item.kabupaten,
+        item.kecamatan,
+        item.alasan,
+        getStatusText(item.status),
+        formatDate(item.created_at)
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+
+      return searchableText.includes(keyword)
+    })
+  }, [data.laporan, isAdminPusat, searchTerm])
+
   /**
    * getStatusBadge — Render badge status laporan
    * Menggunakan class .lk-badge + modifier dari LaporanKonservasi.css
@@ -171,6 +217,24 @@ React.useEffect(() => {
       <div className="white-box">
         <div className="box-title mb-3">Semua Laporan</div>
 
+        {isAdminPusat && (
+          <div className="row mb-3">
+            <div className="col-md-6 ms-auto">
+              <div className="d-flex justify-content-end align-items-center">
+                <label className="me-2">Cari:</label>
+                <input
+                  type="text"
+                  className="form-control form-control-sm"
+                  style={{ maxWidth: '260px' }}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Cari laporan..."
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Wrapper overflow agar tabel bisa di-scroll horizontal di mobile */}
         <div style={{ overflowX: 'auto' }}>
           <table className="lk-table">
@@ -187,17 +251,17 @@ React.useEffect(() => {
             <tbody>
 
               {/* ── Kosong state ── */}
-              {data.laporan.length === 0 ? (
+              {filteredLaporan.length === 0 ? (
                 <tr>
                   <td colSpan="6">
                     <div style={{ textAlign: 'center', padding: '40px 0', color: '#bbb', fontSize: '14px' }}>
                       <div style={{ fontSize: '32px', marginBottom: '8px' }}>📋</div>
-                      <div>Belum ada laporan konservasi</div>
+                      <div>{isAdminPusat && searchTerm.trim() ? 'Laporan tidak ditemukan' : 'Belum ada laporan konservasi'}</div>
                     </div>
                   </td>
                 </tr>
               ) : (
-                data.laporan.map((item, index) => (
+                filteredLaporan.map((item, index) => (
                   /*
                    * Row berwarna merah muda jika laporan ditolak.
                    * Class .lk-row-rejected dari LaporanKonservasi.css
@@ -243,12 +307,7 @@ React.useEffect(() => {
 
                     {/* Tanggal dibuat — format lokal Indonesia */}
                     <td style={{ color: '#555', fontSize: '13px' }}>
-                      {item.created_at
-                        ? new Date(item.created_at).toLocaleDateString('id-ID', {
-                            day: '2-digit', month: '2-digit', year: 'numeric',
-                            hour: '2-digit', minute: '2-digit', second: '2-digit'
-                          })
-                        : 'N/A'}
+                      {formatDate(item.created_at)}
                     </td>
 
                     {/* Badge status */}

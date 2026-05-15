@@ -11,7 +11,6 @@ import {
   Tooltip,
   Legend
 } from 'chart.js'
-import "../../../assets/css/Dashboard.css";
 import { Bar, Pie, Line } from 'react-chartjs-2'
 import { dashboardService } from '../../../services/dashboardService.js'
 import DashboardLayout from '../../../layouts/DashboardLayout'

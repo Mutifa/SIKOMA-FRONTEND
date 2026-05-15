@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
 /* ============================================================
    SIKOMA — Shared Admin Styles (Admin Lapangan & Admin Pusat)
    ============================================================ */
@@ -22,7 +24,7 @@
   --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
   --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
 
-  --font-main: 'Segoe UI', system-ui, sans-serif;
+  --font-main: 'Poppins', sans-serif;
 }
 
 /* ===== RESET ===== */
@@ -952,4 +954,12 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 .w-100 { width: 100% !important; }
 .col-12 { width: 100%; }
 
-hr { display: none; }
+hr:not([class]) { display: none; }
+
+/* Logo SIKOMA */
+.logo-text {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: white;
+}

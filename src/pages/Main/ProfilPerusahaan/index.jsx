@@ -2,6 +2,8 @@ import React from 'react'
 import DashboardLayout from '../../../layouts/DashboardLayout'
 import profilPerusahaanService  from '../../../services/profilPerusahaanService'
 
+const FILE_URL = 'https://codemy.my.id'
+
 // ── Semua style dipindah ke Dashboard.css
 // ── Tidak ada lagi <style>{...}</style> di dalam JSX
 
@@ -38,19 +40,19 @@ export default function ProfilPerusahaan() {
       const response = await profilPerusahaanService.get()
       const data = response.data
       setFormData({
-        nama:      stripHtmlTags(data.nama)      || '',
-        deskripsi: stripHtmlTags(data.deskripsi) || '',
-        keyword:   stripHtmlTags(data.keyword)   || '',
-        alamat:    stripHtmlTags(data.alamat)    || '',
-        telepon:   stripHtmlTags(data.telepon)   || '',
-        email:     stripHtmlTags(data.email)     || '',
-        facebook:  stripHtmlTags(data.facebook)  || '',
-        instagram: stripHtmlTags(data.instagram) || '',
-        wa:        stripHtmlTags(data.wa)        || '',
-        gmaps:     stripHtmlTags(data.gmaps)     || '',
-        jambuka:   stripHtmlTags(data.jambuka)  || '',
-        visi:      stripHtmlTags(data.visi)      || '',
-        misi:      stripHtmlTags(data.misi)      || '',
+        nama:      data.nama      || '',
+        deskripsi: data.deskripsi || '',
+        keyword:   data.keyword   || '',
+        alamat:    data.alamat    || '',
+        telepon:   data.telepon   || '',
+        email:     data.email     || '',
+        facebook:  data.facebook  || '',
+        instagram: data.instagram || '',
+        wa:        data.wa        || '',
+        gmaps:     data.gmaps     || '',
+        jambuka:   data.jambuka   || '',
+        visi:      data.visi      || '',
+        misi:      data.misi      || '',
         logo:      data.logo      || null,
         struktur:  data.struktur  || null
       })
@@ -141,16 +143,16 @@ export default function ProfilPerusahaan() {
         <hr className="profil-divider" />
 
         <div className="row">
-          <div className="col-md-6"><Field label="Nama Website"    value={formData.nama}      /></div>
-          <div className="col-md-6"><Field label="Meta Deskripsi"  value={formData.deskripsi}  /></div>
-          <div className="col-md-6"><Field label="Meta Keyword"    value={formData.keyword}    /></div>
-          <div className="col-md-6"><Field label="Alamat"          value={formData.alamat}     /></div>
-          <div className="col-md-6"><Field label="Telepon"         value={formData.telepon}    /></div>
-          <div className="col-md-6"><Field label="Email"           value={formData.email}      /></div>
-          <div className="col-md-6"><Field label="Facebook"        value={formData.facebook}   /></div>
-          <div className="col-md-6"><Field label="Instagram"       value={formData.instagram}  /></div>
-          <div className="col-md-12"><Field label="WhatsApp"       value={formData.wa}         /></div>
-          <div className="col-md-12"><Field label="Google Maps"    value={formData.gmaps}      /></div>
+          <div className="col-md-6"><Field label="Nama Website"    value={stripHtmlTags(formData.nama)}      /></div>
+          <div className="col-md-6"><Field label="Meta Deskripsi"  value={stripHtmlTags(formData.deskripsi)}  /></div>
+          <div className="col-md-6"><Field label="Meta Keyword"    value={stripHtmlTags(formData.keyword)}    /></div>
+          <div className="col-md-6"><Field label="Alamat"          value={stripHtmlTags(formData.alamat)}     /></div>
+          <div className="col-md-6"><Field label="Telepon"         value={stripHtmlTags(formData.telepon)}    /></div>
+          <div className="col-md-6"><Field label="Email"           value={stripHtmlTags(formData.email)}      /></div>
+          <div className="col-md-6"><Field label="Facebook"        value={stripHtmlTags(formData.facebook)}   /></div>
+          <div className="col-md-6"><Field label="Instagram"       value={stripHtmlTags(formData.instagram)}  /></div>
+          <div className="col-md-12"><Field label="WhatsApp"       value={stripHtmlTags(formData.wa)}         /></div>
+          <div className="col-md-12"><Field label="Google Maps"    value={stripHtmlTags(formData.gmaps)}      /></div>
         </div>
 
         <div className="row mt-1">
@@ -159,7 +161,7 @@ export default function ProfilPerusahaan() {
             {/* profil-image-box dari Dashboard.css */}
             <div className="profil-image-box">
               {formData.logo
-                ? <img src={`/img/${formData.logo}`} alt="Logo" style={{ maxHeight: '80px' }} />
+                ? <img src={`${FILE_URL}/img/${formData.logo}`} alt="Logo" style={{ maxHeight: '80px' }} />
                 : 'Belum ada logo'}
             </div>
           </div>
@@ -167,7 +169,7 @@ export default function ProfilPerusahaan() {
             <div className="profil-field-label">Struktur Organisasi</div>
             <div className="profil-image-box">
               {formData.struktur
-                ? <img src={`/img/${formData.struktur}`} alt="Struktur" style={{ maxHeight: '80px' }} />
+                ? <img src={`${FILE_URL}/img/${formData.struktur}`} alt="Struktur" style={{ maxHeight: '80px' }} />
                 : 'Belum ada gambar'}
             </div>
           </div>
@@ -186,7 +188,7 @@ export default function ProfilPerusahaan() {
               <button
                 className="profil-modal-close"
                 onClick={() => { setIsEdit(false); loadWebsiteData() }}
-              >×</button>
+              >x</button>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -204,8 +206,8 @@ export default function ProfilPerusahaan() {
                   <div className="col-md-6 mb-3"><label>Instagram</label><input type="text" className="form-control" name="instagram" value={formData.instagram} onChange={handleChange} /></div>
                   <div className="col-md-12 mb-3"><label>WhatsApp</label><input type="text" className="form-control" name="wa" value={formData.wa} onChange={handleChange} /></div>
                   <div className="col-md-12 mb-3"><label>Google Maps</label><input type="text" className="form-control" name="gmaps" value={formData.gmaps} onChange={handleChange} /></div>
-                  <div className="col-md-6 mb-3"><label>Logo Website</label><input type="file" className="form-control" name="logo" onChange={handleFileChange} /></div>
-                  <div className="col-md-6 mb-3"><label>Struktur Organisasi</label><input type="file" className="form-control" name="struktur" onChange={handleFileChange} /></div>
+                  <div className="col-md-6 mb-3"><label>Logo Website</label><input type="file" className="form-control" name="logo" accept="image/*" onChange={handleFileChange} /></div>
+                  <div className="col-md-6 mb-3"><label>Struktur Organisasi</label><input type="file" className="form-control" name="struktur" accept="image/*" onChange={handleFileChange} /></div>
                   <div className="col-12 mb-3"><label>Jam Operasional</label><textarea className="form-control" name="jambuka" value={formData.jambuka} onChange={handleChange} rows={3} /></div>
                   <div className="col-md-6 mb-3"><label>Visi</label><textarea className="form-control" name="visi" value={formData.visi} onChange={handleChange} rows={4} /></div>
                   <div className="col-md-6 mb-3"><label>Misi</label><textarea className="form-control" name="misi" value={formData.misi} onChange={handleChange} rows={4} /></div>

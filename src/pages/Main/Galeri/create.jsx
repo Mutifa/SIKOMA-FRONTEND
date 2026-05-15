@@ -191,7 +191,7 @@ export default function GaleriCreate() {
             {/* Tombol submit: disabled saat proses simpan berlangsung */}
             <button
               type="submit"
-              className="btn btn-success"
+              className="btn btn-secondary"
               disabled={saving}
             >
               {saving ? 'Menyimpan...' : 'Simpan'}
@@ -200,7 +200,7 @@ export default function GaleriCreate() {
             {/* Tombol kembali ke daftar galeri */}
             <Link
               to="/galeri"
-              className="btn btn-secondary"
+              className="btn-secondary-custom"
             >
               Kembali
             </Link>
