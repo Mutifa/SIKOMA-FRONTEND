@@ -4,19 +4,23 @@ const kawasanService = {
 
   // Ambil semua kawasan
   getAll: () =>
-    api.get('/admin_pusat/kawasan'),
+    api.get('/kawasan'),
+  
+  // Detail kawasan
+  getById: (id) =>
+    api.get(`/kawasan/${id}`),
 
   // Tambah kawasan
   create: (data) =>
-    api.post('/admin_pusat/kawasan', data),
+    api.post('/kawasan', data),
 
   // Update kawasan
   update: (id, data) =>
-    api.post(`/admin_pusat/kawasan/${id}`, data),
+    api.put(`/kawasan/${id}`, data),
 
   // Hapus kawasan
   delete: (id) =>
-    api.delete(`/admin_pusat/kawasan/${id}`),
+    api.delete(`/kawasan/${id}`),
 
 }
 

@@ -4,22 +4,22 @@ export const penggunaService = {
 
   // Ambil semua pengguna
   getAll: () =>
-    api.get('/admin_pusat/pengguna'),
+    api.get('/pengguna'),
 
   // Ambil detail pengguna
   getById: (id) =>
-    api.get(`/admin_pusat/pengguna/${id}`),
+    api.get(`/pengguna/${id}`),
 
   // Tambah pengguna
   create: (data) =>
-    api.post('/admin_pusat/pengguna', data),
+    api.post('/pengguna', data),
 
   // Update pengguna
   update: (id, data) =>
-    api.put(`/admin_pusat/pengguna/${id}`, data),
+    api.put(`/pengguna/${id}`, data),
 
   // Hapus pengguna
   delete: (id) =>
-    api.delete(`/admin_pusat/pengguna/${id}`),
+    api.delete(`/pengguna/${id}`),
 
 }

@@ -1,6 +1,24 @@
 import api from '../lib/api'
-import { ENDPOINTS } from '../lib/endpoints'
 
 export const edukasiService = {
-  get: () => api.get('/program')
+
+  getAll: () =>
+    api.get('/edukasi'),
+
+  getById: (id) =>
+    api.get(`/edukasi/${id}`),
+
+  create: (data) =>
+    api.post('/edukasi', data, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+
+  update: (id, data) =>
+    api.put(`/edukasi/${id}`, data, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+
+  delete: (id) =>
+    api.delete(`/edukasi/${id}`),
+
 }

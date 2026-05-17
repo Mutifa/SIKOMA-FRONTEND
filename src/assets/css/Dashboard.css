@@ -259,17 +259,31 @@ a { text-decoration: none; color: inherit; }
   flex-direction: column;
 }
 
+/* ============================================================
+   PAGE HEADER — breadcrumb area
+   ============================================================ */
 .page-breadcrumb {
   background: #fff;
   padding: 14px 28px;
   border-bottom: 1px solid #e2ece7;
 }
+
 .page-title {
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--green-800);
-  margin: 0;
+  margin: 0 0 2px;
+  line-height: 1.3;
 }
+
+/* ── BARU: subtitle di bawah judul ── */
+.page-subtitle {
+  font-size: 12.5px;
+  color: #6b8c7a;
+  margin: 0 0 4px;
+  font-weight: 400;
+}
+
 .breadcrumb {
   margin: 4px 0 0;
   padding: 0;
@@ -313,6 +327,143 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ============================================================
+   TABLE CONTROLS — search + show entries (BARU, wajib konsisten)
+   Cara pakai:
+     <div className="table-controls">
+       <div className="table-controls-left">
+         Tampilkan <select>…</select> entri
+       </div>
+       <div className="table-controls-right">
+         <div className="table-search-wrap">
+           <i className="fas fa-search table-search-icon"/>
+           <input className="table-search-input" placeholder="Cari…"/>
+         </div>
+       </div>
+     </div>
+   ============================================================ */
+.table-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e8f0eb;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.table-controls-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.table-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Dropdown "Tampilkan N entri" */
+.table-entries-select {
+  padding: 5px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: var(--font-main);
+  background: #fff;
+  color: #1e2d26;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.table-entries-select:focus {
+  outline: none;
+  border-color: var(--green-600);
+}
+
+/* Search wrapper */
+.table-search-wrap {
+  position: relative;
+}
+.table-search-icon {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 12px;
+  pointer-events: none;
+}
+.table-search-input {
+  padding: 7px 12px 7px 30px;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: var(--font-main);
+  color: #1e2d26;
+  background: #f9fafb;
+  width: 200px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.table-search-input:focus {
+  outline: none;
+  border-color: var(--green-600);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(47,111,79,0.10);
+}
+
+/* ============================================================
+   TABLE FOOTER — info + pagination (BARU)
+   Cara pakai:
+     <div className="table-footer">
+       <span className="table-info">Menampilkan 1 sampai N dari N entri</span>
+       <div className="pagination-wrap">…</div>
+     </div>
+   ============================================================ */
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-top: 1px solid #e8f0eb;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.table-info {
+  font-size: 12.5px;
+  color: #6b7280;
+}
+
+.pagination-wrap {
+  display: flex;
+  gap: 4px;
+}
+
+.page-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  font-size: 12px;
+  font-family: var(--font-main);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #374151;
+  transition: all 0.15s;
+}
+.page-btn:hover { background: var(--green-50); border-color: var(--green-600); }
+.page-btn.active {
+  background: var(--green-800);
+  color: #fff;
+  border-color: var(--green-800);
+}
+
+/* ============================================================
    TABLE
    ============================================================ */
 .table {
@@ -346,8 +497,64 @@ a { text-decoration: none; color: inherit; }
   border: 1px solid #e8f0eb;
 }
 
+/* ── BARU: teks panjang otomatis terpotong di sel tabel ── */
+.td-truncate {
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #6b7280;
+}
+
+/* ── BARU: foto/thumbnail placeholder di tabel ── */
+.photo-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--green-50);
+  border: 1px solid var(--green-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.photo-thumb-icon {
+  color: #a0b8a8;
+  font-size: 16px;
+}
+
+/* ── BARU: avatar mini di tabel pengguna ── */
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mini-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--green-100);
+  border: 2px solid var(--green-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green-700);
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
 /* ============================================================
-   BUTTONS — Universal (semua halaman wajib pakai class ini)
+   BUTTONS — Universal
    ============================================================ */
 .btn {
   border-radius: var(--radius-sm);
@@ -362,14 +569,12 @@ a { text-decoration: none; color: inherit; }
   gap: 6px;
 }
 
-/* Size modifier — bisa digabung: class="btn-primary-custom btn-sm" */
 .btn-sm {
   padding: 5px 10px;
   font-size: 12px;
   border-radius: var(--radius-sm);
 }
 
-/* Tambah / Simpan / Detail (hijau gelap) */
 .btn-primary-custom {
   background: #1a5c35;
   color: #fff;
@@ -391,7 +596,6 @@ a { text-decoration: none; color: inherit; }
   transform: translateY(-1px);
 }
 
-/* Edit (oranye/kuning) */
 .btn-warning-custom {
   background: #f5a623;
   color: #fff;
@@ -413,7 +617,6 @@ a { text-decoration: none; color: inherit; }
   transform: translateY(-1px);
 }
 
-/* Hapus / Tolak (merah) */
 .btn-danger-custom {
   background: #e24b4a;
   color: #fff;
@@ -435,7 +638,6 @@ a { text-decoration: none; color: inherit; }
   transform: translateY(-1px);
 }
 
-/* Batal / Netral (abu-abu) */
 .btn-secondary-custom {
   background: #6b7280;
   color: #fff;
@@ -457,6 +659,26 @@ a { text-decoration: none; color: inherit; }
   transform: translateY(-1px);
 }
 
+/* Tombol ikon aksi di tabel (lihat/edit/hapus) */
+.btn-icon-action {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 13px;
+}
+.btn-icon-view   { background: var(--green-800); color: #fff; }
+.btn-icon-view:hover   { background: var(--green-700); }
+.btn-icon-edit   { background: #f5a623; color: #fff; }
+.btn-icon-edit:hover   { background: #d4861a; }
+.btn-icon-delete { background: #e24b4a; color: #fff; }
+.btn-icon-delete:hover { background: #c0302f; }
+
 /* ============================================================
    BADGE
    ============================================================ */
@@ -473,6 +695,10 @@ a { text-decoration: none; color: inherit; }
 .bg-danger   { background: #fee2e2 !important; color: #991b1b !important; }
 .bg-secondary{ background: #f3f4f6 !important; color: #374151 !important; }
 .bg-primary  { background: #dbeafe !important; color: #1e3a8a !important; }
+
+/* Badge role spesifik SIKOMA */
+.badge-admin-pusat    { background: var(--green-50); color: var(--green-700); border: 1px solid var(--green-100); }
+.badge-admin-lapangan { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
 
 /* ============================================================
    MODAL
@@ -545,20 +771,9 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   font-size: 13.5px;
   margin-bottom: 16px;
 }
-.alert-danger {
-  background: #fee2e2;
-  color: #991b1b;
-}
-/* Ditambahkan: alert-success */
-.alert-success {
-  background: #d1fae5;
-  color: #065f46;
-}
-/* Ditambahkan: alert-warning */
-.alert-warning {
-  background: #fef3c7;
-  color: #92400e;
-}
+.alert-danger   { background: #fee2e2; color: #991b1b; }
+.alert-success  { background: #d1fae5; color: #065f46; }
+.alert-warning  { background: #fef3c7; color: #92400e; }
 
 /* ============================================================
    FOOTER
@@ -639,20 +854,11 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   color: var(--green-700);
   font-size: 20px;
 }
-.empty-state__title {
-  margin: 0;
-  color: #52645a;
-  font-size: 14px;
-  font-weight: 600;
-}
-.empty-state__text {
-  margin: 4px 0 0;
-  color: #94a39a;
-  font-size: 12.5px;
-}
+.empty-state__title { margin: 0; color: #52645a; font-size: 14px; font-weight: 600; }
+.empty-state__text  { margin: 4px 0 0; color: #94a39a; font-size: 12.5px; }
 
 /* ============================================================
-   PROFIL PAGE — dipindah dari inline style di ProfilPerusahaan
+   PROFIL PAGE
    ============================================================ */
 .profil-box {
   background: #fff;
@@ -667,11 +873,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   align-items: center;
   margin-bottom: 14px;
 }
-.profil-box-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--green-900);
-}
+.profil-box-title { font-size: 15px; font-weight: 600; color: var(--green-900); }
 .profil-field-label {
   font-size: 13px;
   color: #495057;
@@ -703,11 +905,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   font-size: 13px;
   margin-bottom: 1rem;
 }
-.profil-divider {
-  border: none;
-  border-top: 1px solid #dee2e6;
-  margin: 14px 0 18px;
-}
+.profil-divider { border: none; border-top: 1px solid #dee2e6; margin: 14px 0 18px; }
 
 /* Modal profil */
 .profil-modal-overlay {
@@ -734,12 +932,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   align-items: center;
   justify-content: space-between;
 }
-.profil-modal-header h5 {
-  font-size: 15px;
-  font-weight: 600;
-  color: #fff;
-  margin: 0;
-}
+.profil-modal-header h5 { font-size: 15px; font-weight: 600; color: #fff; margin: 0; }
 .profil-modal-close {
   background: transparent;
   border: none;
@@ -752,114 +945,39 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 }
 .profil-modal-close:hover { opacity: 1; }
 .profil-modal-body { padding: 20px 24px; }
-.profil-modal-footer {
-  padding: 12px 24px 18px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-.profil-modal-body label {
-  font-size: 13px;
-  color: #495057;
-  margin-bottom: 5px;
-  font-weight: 500;
-  display: block;
-}
+.profil-modal-footer { padding: 12px 24px 18px; display: flex; justify-content: flex-end; gap: 10px; }
+.profil-modal-body label { font-size: 13px; color: #495057; margin-bottom: 5px; font-weight: 500; display: block; }
 
-/* Alert profil */
-.profil-alert {
-  border-radius: var(--radius-sm);
-  padding: 10px 14px;
-  font-size: 14px;
-  margin-bottom: 14px;
-  border: 1px solid transparent;
-}
+.profil-alert { border-radius: var(--radius-sm); padding: 10px 14px; font-size: 14px; margin-bottom: 14px; border: 1px solid transparent; }
 .profil-alert-danger  { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
 .profil-alert-success { background: #d1fae5; border-color: #6ee7b7; color: #065f46; }
 
 /* ============================================================
-   AKUN PAGE — dipindah dari inline style di Akun/index.jsx
+   AKUN PAGE
    ============================================================ */
-.akun-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
-}
-.akun-card {
-  background: #fff;
-  border: 1px solid #e8e8e8;
-  border-radius: var(--radius-md);
-  padding: 1.5rem;
-}
+.akun-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+.akun-card { background: #fff; border: 1px solid #e8e8e8; border-radius: var(--radius-md); padding: 1.5rem; }
 .akun-section-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: #1a5c35;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  margin-bottom: 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  font-size: 13px; font-weight: 700; color: #1a5c35;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px;
 }
-.akun-section-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #1a5c35;
-  flex-shrink: 0;
-}
-.akun-field-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: #999;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-  display: block;
-}
+.akun-section-dot { width: 6px; height: 6px; border-radius: 50%; background: #1a5c35; flex-shrink: 0; }
+.akun-field-label { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; margin-bottom: 5px; display: block; }
 .akun-field-value {
-  font-size: 14px;
-  color: #1a1a1a;
-  padding: 9px 12px;
-  background: #f8f9f8;
-  border: 1px solid #efefef;
-  border-radius: 8px;
-  min-height: 38px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 14px;
+  font-size: 14px; color: #1a1a1a; padding: 9px 12px;
+  background: #f8f9f8; border: 1px solid #efefef; border-radius: 8px;
+  min-height: 38px; display: flex; align-items: center; margin-bottom: 14px;
 }
-.akun-role-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-}
-.akun-password-dots {
-  letter-spacing: 4px;
-  color: #bbb;
-  font-size: 18px;
-}
-.akun-password-hint {
-  font-size: 12px;
-  color: #bbb;
-  margin-top: 10px;
-}
-.akun-password-hint strong {
-  color: #1a5c35;
-}
+.akun-role-badge { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.akun-password-dots { letter-spacing: 4px; color: #bbb; font-size: 18px; }
+.akun-password-hint { font-size: 12px; color: #bbb; margin-top: 10px; }
+.akun-password-hint strong { color: #1a5c35; }
 
-/* Loading spinner center */
-.loading-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 200px;
-}
+.loading-center { display: flex; justify-content: center; align-items: center; min-height: 200px; }
 
 /* ============================================================
-   RESPONSIVE — MOBILE & TABLET
+   RESPONSIVE
    ============================================================ */
 .sidebar-overlay {
   display: none;
@@ -870,10 +988,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   opacity: 0;
   transition: opacity 0.3s;
 }
-.sidebar-overlay.visible {
-  display: block;
-  opacity: 1;
-}
+.sidebar-overlay.visible { display: block; opacity: 1; }
 
 @media (max-width: 991px) {
   .left-sidebar {
@@ -895,6 +1010,8 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   .table thead tr th,
   .table tbody tr td { padding: 10px 12px; font-size: 12.5px; }
   .modal-dialog { max-width: calc(100% - 32px); margin: 16px; }
+  .table-search-input { width: 150px; }
+  .table-controls { flex-direction: column; align-items: flex-start; }
 }
 
 @media (max-width: 575px) {
@@ -908,6 +1025,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   .modal-footer { padding: 12px 16px; flex-wrap: wrap; }
   .user-info .name { max-width: 100px; overflow: hidden; text-overflow: ellipsis; }
   .akun-grid { grid-template-columns: 1fr; }
+  .table-search-input { width: 120px; }
 }
 
 /* ============================================================
@@ -986,10 +1104,4 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 
 hr:not([class]) { display: none; }
 
-/* Logo SIKOMA */
-.logo-text {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: white;
-}
+.logo-text { font-size: 28px; font-weight: 800; letter-spacing: 1px; color: white; }

@@ -4,23 +4,23 @@ const peraturanService = {
 
   // Ambil semua peraturan
   getAll: () =>
-    api.get('/admin_pusat/peraturan'),
+    api.get('/peraturan'),
 
   // Detail peraturan
   get: (id) =>
-    api.get(`/admin_pusat/peraturan/${id}`),
+    api.get(`/peraturan/${id}`),
 
   // Tambah peraturan
   create: (data) =>
-    api.post('/admin_pusat/peraturan', data),
+    api.post('/peraturan', data),
 
   // Update peraturan
   update: (id, data) =>
-    api.post(`/admin_pusat/peraturan/${id}`, data),
+    api.put(`/peraturan/${id}`, data),
 
   // Hapus peraturan
   delete: (id) =>
-    api.delete(`/admin_pusat/peraturan/${id}`),
+    api.delete(`/peraturan/${id}`),
 
 }
 

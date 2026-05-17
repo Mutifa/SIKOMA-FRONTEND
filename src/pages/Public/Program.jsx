@@ -1,7 +1,7 @@
 import React from 'react'
 import Template from '../../layouts/Template.jsx'
 import { assetUrl } from '../../lib/assets.js'
-import axios from 'axios'
+import api from '../../lib/api.js'
 
 export default function Program() {
   const [items, setItems] = React.useState([])
@@ -12,15 +12,14 @@ export default function Program() {
   React.useEffect(() => {
     let mounted = true
 
-    axios.get('https://codemy.my.id/api/admin_pusat/program')
-  .then(res => {
-    setItems(Array.isArray(res.data) ? res.data : res.data.data || [])
-    setLoading(false)
-  })
-  .catch(err => {
-    setError('Gagal memuat edukasi')
-    setLoading(false)
-  })
+    api.get('/program')
+      .then(res => {
+        if (mounted) {
+          setItems(Array.isArray(res.data) ? res.data : res.data.data || [])   // ✅ FIX sesuai API
+          setKategori(res.data.kategori || '')
+          setLoading(false)
+        }
+      })
       .catch(err => {
         if (mounted) {
           setError(err.response?.data?.message || 'Gagal memuat edukasi')

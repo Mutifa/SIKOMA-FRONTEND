@@ -2,28 +2,33 @@ import api from '../lib/api'
 
 const programService = {
 
+  // Ambil semua program
   getAll: () =>
-    api.get('/admin_pusat/program'),
+    api.get('/program'),
 
+  // Detail program
   getById: (id) =>
-    api.get(`/admin_pusat/program/${id}`),
+    api.get(`/program/${id}`),
 
+  // Tambah program
   create: (data) =>
-    api.post('/admin_pusat/program', data, {
+    api.post('/program', data, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     }),
 
+  // Update program
   update: (id, data) =>
-    api.post(`/admin_pusat/program/${id}`, data, {
+    api.put(`/program/${id}`, data, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     }),
 
+  // Hapus program
   delete: (id) =>
-    api.delete(`/admin_pusat/program/${id}`),
+    api.delete(`/program/${id}`),
 
 }
 
