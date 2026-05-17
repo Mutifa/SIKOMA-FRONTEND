@@ -117,7 +117,7 @@ export default function DashboardLayout({
       },
 
       {
-        to: '/program',
+        to: '/dashboard/program',
         icon: 'fa-list-ul',
         label: 'Program'
       },

@@ -8,8 +8,8 @@ import RoleGuard from './components/RoleGuard.jsx'
 
 // ================= PUBLIC PAGES =================
 import PublicHome from './pages/Public/Home.jsx'
-import PublicEdukasi from './pages/Public/Edukasi.jsx'
-import PublicEdukasiDetail from './pages/Public/EdukasiDetail.jsx'
+import Program from './pages/Public/Program'
+import ProgramDetail from './pages/Public/ProgramDetail'
 import InformasiDetail from './pages/Public/InformasiDetail.jsx'
 import PublicInformasi from './pages/Public/Informasi.jsx'
 import PublicStandarPelayanan from './pages/Public/StandarPelayanan.jsx'
@@ -41,13 +41,12 @@ import GaleriCreate from './pages/Main/Galeri/create'
 import GaleriDetail from './pages/Main/Galeri/detail'
 import GaleriEdit from './pages/Main/Galeri/edit'
 
-
 import ProfilPerusahaan from './pages/Main/ProfilPerusahaan'
 import ProfilPerusahaanEdit from './pages/Main/ProfilPerusahaan/edit.jsx'
 
-import Program from './pages/Main/Program'
+import ProgramAdmin from './pages/Main/Program'
 import ProgramCreate from './pages/Main/Program/create'
-import ProgramDetail from './pages/Main/Program/detail'
+import ProgramAdminDetail from './pages/Main/Program/detail'
 import ProgramEdit from './pages/Main/Program/edit'
 
 import Konten from './pages/Main/Konten/index.jsx'
@@ -88,11 +87,9 @@ export default function App() {
           {/* Halaman utama */}
           <Route path="/" element={<PublicHome />} />
 
-          {/* Edukasi */}
-          <Route path="/edukasi" element={<PublicEdukasi />} />
-
-          {/* Detail edukasi (pakai slug) */}
-          <Route path="/edukasi/:slug" element={<PublicEdukasiDetail />} />
+          {/* Program Public */}
+          <Route path="/program" element={<Program />} />
+          <Route path="/program/:slug" element={<ProgramDetail />} />
 
           {/* Halaman lain */}
           <Route path="/informasi" element={<PublicInformasi />} />
@@ -213,93 +210,95 @@ export default function App() {
               </RoleGuard>
             }
           />
-   
+
           <Route path="/galeri" element={
             <RoleGuard allowedRoles={['admin_pusat', 'admin_lapangan']}>
               <Galeri />
             </RoleGuard>
           } />
+
           <Route path="/galeri/create" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
               <GaleriCreate />
             </RoleGuard>
           } />
+
           <Route path="/galeri/detail/:id" element={
             <RoleGuard allowedRoles={['admin_pusat', 'admin_lapangan']}>
               <GaleriDetail />
             </RoleGuard>
           } />
+
           <Route path="/galeri/edit/:id" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
               <GaleriEdit />
             </RoleGuard>
           } />
 
-
           <Route path="/profil-perusahaan" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
               <ProfilPerusahaan />
             </RoleGuard>
           } />
+
           <Route path="/profil-perusahaan/edit" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
               <ProfilPerusahaanEdit />
             </RoleGuard>
           } />
 
-          <Route path="/program" element={
+          <Route path="/dashboard/program" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
-              <Program />
+              <ProgramAdmin />
             </RoleGuard>
           } />
+
           <Route
-            path="/program/create"
+            path="/dashboard/program/create"
             element={
               <RoleGuard allowedRoles={['admin_pusat']}>
                 <ProgramCreate />
               </RoleGuard>
-            }
-          />
+            }/>
 
           <Route
-            path="/program/detail/:id"
+            path="/dashboard/program/detail/:id"
             element={
               <RoleGuard allowedRoles={['admin_pusat']}>
-                <ProgramDetail />
+                <ProgramAdminDetail />
               </RoleGuard>
-            }
-          />
+            }/>
 
           <Route
-            path="/program/edit/:id"
+            path="/dashboard/program/edit/:id"
             element={
               <RoleGuard allowedRoles={['admin_pusat']}>
                 <ProgramEdit />
               </RoleGuard>
-            }
-          />
+            }  />
 
           <Route path="/konten" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
               <Konten />
             </RoleGuard>
           } />
+
           <Route
             path="/konten/create"
             element={
               <RoleGuard allowedRoles={['admin_pusat']}>
                 <KontenCreate />
               </RoleGuard>
-            }
-          />
+            } />
+
           <Route
             path="/konten/detail/:id"
             element={
               <RoleGuard allowedRoles={['admin_pusat']}>
                 <KontenDetail />
               </RoleGuard>
-            }
-          />
+            } />
+
           <Route
             path="/konten/edit/:id"
             element={
@@ -352,8 +351,6 @@ export default function App() {
               <StandarPelayanan />
             </RoleGuard>
           } />
-
-
 
           {/* ================= UTIL ================= */}
 

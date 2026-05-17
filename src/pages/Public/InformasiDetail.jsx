@@ -2,8 +2,10 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import Template from '../../layouts/Template.jsx'
 import informasiService from '../../services/informasiService.js'
+import { satwaInfo } from '../../data/satwaInfo'
 export default function InformasiDetail() {
     const { slug } = useParams()
+    const info = satwaInfo[slug]
 
     const [data, setData] = React.useState(null)
     const [loading, setLoading] = React.useState(true)
@@ -71,7 +73,7 @@ export default function InformasiDetail() {
                         <div className="col-lg-6 mb-4">
                             {data?.foto && (
                                 <img
-                                    src={`https://codemy.my.id/uploads/edukasi/${data.foto}`}
+                                    src={`https://codemy.my.id/uploads/program/${data.foto}`}
                                     alt={data.judul}
                                     style={{
                                         width: '100%',
@@ -110,9 +112,66 @@ export default function InformasiDetail() {
                                     <p>{data?.lokasi || 'Tidak ada deskripsi'}</p>
                                 )}
                             </div>
+
+                            {/* INFORMASI TAMBAHAN */}
+                            <div className="mt-4">
+
+                                <div className="row g-3">
+
+                                    <div className="col-md-6">
+                                        <div className="card border-0 shadow-sm p-3">
+                                            <h6>Nama Ilmiah</h6>
+                                            <p>{info?.namaIlmiah || '-'}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-6">
+                                        <div className="card border-0 shadow-sm p-3">
+                                            <h6>Status Konservasi</h6>
+                                            <p>{info?.status || '-'}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-6">
+                                        <div className="card border-0 shadow-sm p-3">
+                                            <h6>Habitat</h6>
+                                            <p>{info?.habitat || '-'}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-6">
+                                        <div className="card border-0 shadow-sm p-3">
+                                            <h6>Makanan</h6>
+                                            <p>{info?.makanan || '-'}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-6">
+                                        <div className="card border-0 shadow-sm p-3">
+                                            <h6>Ancaman</h6>
+                                            <p>{info?.ancaman || '-'}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-6">
+                                        <div className="card border-0 shadow-sm p-3">
+                                            <h6>Persebaran</h6>
+                                            <p>{info?.persebaran || '-'}</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div className="alert alert-success mt-4">
+                                    🌿 {info?.edukasi}
+                                </div>
+
+                            </div>
                         </div>
+
                     </div>
                 )}
+
             </div>
         </Template>
     )

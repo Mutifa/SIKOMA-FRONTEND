@@ -4,7 +4,7 @@ import Template from '../../layouts/Template.jsx'
 import api from '../../lib/api.js'
 import { assetUrl } from '../../lib/assets.js'
 
-export default function EdukasiDetail() {
+export default function ProgramDetail() {
   const { slug } = useParams()
   const [data, setData] = React.useState({ edukasi: null, galeri: [] })
   const [loading, setLoading] = React.useState(true)
@@ -12,7 +12,7 @@ export default function EdukasiDetail() {
 
   React.useEffect(() => {
     let mounted = true
-    api.get(`/edukasi/${slug}`)
+    api.get(`/program/${slug}`)
       .then(res => { if (mounted) { setData(res.data); setLoading(false) } })
       .catch(err => { if (mounted) { setError(err.message); setLoading(false) } })
     return () => { mounted = false }
@@ -26,9 +26,9 @@ export default function EdukasiDetail() {
         {!loading && !error && data.edukasi && (
           <div className="row">
             <div className="col-lg-6 mb-4">
-              <img src={assetUrl(`/uploads/edukasi/${data.edukasi.foto}`)} alt={data.edukasi.judul} style={{width:'100%', height:400, objectFit:'cover', borderRadius:10}} />
+              <img src={assetUrl(`/uploads/program/${data.edukasi.foto}`)} alt={data.edukasi.judul} style={{width:'100%', height:400, objectFit:'cover', borderRadius:10}} />
               <div className="mt-3" style={{display:'flex', gap:8, flexWrap:'wrap'}}>
-                <img loading="lazy" src={assetUrl(`/uploads/edukasi/${data.edukasi.foto}`)} style={{width:100, height:80, objectFit:'cover', borderRadius:6}} />
+                <img loading="lazy" src={assetUrl(`/uploads/program/${data.edukasi.foto}`)} style={{width:100, height:80, objectFit:'cover', borderRadius:6}} />
                 {data.galeri.map((g) => (
                   <img loading="lazy" key={g.id} src={assetUrl(`/uploads/galeri/${g.gambar}`)} style={{width:100, height:80, objectFit:'cover', borderRadius:6}} />
                 ))}

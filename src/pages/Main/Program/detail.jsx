@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import { programService } from '../../../services/programService.js'
+import programService from '../../../services/programService.js'
 
 export default function ProgramDetail() {
 
@@ -83,7 +83,7 @@ export default function ProgramDetail() {
             {data?.foto ? (
 
               <img
-                src={`https://codemy.my.id/uploads/edukasi/${data.foto}`}
+                src={`https://codemy.my.id/uploads/dashboard/program/${data.foto}`}
                 alt="Program"
                 className="img-thumbnail"
                 style={{ maxHeight: '250px' }}
@@ -115,7 +115,7 @@ export default function ProgramDetail() {
         </div>
 
         <Link
-          to="/program"
+          to="/dashboard/program"
           className="btn btn-secondary"
         >
           Kembali

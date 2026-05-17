@@ -89,12 +89,12 @@ export default function Informasi() {
           <h2 className="fw-bold heading-green animate-title">Tumbuhan, <br />Satwa di Lindungi</h2>
           <p className="mx-lg-5 mb-5">Hutan mangrove mempunyai banyak sekali manfaat untuk Indonesia. Kini kami bersama-sama dengan lembaga, kelompok, maupun perseorangan melakukan penanaman dan monitoring mangrove.</p>
         </div>
-        <a href="/edukasi?kategori=Satwa" className="btn btn-primary mb-3">Lebih Banyak</a>
+        <a href="/program?kategori=Satwa" className="btn btn-primary mb-3">Lebih Banyak</a>
         <div className="row g-4">
           {data.satwa?.map((p) => (
             <div key={p.id} className="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
               <div className="border rounded h-100 d-flex flex-column">
-                <img loading="lazy" src={assetUrl(`/uploads/edukasi/${p.foto}`)} alt={p.judul} className="w-100" style={{ height: 250, objectFit: 'cover' }} />
+                <img loading="lazy" src={assetUrl(`/uploads/program/${p.foto}`)} alt={p.judul} className="w-100" style={{ height: 250, objectFit: 'cover' }} />
                 <div className="flex-grow-1">
                   <h6 className="mt-3 mx-3">{new Date(p.created_at).toLocaleDateString('id-ID')}</h6>
                   <h4 className="mx-3 mb-3">{p.judul}</h4>
@@ -115,13 +115,13 @@ export default function Informasi() {
           <h2 className="fw-bold heading-green animate-title">Executive Summary<br /></h2>
         </div>
         <div className="text-end mb-3">
-          <a href="/edukasi?kategori=Executive" className="btn btn-primary">Lihat Informasi Lainnya</a>
+          <a href="/program?kategori=Executive" className="btn btn-primary">Lihat Informasi Lainnya</a>
         </div>
         <div className="row g-4">
           {data.executive.map((p) => (
             <div key={p.id} className="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
               <div className="border rounded h-100 d-flex flex-column">
-                <img loading="lazy" src={assetUrl(`/uploads/edukasi/${p.foto}`)} alt={p.judul} className="w-100" style={{ height: 250, objectFit: 'cover' }} />
+                <img loading="lazy" src={assetUrl(`/uploads/program/${p.foto}`)} alt={p.judul} className="w-100" style={{ height: 250, objectFit: 'cover' }} />
                 <div className="flex-grow-1">
                   <h6 className="mt-3 mx-3">{new Date(p.created_at).toLocaleDateString('id-ID')}</h6>
                   <h4 className="mx-3 mb-3">{p.judul}</h4>

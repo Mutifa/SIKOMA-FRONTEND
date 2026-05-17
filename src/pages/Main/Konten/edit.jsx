@@ -196,7 +196,7 @@ export default function KontenEdit() {
               <div>
 
                 <img
-                  src={assetUrl(`/uploads/edukasi/${preview}`)}
+                  src={assetUrl(`/uploads/program/${preview}`)}
                   alt="Preview"
                   className="img-thumbnail"
                   style={{ maxHeight: '200px' }}

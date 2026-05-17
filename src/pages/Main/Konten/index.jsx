@@ -117,7 +117,7 @@ export default function Konten() {
                         <td>
                           {item.foto ? (
                             <img
-                              src={assetUrl(`/uploads/edukasi/${item.foto}`)}
+                              src={assetUrl(`/uploads/program/${item.foto}`)}
                               alt="Foto Konten"
                               className="img-fluid"
                               width="100px"

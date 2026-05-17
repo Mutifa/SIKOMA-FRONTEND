@@ -96,17 +96,12 @@ export default function KontenCreate() {
               }
               required
             >
-
-              <option value="Edukasi">
-                Edukasi
-              </option>
-
               <option value="Informasi">
                 Informasi
               </option>
-
-              <option value="Berita">
-                Berita
+              
+              <option value="Edukasi">
+                Edukasi
               </option>
 
             </select>

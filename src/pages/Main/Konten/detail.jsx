@@ -107,7 +107,7 @@ export default function KontenDetail() {
             {data?.foto ? (
 
               <img
-                src={assetUrl(`/uploads/edukasi/${data.foto}`)}
+                src={assetUrl(`/uploads/program/${data.foto}`)}
                 alt="Konten"
                 className="img-thumbnail"
                 style={{ maxHeight: '250px' }}

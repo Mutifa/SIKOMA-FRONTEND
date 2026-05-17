@@ -2,9 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import { programService } from '../../../services/programService.js'
+import programService from '../../../services/programService.js'
 import {
-  confirmDelete,
   successAlert,
   errorAlert
 } from '../../../utils/alert'
@@ -89,7 +88,7 @@ export default function Program() {
 
       {/* Tombol Tambah — btn-primary-custom */}
       <div className="d-flex justify-content-end mb-3">
-        <Link to="/program/create" className="btn-primary-custom">
+        <Link to="/dashboard/program/create" className="btn-primary-custom">
           <i className="fas fa-plus"></i>
           Tambah Program
         </Link>
@@ -169,7 +168,7 @@ export default function Program() {
                     <td>
                       {item.foto ? (
                         <img
-                          src={`https://codemy.my.id/uploads/edukasi/${item.foto}`}
+                          src={`https://codemy.my.id/uploads/dashboard/program/${item.foto}`}
                           alt="Foto"
                           width="100"
                           className="img-fluid"
@@ -190,7 +189,7 @@ export default function Program() {
 
                         {/* Detail — btn-primary-custom */}
                         <Link
-                          to={`/program/detail/${item.id}`}
+                          to={`/dashboard/program/detail/${item.id}`}
                           className="btn-primary-custom btn-sm"
                           title="Detail"
                         >
@@ -199,7 +198,7 @@ export default function Program() {
 
                         {/* Edit — btn-warning-custom */}
                         <Link
-                          to={`/program/edit/${item.id}`}
+                          to={`/dashboard/program/edit/${item.id}`}
                           className="btn-warning-custom btn-sm"
                           title="Edit"
                         >

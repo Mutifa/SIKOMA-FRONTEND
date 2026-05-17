@@ -1,9 +1,9 @@
 import React from 'react'
 import Template from '../../layouts/Template.jsx'
-import api from '../../lib/api.js'
 import { assetUrl } from '../../lib/assets.js'
+import axios from 'axios'
 
-export default function Edukasi() {
+export default function Program() {
   const [items, setItems] = React.useState([])
   const [kategori, setKategori] = React.useState('')
   const [loading, setLoading] = React.useState(true)
@@ -12,14 +12,15 @@ export default function Edukasi() {
   React.useEffect(() => {
     let mounted = true
 
-    api.get('/edukasi')
-      .then(res => {
-        if (mounted) {
-          setItems(res.data.items || [])   // ✅ FIX sesuai API
-          setKategori(res.data.kategori || '')
-          setLoading(false)
-        }
-      })
+    axios.get('https://codemy.my.id/api/admin_pusat/program')
+  .then(res => {
+    setItems(Array.isArray(res.data) ? res.data : res.data.data || [])
+    setLoading(false)
+  })
+  .catch(err => {
+    setError('Gagal memuat edukasi')
+    setLoading(false)
+  })
       .catch(err => {
         if (mounted) {
           setError(err.response?.data?.message || 'Gagal memuat edukasi')
@@ -46,7 +47,7 @@ export default function Edukasi() {
       <section className="container-xxl py-5">
         <div className="container">
 
-          <h2 className="mb-4 heading-green">Program / Edukasi</h2>
+          <h2 className="mb-4 heading-green">Program UPT KPH Tasik Besar Serkap</h2>
 
           {loading && <p>Memuat...</p>}
           {error && <div className="alert alert-danger">{error}</div>}
@@ -62,7 +63,7 @@ export default function Edukasi() {
                     {/* IMAGE */}
                     {p.foto && (
                       <img
-                        src={`${p.foto}`}
+                        src={`https://codemy.my.id/uploads/dashboard/program/${p.foto}`}
                         alt={p.judul}
                         className="card-img-top"
                         style={{
@@ -88,7 +89,7 @@ export default function Edukasi() {
 
                       {/* BUTTON */}
                       <a
-                        href={`/edukasi/${p.slug}`}
+                        href={`/program/${p.slug}`}
                         className="btn btn-success mt-auto"
                       >
                         Selengkapnya

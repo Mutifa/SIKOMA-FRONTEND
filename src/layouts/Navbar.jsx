@@ -29,38 +29,51 @@ export default function Navbar({ website }) {
 
         <div className="collapse navbar-collapse mobile-menu" id="navbarNav">
           <ul className="navbar-nav ms-auto align-items-lg-center mobile-nav">
+            <li className="nav-item dropdown">
 
-           <li className="nav-item dropdown">
-  <a
-    className="nav-link dropdown-toggle"
-    href="#"
-    data-bs-toggle="dropdown"
-  >
-    Profil
-  </a>
+              <a
+                className="nav-link dropdown-toggle"
+                href="/#struktur-organisasi"
+              >
+                Profil
+              </a>
 
-  <ul className="dropdown-menu">
-    <li>
-      <a href="/#struktur-organisasi" className="dropdown-item">
-        Struktur Organisasi
-      </a>
-    </li>
-    <li>
-      <a href="/#visi-misi" className="dropdown-item">
-        Visi Misi
-      </a>
-    </li>
-    <li>
-      <a href="/#sejarah" className="dropdown-item">
-        Sejarah UPT KPH Tasik Besar Serkap
-      </a>
-    </li>
-  </ul>
-</li>
+              <ul className="dropdown-menu">
+
+                <li>
+                  <a
+                    href="/#struktur-organisasi"
+                    className="dropdown-item"
+                  >
+                    Struktur Organisasi
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/#visi-misi"
+                    className="dropdown-item"
+                  >
+                    Visi Misi
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="/#sejarah"
+                    className="dropdown-item"
+                  >
+                    Sejarah UPT KPH Tasik Besar Serkap
+                  </a>
+                </li>
+
+              </ul>
+
+            </li>
 
             <li className="nav-item">
               <NavLink
-                to="/edukasi"
+                to="/program"
                 className={({ isActive }) =>
                   `nav-link ${isActive ? 'active' : ''}`
                 }
@@ -72,8 +85,7 @@ export default function Navbar({ website }) {
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
-                href="#"
-                data-bs-toggle="dropdown"
+                href="/informasi#kawasan-konservasi"
               >
                 Informasi & Edukasi
               </a>
@@ -111,7 +123,7 @@ export default function Navbar({ website }) {
                 Standar Pelayanan
               </NavLink>
             </li>
-            
+
             <li className="nav-item ms-lg-2 mt-2 mt-lg-0">
               <NavLink
                 to="/login"

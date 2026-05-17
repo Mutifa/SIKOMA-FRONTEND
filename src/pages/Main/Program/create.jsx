@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import { programService } from '../../../services/programService.js'
+import programService from "../../../services/programService.js";
 
 export default function ProgramCreate() {
 
@@ -35,7 +35,7 @@ export default function ProgramCreate() {
       }
 
       await programService.create(formDataToSend)
-      navigate('/program')
+      navigate('/dashboard/program')
     } catch (err) {
     } finally {
       setSaving(false)                                                                              
@@ -123,7 +123,7 @@ export default function ProgramCreate() {
             </button>
 
             <Link
-              to="/program"
+              to="/dashboard/program"
               className="btn btn-secondary"
             >
               Kembali

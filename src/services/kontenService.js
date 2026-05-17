@@ -7,7 +7,7 @@ export const kontenService = {
     api.get(ENDPOINTS.KONTEN.GET),
 
   getDetail: (id) =>
-    api.get(`/admin_pusat/edukasi/${id}`),
+    api.get(`/admin_pusat/program/${id}`),
 
   create: (data) =>
     api.post(ENDPOINTS.KONTEN.CREATE, data, {

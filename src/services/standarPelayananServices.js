@@ -2,21 +2,26 @@ import api from '../lib/api'
 
 const standarPelayananService = {
 
-  // Ambil semua data standar pelayanan
-  getAll: () =>
+  // Admin
+  getStandar: () =>
     api.get('/standar-pelayanan'),
 
-  // Buat standar pelayanan baru
-  create: (data) =>
+  createStandar: (data) =>
     api.post('/standar-pelayanan', data),
 
-  // Perbarui standar pelayanan
-  update: (id, data) =>
+  updateStandar: (id, data) =>
     api.put(`/standar-pelayanan/${id}`, data),
 
-  // Hapus standar pelayanan
-  delete: (id) =>
-    api.delete(`/standar-pelayanan/${id}`)
+  deleteStandar: (id) =>
+    api.delete(`/standar-pelayanan/${id}`),
+
+  // Public — ambil profil website (alamat, telepon, dll)
+  getWebsite: () =>
+    api.get('/profil-perusahaan'),
+
+  // Public — kirim pesan/pertanyaan
+  sendMessage: (data) =>
+    api.post('/standar-pelayanan', data),
 
 }
 

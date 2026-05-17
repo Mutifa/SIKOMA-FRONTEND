@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import { programService } from '../../../services/programService.js'
+import programService from '../../../services/programService.js'
 
 export default function ProgramEdit() {
 
@@ -78,7 +78,7 @@ export default function ProgramEdit() {
 
       await programService.update(id, formDataToSend)
 
-      navigate('/program')
+      navigate('/dashboard/program')
 
     } catch (err) {
 
@@ -155,7 +155,7 @@ export default function ProgramEdit() {
               <div>
 
                 <img
-                  src={`https://codemy.my.id/uploads/edukasi/${preview}`}
+                  src={`https://codemy.my.id/uploads/dashboard/program/${preview}`}
                   alt="Preview"
                   className="img-thumbnail"
                   style={{ maxHeight: '200px' }}
@@ -197,7 +197,7 @@ export default function ProgramEdit() {
             </button>
 
             <Link
-              to="/program"
+              to="/dashboard/program"
               className="btn btn-secondary"
             >
               Kembali
