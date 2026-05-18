@@ -91,55 +91,60 @@ export default function PenggunaCreate() {
     return (
         <DashboardLayout title="Tambah Pengguna">
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} autoComplete="off">
                 <div className="white-box">
-                    {/* ── Field Nama ── */}
-                    <div className="mb-3">
-                        <label className="form-label">Nama</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        />
-                        <small className="text-muted">* Wajib diisi</small>
-                    </div>
 
-                    {/* ── Field Username ── */}
-                    <div className="mb-3">
-                        <label className="form-label">Username</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={formData.username}
-                            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                        />
-                        <small className="text-muted">* Wajib diisi, minimal 3 karakter</small>
-                    </div>
+                 {/* ── Field Nama ── */}
+<div className="mb-3">
+  <label className="form-label">Nama</label>
+  <input
+    type="text"
+    className="form-control"
+    value={formData.name}
+    autoComplete="off"
+    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+  />
+  <small className="text-muted">* Wajib diisi</small>
+</div>
 
-                    {/* ── Field Email ── */}
-                    <div className="mb-3">
-                        <label className="form-label">Email</label>
-                        <input
-                            type="email"
-                            className="form-control"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        />
-                        <small className="text-muted">* Wajib diisi, contoh: nama@email.com</small>
-                    </div>
+{/* ── Field Username ── */}
+<div className="mb-3">
+  <label className="form-label">Username</label>
+  <input
+    type="text"
+    className="form-control"
+    value={formData.username}
+    autoComplete="off"
+    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+  />
+  <small className="text-muted">* Wajib diisi, minimal 3 karakter</small>
+</div>
 
-                    {/* ── Field Password — minimal 8 karakter ── */}
-                    <div className="mb-3">
-                        <label className="form-label">Password</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            value={formData.password}
-                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                        />
-                        <small className="text-muted">* Wajib diisi, minimal 8 karakter</small>
-                    </div>
+{/* ── Field Email ── */}
+<div className="mb-3">
+  <label className="form-label">Email</label>
+  <input
+    type="email"
+    className="form-control"
+    value={formData.email}
+    autoComplete="off"
+    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+  />
+  <small className="text-muted">* Wajib diisi, contoh: nama@email.com</small>
+</div>
+
+{/* ── Field Password ── */}
+<div className="mb-3">
+  <label className="form-label">Password</label>
+  <input
+    type="password"
+    className="form-control"
+    value={formData.password}
+    autoComplete="new-password"
+    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+  />
+  <small className="text-muted">* Wajib diisi, minimal 8 karakter</small>
+</div>
 
                     {/* ── Field Role — default Admin Lapangan ── */}
                     <div className="mb-3">
@@ -167,14 +172,23 @@ export default function PenggunaCreate() {
                         </select>
                     </div>
 
-                    {/* ── Tombol Simpan ── */}
-                    <button
-                        type="submit"
-                        className="btn btn-success"
-                    >
-                        Simpan
-                    </button>
+                    {/* ── Tombol ── */}
+                    <div className="d-flex gap-2">
+                        <button
+                            type="submit"
+                            className="btn btn-success"
+                        >
+                            Simpan
+                        </button>
 
+                        <button
+                            type="button"
+                            className="btn btn-secondary"
+                            onClick={() => navigate('/pengguna')}
+                        >
+                            Kembali
+                        </button>
+                    </div>
                 </div>
             </form>
         </DashboardLayout>

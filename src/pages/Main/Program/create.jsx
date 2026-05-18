@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import programService from "../../../services/programService.js";
+import { successAlert, errorAlert } from '../../../utils/alert'
 
 export default function ProgramCreate() {
 
@@ -35,8 +36,10 @@ export default function ProgramCreate() {
       }
 
       await programService.create(formDataToSend)
+      await successAlert('Berhasil', 'Program berhasil ditambahkan')
       navigate('/dashboard/program')
     } catch (err) {
+      await errorAlert('Gagal', err.response?.data?.message || 'Gagal menyimpan data')
     } finally {
       setSaving(false)                                                                              
     }

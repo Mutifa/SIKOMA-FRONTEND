@@ -1,13 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import programService from '../../../services/programService.js'
-import {
-  successAlert,
-  errorAlert
-} from '../../../utils/alert'
-
+import { successAlert, errorAlert, confirmDelete } from '../../../utils/alert'
 
 export default function Program() {
 
@@ -177,7 +172,7 @@ export default function Program() {
                     <td>
                       {item.foto ? (
                         <img
-                          src={`https://codemy.my.id/uploads/dashboard/program/${item.foto}`}
+                          src={`https://codemy.my.id/storage/${item.foto}`}src={`https://codemy.my.id/storage/${item.foto}`}
                           alt="Foto"
                           width="100"
                           className="img-fluid"

@@ -54,7 +54,8 @@ import KontenCreate from './pages/Main/Konten/create'
 import KontenDetail from './pages/Main/Konten/detail'
 import KontenEdit from './pages/Main/Konten/edit'
 
-import Kawasan from './pages/Main/Kawasan'
+import Kawasan from './pages/Main/Kawasan/index.jsx'
+import KawasanEdit from './pages/Main/Kawasan/edit.jsx'
 
 import Peraturan from './pages/Main/Peraturan'
 import PeraturanCreate from './pages/Main/Peraturan/create.jsx'
@@ -259,7 +260,7 @@ export default function App() {
               <RoleGuard allowedRoles={['admin_pusat']}>
                 <ProgramCreate />
               </RoleGuard>
-            }/>
+            } />
 
           <Route
             path="/dashboard/program/detail/:id"
@@ -267,7 +268,7 @@ export default function App() {
               <RoleGuard allowedRoles={['admin_pusat']}>
                 <ProgramAdminDetail />
               </RoleGuard>
-            }/>
+            } />
 
           <Route
             path="/dashboard/program/edit/:id"
@@ -275,7 +276,7 @@ export default function App() {
               <RoleGuard allowedRoles={['admin_pusat']}>
                 <ProgramEdit />
               </RoleGuard>
-            }  />
+            } />
 
           <Route path="/konten" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
@@ -314,11 +315,18 @@ export default function App() {
             </RoleGuard>
           } />
 
+          <Route path="/kawasan/edit/:id" element={
+            <RoleGuard allowedRoles={['admin_pusat']}>
+              <KawasanEdit />
+            </RoleGuard>
+          } />
+
           <Route path="/peraturan" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
               <Peraturan />
             </RoleGuard>
           } />
+          
           <Route
             path="/peraturan/create"
             element={

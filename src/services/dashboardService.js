@@ -1,12 +1,11 @@
 import api from '../lib/api'
-import { ENDPOINTS } from '../lib/endpoints'
 
 export const dashboardService = {
   getAdminPusat() {
-    return api.get(ENDPOINTS.DASHBOARD.ADMIN_PUSAT)
+    return api.get('/dashboard/admin-pusat')  // ✅ path baru
   },
 
   getAdminLapangan() {
-    return api.get(ENDPOINTS.DASHBOARD.ADMIN_LAPANGAN)
+    return api.get('/dashboard/admin-lapangan')  // ✅ path baru
   }
 }

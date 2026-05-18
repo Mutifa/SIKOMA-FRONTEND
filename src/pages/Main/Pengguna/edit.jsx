@@ -2,6 +2,8 @@ import React from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout'
 import { penggunaService } from '../../../services/penggunaService'
+// Tambah import ini
+import { successAlert, errorAlert } from '../../../utils/alert'
 
 export default function PenggunaEdit() {
 
@@ -53,22 +55,18 @@ export default function PenggunaEdit() {
 
   }, [id])
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
+  e.preventDefault()
 
-    e.preventDefault()
+  try {
+    await penggunaService.update(id, formData)
+    await successAlert('Berhasil', 'Pengguna berhasil diupdate')  // ← tambah ini
+    navigate('/pengguna')
 
-    try {
-
-      await penggunaService.update(id, formData)
-
-      navigate('/pengguna')
-
-    } catch (err) {
-
-
-    }
-
+  } catch (err) {
+    await errorAlert('Gagal', err.response?.data?.message || 'Gagal mengupdate data')  // ← tambah ini
   }
+}
 
   if (loading) {
     return (

@@ -16,13 +16,18 @@ export default function Pengguna() {
 
   React.useEffect(() => {
     let mounted = true
-    penggunaService.getAll()
-      .then(res => {
-        if (mounted) {
-          setData(res.data.data || res.data)
-          setLoading(false)
-        }
-      })
+   penggunaService.getAll()
+  .then(res => {
+    if (mounted) {
+      const result = res.data.data || res.data
+      // Sort by updated_at, terbaru di atas
+      const sorted = result.sort((a, b) => 
+        new Date(b.updated_at) - new Date(a.updated_at)
+      )
+      setData(sorted)
+      setLoading(false)
+    }
+  })
       .catch(err => {
         if (mounted) {
           setError(err.response?.data?.message || 'Gagal memuat data')

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import contentInformasiEdukasi from '../../../services/contentInformasiEdukasi.js'
+import { successAlert, errorAlert } from '../../../utils/alert'
 
 export default function KontenCreate() {
 
@@ -11,44 +11,43 @@ export default function KontenCreate() {
   const [saving, setSaving] = React.useState(false)
 
   const [formData, setFormData] = React.useState({
-    judul: '',
-    deskripsi: '',
-    foto: null,
-    kategori: 'Edukasi'
-  })
+  judul: '',
+  deskripsi: '',
+  foto: null,
+  kategori: 'Edukasi'
+})
 
   const handleSubmit = async (e) => {
+  e.preventDefault()
+  setSaving(true)
 
-    e.preventDefault()
-
-    setSaving(true)
-
-    try {
-
-      const formDataToSend = new FormData()
-
-      formDataToSend.append('judul', formData.judul)
-      formDataToSend.append('deskripsi', formData.deskripsi)
-      formDataToSend.append('kategori', formData.kategori)
-
-      if (formData.foto) {
-        formDataToSend.append('foto', formData.foto)
-      }
-
-      await contentInformasiEdukasi.create(formDataToSend)
-
-      navigate('/konten')
-
-    } catch (err) {
-
-
-    } finally {
-
-      setSaving(false)
-
+  try {
+    // Mapping kategori ke nilai yang diterima backend
+    const kategoriMapping = {
+      'Edukasi': 'Satwa',
+      'Informasi': 'Executive',
+      'Berita': 'Program'
     }
 
+    const formDataToSend = new FormData()
+    formDataToSend.append('judul', formData.judul)
+    formDataToSend.append('deskripsi', formData.deskripsi)
+    formDataToSend.append('kategori', kategoriMapping[formData.kategori]) // ← pakai mapping
+    if (formData.foto) {
+      formDataToSend.append('foto', formData.foto)
+    }
+
+    await contentInformasiEdukasi.create(formDataToSend)
+    successAlert('Konten berhasil disimpan')
+    navigate('/konten')
+
+  } catch (err) {
+    console.error(err)
+    errorAlert('Gagal menyimpan konten')
+  } finally {
+    setSaving(false)
   }
+}
 
   return (
 
@@ -99,9 +98,13 @@ export default function KontenCreate() {
               <option value="Informasi">
                 Informasi
               </option>
-              
+
               <option value="Edukasi">
                 Edukasi
+              </option>
+
+              <option value="Berita">
+                Berita
               </option>
 
             </select>
@@ -161,7 +164,7 @@ export default function KontenCreate() {
             </button>
 
             <Link
-              to="/konten"
+              to="/konten"  
               className="btn btn-secondary"
             >
               Kembali

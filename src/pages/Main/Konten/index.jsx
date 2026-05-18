@@ -1,14 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import contentInformasiEdukasi from '../../../services/contentInformasiEdukasi.js'
 import { assetUrl } from '../../../lib/assets.js'
-import {
-  confirmDelete,
-  successAlert,
-  errorAlert
-} from '../../../utils/alert'
+import { successAlert, errorAlert, confirmDelete } from '../../../utils/alert'
 
 export default function Konten() {
 
@@ -42,7 +37,7 @@ export default function Konten() {
         setData(prev => prev.filter(item => item.id !== id))
         await successAlert('Berhasil', 'Konten berhasil dihapus')
       } catch (err) {
-        setError(err.response?.data?.message || 'Gagal menghapus konten')
+        await errorAlert('Gagal menghapus konten')
       }
     }
   }

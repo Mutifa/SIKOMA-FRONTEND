@@ -4,23 +4,23 @@ const galeriService = {
 
   // Ambil semua galeri
   getAll: () =>
-    api.get('/admin_pusat/galeri'),
+    api.get('/galeri'),
 
   // Detail galeri
   get: (id) =>
-    api.get(`/admin_pusat/galeri/${id}`),
+    api.get(`/galeri/${id}`),
 
   // Tambah galeri
   create: (data) =>
-    api.post('/admin_pusat/galeri', data),
+    api.post('/galeri', data),
 
   // Update galeri
   update: (id, data) =>
-    api.post(`/admin_pusat/galeri/${id}`, data),
+    api.put(`/galeri/${id}`, data),  // ← PUT bukan POST
 
   // Hapus galeri
   delete: (id) =>
-    api.delete(`/admin_pusat/galeri/${id}`),
+    api.delete(`/galeri/${id}`),
 
 }
 

@@ -16,28 +16,25 @@ export default function KontenDetail() {
 
     let mounted = true
 
-    contentInformasiEdukasi.get(id)
+contentInformasiEdukasi.get(id)
+  .then(res => {
+    if (mounted) {
+      const result = res.data.data || res.data
 
-      .then(res => {
+      const kategoriLabel = {
+        'Satwa': 'Edukasi',
+        'Executive': 'Informasi',
+        'Program': 'Berita'
+      }
 
-        if (mounted) {
-
-          const result = res.data.data || res.data
-
-          setData(result)
-
-          setLoading(false)
-
-        }
-
+      setData({
+        ...result,
+        kategori: kategoriLabel[result.kategori] || result.kategori
       })
 
-      .catch(err => {
-
-
-        setLoading(false)
-
-      })
+      setLoading(false)
+    }
+  })
 
     return () => { mounted = false }
 

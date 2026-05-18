@@ -81,21 +81,21 @@ export default function AdminPusatDashboard() {
   React.useEffect(() => {
     let mounted = true
 
-    dashboardService.getAdminPusat()
-      .then(res => {
-        if (mounted) {
-          // Ambil data dari struktur response yang mungkin berbeda
-          setData(res.data.data || res.data)
-          setLoading(false)
-        }
-      })
-      .catch(err => {
-        if (mounted) {
-          // Tampilkan pesan error dari server atau pesan default
-          setError(err.response?.data?.message || 'Gagal memuat')
-          setLoading(false)
-        }
-      })
+dashboardService.getAdminPusat()
+.then(res => {
+  console.log('DATA DAERAH:', res.data)
+  if (mounted) {
+    const result = res.data.data || res.data
+    
+    // Pastikan daerah selalu array
+    if (result.daerah && !Array.isArray(result.daerah)) {
+      result.daerah = [result.daerah] // ubah object jadi array
+    }
+    
+    setData(result)
+    setLoading(false)
+  }
+})
 
     // Cleanup: set mounted = false saat komponen di-unmount
     return () => { mounted = false }
@@ -194,7 +194,7 @@ export default function AdminPusatDashboard() {
                   <div className="mt-3">
 
                     <h2 className="fw-bold">
-                      {summary.total_laporan || 0}
+                      {data.feedback || 0}
                     </h2>
 
                     <small className="text-muted">
@@ -348,7 +348,7 @@ export default function AdminPusatDashboard() {
                           daerahList.map((item, index) => (
 
                             <tr key={index}>
-                              <td>{item}</td>
+                              <td>{item.jenisKawasan}</td>
                               <td>-</td>
                             </tr>
 

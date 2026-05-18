@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import contentInformasiEdukasi from '../../../services/contentInformasiEdukasi.js'
 import { assetUrl } from '../../../lib/assets.js'
+import { successAlert, errorAlert } from '../../../utils/alert'
 
 export default function KontenEdit() {
 
@@ -67,33 +67,33 @@ export default function KontenEdit() {
   }, [id])
 
   const handleSubmit = async (e) => {
+  e.preventDefault()
 
-    e.preventDefault()
-
-    try {
-
-      const formDataToSend = new FormData()
-
-      formDataToSend.append('judul', formData.judul)
-      formDataToSend.append('deskripsi', formData.deskripsi)
-      formDataToSend.append('kategori', formData.kategori)
-
-      if (formData.foto) {
-        formDataToSend.append('foto', formData.foto)
-      }
-
-      formDataToSend.append('_method', 'PUT')
-
-      await contentInformasiEdukasi.update(id, formDataToSend)
-
-      navigate('/konten')
-
-    } catch (err) {
-
-
+  try {
+    const kategoriMapping = {
+      'Edukasi': 'Satwa',
+      'Informasi': 'Executive',
+      'Berita': 'Program'
     }
 
+    const formDataToSend = new FormData()
+    formDataToSend.append('judul', formData.judul)
+    formDataToSend.append('deskripsi', formData.deskripsi)
+    formDataToSend.append('kategori', kategoriMapping[formData.kategori]) // ← mapping
+    if (formData.foto) {
+      formDataToSend.append('foto', formData.foto)
+    }
+    formDataToSend.append('_method', 'PUT')
+
+    await contentInformasiEdukasi.update(id, formDataToSend)
+    await successAlert('Berhasil', 'Konten berhasil diupdate')
+    navigate('/konten')
+
+  } catch (err) {
+    await errorAlert('Gagal mengupdate konten')
+    console.error(err)
   }
+}
 
   if (loading) {
 

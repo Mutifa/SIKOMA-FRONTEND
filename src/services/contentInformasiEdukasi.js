@@ -2,25 +2,29 @@ import api from '../lib/api'
 
 const contentInformasiEdukasi = {
 
-  // Ambil semua konten edukasi
+  // Ambil semua edukasi
   getAll: () =>
-    api.get('/admin_pusat/program'),
+    api.get('/edukasi'),
 
-  // Detail konten edukasi
+  // Detail edukasi
   get: (id) =>
-    api.get(`/admin_pusat/program/${id}`),
+    api.get(`/edukasi/${id}`),
 
-  // Tambah konten edukasi
+  // Tambah edukasi
   create: (data) =>
-    api.post('/admin_pusat/program', data),
+    api.post('/edukasi', data, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
 
-  // Update konten edukasi
+    // Update edukasi
   update: (id, data) =>
-    api.post(`/admin_pusat/program/${id}`, data),
+    api.post(`/edukasi/${id}`, data, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }),
 
-  // Hapus konten edukasi
+    // Hapus edukasi
   delete: (id) =>
-    api.delete(`/admin_pusat/program/${id}`),
+    api.delete(`/edukasi/${id}`),
 
 }
 
