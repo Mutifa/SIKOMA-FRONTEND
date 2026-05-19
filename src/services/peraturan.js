@@ -15,8 +15,12 @@ const peraturanService = {
     api.post('/peraturan', data),
 
   // Update peraturan
-  update: (id, data) =>
-    api.put(`/peraturan/${id}`, data),
+update: (id, data) =>
+  api.post(`/peraturan/${id}`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }),
 
   // Hapus peraturan
   delete: (id) =>

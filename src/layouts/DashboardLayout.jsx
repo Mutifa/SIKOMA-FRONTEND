@@ -140,11 +140,9 @@ export default function DashboardLayout({
         label: 'Peraturan'
       },
 
-      {
-        to: '/admin-pusat/standar-pelayanan',
-        icon: 'fa-clipboard-list',
-        label: 'Standar Pelayanan'
-      },
+      { to: '/pesan-masuk', 
+        icon: 'fa-clipboard-list', 
+        label: 'Standar Pelayanan' },
 
       {
         to: '/galeri',

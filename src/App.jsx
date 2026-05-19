@@ -354,7 +354,7 @@ export default function App() {
             }
           />
 
-          <Route path="/admin-pusat/standar-pelayanan" element={
+          <Route path="/pesan-masuk" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
               <StandarPelayanan />
             </RoleGuard>

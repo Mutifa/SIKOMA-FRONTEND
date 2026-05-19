@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import peraturanService from '../../../services/peraturan.js'
+import { successAlert, errorAlert } from '../../../utils/alert'
 
 export default function PeraturanEdit() {
 
@@ -81,11 +81,12 @@ export default function PeraturanEdit() {
 
       await peraturanService.update(id, formDataToSend)
 
+      await successAlert('Berhasil', 'Peraturan berhasil diupdate') 
       navigate('/peraturan')
 
     } catch (err) {
 
-
+      errorAlert('Gagal', err.response?.data?.message || 'Gagal mengupdate peraturan')
     }
 
   }

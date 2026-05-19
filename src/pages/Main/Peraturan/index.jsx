@@ -15,12 +15,18 @@ export default function Peraturan() {
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(true)
 
+
+
   React.useEffect(() => {
     let mounted = true
     peraturanService.getAll()
       .then(res => {
         if (mounted) {
-          setData(res.data.data || res.data)
+          const result = res.data.data || res.data
+          const sorted = [...result].sort((a, b) =>
+            new Date(b.updated_at) - new Date(a.updated_at)
+          )
+          setData(sorted)
           setLoading(false)
         }
       })

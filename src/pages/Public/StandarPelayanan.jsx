@@ -5,7 +5,7 @@ import standarPelayananService from '../../services/standarPelayananServices.js'
 
 export default function StandarPelayanan() {
   const [website, setWebsite] = React.useState(null)
-  const [form, setForm] = React.useState({ nama: '', email: '', nohp: '', judul: '', pesan: '' })
+  const [form, setForm] = React.useState({ nama: '', email: '', nomor_hp: '', judul: '', pesan: '' })
   const [message, setMessage] = React.useState('')
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(false)
@@ -69,7 +69,7 @@ React.useEffect(() => {
   standarPelayananService.sendMessage(form)
     .then(()=>{
       setMessage('Pesan anda telah terkirim.');
-      setForm({ nama:'', email:'', nohp:'', judul:'', pesan:'' });
+      setForm({ nama:'', email:'', nomor_hp:'', judul:'', pesan:'' });
     })
     .catch(err=>{
       setError(err.response?.data?.message || 'Gagal mengirim pesan');
@@ -86,7 +86,7 @@ React.useEffect(() => {
                     <input type="email" name="email" className="form-control border-0" placeholder="Alamat Email" style={{height:55}} value={form.email} onChange={e=>setForm({...form, email:e.target.value})} />
                   </div>
                   <div className="col-12 col-md-4">
-                    <input type="number" name="nohp" className="form-control border-0" placeholder="Nomor HP" style={{height:55}} value={form.nohp} onChange={e=>setForm({...form, nohp:e.target.value})} />
+                    <input type="number" name="nomor_hp" className="form-control border-0" placeholder="Nomor HP" style={{height:55}} value={form.nomor_hp} onChange={e=>setForm({...form, nomor_hp:e.target.value})} />
                   </div>
                   <div className="col-12">
                     <input type="text" name="judul" className="form-control border-0" placeholder="Judul" style={{height:55}} value={form.judul} onChange={e=>setForm({...form, judul:e.target.value})} />
