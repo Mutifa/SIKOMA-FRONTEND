@@ -54,14 +54,13 @@ export default function AdminPusatDashboard() {
   const [loading, setLoading] = React.useState(true)
 
   // Ringkasan data yang digunakan di summary card
-  const summary = {
-    total_laporan: data.laporanTerakhir,
-    disetujui: data.laporanDisetujui
-  }
+const summary = {
+  total_laporan: data.jumlahLaporan,
+  disetujui: data.diterima
+}
 
   // Data chart tahunan dan daftar daerah (dengan fallback ke default kosong)
-  const chart = data.laporanTahunan || {}
-  const daerahList = data.daerah || []
+const daerahList = data.daerah || []
 
   // Ambil data user dari context dan tentukan role-nya
   const { user } = useAuth()
@@ -78,52 +77,43 @@ export default function AdminPusatDashboard() {
   // Fetch data dashboard saat komponen pertama kali dimuat
   // Menggunakan flag `mounted` untuk mencegah setState setelah unmount
   // ─────────────────────────────────────────────
-  React.useEffect(() => {
-    let mounted = true
 
-dashboardService.getAdminPusat()
-.then(res => {
-  console.log('DATA DAERAH:', res.data)
-  if (mounted) {
-    const result = res.data.data || res.data
-    
-    // Pastikan daerah selalu array
-    if (result.daerah && !Array.isArray(result.daerah)) {
-      result.daerah = [result.daerah] // ubah object jadi array
-    }
-    
-    setData(result)
-    setLoading(false)
-  }
-})
+React.useEffect(() => {
+  let mounted = true
 
-    // Cleanup: set mounted = false saat komponen di-unmount
-    return () => { mounted = false }
-  }, [])
+  const fetchData = isAdminPusat
+    ? dashboardService.getAdminPusat()
+    : dashboardService.getAdminLapangan()
+
+  fetchData
+    .then(res => {
+      if (mounted) {
+        const result = res.data.data || res.data
+        if (result.daerah && !Array.isArray(result.daerah)) {
+          result.daerah = [result.daerah]
+        }
+        setData(result)
+        setLoading(false)
+      }
+    })
+    .catch(err => {
+      if (mounted) {
+        setError(err.response?.data?.message || 'Gagal memuat data')
+        setLoading(false)
+      }
+    })
+
+  return () => { mounted = false }
+}, [isAdminPusat])
 
   // ─────────────────────────────────────────────
   // Persiapan data chart laporan tahunan
   // ─────────────────────────────────────────────
-
-  // Total semua laporan dari seluruh bulan (tidak dipakai di render, bisa untuk debug)
-  const totalSemua = Object.values(chart).reduce((a, b) => a + b, 0)
-
-  // Mapping nama bulan ke index array (tidak digunakan langsung, tersedia sebagai referensi)
-  const bulanMap = {
-    Jan: 0, Feb: 1, Mar: 2, Apr: 3, Mei: 4, Jun: 5,
-    Jul: 6, Agu: 7, Sep: 8, Okt: 9, Nov: 10, Des: 11
-  }
-
-  // Inisialisasi array 12 bulan dengan nilai 0
-  const chartDataFix = Array(12).fill(0)
-
-  // Isi array berdasarkan data dari API (key = angka bulan "1"-"12")
-  Object.entries(chart).forEach(([bulan, total]) => {
-    const index = parseInt(bulan) - 1
-    if (index >= 0 && index < 12) {
-      chartDataFix[index] = total
-    }
-  })
+// ✅ GANTI JADI
+const chartDataFix = Array.isArray(data.laporanBulanan)
+  ? data.laporanBulanan
+  : Array(12).fill(0)
+  
 
   // Konfigurasi data Bar chart untuk Admin Pusat
   const tahunanChartData = {
@@ -486,7 +476,7 @@ dashboardService.getAdminPusat()
                               // Diterima: dari summary disetujui
                               summary.disetujui || 0,
                               // Ditolak: filter laporan dengan status = 2
-                              (data.laporan || []).filter(item => item.status === 2).length
+                              data.ditolak || 0
                             ],
                             backgroundColor: [
                               '#2563eb',
