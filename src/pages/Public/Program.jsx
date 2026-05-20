@@ -2,6 +2,7 @@ import React from 'react'
 import Template from '../../layouts/Template.jsx'
 import { assetUrl } from '../../lib/assets.js'
 import api from '../../lib/api.js'
+import { sanitizeHtml } from '../../utils/sanitizeHtml.js'
 
 export default function Program() {
   const [items, setItems] = React.useState([])
@@ -82,7 +83,7 @@ export default function Program() {
                       <div
                         className="card-text mb-3"
                         dangerouslySetInnerHTML={{
-                          __html: p.deskripsi?.slice(0, 100) + '...'
+                          __html: sanitizeHtml(`${p.deskripsi?.slice(0, 100) || ''}...`)
                         }}
                       />
 

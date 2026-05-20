@@ -2,6 +2,7 @@ import React from 'react'
 import Template from '../../layouts/Template.jsx'
 import informasiEdukasiService from '../../services/informasiEdukasiService.js'
 import { assetUrl } from '../../lib/assets.js'
+import { sanitizeHtml } from '../../utils/sanitizeHtml.js'
 
 export default function Informasi() {
   const [data, setData] = React.useState({ executive: [], peraturan: [], satwa: [], kawasan: null })
@@ -12,8 +13,6 @@ React.useEffect(() => {
   let mounted = true
   informasiEdukasiService.getAll()
     .then(res => { 
-      console.log('SATWA[0]:', res.data.satwa?.[0])
-      console.log('EXECUTIVE[0]:', res.data.executive?.[0])
       if (mounted) { setData(res.data); setLoading(false) } 
     })
     .catch(err => { if (mounted) { setError(err.message); setLoading(false) } })
@@ -50,7 +49,7 @@ React.useEffect(() => {
             {loading ? <p>Memuat...</p> : (
               <div
                 className="text-justify"
-                dangerouslySetInnerHTML={{ __html: data.kawasan?.deskripsi || '' }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.kawasan?.deskripsi || '') }}
               />
             )}
             <h4 className="mt-3">Data Statistik</h4>
@@ -102,7 +101,7 @@ React.useEffect(() => {
                 <div className="flex-grow-1">
                   <h6 className="mt-3 mx-3">{new Date(p.created_at).toLocaleDateString('id-ID')}</h6>
                   <h4 className="mx-3 mb-3">{p.judul}</h4>
-                  <span className="truncate-4 mb-3 px-3" dangerouslySetInnerHTML={{ __html: p.deskripsi }} />
+                  <span className="truncate-4 mb-3 px-3" dangerouslySetInnerHTML={{ __html: sanitizeHtml(p.deskripsi) }} />
                 </div>
                 <div className="mb-3 px-3 mt-auto">
                   <a href={`/informasi-edukasi/${p.slug}`} className="btn btn-primary">Selengkapnya</a>
@@ -129,7 +128,7 @@ React.useEffect(() => {
                 <div className="flex-grow-1">
                   <h6 className="mt-3 mx-3">{new Date(p.created_at).toLocaleDateString('id-ID')}</h6>
                   <h4 className="mx-3 mb-3">{p.judul}</h4>
-                  <span className="truncate-4 mb-3 px-3" dangerouslySetInnerHTML={{ __html: p.deskripsi }} />
+                  <span className="truncate-4 mb-3 px-3" dangerouslySetInnerHTML={{ __html: sanitizeHtml(p.deskripsi) }} />
                 </div>
                 <div className="mb-3 px-3 mt-auto">
                   <a href={`/informasi-edukasi/${p.slug}`} className="btn btn-primary">Selengkapnya</a>
@@ -162,5 +161,4 @@ React.useEffect(() => {
     </Template>
   )
 }
-
 

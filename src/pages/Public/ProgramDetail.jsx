@@ -3,13 +3,13 @@ import { useParams } from 'react-router-dom'
 import Template from '../../layouts/Template.jsx'
 import api from '../../lib/api.js'
 import { assetUrl } from '../../lib/assets.js'
+import { sanitizeHtml } from '../../utils/sanitizeHtml.js'
 
 export default function ProgramDetail() {
   const { slug } = useParams()
   const [data, setData] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState('')
-  console.log(data)
 
 React.useEffect(() => {
   let mounted = true
@@ -17,7 +17,6 @@ React.useEffect(() => {
   api.get(`/program/${slug}`)
     .then(res => {
       if (mounted) {
-        console.log(res.data)
         setData(res.data.data || res.data)
         setLoading(false)
       }
@@ -52,7 +51,7 @@ React.useEffect(() => {
               <h1 className="mb-2">{data.judul}</h1>
               <hr />
               <div>
-                <span dangerouslySetInnerHTML={{ __html: data.deskripsi }} />
+                <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.deskripsi) }} />
               </div>
             </div>
           </div>
@@ -61,5 +60,4 @@ React.useEffect(() => {
     </Template>
   )
 }
-
 

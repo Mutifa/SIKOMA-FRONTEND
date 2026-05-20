@@ -23,8 +23,6 @@ export default function ProfilPerusahaan() {
       .then(res => {
         setFormData(res.data)
         setLoading(false)
-        console.log('semua data:', res.data)  // ganti ini
-        
       })
 
       .catch(err => {

@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom'
 export default function Navbar({ website }) {
 
   const FILE_URL = 'https://codemy.my.id'
-    console.log(website)
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light sticky-top">
       <div className="container">

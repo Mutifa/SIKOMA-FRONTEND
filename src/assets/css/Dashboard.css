@@ -955,24 +955,332 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 /* ============================================================
    AKUN PAGE
    ============================================================ */
-.akun-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
-.akun-card { background: #fff; border: 1px solid #e8e8e8; border-radius: var(--radius-md); padding: 1.5rem; }
+.akun-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.akun-hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  background: #fff;
+  border: 1px solid #e8f0eb;
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+}
+
+.akun-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--green-700), var(--green-900));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 800;
+  box-shadow: 0 8px 22px rgba(26,71,49,0.20);
+  flex-shrink: 0;
+}
+
+.akun-hero-main {
+  min-width: 0;
+}
+
+.akun-hero-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.akun-name {
+  margin: 0;
+  color: var(--green-900);
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.akun-email {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+  word-break: break-word;
+}
+
+.akun-quick-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.akun-quick-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 5px 10px;
+  background: var(--green-50);
+  border: 1px solid var(--green-100);
+  border-radius: 999px;
+  color: var(--green-800);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.akun-edit-button {
+  justify-self: end;
+  white-space: nowrap;
+}
+
+.akun-grid,
+.akun-edit-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.akun-card {
+  background: #fff;
+  border: 1px solid #e8f0eb;
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+.akun-card-soft {
+  background: linear-gradient(180deg, #ffffff 0%, var(--green-50) 100%);
+}
+
 .akun-section-title {
-  font-size: 13px; font-weight: 700; color: #1a5c35;
-  text-transform: uppercase; letter-spacing: 0.07em;
-  margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--green-800);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.akun-section-dot { width: 6px; height: 6px; border-radius: 50%; background: #1a5c35; flex-shrink: 0; }
-.akun-field-label { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; margin-bottom: 5px; display: block; }
+
+.akun-section-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green-700);
+  flex-shrink: 0;
+}
+
+.akun-info-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.akun-info-item {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  min-width: 0;
+}
+
+.akun-info-icon {
+  width: 42px;
+  min-height: 42px;
+  border-radius: 10px;
+  background: var(--green-50);
+  border: 1px solid var(--green-100);
+  color: var(--green-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.akun-info-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.akun-field-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #7b8b83;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  display: block;
+}
+
 .akun-field-value {
-  font-size: 14px; color: #1a1a1a; padding: 9px 12px;
-  background: #f8f9f8; border: 1px solid #efefef; border-radius: 8px;
-  min-height: 38px; display: flex; align-items: center; margin-bottom: 14px;
+  font-size: 14px;
+  color: #1e2d26;
+  padding: 9px 12px;
+  background: #f8faf9;
+  border: 1px solid #e8f0eb;
+  border-radius: 8px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+  word-break: break-word;
 }
-.akun-role-badge { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
-.akun-password-dots { letter-spacing: 4px; color: #bbb; font-size: 18px; }
-.akun-password-hint { font-size: 12px; color: #bbb; margin-top: 10px; }
-.akun-password-hint strong { color: #1a5c35; }
+
+.akun-role-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.akun-security-box {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: #fff;
+  border: 1px solid #e8f0eb;
+  margin-bottom: 14px;
+}
+
+.akun-security-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--green-800);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.akun-security-box h5 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: var(--green-900);
+  font-weight: 700;
+}
+
+.akun-security-box p,
+.akun-card-note,
+.akun-edit-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.akun-password-dots {
+  letter-spacing: 4px;
+  color: #8a9a91;
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+
+.akun-full-button {
+  width: 100%;
+  justify-content: center;
+}
+
+.akun-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.akun-edit-header,
+.akun-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #e8f0eb;
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.akun-edit-header h4 {
+  margin: 0 0 4px;
+  color: var(--green-900);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.akun-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.akun-form-group,
+.akun-password-control {
+  min-width: 0;
+}
+
+.akun-form-wide {
+  grid-column: 1 / -1;
+}
+
+.akun-readonly {
+  background: var(--green-50);
+  color: var(--green-800);
+  font-weight: 600;
+}
+
+.akun-password-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.akun-input-wrap {
+  position: relative;
+}
+
+.akun-input-wrap .form-control {
+  padding-right: 42px;
+}
+
+.akun-input-action {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #7b8b83;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.akun-input-action:hover {
+  background: var(--green-50);
+  color: var(--green-800);
+}
 
 .loading-center { display: flex; justify-content: center; align-items: center; min-height: 200px; }
 
@@ -1012,6 +1320,18 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   .modal-dialog { max-width: calc(100% - 32px); margin: 16px; }
   .table-search-input { width: 150px; }
   .table-controls { flex-direction: column; align-items: flex-start; }
+  .akun-hero {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .akun-edit-button {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    justify-content: center;
+  }
+  .akun-grid,
+  .akun-edit-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 575px) {
@@ -1025,6 +1345,47 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   .modal-footer { padding: 12px 16px; flex-wrap: wrap; }
   .user-info .name { max-width: 100px; overflow: hidden; text-overflow: ellipsis; }
   .akun-grid { grid-template-columns: 1fr; }
+  .akun-hero,
+  .akun-card,
+  .akun-edit-header,
+  .akun-action-bar {
+    padding: 16px;
+  }
+  .akun-hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .akun-avatar {
+    justify-self: center;
+    width: 64px;
+    height: 64px;
+    font-size: 20px;
+  }
+  .akun-hero-title-row,
+  .akun-edit-header,
+  .akun-action-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .akun-role-badge {
+    align-self: center;
+  }
+  .akun-quick-row {
+    justify-content: center;
+  }
+  .akun-info-list,
+  .akun-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .akun-info-item {
+    align-items: flex-start;
+  }
+  .akun-action-bar .btn-primary-custom,
+  .akun-action-bar .btn-secondary-custom,
+  .akun-edit-header .btn-secondary-custom {
+    width: 100%;
+    justify-content: center;
+  }
   .table-search-input { width: 120px; }
 }
 

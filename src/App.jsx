@@ -116,7 +116,11 @@ export default function App() {
             </RoleGuard>
           } /> */}
 
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={
+            <RoleGuard allowedRoles={['admin_pusat', 'admin_lapangan']}>
+              <Dashboard />
+            </RoleGuard>
+          } />
 
 
 

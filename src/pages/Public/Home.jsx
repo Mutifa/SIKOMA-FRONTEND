@@ -4,6 +4,7 @@ import { assetUrl } from '../../lib/assets.js'
 import { homeService } from '../../services/homeService.js'
 import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom'
+import { sanitizeHtml } from '../../utils/sanitizeHtml.js'
 
 export default function Home() {
   const [banner, setBanner] = useState([]);
@@ -170,14 +171,14 @@ export default function Home() {
                     <div className="text-start fw-bold mb-4">
                       <p className="mb-2">Visi:</p>
                       <span dangerouslySetInnerHTML={{
-                        __html: website?.visi || 'Visi belum tersedia'
+                        __html: sanitizeHtml(website?.visi || 'Visi belum tersedia')
                       }} />
                     </div>
 
                     <div className="text-start fw-bold">
                       <p className="mb-2">Misi:</p>
                       <span dangerouslySetInnerHTML={{
-                        __html: website?.misi || 'Misi belum tersedia'
+                        __html: sanitizeHtml(website?.misi || 'Misi belum tersedia')
                       }} />
                     </div>
                   </div>
@@ -245,5 +246,4 @@ export default function Home() {
     </Template>
   )
 }
-
 

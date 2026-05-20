@@ -1,6 +1,7 @@
 import React from 'react'
 import Template from '../../layouts/Template.jsx'
 import standarPelayananService from '../../services/standarPelayananServices.js'
+import { sanitizeHtml } from '../../utils/sanitizeHtml.js'
 
 
 export default function StandarPelayanan() {
@@ -52,7 +53,7 @@ React.useEffect(() => {
             <p className="mb-2"><i className="fa fa-phone-alt me-3"></i>{website?.telepon}</p>
             <p className="mb-4"><i className="fa fa-envelope me-3"></i>{website?.email}</p>
             <h4>Jam Operasional</h4>
-            <span dangerouslySetInnerHTML={{ __html: website?.jambuka || '' }} />
+            <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(website?.jambuka || '') }} />
           </div>
           <div className="col-lg-8">
             <div className="bg-light text-center p-4">
@@ -108,5 +109,4 @@ React.useEffect(() => {
     </Template>
   )
 }
-
 

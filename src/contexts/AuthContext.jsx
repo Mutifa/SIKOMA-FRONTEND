@@ -19,6 +19,22 @@ import { authService } from '../services/authService'
 // =======================================================
 const AuthContext = createContext()
 
+const parseStoredUser = () => {
+  try {
+    const savedUser = localStorage.getItem('user')
+    return savedUser ? JSON.parse(savedUser) : null
+  } catch {
+    localStorage.removeItem('user')
+    return null
+  }
+}
+
+const getProfileEndpoint = (role) => {
+  return role === 'admin_pusat'
+    ? '/admin_pusat/profile'
+    : '/admin_lapangan/profile'
+}
+
 
 // =======================================================
 // CUSTOM HOOK
@@ -76,27 +92,25 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token')
 
     // Ambil data user dari localStorage
-    const savedUser = localStorage.getItem('user')
+    const savedUser = token ? parseStoredUser() : null
 
     // Jika user tersimpan → langsung set user
-    if (savedUser) {
+    // Jika ada token → cek auth ke backend  
+    if (token) {
 
-      setUser(JSON.parse(savedUser))
+      if (savedUser) {
+        setUser(savedUser)
+      }
 
-      setIsAuthenticated(true)
+      checkAuth()
+      return
 
     }
 
-    // Jika ada token → cek auth ke backend  
-if (savedUser) {
-
-  setUser(JSON.parse(savedUser))
-
-  setIsAuthenticated(true)
-
-}
-
-setLoading(false)
+    localStorage.removeItem('role')
+    localStorage.removeItem('user')
+    setIsAuthenticated(false)
+    setLoading(false)
 
   }, [])
 
@@ -112,24 +126,28 @@ setLoading(false)
     try {
 
       // Ambil role dari localStorage
-      const role = localStorage.getItem('role')
+      const role = localStorage.getItem('role') || parseStoredUser()?.role
 
       // Menentukan endpoint profile
-      const endpoint =
-        role === 'admin_pusat'
-          ? '/admin_pusat/profile'
-          : '/profile'
+      const endpoint = getProfileEndpoint(role)
 
       // Request ke backend
-      const res = await authService.me()
+      const res = await authService.me(endpoint)
 
-      const userData = res.data
+      const userData = res.data.data || res.data
 
       // Simpan user + role
-      setUser({
+      const nextUser = {
         ...userData,
         role
-      })
+      }
+
+      setUser(nextUser)
+
+      localStorage.setItem(
+        'user',
+        JSON.stringify(nextUser)
+      )
 
       setIsAuthenticated(true)
 
@@ -140,23 +158,11 @@ setLoading(false)
         error
       )
 
-      // Fallback:
-      // jika backend gagal tapi localStorage masih ada
-      const token = localStorage.getItem('token')
-
-      const savedUser = localStorage.getItem('user')
-
-      if (token && savedUser) {
-
-        setUser(JSON.parse(savedUser))
-
-        setIsAuthenticated(true)
-
-      } else {
-
-        setIsAuthenticated(false)
-
-      }
+      setUser(null)
+      setIsAuthenticated(false)
+      localStorage.removeItem('token')
+      localStorage.removeItem('role')
+      localStorage.removeItem('user')
 
     } finally {
 

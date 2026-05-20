@@ -4,8 +4,40 @@ import { Link, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import { akunService } from '../../../services/akunService.js'
 
-export default function AkunEdit() {
+const roleLabel = {
+  admin_pusat: 'Admin Pusat',
+  super_admin: 'Super Admin',
+  admin_lapangan: 'Admin Lapangan',
+}
 
+const PasswordInput = ({ label, value, onChange, autoComplete }) => {
+  const [visible, setVisible] = React.useState(false)
+
+  return (
+    <div className="akun-password-control">
+      <label className="akun-field-label">{label}</label>
+      <div className="akun-input-wrap">
+        <input
+          type={visible ? 'text' : 'password'}
+          className="form-control"
+          value={value}
+          onChange={onChange}
+          autoComplete={autoComplete}
+        />
+        <button
+          type="button"
+          className="akun-input-action"
+          onClick={() => setVisible(prev => !prev)}
+          aria-label={visible ? 'Sembunyikan password' : 'Tampilkan password'}
+        >
+          <i className={`fas ${visible ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export default function AkunEdit() {
   const navigate = useNavigate()
 
   const [loading, setLoading] = React.useState(true)
@@ -33,26 +65,68 @@ export default function AkunEdit() {
         if (mounted) {
           const userData = res.data.user || res.data.data || res.data || {}
           setFormData({
-            name:     userData.name     || '',
+            name: userData.name || '',
             username: userData.username || '',
-            email:    userData.email    || '',
-            role:     userData.role     || ''
+            email: userData.email || '',
+            role: userData.role || ''
           })
           setLoading(false)
         }
       })
       .catch(() => {
-        setError('Gagal memuat data')
-        setLoading(false)
+        if (mounted) {
+          setError('Gagal memuat data')
+          setLoading(false)
+        }
       })
     return () => { mounted = false }
   }, [])
+
+  const updateForm = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+  }
+
+  const updatePassword = (field, value) => {
+    setPasswordData(prev => ({ ...prev, [field]: value }))
+  }
+
+  const validatePassword = () => {
+    const hasPasswordChange =
+      passwordData.current_password ||
+      passwordData.password ||
+      passwordData.password_confirmation
+
+    if (!hasPasswordChange) return true
+
+    if (!passwordData.current_password || !passwordData.password || !passwordData.password_confirmation) {
+      setError('Lengkapi semua field password jika ingin mengganti password')
+      return false
+    }
+
+    if (passwordData.password.length < 8) {
+      setError('Password baru minimal 8 karakter')
+      return false
+    }
+
+    if (passwordData.password !== passwordData.password_confirmation) {
+      setError('Konfirmasi password baru tidak sama')
+      return false
+    }
+
+    return true
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setSaving(true)
     setError('')
     setSuccess('')
+
+    if (!validatePassword()) {
+      setSaving(false)
+      return
+    }
+
     try {
       await akunService.updateProfile(formData)
 
@@ -62,7 +136,7 @@ export default function AkunEdit() {
         passwordData.password_confirmation
 
       if (hasPasswordChange) {
-        await api.put('/password', passwordData)
+        await akunService.updatePassword(passwordData)
       }
 
       setSuccess('Profil berhasil diperbarui')
@@ -85,126 +159,125 @@ export default function AkunEdit() {
   }
 
   return (
-
     <DashboardLayout title="Edit Akun">
-
-      {/* Alert — class dari Dashboard.css */}
-      {error   && <div className="alert alert-danger">{error}</div>}
+      {error && <div className="alert alert-danger">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
 
-      <form onSubmit={handleSubmit}>
-
-        {/* ── Section Profil — akun-card dari Dashboard.css ── */}
-        <div className="akun-card mb-3">
-
-          <div className="akun-section-title">
-            <span className="akun-section-dot"></span>
-            Informasi Profil
+      <form className="akun-edit-form" onSubmit={handleSubmit}>
+        <div className="akun-edit-header">
+          <div>
+            <h4>Perbarui Profil</h4>
+            <p>Ubah informasi akun dan password bila diperlukan.</p>
           </div>
-
-          <div className="mb-3">
-            <label className="akun-field-label">Nama</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="akun-field-label">Username</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="akun-field-label">Email</label>
-            <input
-              type="email"
-              className="form-control"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              required
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="akun-field-label">Role</label>
-            {/* Read-only — tampil seperti field value */}
-            <div className="akun-field-value">{formData.role || '-'}</div>
-          </div>
-
+          <Link to="/akun" className="btn-secondary-custom">
+            <i className="fas fa-arrow-left"></i>
+            Kembali
+          </Link>
         </div>
 
-        {/* ── Section Password — akun-card dari Dashboard.css ── */}
-        <div className="akun-card mb-3">
+        <div className="akun-edit-grid">
+          <div className="akun-card">
+            <div className="akun-section-title">
+              <span className="akun-section-dot"></span>
+              Informasi Profil
+            </div>
 
-          <div className="akun-section-title">
-            <span className="akun-section-dot"></span>
-            Ubah Password
+            <div className="akun-form-grid">
+              <div className="akun-form-group">
+                <label className="akun-field-label">Nama</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={formData.name}
+                  autoComplete="name"
+                  onChange={(e) => updateForm('name', e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="akun-form-group">
+                <label className="akun-field-label">Username</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={formData.username}
+                  autoComplete="username"
+                  onChange={(e) => updateForm('username', e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="akun-form-group akun-form-wide">
+                <label className="akun-field-label">Email</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  value={formData.email}
+                  autoComplete="email"
+                  onChange={(e) => updateForm('email', e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="akun-form-group akun-form-wide">
+                <label className="akun-field-label">Role</label>
+                <div className="akun-field-value akun-readonly">
+                  <i className="fas fa-user-shield"></i>
+                  {roleLabel[formData.role] || formData.role || '-'}
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="mb-3">
-            <label className="akun-field-label">Password Lama</label>
-            <input
-              type="password"
-              className="form-control"
-              value={passwordData.current_password}
-              onChange={(e) => setPasswordData({ ...passwordData, current_password: e.target.value })}
-            />
-          </div>
+          <div className="akun-card akun-card-soft">
+            <div className="akun-section-title">
+              <span className="akun-section-dot"></span>
+              Ubah Password
+            </div>
 
-          <div className="mb-3">
-            <label className="akun-field-label">Password Baru</label>
-            <input
-              type="password"
-              className="form-control"
-              value={passwordData.password}
-              onChange={(e) => setPasswordData({ ...passwordData, password: e.target.value })}
-            />
-          </div>
+            <p className="akun-card-note">
+              Kosongkan bagian ini jika password tidak ingin diubah.
+            </p>
 
-          <div className="mb-3">
-            <label className="akun-field-label">Konfirmasi Password Baru</label>
-            <input
-              type="password"
-              className="form-control"
-              value={passwordData.password_confirmation}
-              onChange={(e) => setPasswordData({ ...passwordData, password_confirmation: e.target.value })}
-            />
-          </div>
+            <div className="akun-password-stack">
+              <PasswordInput
+                label="Password Lama"
+                value={passwordData.current_password}
+                autoComplete="current-password"
+                onChange={(e) => updatePassword('current_password', e.target.value)}
+              />
 
+              <PasswordInput
+                label="Password Baru"
+                value={passwordData.password}
+                autoComplete="new-password"
+                onChange={(e) => updatePassword('password', e.target.value)}
+              />
+
+              <PasswordInput
+                label="Konfirmasi Password Baru"
+                value={passwordData.password_confirmation}
+                autoComplete="new-password"
+                onChange={(e) => updatePassword('password_confirmation', e.target.value)}
+              />
+            </div>
+          </div>
         </div>
 
-        {/* ── Tombol Aksi ── */}
-        <div className="d-flex gap-2">
-
-          {/* Simpan — btn-primary-custom */}
+        <div className="akun-action-bar">
+          <Link to="/akun" className="btn-secondary-custom">
+            Batal
+          </Link>
           <button
             type="submit"
             className="btn-primary-custom"
             disabled={saving}
           >
-            {saving ? 'Menyimpan...' : 'Simpan'}
+            <i className={`fas ${saving ? 'fa-spinner fa-spin' : 'fa-save'}`}></i>
+            {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
           </button>
-
-          {/* Kembali — btn-secondary-custom */}
-          <Link to="/akun" className="btn-secondary-custom">
-            Kembali
-          </Link>
-
         </div>
-
       </form>
-
     </DashboardLayout>
-
   )
 }

@@ -16,7 +16,6 @@ export default function InformasiDetail() {
 
         informasiEdukasiService.getAll()
             .then(res => {
-                console.log('RESPONSE:', res.data)
                 if (mounted) {
                     const allData = [
                         ...(res.data.executive || []),

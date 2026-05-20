@@ -8,8 +8,8 @@ export const authService = {
   logout: () =>
     api.post('/auth/logout'),
 
-  me: () =>
-    api.get('/admin_lapangan/profile'),
+  me: (endpoint = '/admin_lapangan/profile') =>
+    api.get(endpoint),
 
 forgotPassword: (data) =>
     api.post('/auth/forgot-password', data),

@@ -10,4 +10,8 @@ export const akunService = {
   updateProfile: (data) =>
     api.post('/admin_pusat/profile/update', data),
 
+  // Update password
+  updatePassword: (data) =>
+    api.put('/password', data),
+
 }
