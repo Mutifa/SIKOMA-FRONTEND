@@ -211,8 +211,6 @@ export default function App() {
             }
           />
 
-         
-
           <Route path="/profil-perusahaan" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
               <ProfilPerusahaan />

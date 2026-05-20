@@ -19,12 +19,12 @@ const programService = {
     }),
 
   // Update program
-update: (id, data) =>
-  api.post(`/program/${id}`, data, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  }),
+  update: (id, data) =>
+    api.post(`/program/${id}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }),
 
   // Hapus program
   delete: (id) =>

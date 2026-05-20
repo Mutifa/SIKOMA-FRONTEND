@@ -83,24 +83,24 @@ export default function Program() {
       {error && <div className="alert alert-danger">{error}</div>}
 
       {/* Tombol Tambah — btn-primary-custom */}
-   <div className="white-box">
+      <div className="white-box">
 
-  {/* Header */}
-  <div className="d-flex justify-content-between align-items-center mb-3">
+        {/* Header */}
+        <div className="d-flex justify-content-between align-items-center mb-3">
 
-    <div className="box-title mb-0">
-      Kelola halaman program
-    </div>
+          <div className="box-title mb-0">
+            Kelola halaman program
+          </div>
 
-    <Link
-      to="/dashboard/program/create"
-      className="btn-primary-custom"
-    >
-      <i className="fas fa-plus me-1"></i>
-      Tambah Program
-    </Link>
+          <Link
+            to="/dashboard/program/create"
+            className="btn-primary-custom"
+          >
+            <i className="fas fa-plus me-1"></i>
+            Tambah Program
+          </Link>
 
-  </div>
+        </div>
 
         {/* Search & Items per page */}
         <div className="row mb-3">
@@ -171,12 +171,12 @@ export default function Program() {
 
                     <td>
                       {item.foto ? (
-                       <img
-  src={`https://codemy.my.id/uploads/edukasi/${item.foto}`}
-  alt="Foto"
-  width="100"
-  className="img-fluid"
-/>
+                        <img
+                          src={`https://codemy.my.id/uploads/edukasi/${item.foto}`}
+                          alt="Foto"
+                          width="100"
+                          className="img-fluid"
+                        />
                       ) : '-'}
                     </td>
 

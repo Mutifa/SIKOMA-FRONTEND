@@ -74,7 +74,7 @@ export default function Konten() {
                 Kelola halaman Informasi & edukasi
               </div>
 
-              <Link to="/konten/create" className="btn-primary-custom">
+              <Link to="/dashboard/informasi-edukasi/create" className="btn-primary-custom">
                 <i className="fas fa-plus"></i>
                 Tambah Edukasi
               </Link>
@@ -133,7 +133,7 @@ export default function Konten() {
 
                             {/* Detail — btn-primary-custom */}
                             <Link
-                              to={`/konten/detail/${item.id}`}
+                              to={`/dashboard/informasi-edukasi/detail/${item.id}`}
                               className="btn-primary-custom btn-sm"
                               title="Detail"
                             >
@@ -142,7 +142,7 @@ export default function Konten() {
 
                             {/* Edit — btn-warning-custom */}
                             <Link
-                              to={`/konten/edit/${item.id}`}
+                              to={`/dashboard/informasi-edukasi/edit/${item.id}`}
                               className="btn-warning-custom btn-sm"
                               title="Edit"
                             >
