@@ -96,67 +96,59 @@ export default function DashboardLayout({
   // ===================================================
   if (isAdminPusat) {
 
-    menuItems = [
+   menuItems = [
+  {
+    to: '/dashboard',
+    icon: 'fa-home',
+    label: 'Dashboard'
+  },
+  {
+    to: '/profil-perusahaan',
+    icon: 'fa-building',
+    label: 'Profil Perusahaan'
+  },
+  {
+    to: '/pengguna',
+    icon: 'fa-users',
+    label: 'Pengguna'
+  },
+  {
+    to: '/dashboard/program',
+    icon: 'fa-list-ul',
+    label: 'Program'
+  },
+  {
+    to: '/dashboard/informasi-edukasi',
+    icon: 'fa-newspaper',
+    label: 'Informasi & Edukasi'
+  },
+  {
+    to: '/kawasan',
+    icon: 'fa-map-marker-alt',
+    label: 'Kawasan Konservasi'
+  },
+  {
+    to: '/peraturan',
+    icon: 'fa-gavel',
+    label: 'Peraturan'
+  },
+  {
+    to: '/laporan-konservasi',
+    icon: 'fa-file-lines',
+    label: 'Laporan Konservasi'
+  },
+  {
+    to: '/pesan-masuk',
+    icon: 'fa-clipboard-list',
+    label: 'Standar Pelayanan'
+  },
+  {
+    to: '/akun',
+    icon: 'fa-user-cog',
+    label: 'Akun'
+  },
+]
 
-      {
-        to: '/dashboard',
-        icon: 'fa-home',
-        label: 'Dashboard'
-      },
-
-      {
-        to: '/pengguna',
-        icon: 'fa-users',
-        label: 'Pengguna'
-      },
-
-      {
-        to: '/profil-perusahaan',
-        icon: 'fa-building',
-        label: 'Profil Perusahaan'
-      },
-
-      {
-        to: '/dashboard/program',
-        icon: 'fa-list-ul',
-        label: 'Program'
-      },
-
-      {
-        to: '/dashboard/informasi-edukasi',
-        icon: 'fa-newspaper',
-        label: 'Informasi & Edukasi'
-      },
-
-      {
-        to: '/kawasan',
-        icon: 'fa-map-marker-alt',
-        label: 'Kawasan Konservasi'
-      },
-
-      {
-        to: '/peraturan',
-        icon: 'fa-gavel',
-        label: 'Peraturan'
-      },
-
-      { to: '/pesan-masuk', 
-        icon: 'fa-clipboard-list', 
-        label: 'Standar Pelayanan' },
-
-      {
-        to: '/laporan-konservasi',
-        icon: 'fa-file-lines',
-        label: 'Laporan Konservasi'
-      },
-
-      {
-        to: '/akun',
-        icon: 'fa-user-cog',
-        label: 'Akun'
-      },
-
-    ]
 
   } else {
 
