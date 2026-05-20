@@ -16,7 +16,7 @@ export default function InformasiDetail() {
 
         informasiEdukasiService.getAll()
             .then(res => {
-                 console.log('RESPONSE:', res.data)
+                console.log('RESPONSE:', res.data)
                 if (mounted) {
                     const allData = [
                         ...(res.data.executive || []),
@@ -87,21 +87,21 @@ export default function InformasiDetail() {
                             )}
                         </div>
 
-                        {/* KONTEN */}
-                        <div className="col-lg-6 mb-4">
-                            <h1 style={{ fontWeight: 'bold' }}>
-                                {data?.judul}
-                            </h1>
+                                {/* informasi */}
+                                <div className="col-lg-6 mb-4">
+                                    <h1 style={{ fontWeight: 'bold' }}>
+                                        {data?.judul}
+                                    </h1>
 
-                            <div
-                                style={{
-                                    width: 60,
-                                    height: 4,
-                                    backgroundColor: '#2e7d32',
-                                    marginBottom: 15,
-                                    borderRadius: 2
-                                }}
-                            />
+                                    <div
+                                        style={{
+                                            width: 60,
+                                            height: 4,
+                                            backgroundColor: '#2e7d32',
+                                            marginBottom: 15,
+                                            borderRadius: 2
+                                        }}
+                                    />
 
                             {/* DESKRIPSI */}
                             <div className="deskripsi-content">
