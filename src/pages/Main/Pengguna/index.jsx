@@ -92,14 +92,16 @@ export default function Pengguna() {
       )}
 
       {/* Tombol Tambah — btn-primary-custom */}
-      <div className="d-flex justify-content-end mb-3">
-        <Link to="/pengguna/create" className="btn-primary-custom">
-          <i className="fas fa-plus"></i>
-          Tambah Pengguna
-        </Link>
-      </div>
-
       <div className="white-box">
+
+        <div className="admin-card-header">
+          <div className="box-title mb-0">Kelola halaman pengguna</div>
+
+          <Link to="/pengguna/create" className="btn-primary-custom">
+            <i className="fas fa-plus"></i>
+            Tambah Pengguna
+          </Link>
+        </div>
 
         {data.length === 0 ? (
           <div className="empty-state">

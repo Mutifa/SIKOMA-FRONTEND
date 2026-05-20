@@ -67,17 +67,17 @@ export default function Konten() {
         <div className="col-12">
 
           {/* Tombol Tambah — btn-primary-custom */}
-          <div className="d-flex justify-content-end mb-3">
-            <Link to="/konten/create" className="btn-primary-custom">
-              <i className="fas fa-plus"></i>
-              Tambah Edukasi
-            </Link>
-          </div>
-
           <div className="white-box">
 
-            <div className="box-title mb-3">
-              Kelola halaman nformasi & edukasi
+            <div className="admin-card-header">
+              <div className="box-title mb-0">
+                Kelola halaman Informasi & edukasi
+              </div>
+
+              <Link to="/konten/create" className="btn-primary-custom">
+                <i className="fas fa-plus"></i>
+                Tambah Edukasi
+              </Link>
             </div>
 
             <div className="table-responsive">

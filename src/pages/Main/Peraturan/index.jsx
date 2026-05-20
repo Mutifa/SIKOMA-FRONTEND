@@ -72,8 +72,8 @@ export default function Peraturan() {
         <div className="col-12">
 
           {/* Header */}
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <div className="box-title mb-0">Manajemen halaman peraturan</div>
+          <div className="admin-card-header">
+            <div className="box-title mb-0">Kelola halaman peraturan</div>
 
             {/* Tombol Tambah — btn-primary-custom */}
             <Link to="/peraturan/create" className="btn-primary-custom">

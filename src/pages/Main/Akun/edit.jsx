@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
+import { useAuth } from '../../../contexts/AuthContext.jsx'
 import { akunService } from '../../../services/akunService.js'
 
 const roleLabel = {
@@ -37,8 +38,21 @@ const PasswordInput = ({ label, value, onChange, autoComplete }) => {
   )
 }
 
+const extractProfile = (payload, fallbackUser = {}) => {
+  const data = payload?.data?.user || payload?.user || payload?.data || payload || {}
+  return {
+    ...fallbackUser,
+    ...data,
+    name: data.name || data.nama || fallbackUser?.name || '',
+    username: data.username || fallbackUser?.username || '',
+    email: data.email || fallbackUser?.email || '',
+    role: data.role || fallbackUser?.role || '',
+  }
+}
+
 export default function AkunEdit() {
   const navigate = useNavigate()
+  const { user: authUser } = useAuth()
 
   const [loading, setLoading] = React.useState(true)
   const [saving, setSaving] = React.useState(false)
@@ -60,10 +74,10 @@ export default function AkunEdit() {
 
   React.useEffect(() => {
     let mounted = true
-    akunService.getProfile()
+    akunService.getProfile(authUser?.role)
       .then(res => {
         if (mounted) {
-          const userData = res.data.user || res.data.data || res.data || {}
+          const userData = extractProfile(res.data, authUser)
           setFormData({
             name: userData.name || '',
             username: userData.username || '',
@@ -75,12 +89,22 @@ export default function AkunEdit() {
       })
       .catch(() => {
         if (mounted) {
-          setError('Gagal memuat data')
+          if (authUser) {
+            const userData = extractProfile(null, authUser)
+            setFormData({
+              name: userData.name || '',
+              username: userData.username || '',
+              email: userData.email || '',
+              role: userData.role || ''
+            })
+          } else {
+            setError('Gagal memuat data')
+          }
           setLoading(false)
         }
       })
     return () => { mounted = false }
-  }, [])
+  }, [authUser])
 
   const updateForm = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }))

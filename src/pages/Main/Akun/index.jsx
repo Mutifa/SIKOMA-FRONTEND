@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
+import { useAuth } from '../../../contexts/AuthContext.jsx'
 import { akunService } from '../../../services/akunService.js'
 
 const roleMap = {
@@ -28,29 +29,46 @@ const InfoItem = ({ icon, label, value }) => (
   </div>
 )
 
+const extractProfile = (payload, fallbackUser = {}) => {
+  const data = payload?.data?.user || payload?.user || payload?.data || payload || {}
+  return {
+    ...fallbackUser,
+    ...data,
+    name: data.name || data.nama || fallbackUser?.name || '',
+    username: data.username || fallbackUser?.username || '',
+    email: data.email || fallbackUser?.email || '',
+    role: data.role || fallbackUser?.role || '',
+  }
+}
+
 export default function Akun() {
+  const { user: authUser } = useAuth()
   const [user, setUser] = React.useState({ name: '', username: '', email: '', role: '' })
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState('')
 
   React.useEffect(() => {
     let mounted = true
-    akunService.getProfile()
+    akunService.getProfile(authUser?.role)
       .then(res => {
         if (mounted) {
-          const userData = res.data.user || res.data.data || res.data || {}
+          const userData = extractProfile(res.data, authUser)
           setUser(userData)
           setLoading(false)
         }
       })
       .catch(() => {
         if (mounted) {
-          setError('Gagal memuat data profil')
+          if (authUser) {
+            setUser(extractProfile(null, authUser))
+          } else {
+            setError('Gagal memuat data profil')
+          }
           setLoading(false)
         }
       })
     return () => { mounted = false }
-  }, [])
+  }, [authUser])
 
   const roleInfo = roleMap[user.role] || { label: user.role || '-', bg: '#f3f4f6', color: '#374151' }
 

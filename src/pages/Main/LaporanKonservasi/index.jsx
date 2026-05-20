@@ -204,18 +204,18 @@ React.useEffect(() => {
       )}
 
       {/* Tombol Tambah — hanya tampil untuk Admin Lapangan */}
-      {isAdminLapangan && (
-        <div className="d-flex justify-content-end mb-3">
-          <Link to="/laporan-konservasi/create" className="btn-primary-custom">
-            <i className="fas fa-plus"></i>
-            Tambah Laporan
-          </Link>
-        </div>
-      )}
-
       {/* White box / card tabel */}
       <div className="white-box">
-        <div className="box-title mb-3">Semua Laporan</div>
+        <div className="admin-card-header">
+          <div className="box-title mb-0">Semua Laporan</div>
+
+          {isAdminLapangan && (
+            <Link to="/laporan-konservasi/create" className="btn-primary-custom">
+              <i className="fas fa-plus"></i>
+              Tambah Laporan
+            </Link>
+          )}
+        </div>
 
         {isAdminPusat && (
           <div className="row mb-3">
