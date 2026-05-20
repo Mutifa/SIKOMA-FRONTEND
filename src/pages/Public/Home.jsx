@@ -12,6 +12,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true); // 🔥 penting
   const [error, setError] = useState(null);
   const location = useLocation()
+  const FILE_URL = 'https://codemy.my.id'
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,11 +59,13 @@ export default function Home() {
               banner.map((b, idx) => (
                 <div key={b.id} className={`carousel-item ${idx === 0 ? 'active' : ''}`}>
 
-                  <img
-                    className="w-100"
-                    src={assetUrl(`/uploads/galeri/${b.gambar}`)}
-                    alt="Image"
-                  />
+                  {b?.gambar && (
+                    <img
+                      className="w-100"
+                      src={assetUrl(`/uploads/galeri/${b.gambar}`)}
+                      alt="Image"
+                    />
+                  )}
 
                   <div className="carousel-caption w-100 h-100 d-flex align-items-center justify-content-center text-center">
                     <div className="w-100 px-3">
@@ -84,7 +87,7 @@ export default function Home() {
               ))
             ) : (
               <div className="carousel-item active">
-      
+
                 <div className="carousel-caption">
                   <div className="container-fluid p-0">
                     <div className="row justify-content-center">
@@ -103,18 +106,6 @@ export default function Home() {
             )}
           </div>
 
-          {/* {Array.isArray(banner) && banner.length > 1 && (
-            <>
-              <button className="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
-                <span className="carousel-control-prev-icon"></span>
-              </button>
-
-              <button className="carousel-control-next" type="button" data-bs-target="#header-carousel" data-bs-slide="next">
-                <span className="carousel-control-next-icon"></span>
-              </button>
-            </>
-          )} */}
-
         </div>
       </div>
       {/* Carousel End */}
@@ -132,15 +123,15 @@ export default function Home() {
 
                   <div className="text-center">
                     <h2 className="fw-bold heading-green animate-title">
-                      Struktur Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan  <br /> Tasik Besar Serkap 
+                      Struktur Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan  <br /> Tasik Besar Serkap
                     </h2>
                   </div>
 
                   <div className="text-center mt-4" style={{ overflowX: 'auto' }}>
                     <img
                       src={website?.struktur
-                        ? `/img/${website.struktur}`
-                        : `/img/struktur.png`
+                        ? `${FILE_URL}/img/${website.struktur}`
+                        : `${FILE_URL}  /img/struktur.png`
                       }
                       alt="Struktur Organisasi"
                       style={{
@@ -162,7 +153,7 @@ export default function Home() {
                 id="visi-misi"
                 className="container-fluid p-0 visi-misi-section"
                 style={{
-                  backgroundImage: 'url(/img/visi-misi.jpg)',
+                  backgroundImage: `url(${FILE_URL}/img/visi-misi.jpg)`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   position: 'relative',
@@ -174,7 +165,7 @@ export default function Home() {
                   style={{ zIndex: 2, minHeight: '500px' }}>
                   <div className="content-box text-start" style={{ color: 'black' }}>
                     <h2 className="fw-bold heading-green animate-title">
-                      Visi dan Misi Unit Pelaksanaan Teknis Kesatuan <br />Pengelolaan Hutan 
+                      Visi dan Misi Unit Pelaksanaan Teknis Kesatuan <br />Pengelolaan Hutan
                     </h2>
                     <div className="text-start fw-bold mb-4">
                       <p className="mb-2">Visi:</p>
@@ -199,7 +190,7 @@ export default function Home() {
                 <div className="container">
                   <div className="text-center">
                     <h2 className="fw-bold heading-green animate-title">
-                      Sejarah Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan <br />Tasik Besar Serkap 
+                      Sejarah Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan <br />Tasik Besar Serkap
                     </h2>
                   </div>
                   <br />

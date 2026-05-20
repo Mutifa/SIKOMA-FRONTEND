@@ -1,6 +1,6 @@
 import api from '../lib/api'
 
-export const edukasiService = {
+const adminInformasiEdukasiService = {
 
   getAll: () =>
     api.get('/edukasi'),
@@ -22,3 +22,5 @@ export const edukasiService = {
     api.delete(`/edukasi/${id}`),
 
 }
+
+export default adminInformasiEdukasiService

@@ -1,75 +1,28 @@
 import React from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import contentInformasiEdukasi from '../../../services/contentInformasiEdukasi.js'
-import { assetUrl } from '../../../lib/assets.js'
-import { successAlert, errorAlert } from '../../../utils/alert'
+import adminInformasiEdukasiService from '../../../services/adminInformasiEdukasiService.js'
+import { successAlert, errorAlert } from '../../../utils/alert.js'
 
-export default function KontenEdit() {
+export default function KontenCreate() {
 
   const navigate = useNavigate()
-  const { id } = useParams()
 
-  const [loading, setLoading] = React.useState(true)
+  const [saving, setSaving] = React.useState(false)
 
   const [formData, setFormData] = React.useState({
-    judul: '',
-    deskripsi: '',
-    foto: null,
-    kategori: 'Edukasi'
-  })
-
-  const [preview, setPreview] = React.useState('')
-
-  React.useEffect(() => {
-
-    let mounted = true
-
-    contentInformasiEdukasi.get(id)
-
-      .then(res => {
-
-        if (mounted) {
-
-          const data = res.data.data || res.data
-
-          // Mapping balik kategori
-          const kategoriReverseMapping = {
-            'Satwa': 'Edukasi',
-            'Executive': 'Informasi',
-            'Program': 'Berita'
-          }
-
-          setFormData({
-            judul: data.judul || '',
-            deskripsi: data.deskripsi || '',
-            foto: null,
-            kategori: kategoriReverseMapping[data.kategori] || 'Edukasi'
-          })
-
-          setPreview(data.foto || '')
-
-          setLoading(false)
-
-        }
-
-      })
-
-      .catch(err => {
-
-
-        setLoading(false)
-
-      })
-
-    return () => { mounted = false }
-
-  }, [id])
+  judul: '',
+  deskripsi: '',
+  foto: null,
+  kategori: 'Edukasi'
+})
 
   const handleSubmit = async (e) => {
   e.preventDefault()
+  setSaving(true)
 
   try {
+    // Mapping kategori ke nilai yang diterima backend
     const kategoriMapping = {
       'Edukasi': 'Satwa',
       'Informasi': 'Executive',
@@ -79,34 +32,26 @@ export default function KontenEdit() {
     const formDataToSend = new FormData()
     formDataToSend.append('judul', formData.judul)
     formDataToSend.append('deskripsi', formData.deskripsi)
-    formDataToSend.append('kategori', kategoriMapping[formData.kategori]) // ← mapping
+    formDataToSend.append('kategori', kategoriMapping[formData.kategori]) // ← pakai mapping
     if (formData.foto) {
       formDataToSend.append('foto', formData.foto)
     }
-    formDataToSend.append('_method', 'PUT')
 
-    await contentInformasiEdukasi.update(id, formDataToSend)
-    await successAlert('Berhasil', 'Konten berhasil diupdate')
+    await adminInformasiEdukasiService  .create(formDataToSend)
+    successAlert('Konten berhasil disimpan')
     navigate('/konten')
 
   } catch (err) {
-    await errorAlert('Gagal mengupdate konten')
     console.error(err)
+    errorAlert('Gagal menyimpan konten')
+  } finally {
+    setSaving(false)
   }
 }
 
-  if (loading) {
-
-    return (
-      <DashboardLayout title="Edit Konten">
-      </DashboardLayout>
-    )
-
-  }
-
   return (
 
-    <DashboardLayout title="Edit Konten">
+    <DashboardLayout title="Tambah Konten">
 
       <form onSubmit={handleSubmit}>
 
@@ -128,6 +73,7 @@ export default function KontenEdit() {
                   judul: e.target.value
                 })
               }
+              required
             />
 
           </div>
@@ -147,14 +93,14 @@ export default function KontenEdit() {
                   kategori: e.target.value
                 })
               }
+              required
             >
+              <option value="Informasi">
+                Informasi
+              </option>
 
               <option value="Edukasi">
                 Edukasi
-              </option>
-
-              <option value="Informasi">
-                Informasi
               </option>
 
               <option value="Berita">
@@ -185,29 +131,6 @@ export default function KontenEdit() {
 
           </div>
 
-          {preview && (
-
-            <div className="mb-3">
-
-              <label className="form-label">
-                Foto Saat Ini
-              </label>
-
-              <div>
-
-                <img
-                  src={assetUrl(`/uploads/program/${preview}`)}
-                  alt="Preview"
-                  className="img-thumbnail"
-                  style={{ maxHeight: '200px' }}
-                />
-
-              </div>
-
-            </div>
-
-          )}
-
           <div className="mb-3">
 
             <label className="form-label">
@@ -232,13 +155,16 @@ export default function KontenEdit() {
 
             <button
               type="submit"
-              className="btn-primary-custom"
+              className="btn btn-success"
+              disabled={saving}
             >
-              Update
+
+              {saving ? 'Menyimpan...' : 'Simpan'}
+
             </button>
 
             <Link
-              to="/konten"
+              to="/konten"  
               className="btn btn-secondary"
             >
               Kembali

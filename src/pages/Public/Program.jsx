@@ -62,7 +62,7 @@ export default function Program() {
                     {/* IMAGE */}
                     {p.foto && (
                       <img
-                        src={`https://codemy.my.id/uploads/dashboard/program/${p.foto}`}
+                        src={`https://codemy.my.id/uploads/edukasi/${p.foto}`}
                         alt={p.judul}
                         className="card-img-top"
                         style={{

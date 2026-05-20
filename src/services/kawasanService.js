@@ -16,7 +16,7 @@ const kawasanService = {
 
   // Update kawasan
   update: (id, data) =>
-    api.put(`/kawasan/${id}`, data),
+  api.post(`/kawasan/${id}`, data),
 
   // Hapus kawasan
   delete: (id) =>

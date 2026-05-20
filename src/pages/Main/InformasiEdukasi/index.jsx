@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import contentInformasiEdukasi from '../../../services/contentInformasiEdukasi.js'
+import adminInformasiEdukasiService from '../../../services/adminInformasiEdukasiService.js'
 import { assetUrl } from '../../../lib/assets.js'
-import { successAlert, errorAlert, confirmDelete } from '../../../utils/alert'
+import { successAlert, errorAlert, confirmDelete } from '../../../utils/alert.js'
 
 export default function Konten() {
 
@@ -13,7 +13,7 @@ export default function Konten() {
 
   React.useEffect(() => {
     let mounted = true
-    contentInformasiEdukasi.getAll()
+    adminInformasiEdukasiService.getAll()
       .then(res => {
         if (mounted) {
           setData(res.data.data || res.data)
@@ -33,7 +33,7 @@ export default function Konten() {
     const result = await confirmDelete()
     if (result.isConfirmed) {
       try {
-        await contentInformasiEdukasi.delete(id)
+        await adminInformasiEdukasiService.delete(id)
         setData(prev => prev.filter(item => item.id !== id))
         await successAlert('Berhasil', 'Konten berhasil dihapus')
       } catch (err) {
@@ -49,7 +49,7 @@ export default function Konten() {
 
   if (loading) {
     return (
-      <DashboardLayout title="Konten Informasi & Edukasi">
+      <DashboardLayout title="Informasi & Edukasi">
         <div className="d-flex justify-content-center">
           <div className="spinner-border"></div>
         </div>
@@ -59,7 +59,7 @@ export default function Konten() {
 
   return (
 
-    <DashboardLayout title="Konten Informasi & Edukasi">
+    <DashboardLayout title="Informasi & Edukasi">
 
       {error && <div className="alert alert-danger">{error}</div>}
 
@@ -70,14 +70,14 @@ export default function Konten() {
           <div className="d-flex justify-content-end mb-3">
             <Link to="/konten/create" className="btn-primary-custom">
               <i className="fas fa-plus"></i>
-              Tambah Konten
+              Tambah Edukasi
             </Link>
           </div>
 
           <div className="white-box">
 
             <div className="box-title mb-3">
-              Kelola halaman konten informasi & edukasi
+              Kelola halaman nformasi & edukasi
             </div>
 
             <div className="table-responsive">
@@ -112,8 +112,8 @@ export default function Konten() {
                         <td>
                           {item.foto ? (
                             <img
-                              src={assetUrl(`/uploads/program/${item.foto}`)}
-                              alt="Foto Konten"
+                              src={assetUrl(`/uploads/edukasi/${item.foto}`)}
+                              alt="Foto Edukasi"
                               className="img-fluid"
                               width="100px"
                             />

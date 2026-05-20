@@ -42,7 +42,7 @@ export default function KawasanEdit() {
 
           // Isi formData dengan data dari API
           setFormData({
-            deskripsi: stripHtmlTags(item.deskripsi) || '',
+            deskripsi: item.deskripsi || '',
             luasKawasan: item.luasKawasan || '',
             jenisKawasan: item.jenisKawasan || '',
             alamat: item.alamat || '',
@@ -88,6 +88,7 @@ export default function KawasanEdit() {
     try {
       // Gunakan FormData untuk mengirim data termasuk file
       const formDataToSend = new FormData()
+      formDataToSend.append('_method', 'PUT')
       formDataToSend.append('deskripsi', formData.deskripsi)
       formDataToSend.append('luasKawasan', formData.luasKawasan)
       formDataToSend.append('jenisKawasan', formData.jenisKawasan)
@@ -209,7 +210,8 @@ export default function KawasanEdit() {
                 <label className="form-label">Foto Saat Ini</label>
                 <div>
                   <img
-                    src={`https://codemy.my.id/uploads/${preview}`}
+                    // ✅ Kembalikan ke
+src={`https://codemy.my.id/uploads/kawasan/${preview}`}
                     alt="Preview"
                     className="img-thumbnail"
                     style={{ maxHeight: '200px' }}

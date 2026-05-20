@@ -10,8 +10,8 @@ import RoleGuard from './components/RoleGuard.jsx'
 import PublicHome from './pages/Public/Home.jsx'
 import Program from './pages/Public/Program'
 import ProgramDetail from './pages/Public/ProgramDetail'
-import InformasiDetail from './pages/Public/InformasiDetail.jsx'
-import PublicInformasi from './pages/Public/Informasi.jsx'
+import InformasiEdukasiDetailPublic from './pages/Public/InformasiEdukasiDetail.jsx'
+import PublicInformasiEdukasi from './pages/Public/InformasiEdukasi.jsx'
 import PublicStandarPelayanan from './pages/Public/StandarPelayanan.jsx'
 import Profil from './pages/Public/Profil.jsx'
 import Kontak from './pages/Public/Kontak'
@@ -49,10 +49,10 @@ import ProgramCreate from './pages/Main/Program/create'
 import ProgramAdminDetail from './pages/Main/Program/detail'
 import ProgramEdit from './pages/Main/Program/edit'
 
-import Konten from './pages/Main/Konten/index.jsx'
-import KontenCreate from './pages/Main/Konten/create'
-import KontenDetail from './pages/Main/Konten/detail'
-import KontenEdit from './pages/Main/Konten/edit'
+import InformasiEdukasi from './pages/Main/InformasiEdukasi/index.jsx'
+import InformasiEdukasiCreate from './pages/Main/InformasiEdukasi/create'
+import InformasiEdukasiDetail from './pages/Main/InformasiEdukasi/detail'
+import InformasiEdukasiEdit from './pages/Main/InformasiEdukasi/edit'
 
 import Kawasan from './pages/Main/Kawasan/index.jsx'
 import KawasanEdit from './pages/Main/Kawasan/edit.jsx'
@@ -93,8 +93,8 @@ export default function App() {
           <Route path="/program/:slug" element={<ProgramDetail />} />
 
           {/* Halaman lain */}
-          <Route path="/informasi" element={<PublicInformasi />} />
-          <Route path="/informasi/:slug" element={<InformasiDetail />} />
+          <Route path="/informasi-edukasi" element={<PublicInformasiEdukasi />} />
+          <Route path="/informasi-edukasi/:slug" element={<InformasiEdukasiDetailPublic />} />
 
           <Route path="/standar-pelayanan" element={<PublicStandarPelayanan />} />
 
@@ -278,36 +278,38 @@ export default function App() {
               </RoleGuard>
             } />
 
-          <Route path="/konten" element={
-            <RoleGuard allowedRoles={['admin_pusat']}>
-              <Konten />
-            </RoleGuard>
-          } />
+          <Route path="/dashboard/informasi-edukasi" element={
+  <RoleGuard allowedRoles={['admin_pusat']}>
+    <InformasiEdukasi />
+  </RoleGuard>
+} />
 
-          <Route
-            path="/konten/create"
-            element={
-              <RoleGuard allowedRoles={['admin_pusat']}>
-                <KontenCreate />
-              </RoleGuard>
-            } />
+<Route
+  path="/dashboard/informasi-edukasi/create"
+  element={
+    <RoleGuard allowedRoles={['admin_pusat']}>
+      <InformasiEdukasiCreate />
+    </RoleGuard>
+  }
+/>
 
-          <Route
-            path="/konten/detail/:id"
-            element={
-              <RoleGuard allowedRoles={['admin_pusat']}>
-                <KontenDetail />
-              </RoleGuard>
-            } />
+<Route
+  path="/dashboard/informasi-edukasi/detail/:id"
+  element={
+    <RoleGuard allowedRoles={['admin_pusat']}>
+      <InformasiEdukasiDetail />
+    </RoleGuard>
+  }
+/>
 
-          <Route
-            path="/konten/edit/:id"
-            element={
-              <RoleGuard allowedRoles={['admin_pusat']}>
-                <KontenEdit />
-              </RoleGuard>
-            }
-          />
+<Route
+  path="/dashboard/informasi-edukasi/edit/:id"
+  element={
+    <RoleGuard allowedRoles={['admin_pusat']}>
+      <InformasiEdukasiEdit />
+    </RoleGuard>
+  }
+/>
 
           <Route path="/kawasan" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
@@ -326,7 +328,7 @@ export default function App() {
               <Peraturan />
             </RoleGuard>
           } />
-          
+
           <Route
             path="/peraturan/create"
             element={

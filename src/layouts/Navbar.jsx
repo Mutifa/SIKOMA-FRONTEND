@@ -2,17 +2,24 @@ import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
 export default function Navbar({ website }) {
+
+  const FILE_URL = 'https://codemy.my.id'
+    console.log(website)
   return (
     <nav className="navbar navbar-expand-lg navbar-light sticky-top">
       <div className="container">
 
-        <Link to="/" className="navbar-brand d-flex align-items-center">
-          <img
-            src={`/img/${website?.icon || 'logo.png'}`}
-            alt="Logo"
-            style={{ width: 40, height: 40, objectFit: 'contain' }}
-            className="me-2"
-          />
+<Link to="/" className="navbar-brand d-flex align-items-center">
+  <img
+    src={
+      website?.logo
+        ? `${FILE_URL}/img/${website.logo}`
+        : `${FILE_URL}/img/logo.jpg`
+    }
+    alt="Logo"
+    style={{ width: 40, height: 40, objectFit: 'contain' }}
+    className="me-2"
+  />
           <span className="fw-semibold">
             {website?.nama || 'SIKOMA'}
           </span>
@@ -85,28 +92,28 @@ export default function Navbar({ website }) {
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
-                href="/informasi#kawasan-konservasi"
+                href="/informasi-edukasi#kawasan-konservasi"
               >
                 Informasi & Edukasi
               </a>
               <ul className="dropdown-menu">
                 <li>
-                  <a href="/informasi#kawasan-konservasi" className="dropdown-item">
+                  <a href="/informasi-edukasi#kawasan-konservasi" className="dropdown-item">
                     Kawasan Konservasi
                   </a>
                 </li>
                 <li>
-                  <a href="/informasi#dilindungi" className="dropdown-item">
+                  <a href="/informasi-edukasi#dilindungi" className="dropdown-item">
                     Jenis TSL Dilindungi
                   </a>
                 </li>
                 <li>
-                  <a href="/informasi#executive-summary" className="dropdown-item">
+                  <a href="/informasi-edukasi#executive-summary" className="dropdown-item">
                     Executive Summary
                   </a>
                 </li>
                 <li>
-                  <a href="/informasi#peraturan" className="dropdown-item">
+                  <a href="/informasi-edukasi#peraturan" className="dropdown-item">
                     Peraturan
                   </a>
                 </li>

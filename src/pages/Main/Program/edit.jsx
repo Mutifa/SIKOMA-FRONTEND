@@ -96,7 +96,7 @@ export default function ProgramEdit() {
               <label className="form-label">Foto Saat Ini</label>
               <div>
                 <img
-                  src={`https://codemy.my.id/storage/${preview}`}
+                  src={`https://codemy.my.id/uploads/edukasi/${preview}`}
                   alt="Preview"
                   className="img-thumbnail"
                   style={{ maxHeight: '200px' }}

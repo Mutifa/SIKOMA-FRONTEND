@@ -1,23 +1,27 @@
 import React from 'react'
 import Template from '../../layouts/Template.jsx'
-import informasiService from '../../services/informasiService.js'
+import informasiEdukasiService from '../../services/informasiEdukasiService.js'
 import { assetUrl } from '../../lib/assets.js'
 
 export default function Informasi() {
-  const [data, setData] = React.useState({ executive: [], peraturan: [], kawasan: null })
+  const [data, setData] = React.useState({ executive: [], peraturan: [], satwa: [], kawasan: null })
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState('')
 
-  React.useEffect(() => {
-    let mounted = true
-    informasiService.getAll()
-      .then(res => { if (mounted) { setData(res.data); setLoading(false) } })
-      .catch(err => { if (mounted) { setError(err.message); setLoading(false) } })
-    return () => { mounted = false }
-  }, [])
+React.useEffect(() => {
+  let mounted = true
+  informasiEdukasiService.getAll()
+    .then(res => { 
+      console.log('SATWA[0]:', res.data.satwa?.[0])
+      console.log('EXECUTIVE[0]:', res.data.executive?.[0])
+      if (mounted) { setData(res.data); setLoading(false) } 
+    })
+    .catch(err => { if (mounted) { setError(err.message); setLoading(false) } })
+  return () => { mounted = false }
+}, [])
 
   return (
-    <Template title="Informasi" active="informasi">
+    <Template title="Edukasi" active="informasi">
       <div className="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
         <div className="container text-center py-5">
           <h1 className="display-5 text-white mb-4 animated slideInDown">Informasi dan Edukasi <br />
@@ -32,7 +36,7 @@ export default function Informasi() {
             ) : (
               data.kawasan?.gambar ? (
                 <img
-                  src={assetUrl(`/uploads/${data.kawasan.gambar}`)}
+                  src={assetUrl(`/uploads/kawasan/${data.kawasan.gambar}`)}
                   alt="Peta"
                   className="img-fluid rounded shadow-sm peta-img"
                 />
@@ -94,14 +98,14 @@ export default function Informasi() {
           {data.satwa?.map((p) => (
             <div key={p.id} className="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
               <div className="border rounded h-100 d-flex flex-column">
-                <img loading="lazy" src={assetUrl(`/uploads/program/${p.foto}`)} alt={p.judul} className="w-100" style={{ height: 250, objectFit: 'cover' }} />
+                <img loading="lazy" src={assetUrl(`/uploads/edukasi/${p.foto}`)} alt={p.judul} className="w-100" style={{ height: 250, objectFit: 'cover' }} />
                 <div className="flex-grow-1">
                   <h6 className="mt-3 mx-3">{new Date(p.created_at).toLocaleDateString('id-ID')}</h6>
                   <h4 className="mx-3 mb-3">{p.judul}</h4>
                   <span className="truncate-4 mb-3 px-3" dangerouslySetInnerHTML={{ __html: p.deskripsi }} />
                 </div>
                 <div className="mb-3 px-3 mt-auto">
-                  <a href={`/informasi/${p.slug}`} className="btn btn-primary">Selengkapnya</a>
+                  <a href={`/informasi-edukasi/${p.slug}`} className="btn btn-primary">Selengkapnya</a>
                 </div>
               </div>
             </div>
@@ -115,20 +119,20 @@ export default function Informasi() {
           <h2 className="fw-bold heading-green animate-title">Executive Summary<br /></h2>
         </div>
         <div className="text-end mb-3">
-          <a href="/program?kategori=Executive" className="btn btn-primary">Lihat Informasi Lainnya</a>
+          <a href="/informasi-edukasi" className="btn btn-primary">Lihat Informasi Lainnya</a>
         </div>
         <div className="row g-4">
-          {data.executive.map((p) => (
+          {data?.executive?.map((p) => (
             <div key={p.id} className="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
               <div className="border rounded h-100 d-flex flex-column">
-                <img loading="lazy" src={assetUrl(`/uploads/program/${p.foto}`)} alt={p.judul} className="w-100" style={{ height: 250, objectFit: 'cover' }} />
+                <img loading="lazy" src={assetUrl(`/uploads/edukasi/${p.foto}`)} alt={p.judul} className="w-100" style={{ height: 250, objectFit: 'cover' }} />
                 <div className="flex-grow-1">
                   <h6 className="mt-3 mx-3">{new Date(p.created_at).toLocaleDateString('id-ID')}</h6>
                   <h4 className="mx-3 mb-3">{p.judul}</h4>
                   <span className="truncate-4 mb-3 px-3" dangerouslySetInnerHTML={{ __html: p.deskripsi }} />
                 </div>
                 <div className="mb-3 px-3 mt-auto">
-                  <a href={`/informasi/${p.slug}`} className="btn btn-primary">Selengkapnya</a>
+                  <a href={`/informasi-edukasi/${p.slug}`} className="btn btn-primary">Selengkapnya</a>
                 </div>
               </div>
             </div>
@@ -140,7 +144,7 @@ export default function Informasi() {
         <div className="text-center">
           <h2 className="fw-bold heading-green animate-title">Daftar Peraturan<br /></h2>
         </div>
-        {data.peraturan.map((p) => (
+        {data?.peraturan?.map((p) => (
           <div key={p.id} className="border rounded p-3 mb-3">
             <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between">
               <div className="mb-3 mb-md-0">

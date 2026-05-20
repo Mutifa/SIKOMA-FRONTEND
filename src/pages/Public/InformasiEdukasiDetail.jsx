@@ -1,8 +1,8 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import Template from '../../layouts/Template.jsx'
-import informasiService from '../../services/informasiService.js'
-import { satwaInfo } from '../../data/satwaInfo'
+import informasiEdukasiService from '../../services/informasiEdukasiService.js'
+import { satwaInfo } from '../../data/satwaInfo.js'
 export default function InformasiDetail() {
     const { slug } = useParams()
     const info = satwaInfo[slug]
@@ -14,8 +14,9 @@ export default function InformasiDetail() {
     React.useEffect(() => {
         let mounted = true
 
-        informasiService.getAll()
+        informasiEdukasiService.getAll()
             .then(res => {
+                 console.log('RESPONSE:', res.data)
                 if (mounted) {
                     const allData = [
                         ...(res.data.executive || []),
@@ -73,7 +74,7 @@ export default function InformasiDetail() {
                         <div className="col-lg-6 mb-4">
                             {data?.foto && (
                                 <img
-                                    src={`https://codemy.my.id/uploads/program/${data.foto}`}
+                                    src={`https://codemy.my.id/uploads/edukasi/${data.foto}`}
                                     alt={data.judul}
                                     style={{
                                         width: '100%',

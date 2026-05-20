@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
-import contentInformasiEdukasi from '../../../services/contentInformasiEdukasi.js'
+import adminInformasiEdukasiService from '../../../services/adminInformasiEdukasiService.js'
 import { assetUrl } from '../../../lib/assets.js'
 
 export default function KontenDetail() {
@@ -16,8 +16,8 @@ export default function KontenDetail() {
 
     let mounted = true
 
-contentInformasiEdukasi.get(id)
-  .then(res => {
+    adminInformasiEdukasiService.get(id)
+      .then(res => {
     if (mounted) {
       const result = res.data.data || res.data
 

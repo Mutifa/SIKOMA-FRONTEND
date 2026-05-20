@@ -1,11 +1,10 @@
 import api from '../lib/api'
 
-const informasiService = {
+const informasiEdukasiService = {
 
   // Ambil semua data informasi
   getAll: () =>
     api.get('/informasi'),
 
 }
-
-export default informasiService
+export default informasiEdukasiService

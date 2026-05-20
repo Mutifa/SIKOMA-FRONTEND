@@ -123,9 +123,9 @@ export default function DashboardLayout({
       },
 
       {
-        to: '/konten',
+        to: '/dashboard/informasi-edukasi',
         icon: 'fa-newspaper',
-        label: 'Konten Informasi & Edukasi'
+        label: 'Informasi & Edukasi'
       },
 
       {
