@@ -7,175 +7,99 @@ import { successAlert, errorAlert } from '../../../utils/alert.js'
 export default function KontenCreate() {
 
   const navigate = useNavigate()
-
   const [saving, setSaving] = React.useState(false)
 
   const [formData, setFormData] = React.useState({
-  judul: '',
-  deskripsi: '',
-  foto: null,
-  kategori: 'Edukasi'
-})
+    judul: '',
+    deskripsi: '',
+    foto: null,
+    kategori: 'Informasi'
+  })
 
   const handleSubmit = async (e) => {
-  e.preventDefault()
-  setSaving(true)
+    e.preventDefault()
+    setSaving(true)
 
-  try {
-    // Mapping kategori ke nilai yang diterima backend
-    const kategoriMapping = {
-      'Edukasi': 'Satwa',
-      'Informasi': 'Executive',
-      'Berita': 'Program'
+    try {
+      const formDataToSend = new FormData()
+      formDataToSend.append('judul', formData.judul)
+      formDataToSend.append('deskripsi', formData.deskripsi)
+      formDataToSend.append('kategori', formData.kategori)
+      if (formData.foto) {
+        formDataToSend.append('foto', formData.foto)
+      }
+
+      await adminInformasiEdukasiService.create(formDataToSend)
+      successAlert('Berhasil', 'Konten berhasil disimpan')
+      navigate('/dashboard/informasi-edukasi')
+    } catch (err) {
+      console.error(err)
+      errorAlert('Gagal', err.response?.data?.message || 'Gagal menyimpan konten')
+    } finally {
+      setSaving(false)
     }
-
-    const formDataToSend = new FormData()
-    formDataToSend.append('judul', formData.judul)
-    formDataToSend.append('deskripsi', formData.deskripsi)
-    formDataToSend.append('kategori', kategoriMapping[formData.kategori]) // ← pakai mapping
-    if (formData.foto) {
-      formDataToSend.append('foto', formData.foto)
-    }
-
-    await adminInformasiEdukasiService  .create(formDataToSend)
-    successAlert('Konten berhasil disimpan')
-    navigate('/dashboard/informasi-edukasi')
-  } catch (err) {
-    console.error(err)
-    errorAlert('Gagal menyimpan konten')
-  } finally {
-    setSaving(false)
   }
-}
 
   return (
-
     <DashboardLayout title="Tambah Konten">
-
       <form onSubmit={handleSubmit}>
-
         <div className="white-box">
 
           <div className="mb-3">
-
-            <label className="form-label">
-              Judul
-            </label>
-
+            <label className="form-label">Judul</label>
             <input
               type="text"
               className="form-control"
               value={formData.judul}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  judul: e.target.value
-                })
-              }
+              onChange={(e) => setFormData({ ...formData, judul: e.target.value })}
               required
             />
-
           </div>
 
           <div className="mb-3">
-
-            <label className="form-label">
-              Kategori
-            </label>
-
+            <label className="form-label">Kategori</label>
             <select
               className="form-control"
               value={formData.kategori}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  kategori: e.target.value
-                })
-              }
+              onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}
               required
             >
-              <option value="Informasi">
-                Informasi
-              </option>
-
-              <option value="Edukasi">
-                Edukasi
-              </option>
-
-              <option value="Berita">
-                Berita
-              </option>
-
+              <option value="Informasi">Informasi</option>
+              <option value="Edukasi">Edukasi</option>
             </select>
-
           </div>
 
           <div className="mb-3">
-
-            <label className="form-label">
-              Foto
-            </label>
-
+            <label className="form-label">Foto</label>
             <input
               type="file"
               className="form-control"
               accept="image/*"
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  foto: e.target.files[0]
-                })
-              }
+              onChange={(e) => setFormData({ ...formData, foto: e.target.files[0] })}
             />
-
           </div>
 
           <div className="mb-3">
-
-            <label className="form-label">
-              Deskripsi
-            </label>
-
+            <label className="form-label">Deskripsi</label>
             <textarea
               className="form-control"
               rows="5"
               value={formData.deskripsi}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  deskripsi: e.target.value
-                })
-              }
+              onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
             />
-
           </div>
 
           <div className="d-flex gap-2">
-
-            <button
-              type="submit"
-              className="btn btn-success"
-              disabled={saving}
-            >
-
+            <button type="submit" className="btn-primary-custom" disabled={saving}>
               {saving ? 'Menyimpan...' : 'Simpan'}
-
             </button>
-
-            <Link
-              to="/dashboard/informasi-edukasi"  
-              className="btn btn-secondary"
-            >
+            <Link to="/dashboard/informasi-edukasi" className="btn btn-secondary">
               Kembali
             </Link>
-
           </div>
 
         </div>
-
       </form>
-
     </DashboardLayout>
-
   )
 }

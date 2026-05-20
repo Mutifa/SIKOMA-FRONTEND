@@ -15,28 +15,22 @@ export default function KontenEdit() {
     judul: '',
     deskripsi: '',
     foto: null,
-    kategori: 'Edukasi'
+    kategori: 'Informasi'
   })
   const [preview, setPreview] = React.useState('')
 
   React.useEffect(() => {
     let mounted = true
 
-    // ✅ Fix 1: get → getById
     adminInformasiEdukasiService.getById(id)
       .then(res => {
         if (mounted) {
           const data = res.data.data || res.data
-          const kategoriReverseMapping = {
-            'Satwa': 'Edukasi',
-            'Executive': 'Informasi',
-            'Program': 'Berita'
-          }
           setFormData({
             judul: data.judul || '',
             deskripsi: data.deskripsi || '',
             foto: null,
-            kategori: kategoriReverseMapping[data.kategori] || 'Edukasi'
+            kategori: data.kategori || 'Informasi'
           })
           setPreview(data.foto || '')
           setLoading(false)
@@ -50,26 +44,18 @@ export default function KontenEdit() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const kategoriMapping = {
-        'Edukasi': 'Satwa',
-        'Informasi': 'Executive',
-        'Berita': 'Program'
-      }
       const formDataToSend = new FormData()
       formDataToSend.append('judul', formData.judul)
       formDataToSend.append('deskripsi', formData.deskripsi)
-      formDataToSend.append('kategori', kategoriMapping[formData.kategori])
+      formDataToSend.append('kategori', formData.kategori)
       if (formData.foto) formDataToSend.append('foto', formData.foto)
       formDataToSend.append('_method', 'PUT')
 
-      // ✅ Fix 2: contentInformasiEdukasi → adminInformasiEdukasiService
       await adminInformasiEdukasiService.update(id, formDataToSend)
       await successAlert('Berhasil', 'Konten berhasil diupdate')
-
-      // ✅ Fix 3: path navigate
       navigate('/dashboard/informasi-edukasi')
     } catch (err) {
-      await errorAlert('Gagal mengupdate konten')
+      await errorAlert('Gagal', err.response?.data?.message || 'Gagal mengupdate konten')
       console.error(err)
     }
   }
@@ -86,16 +72,15 @@ export default function KontenEdit() {
           <div className="mb-3">
             <label className="form-label">Judul</label>
             <input type="text" className="form-control" value={formData.judul}
-              onChange={(e) => setFormData({ ...formData, judul: e.target.value })} />
+              onChange={(e) => setFormData({ ...formData, judul: e.target.value })} required />
           </div>
 
           <div className="mb-3">
             <label className="form-label">Kategori</label>
             <select className="form-control" value={formData.kategori}
               onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}>
-              <option value="Edukasi">Edukasi</option>
               <option value="Informasi">Informasi</option>
-              <option value="Berita">Berita</option>
+              <option value="Edukasi">Edukasi</option>
             </select>
           </div>
 
@@ -109,7 +94,6 @@ export default function KontenEdit() {
             <div className="mb-3">
               <label className="form-label">Foto Saat Ini</label>
               <div>
-                {/* ✅ Fix 4: path foto */}
                 <img src={assetUrl(`/uploads/edukasi/${preview}`)}
                   alt="Preview" className="img-thumbnail" style={{ maxHeight: '200px' }} />
               </div>
@@ -124,7 +108,6 @@ export default function KontenEdit() {
 
           <div className="d-flex gap-2">
             <button type="submit" className="btn-primary-custom">Update</button>
-            {/* ✅ Fix 5: path kembali */}
             <Link to="/dashboard/informasi-edukasi" className="btn btn-secondary">Kembali</Link>
           </div>
 
