@@ -6,7 +6,7 @@ import { assetUrl } from '../../lib/assets.js'
 import { sanitizeHtml } from '../../utils/sanitizeHtml.js'
 
 export default function ProgramDetail() {
-  const { slug } = useParams()
+  const { id } = useParams()
   const [data, setData] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState('')
@@ -14,7 +14,7 @@ export default function ProgramDetail() {
 React.useEffect(() => {
   let mounted = true
 
-  api.get(`/program/${slug}`)
+  api.get(`/program/${id}`)
     .then(res => {
       if (mounted) {
         setData(res.data.data || res.data)
@@ -29,19 +29,19 @@ React.useEffect(() => {
     })
 
   return () => { mounted = false }
-}, [slug])
+}, [id])
 
   return (
-    <Template title={`Detail: ${data?.slug || slug}`} active="edukasi">
+    <Template title={`Detail: ${data?.slug || id}`} active="edukasi">
       <section className="container my-5">
         {loading && <p>Memuat...</p>}
         {error && <div className="alert alert-danger">{error}</div>}
         {!loading && !error && data && (
           <div className="row">
             <div className="col-lg-6 mb-4">
-              <img src={assetUrl(`/uploads/edukasi/${data.foto}`)} alt={data.judul} style={{width:'100%', height:400, objectFit:'cover', borderRadius:10}} />
+              <img src={assetUrl(`/uploads/program/${data.foto}`)} alt={data.judul} style={{width:'100%', height:400, objectFit:'cover', borderRadius:10}} />
               <div className="mt-3" style={{display:'flex', gap:8, flexWrap:'wrap'}}>
-                <img loading="lazy" src={assetUrl(`/uploads/edukasi/${data.foto}`)} style={{width:100, height:80, objectFit:'cover', borderRadius:6}} />
+                <img loading="lazy" src={assetUrl(`/uploads/program/${data.foto}`)} style={{width:100, height:80, objectFit:'cover', borderRadius:6}} />
                 {data?.galeri?.map((g) => (
                   <img loading="lazy" key={g.id} src={assetUrl(`/uploads/galeri/${g.gambar}`)} style={{width:100, height:80, objectFit:'cover', borderRadius:6}} />
                 ))}

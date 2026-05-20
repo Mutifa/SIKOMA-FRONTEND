@@ -3,6 +3,7 @@ import Template from '../../layouts/Template.jsx'
 import { assetUrl } from '../../lib/assets.js'
 import api from '../../lib/api.js'
 import { sanitizeHtml } from '../../utils/sanitizeHtml.js'
+import { Link } from 'react-router-dom'
 
 export default function Program() {
   const [items, setItems] = React.useState([])
@@ -63,7 +64,7 @@ export default function Program() {
                     {/* IMAGE */}
                     {p.foto && (
                       <img
-                        src={`https://codemy.my.id/uploads/edukasi/${p.foto}`}
+                        src={`https://codemy.my.id/uploads/program/${p.foto}`}
                         alt={p.judul}
                         className="card-img-top"
                         style={{
@@ -89,7 +90,7 @@ export default function Program() {
 
                       {/* BUTTON */}
                       <a
-                        href={`/program/${p.slug}`}
+                        href={`/program/${p.id}`}
                         className="btn btn-success mt-auto"
                       >
                         Selengkapnya

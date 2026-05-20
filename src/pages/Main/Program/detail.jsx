@@ -82,7 +82,7 @@ export default function ProgramDetail() {
             {data?.foto ? (
 
               <img
-                src={`https://codemy.my.id/uploads/edukasi/${data.foto}`}
+                src={`https://codemy.my.id/uploads/program/${data.foto}`}
                 alt="Program"
                 className="img-thumbnail"
                 style={{ maxHeight: '250px' }}

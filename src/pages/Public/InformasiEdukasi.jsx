@@ -5,19 +5,19 @@ import { assetUrl } from '../../lib/assets.js'
 import { sanitizeHtml } from '../../utils/sanitizeHtml.js'
 
 export default function Informasi() {
-  const [data, setData] = React.useState({ executive: [], peraturan: [], satwa: [], kawasan: null })
+  const [data, setData] = React.useState({ informasi: [], edukasi: [], peraturan: [], kawasan: null })
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState('')
 
-React.useEffect(() => {
-  let mounted = true
-  informasiEdukasiService.getAll()
-    .then(res => { 
-      if (mounted) { setData(res.data); setLoading(false) } 
-    })
-    .catch(err => { if (mounted) { setError(err.message); setLoading(false) } })
-  return () => { mounted = false }
-}, [])
+  React.useEffect(() => {
+    let mounted = true
+    informasiEdukasiService.getAll()
+      .then(res => { 
+        if (mounted) { setData(res.data); setLoading(false) } 
+      })
+      .catch(err => { if (mounted) { setError(err.message); setLoading(false) } })
+    return () => { mounted = false }
+  }, [])
 
   return (
     <Template title="Edukasi" active="informasi">
@@ -27,6 +27,7 @@ React.useEffect(() => {
             Seputar Konservasi Bersama Masayarakat</h1>
         </div>
       </div>
+
       <section id="kawasan-konservasi" className="container-fluid py-3">
         <div className="row g-4">
           <div className="col-lg-7 col-md-12 d-flex justify-content-center">
@@ -53,7 +54,6 @@ React.useEffect(() => {
               />
             )}
             <h4 className="mt-3">Data Statistik</h4>
-
             <div className="row g-2">
               <div className="col-md-4 d-flex">
                 <div className="stat-card yellow">
@@ -61,23 +61,19 @@ React.useEffect(() => {
                   <p>{data.kawasan?.luasKawasan || '-'}</p>
                 </div>
               </div>
-
               <div className="col-md-4 d-flex">
                 <div className="stat-card brown">
                   <h5>Jenis Kawasan</h5>
                   <p>{data.kawasan?.jenisKawasan || '-'}</p>
                 </div>
               </div>
-
               <div className="col-md-4 d-flex">
                 <div className="stat-card orange">
                   <h5>Alamat</h5>
                   <p>{data.kawasan?.alamat || '-'}</p>
                 </div>
               </div>
-
             </div>
-
             <div className="mt-4">
               <h4>Status Kawasan</h4>
               <p>{data.kawasan?.status}</p>
@@ -86,7 +82,7 @@ React.useEffect(() => {
         </div>
       </section>
 
-      {/* Satwa Dilindungi Start */}
+      {/* Informasi (dulunya Satwa) */}
       <section id="dilindungi" className="container-fluid py-5">
         <div className="text-center">
           <h2 className="fw-bold heading-green animate-title">Tumbuhan, <br />Satwa di Lindungi</h2>
@@ -94,7 +90,7 @@ React.useEffect(() => {
         </div>
         <a href="/program?kategori=Satwa" className="btn btn-primary mb-3">Lebih Banyak</a>
         <div className="row g-4">
-          {data.satwa?.map((p) => (
+          {data.informasi?.map((p) => (
             <div key={p.id} className="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
               <div className="border rounded h-100 d-flex flex-column">
                 <img loading="lazy" src={assetUrl(`/uploads/edukasi/${p.foto}`)} alt={p.judul} className="w-100" style={{ height: 250, objectFit: 'cover' }} />
@@ -104,15 +100,15 @@ React.useEffect(() => {
                   <span className="truncate-4 mb-3 px-3" dangerouslySetInnerHTML={{ __html: sanitizeHtml(p.deskripsi) }} />
                 </div>
                 <div className="mb-3 px-3 mt-auto">
-                  <a href={`/informasi-edukasi/${p.slug}`} className="btn btn-primary">Selengkapnya</a>
+                  <a href={`/informasi-edukasi/${p.id}`} className="btn btn-primary">Selengkapnya</a>
                 </div>
               </div>
             </div>
           ))}
         </div>
       </section>
-      {/* Satwa Dilindungi End */}
 
+      {/* Edukasi (dulunya Executive) */}
       <section id="executive-summary" className="container-fluid py-5">
         <div className="text-center">
           <h2 className="fw-bold heading-green animate-title">Executive Summary<br /></h2>
@@ -121,7 +117,7 @@ React.useEffect(() => {
           <a href="/informasi-edukasi" className="btn btn-primary">Lihat Informasi Lainnya</a>
         </div>
         <div className="row g-4">
-          {data?.executive?.map((p) => (
+          {data.edukasi?.map((p) => (
             <div key={p.id} className="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
               <div className="border rounded h-100 d-flex flex-column">
                 <img loading="lazy" src={assetUrl(`/uploads/edukasi/${p.foto}`)} alt={p.judul} className="w-100" style={{ height: 250, objectFit: 'cover' }} />
@@ -131,7 +127,7 @@ React.useEffect(() => {
                   <span className="truncate-4 mb-3 px-3" dangerouslySetInnerHTML={{ __html: sanitizeHtml(p.deskripsi) }} />
                 </div>
                 <div className="mb-3 px-3 mt-auto">
-                  <a href={`/informasi-edukasi/${p.slug}`} className="btn btn-primary">Selengkapnya</a>
+                  <a href={`/informasi-edukasi/${p.id}`} className="btn btn-primary">Selengkapnya</a>
                 </div>
               </div>
             </div>
@@ -152,7 +148,7 @@ React.useEffect(() => {
                 <p>Tahun: {p.tahun} | Nomor: {p.nomor}</p>
               </div>
               <div className="text-md-end">
-                <a href={`https://codemy.my.id/uploads/peraturan/${p.file}`} download className="btn btn-primary">Unduh PDF</a>
+                <a href={`https://codemy.my.id/storage/${p.file}`} download className="btn btn-primary">Unduh PDF</a>
               </div>
             </div>
           </div>
@@ -161,4 +157,3 @@ React.useEffect(() => {
     </Template>
   )
 }
-

@@ -172,7 +172,7 @@ export default function Program() {
                     <td>
                       {item.foto ? (
                         <img
-                          src={`https://codemy.my.id/uploads/edukasi/${item.foto}`}
+                          src={`https://codemy.my.id/uploads/program/${item.foto}`}
                           alt="Foto"
                           width="100"
                           className="img-fluid"

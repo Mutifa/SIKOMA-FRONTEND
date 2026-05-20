@@ -36,6 +36,11 @@ export default function KontenDetail() {
     }
   })
 
+   .catch(err => {         // ← tambah ini
+    console.error(err)
+    if (mounted) setLoading(false)
+  })
+
     return () => { mounted = false }
 
   }, [id])

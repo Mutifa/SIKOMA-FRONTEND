@@ -85,11 +85,11 @@ export default function App() {
 
           {/* Program Public */}
           <Route path="/program" element={<Program />} />
-          <Route path="/program/:slug" element={<ProgramDetail />} />
+          <Route path="/program/:id" element={<ProgramDetail />} />
 
           {/* Halaman lain */}
           <Route path="/informasi-edukasi" element={<PublicInformasiEdukasi />} />
-          <Route path="/informasi-edukasi/:slug" element={<InformasiEdukasiDetailPublic />} />
+          <Route path="/informasi-edukasi/:id" element={<InformasiEdukasiDetailPublic />} />
 
           <Route path="/standar-pelayanan" element={<PublicStandarPelayanan />} />
 

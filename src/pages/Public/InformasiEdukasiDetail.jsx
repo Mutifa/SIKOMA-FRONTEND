@@ -3,9 +3,10 @@ import { useParams } from 'react-router-dom'
 import Template from '../../layouts/Template.jsx'
 import informasiEdukasiService from '../../services/informasiEdukasiService.js'
 import { satwaInfo } from '../../data/satwaInfo.js'
+
 export default function InformasiDetail() {
-    const { slug } = useParams()
-    const info = satwaInfo[slug]
+    const { id } = useParams()
+    const info = satwaInfo[id]
 
     const [data, setData] = React.useState(null)
     const [loading, setLoading] = React.useState(true)
@@ -14,47 +15,33 @@ export default function InformasiDetail() {
     React.useEffect(() => {
         let mounted = true
 
-        informasiEdukasiService.getAll()
-            .then(res => {
-                if (mounted) {
-                    const allData = [
-                        ...(res.data.executive || []),
-                        ...(res.data.satwa || []),
-                        ...(res.data.peraturan || [])
-                    ]
-
-                    const found = allData.find(item => item.slug === slug)
-
-                    if (!found) {
-                        setError('Data tidak ditemukan')
-                    } else {
-                        setData(found)
-                    }
-
-                    setLoading(false)
+informasiEdukasiService.getById(id)   // ← ganti getAll() dengan getById(id)
+        .then(res => {
+            if (mounted) {
+                const found = res.data    // ← langsung pakai, tidak perlu find()
+                if (!found) {
+                    setError('Data tidak ditemukan')
+                } else {
+                    setData(found)
                 }
-            })
-            .catch(err => {
-                if (mounted) {
-                    setError(err.message)
-                    setLoading(false)
-                }
-            })
+                setLoading(false)
+            }
+        })
+        .catch(err => {
+            if (mounted) {
+                setError(err.message)
+                setLoading(false)
+            }
+        })
 
-        return () => { mounted = false }
-    }, [slug])
+    return () => { mounted = false }
+}, [id])
 
-    // ✅ FORMAT DESKRIPSI JADI LIST RAPI
     const formatDeskripsi = (text) => {
         if (!text) return null
-
         return text.split('\n').map((item, index) => {
             if (!item.trim()) return null
-            return (
-                <li key={index}>
-                    {item.replace('• ', '')}
-                </li>
-            )
+            return <li key={index}>{item.replace('• ', '')}</li>
         })
     }
 
@@ -69,7 +56,6 @@ export default function InformasiDetail() {
                 {!loading && !error && data && (
                     <div className="row align-items-start">
 
-                        {/* GAMBAR */}
                         <div className="col-lg-6 mb-4">
                             {data?.foto && (
                                 <img
@@ -86,36 +72,24 @@ export default function InformasiDetail() {
                             )}
                         </div>
 
-                                {/* informasi */}
-                                <div className="col-lg-6 mb-4">
-                                    <h1 style={{ fontWeight: 'bold' }}>
-                                        {data?.judul}
-                                    </h1>
+                        <div className="col-lg-6 mb-4">
+                            <h1 style={{ fontWeight: 'bold' }}>{data?.judul}</h1>
 
-                                    <div
-                                        style={{
-                                            width: 60,
-                                            height: 4,
-                                            backgroundColor: '#2e7d32',
-                                            marginBottom: 15,
-                                            borderRadius: 2
-                                        }}
-                                    />
+                            <div style={{
+                                width: 60, height: 4,
+                                backgroundColor: '#2e7d32',
+                                marginBottom: 15, borderRadius: 2
+                            }} />
 
-                            {/* DESKRIPSI */}
                             <div className="deskripsi-content">
                                 {data?.deskripsi ? (
-                                    <ul>
-                                        {formatDeskripsi(data.deskripsi)}
-                                    </ul>
+                                    <ul>{formatDeskripsi(data.deskripsi)}</ul>
                                 ) : (
                                     <p>{data?.lokasi || 'Tidak ada deskripsi'}</p>
                                 )}
                             </div>
 
-                            {/* INFORMASI TAMBAHAN */}
                             <div className="mt-4">
-
                                 <div className="row g-3">
 
                                     <div className="col-md-6">
@@ -165,7 +139,6 @@ export default function InformasiDetail() {
                                 <div className="alert alert-success mt-4">
                                     🌿 {info?.edukasi}
                                 </div>
-
                             </div>
                         </div>
 
