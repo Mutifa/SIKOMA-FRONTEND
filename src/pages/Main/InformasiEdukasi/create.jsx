@@ -39,8 +39,7 @@ export default function KontenCreate() {
 
     await adminInformasiEdukasiService  .create(formDataToSend)
     successAlert('Konten berhasil disimpan')
-    navigate('/konten')
-
+    navigate('/dashboard/informasi-edukasi')
   } catch (err) {
     console.error(err)
     errorAlert('Gagal menyimpan konten')
@@ -164,7 +163,7 @@ export default function KontenCreate() {
             </button>
 
             <Link
-              to="/konten"  
+              to="/dashboard/informasi-edukasi"  
               className="btn btn-secondary"
             >
               Kembali

@@ -16,7 +16,7 @@ export default function KontenDetail() {
 
     let mounted = true
 
-    adminInformasiEdukasiService.get(id)
+    adminInformasiEdukasiService.getById(id)
       .then(res => {
     if (mounted) {
       const result = res.data.data || res.data
@@ -104,7 +104,7 @@ export default function KontenDetail() {
             {data?.foto ? (
 
               <img
-                src={assetUrl(`/uploads/program/${data.foto}`)}
+                src={assetUrl(`/uploads/edukasi/${data.foto}`)}
                 alt="Konten"
                 className="img-thumbnail"
                 style={{ maxHeight: '250px' }}
@@ -138,7 +138,7 @@ export default function KontenDetail() {
         </div>
 
         <Link
-          to="/konten"
+          to="/dashboard/informasi-edukasi"
           className="btn-secondary-custom"
         >
           Kembali

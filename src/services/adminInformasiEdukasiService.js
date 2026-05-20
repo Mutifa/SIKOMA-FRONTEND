@@ -13,10 +13,10 @@ const adminInformasiEdukasiService = {
       headers: { 'Content-Type': 'multipart/form-data' }
     }),
 
-  update: (id, data) =>
-    api.put(`/edukasi/${id}`, data, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    }),
+ update: (id, data) =>
+  api.post(`/edukasi/${id}`, data, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
 
   delete: (id) =>
     api.delete(`/edukasi/${id}`),
