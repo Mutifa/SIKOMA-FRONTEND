@@ -20,7 +20,7 @@ const standarPelayananService = {
 
   // Public — ambil profil website (alamat, telepon, dll)
   getWebsite: () =>
-    api.get('/profil-perusahaan'),
+    api.get('/home'),
 
   // Public — kirim pesan/pertanyaan
   sendMessage: (data) =>

@@ -1,20 +1,14 @@
 import api from '../lib/api'
 
-const getProfileEndpoint = (role) => {
-  return role === 'admin_lapangan'
-    ? '/admin_lapangan/profile'
-    : '/admin_pusat/profile'
-}
-
 export const akunService = {
 
   // Ambil profile user login
-  getProfile: (role) =>
-    api.get(getProfileEndpoint(role)),
+  getProfile: () =>
+    api.get('/profile'),
 
   // Update profile
   updateProfile: (data) =>
-    api.post('/admin_pusat/profile/update', data),
+    api.put('/profile', data),
 
   // Update password
   updatePassword: (data) =>

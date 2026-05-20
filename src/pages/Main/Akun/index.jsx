@@ -51,6 +51,7 @@ export default function Akun() {
     let mounted = true
     akunService.getProfile(authUser?.role)
       .then(res => {
+        console.log('AKUN RESPONSE:', res.data)
         if (mounted) {
           const userData = extractProfile(res.data, authUser)
           setUser(userData)
@@ -93,14 +94,12 @@ export default function Akun() {
           </div>
 
           <div className="akun-hero-main">
-            <div className="akun-hero-title-row">
-              <div>
-                <h4 className="akun-name">{user.name || 'Admin'}</h4>
-                <p className="akun-email">{user.email || '-'}</p>
-              </div>
 
+            <div>
+              <h4 className="akun-name">{user.name || 'Admin'}</h4>
+              <p className="akun-email">{user.email || '-'}</p>
               <span
-                className="akun-role-badge"
+                className="akun-role-badge mt-1"
                 style={{ background: roleInfo.bg, color: roleInfo.color }}
               >
                 {roleInfo.label}

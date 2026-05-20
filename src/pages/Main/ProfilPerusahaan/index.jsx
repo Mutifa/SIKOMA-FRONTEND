@@ -51,7 +51,7 @@ export default function ProfilPerusahaan() {
       <div className="white-box">
 
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h5 className="mb-0">Kelola halaman profil perusahaan</h5>
+          <div className="box-title">Kelola halaman profil perusahaan</div>
           <button
             className="btn-primary-custom"
             onClick={() => navigate('/profil-perusahaan/edit')}
