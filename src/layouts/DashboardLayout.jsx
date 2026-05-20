@@ -145,12 +145,6 @@ export default function DashboardLayout({
         label: 'Standar Pelayanan' },
 
       {
-        to: '/galeri',
-        icon: 'fa-images',
-        label: 'Galeri'
-      },
-
-      {
         to: '/laporan-konservasi',
         icon: 'fa-file-lines',
         label: 'Laporan Konservasi'
@@ -392,25 +386,6 @@ export default function DashboardLayout({
                 </li>
 
               ))}
-
-              {/* LOGOUT */}
-              <li className="sidebar-item logout-item">
-
-                <a
-                  className="sidebar-link"
-                  href="#"
-                  onClick={handleLogout}
-                >
-
-                  <i className="fas fa-sign-out-alt"></i>
-
-                  <span className="hide-menu">
-                    Logout
-                  </span>
-
-                </a>
-
-              </li>
 
             </ul>
 

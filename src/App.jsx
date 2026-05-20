@@ -36,11 +36,6 @@ import PenggunaDetail from './pages/Main/Pengguna/detail.jsx'
 import PenggunaEdit from './pages/Main/Pengguna/edit.jsx'
 
 
-import Galeri from './pages/Main/Galeri'
-import GaleriCreate from './pages/Main/Galeri/create'
-import GaleriDetail from './pages/Main/Galeri/detail'
-import GaleriEdit from './pages/Main/Galeri/edit'
-
 import ProfilPerusahaan from './pages/Main/ProfilPerusahaan'
 import ProfilPerusahaanEdit from './pages/Main/ProfilPerusahaan/edit.jsx'
 
@@ -212,29 +207,7 @@ export default function App() {
             }
           />
 
-          <Route path="/galeri" element={
-            <RoleGuard allowedRoles={['admin_pusat', 'admin_lapangan']}>
-              <Galeri />
-            </RoleGuard>
-          } />
-
-          <Route path="/galeri/create" element={
-            <RoleGuard allowedRoles={['admin_pusat']}>
-              <GaleriCreate />
-            </RoleGuard>
-          } />
-
-          <Route path="/galeri/detail/:id" element={
-            <RoleGuard allowedRoles={['admin_pusat', 'admin_lapangan']}>
-              <GaleriDetail />
-            </RoleGuard>
-          } />
-
-          <Route path="/galeri/edit/:id" element={
-            <RoleGuard allowedRoles={['admin_pusat']}>
-              <GaleriEdit />
-            </RoleGuard>
-          } />
+         
 
           <Route path="/profil-perusahaan" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
