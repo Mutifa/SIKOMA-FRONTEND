@@ -4,8 +4,8 @@ const informasiEdukasiService = {
 
   // Ambil semua data informasi
   getAll: () =>
-    api.get('/informasi'),
-  getById: (id) => api.get(`/informasi/${id}`),
+    api.get('/edukasi'),
+  getById: (id) => api.get(`/edukasi/${id}`),
 
 }
 export default informasiEdukasiService
