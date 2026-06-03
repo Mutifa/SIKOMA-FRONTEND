@@ -8,7 +8,12 @@ const FILE_URL = 'https://codemy.my.id'
 const Field = ({ label, value }) => (
   <div className="mb-3">
     <div className="profil-field-label">{label}</div>
-    <div className="profil-field-value">{value || '—'}</div>
+    <div
+      className="profil-field-value"
+      style={{ whiteSpace: 'pre-line' }}
+    >
+      {value || '—'}
+    </div>
   </div>
 )
 
@@ -34,7 +39,16 @@ export default function ProfilPerusahaan() {
       })
   }, [location.key])
 
-  const stripHtml = (html) => html ? html.replace(/<[^>]*>/g, '') : ''
+const stripHtml = (html) =>
+  html
+    ? html
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<\/p>/gi, '\n')
+        .replace(/<[^>]*>/g, '')
+        .replace(/&ldquo;/g, '"')
+        .replace(/&rdquo;/g, '"')
+        .trim()
+    : ''
 
   if (loading) {
     return (
@@ -76,6 +90,15 @@ export default function ProfilPerusahaan() {
           <div className="col-md-6"><Field label="Instagram"      value={stripHtml(formData?.instagram)} /></div>
           <div className="col-md-12"><Field label="WhatsApp"      value={stripHtml(formData?.wa)}        /></div>
           <div className="col-md-12"><Field label="Google Maps"   value={stripHtml(formData?.gmaps)}     /></div>
+          <div className="col-md-12"><Field label="Jam Operasional"value={stripHtml(formData?.jambuka)}  /></div>
+          <div className="col-md-6"><Field label="Visi"            value={stripHtml(formData?.visi)}                 /></div>
+
+<div className="col-md-6">
+  <Field
+    label="Misi"
+    value={stripHtml(formData?.misi)}
+  />
+</div>
         </div>
 
         <div className="row mt-2">

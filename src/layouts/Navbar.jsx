@@ -10,13 +10,13 @@ export default function Navbar({ website }) {
       <div className="container">
 
 <Link to="/" className="navbar-brand d-flex align-items-center">
-  <img
-    src={
-      website?.logo
-        ? `${FILE_URL}/img/${website.logo}`
-        : `${FILE_URL}/img/logo.jpg`
-    }
-    alt="Logo"
+ <img
+  src={
+    website?.logo
+      ? `${FILE_URL}/uploads/profil/${website.logo}?t=${Date.now()}`
+      : `${FILE_URL}/uploads/profil/logo.png?t=${Date.now()}`
+  }
+  alt="Logo"
     style={{ width: 40, height: 40, objectFit: 'contain' }}
     className="me-2"
   />

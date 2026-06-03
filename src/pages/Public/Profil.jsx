@@ -10,17 +10,20 @@ export default function Profil() {
   const [loading, setLoading] = React.useState(true)
   const [imgKey, setImgKey] = React.useState(() => Date.now())
 
-  React.useEffect(() => {
-    profilPerusahaanService.get()
-      .then(res => {
-        setData(res.data)
-        setLoading(false)
-        setImgKey(Date.now())
-      })
-      .catch(() => {
-        setLoading(false)
-      })
-  }, [])
+React.useEffect(() => {
+  profilPerusahaanService.get()
+    .then(res => {
+
+      console.log('PROFILE PUBLIC', res.data)
+
+      setData(res.data)
+      setLoading(false)
+      setImgKey(Date.now())
+    })
+    .catch(() => {
+      setLoading(false)
+    })
+}, [])
 
   if (loading) {
     return (

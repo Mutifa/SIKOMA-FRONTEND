@@ -28,6 +28,7 @@ export default function Home() {
     setTimeout(handleScroll, 300)
   }, [location])
 
+
   // API
   useEffect(() => {
     homeService
@@ -47,6 +48,14 @@ export default function Home() {
         setLoading(false); // 🔥 WAJIB biar ga loading terus
       });
   }, []);
+const formatText = (text) =>
+  text
+    ? text
+        .replace(/a\./g, '\na.')
+        .replace(/b\./g, '\nb.')
+        .replace(/c\./g, '\nc.')
+        .trim()
+    : ''
 
   return (
     <Template title={website?.nama || 'Beranda'} active="home">
@@ -129,19 +138,20 @@ export default function Home() {
                   </div>
 
                   <div className="text-center mt-4" style={{ overflowX: 'auto' }}>
-                    <img
-                      src={website?.struktur
-                        ? `${FILE_URL}/img/${website.struktur}`
-                        : `${FILE_URL}  /img/struktur.png`
-                      }
-                      alt="Struktur Organisasi"
-                      style={{
-                        width: '100%',
-                        height: 'auto',
-                        borderRadius: '10px',
-                        boxShadow: '0 5px 25px rgba(0,0,0,0.2)'
-                      }}
-                    />
+                   <img
+  src={
+    website?.struktur
+      ? `${FILE_URL}/uploads/profil/${website.struktur}?t=${Date.now()}`
+      : `${FILE_URL}/uploads/profil/struktur.png?t=${Date.now()}`
+  }
+  alt="Struktur Organisasi"
+  style={{
+    width: '100%',
+    height: 'auto',
+    borderRadius: '10px',
+    boxShadow: '0 5px 25px rgba(0,0,0,0.2)'
+  }}
+/>
                   </div>
                 </div>
               </div>
@@ -168,19 +178,21 @@ export default function Home() {
                     <h2 className="fw-bold heading-green animate-title">
                       Visi dan Misi Unit Pelaksanaan Teknis Kesatuan <br />Pengelolaan Hutan
                     </h2>
-                    <div className="text-start fw-bold mb-4">
-                      <p className="mb-2">Visi:</p>
-                      <span dangerouslySetInnerHTML={{
-                        __html: sanitizeHtml(website?.visi || 'Visi belum tersedia')
-                      }} />
-                    </div>
+                  <div className="text-start fw-bold mb-4">
+  <p className="mb-2">Visi:</p>
 
-                    <div className="text-start fw-bold">
-                      <p className="mb-2">Misi:</p>
-                      <span dangerouslySetInnerHTML={{
-                        __html: sanitizeHtml(website?.misi || 'Misi belum tersedia')
-                      }} />
-                    </div>
+  <div style={{ whiteSpace: 'pre-line' }}>
+    {formatText(website?.visi || 'Visi belum tersedia')}
+  </div>
+</div>
+
+<div className="text-start fw-bold">
+  <p className="mb-2">Misi:</p>
+
+  <div style={{ whiteSpace: 'pre-line' }}>
+    {formatText(website?.misi || 'Misi belum tersedia')}
+  </div>
+</div>
                   </div>
                 </div>
               </div>

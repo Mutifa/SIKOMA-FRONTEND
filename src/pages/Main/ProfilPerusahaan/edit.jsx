@@ -9,6 +9,17 @@ export default function ProfilPerusahaanEdit() {
   const [saving, setSaving] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
 
+const cleanHtml = (html) =>
+  html
+    ? html
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<\/p>/gi, '\n')
+        .replace(/<[^>]*>/g, '')
+        .replace(/&ldquo;/g, '"')
+        .replace(/&rdquo;/g, '"')
+        .trim()
+    : ''
+
   const [formData, setFormData] = React.useState({
     nama: '', deskripsi: '', keyword: '', alamat: '',
     telepon: '', email: '', facebook: '', instagram: '',
@@ -31,9 +42,11 @@ export default function ProfilPerusahaanEdit() {
           instagram: data.instagram || '',
           wa:        data.wa        || '',
           gmaps:     data.gmaps     || '',
-          jambuka:   data.jambuka   || '',
-          visi:      data.visi      || '',
-          misi:      data.misi      || '',
+         
+          jambuka: cleanHtml(data.jambuka),
+          visi: cleanHtml(data.visi),
+          misi: cleanHtml(data.misi),
+
           logo:      data.logo      || null,
           struktur:  data.struktur  || null,
         })
