@@ -23,8 +23,7 @@ export default function StandarPelayanan() {
           <h1 className="display-3 text-white mb-4">Kontak Kami</h1>
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb justify-content-center mb-0">
-              <li className="breadcrumb-item"><a href="/">Home</a></li>
-              <li className="breadcrumb-item active" aria-current="page">Kontak</li>
+            
             </ol>
           </nav>
         </div>

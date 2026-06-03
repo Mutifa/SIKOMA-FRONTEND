@@ -2,82 +2,78 @@ import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
 export default function Navbar({ website }) {
-
   const FILE_URL = 'https://codemy.my.id'
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light sticky-top">
       <div className="container">
 
-<Link to="/" className="navbar-brand d-flex align-items-center">
- <img
-  src={
-    website?.logo
-      ? `${FILE_URL}/uploads/profil/${website.logo}?t=${Date.now()}`
-      : `${FILE_URL}/uploads/profil/logo.png?t=${Date.now()}`
-  }
-  alt="Logo"
-    style={{ width: 40, height: 40, objectFit: 'contain' }}
-    className="me-2"
-  />
+        {/* Brand / Logo Start */}
+        <Link to="/" className="navbar-brand d-flex align-items-center">
+          <img
+            src={
+              website?.logo
+                ? `${FILE_URL}/uploads/profil/${website.logo}?t=${Date.now()}`
+                : `${FILE_URL}/uploads/profil/logo.png?t=${Date.now()}`
+            }
+            alt="Logo"
+            style={{ width: 55, height: 55, objectFit: 'contain' }} // Ukuran diperbesar ke 55px
+            className="me-2"
+          />
           <span className="fw-semibold">
             {website?.nama || 'SIKOMA'}
           </span>
         </Link>
+        {/* Brand / Logo End */}
 
+        {/* Toggler Button Mobile */}
         <button
           className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
+        {/* Navigation Links */}
         <div className="collapse navbar-collapse mobile-menu" id="navbarNav">
           <ul className="navbar-nav ms-auto align-items-lg-center mobile-nav">
+            
+            {/* Dropdown: Profil */}
             <li className="nav-item dropdown">
-
               <a
                 className="nav-link dropdown-toggle"
                 href="/#struktur-organisasi"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
               >
                 Profil
               </a>
-
               <ul className="dropdown-menu">
-
                 <li>
-                  <a
-                    href="/#struktur-organisasi"
-                    className="dropdown-item"
-                  >
+                  <a href="/#struktur-organisasi" className="dropdown-item">
                     Struktur Organisasi
                   </a>
                 </li>
-
                 <li>
-                  <a
-                    href="/#visi-misi"
-                    className="dropdown-item"
-                  >
+                  <a href="/#visi-misi" className="dropdown-item">
                     Visi Misi
                   </a>
                 </li>
-
                 <li>
-                  <a
-                    href="/#sejarah"
-                    className="dropdown-item"
-                  >
+                  <a href="/#sejarah" className="dropdown-item">
                     Sejarah UPT KPH Tasik Besar Serkap
                   </a>
                 </li>
-
               </ul>
-
             </li>
 
+            {/* Nav: Program */}
             <li className="nav-item">
               <NavLink
                 to="/program"
@@ -89,10 +85,14 @@ export default function Navbar({ website }) {
               </NavLink>
             </li>
 
+            {/* Dropdown: Informasi & Edukasi */}
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
                 href="/informasi-edukasi#kawasan-konservasi"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
               >
                 Informasi & Edukasi
               </a>
@@ -120,6 +120,7 @@ export default function Navbar({ website }) {
               </ul>
             </li>
 
+            {/* Nav: Standar Pelayanan */}
             <li className="nav-item">
               <NavLink
                 to="/standar-pelayanan"
@@ -131,6 +132,7 @@ export default function Navbar({ website }) {
               </NavLink>
             </li>
 
+            {/* Nav: Login */}
             <li className="nav-item ms-lg-2 mt-2 mt-lg-0">
               <NavLink
                 to="/login"
@@ -141,6 +143,7 @@ export default function Navbar({ website }) {
                 Login
               </NavLink>
             </li>
+
           </ul>
         </div>
 
