@@ -1,22 +1,12 @@
 import React, {
-  createContext, // Digunakan untuk membuat context baru
-  useContext, // Digunakan untuk mengakses context di komponen lain
-  useEffect, // Digunakan untuk side effect (cek login saat app pertama kali dibuka)
-  useState // Digunakan untuk menyimpan state user, loading, dll
+  createContext,
+  useContext,
+  useEffect,
+  useState
 } from 'react'
 
 import { authService } from '../services/authService'
 
-
-
-// =======================================================
-// MEMBUAT AUTH CONTEXT
-// =======================================================
-// Context ini dipakai untuk menyimpan:
-// - data user login
-// - status login
-// - function login/logout
-// =======================================================
 const AuthContext = createContext()
 
 const parseStoredUser = () => {
@@ -29,304 +19,155 @@ const parseStoredUser = () => {
   }
 }
 
+// 🔥 PERBAIKAN: Tambahkan kondisi untuk role perusahaan agar tidak salah ambil endpoint profile
 const getProfileEndpoint = (role) => {
-  return role === 'admin_pusat'
-    ? '/admin_pusat/profile'
-    : '/admin_lapangan/profile'
+  if (role === 'admin_pusat') return '/admin_pusat/profile'
+  if (role === 'admin_lapangan') return '/admin_lapangan/profile'
+  if (role === 'perusahaan') return '/perusahaan/profile' // <-- Sesuaikan dengan endpoint & role perusahaan kamu
+  
+  // Jika nama role sama dengan nama endpoint backend, bisa gunakan fallback dinamis ini:
+  return `/${role}/profile` 
 }
 
-
-// =======================================================
-// CUSTOM HOOK
-// =======================================================
-// useAuth() dipakai agar component lebih mudah
-// mengambil data auth tanpa menulis:
-// useContext(AuthContext)
-// berulang kali
-// =======================================================
 export const useAuth = () => {
-
   const context = useContext(AuthContext)
-
-  // Keamanan:
-  // memastikan useAuth hanya dipakai
-  // di dalam <AuthProvider>
   if (!context) {
-    throw new Error(
-      'useAuth harus dipakai dalam AuthProvider'
-    )
+    throw new Error('useAuth harus dipakai dalam AuthProvider')
   }
-
   return context
 }
 
-
-// =======================================================
-// AUTH PROVIDER
-// =======================================================
-// Provider utama untuk membungkus seluruh aplikasi
-// agar semua page bisa mengakses auth
-// =======================================================
 export const AuthProvider = ({ children }) => {
-
-  // =====================================================
-  // STATE
-  // =====================================================
-
-  // Menyimpan data user login
   const [user, setUser] = useState(null)
-
-  // Status loading auth
   const [loading, setLoading] = useState(true)
-
-  // Status apakah user sudah login
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-
 
   // =====================================================
   // AUTO CHECK LOGIN SAAT APP PERTAMA KALI DIBUKA
   // =====================================================
   useEffect(() => {
-
-    // Ambil token dari localStorage
     const token = localStorage.getItem('token')
-
-    // Ambil data user dari localStorage
     const savedUser = token ? parseStoredUser() : null
 
-    // Jika user tersimpan → langsung set user
-    // Jika ada token → cek auth ke backend  
     if (token) {
-
       if (savedUser) {
         setUser(savedUser)
+        setIsAuthenticated(true) // 🔥 PERBAIKAN: Langsung set true agar RoleGuard tidak menendang user ke /login
+        setLoading(false)        // 🔥 PERBAIKAN: Matikan loading karena data lokal sudah siap
       }
 
+      // Jalankan verifikasi token ke backend secara background
       checkAuth()
       return
-
     }
 
     localStorage.removeItem('role')
     localStorage.removeItem('user')
     setIsAuthenticated(false)
     setLoading(false)
-
   }, [])
-
 
   // =====================================================
   // CHECK AUTH
   // =====================================================
-  // Mengecek apakah token masih valid
-  // dengan request ke backend
-  // =====================================================
   const checkAuth = async () => {
-
     try {
-
-      // Ambil role dari localStorage
       const role = localStorage.getItem('role') || parseStoredUser()?.role
-
-      // Menentukan endpoint profile
       const endpoint = getProfileEndpoint(role)
 
-      // Request ke backend
       const res = await authService.me(endpoint)
-
       const userData = res.data.data || res.data
 
-      // Simpan user + role
       const nextUser = {
         ...userData,
         role
       }
 
       setUser(nextUser)
-
-      localStorage.setItem(
-        'user',
-        JSON.stringify(nextUser)
-      )
-
+      localStorage.setItem('user', JSON.stringify(nextUser))
       setIsAuthenticated(true)
 
     } catch (error) {
+      console.error('CHECK AUTH ERROR:', error)
 
-      console.error(
-        'CHECK AUTH ERROR:',
-        error
-      )
-
-      setUser(null)
-      setIsAuthenticated(false)
-      localStorage.removeItem('token')
-      localStorage.removeItem('role')
-      localStorage.removeItem('user')
-
+      // Hanya logout jika token benar-benar kedaluwarsa / tidak valid (status 401 / 403)
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        setUser(null)
+        setIsAuthenticated(false)
+        localStorage.removeItem('token')
+        localStorage.removeItem('role')
+        localStorage.removeItem('user')
+      }
     } finally {
-
-      // Loading selesai
       setLoading(false)
-
     }
-
   }
-
 
   // =====================================================
   // LOGIN
   // =====================================================
-  // Mengirim email + password ke backend
-  // =====================================================
   const login = async (email, password) => {
-
     try {
+      const res = await authService.login({ email, password })
+      
+      // Ambil data (sesuaikan struktur object response backend kamu)
+      const userData = res.data.data?.user || res.data.user
+      const token = res.data.data?.token || res.data.token
+      const role = res.data.data?.role || res.data.role
 
-      // Request login ke backend
-      const res = await authService.login({
-        email,
-        password
-      })
-
-      // Ambil data dari response backend
-      const userData = res.data.data.user
-
-      const token = res.data.data.token
-
-      const role = res.data.data.role
-
-      // Simpan user ke state
-      setUser({
-        ...userData,
-        role
-      })
-
-      // Simpan user ke localStorage
-      localStorage.setItem(
-        'user',
-        JSON.stringify({
-          ...userData,
-          role
-        })
-      )
-
+      setUser({ ...userData, role })
+      localStorage.setItem('user', JSON.stringify({ ...userData, role }))
       setIsAuthenticated(true)
 
-      // Simpan token
-      if (token) {
-
-        localStorage.setItem('token', token)
-
-      }
-
-      // Simpan role
-      localStorage.setItem('role', role)
-
-      // Redirect universal dashboard
-      const redirect = '/dashboard'
+      if (token) localStorage.setItem('token', token)
+      if (role) localStorage.setItem('role', role)
 
       return {
         success: true,
         user: userData,
         role,
-        redirect,
+        redirect: '/dashboard',
       }
-
     } catch (error) {
-
       return {
         success: false,
-        message:
-          error.response?.data?.message ||
-          'Login gagal',
+        message: error.response?.data?.message || 'Login gagal',
       }
-
     }
-
   }
-
 
   // =====================================================
   // LOGOUT
   // =====================================================
   const logout = async () => {
-
     try {
-
-      // Request logout ke backend
       await authService.logout()
-
     } catch (error) {
-
-      console.error(
-        'Logout error:',
-        error
-      )
-
+      console.error('Logout error:', error)
     } finally {
-
-      // Reset semua state
       setUser(null)
-
       setIsAuthenticated(false)
-
-      // Hapus localStorage
       localStorage.removeItem('token')
-
       localStorage.removeItem('role')
-
       localStorage.removeItem('user')
-
-      // Redirect ke login
       window.location.href = '/login'
-
     }
-
   }
 
+  const hasRole = (role) => user?.role === role
+  const hasAnyRole = (roles = []) => roles.includes(user?.role)
 
-  // =====================================================
-  // CEK ROLE USER
-  // =====================================================
-
-  // Mengecek apakah role user sama
-  const hasRole = (role) => {
-
-    return user?.role === role
-
-  }
-
-  // Mengecek apakah role user termasuk dalam array role
-  const hasAnyRole = (roles = []) => {
-
-    return roles.includes(user?.role)
-
-  }
-
-
-  // =====================================================
-  // VALUE CONTEXT
-  // =====================================================
   const value = {
-
     user,
     loading,
     isAuthenticated,
-
     login,
     logout,
     checkAuth,
-
     hasRole,
     hasAnyRole,
-
   }
 
-
-  // =====================================================
-  // RETURN PROVIDER semua page bisa tahu: siapa yang login
-  // =====================================================
   return (
     <AuthContext.Provider value={value}>
       {children}

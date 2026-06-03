@@ -1,18 +1,8 @@
 import axios from 'axios'
 
-// Membuat instance axios (biar bisa dipakai berulang di seluruh project)
 const api = axios.create({
-
-  // Base URL API backend (Laravel)
-baseURL: 'https://codemy.my.id/api',
-
-  // Batas waktu request (15 detik)
+  baseURL: 'https://codemy.my.id/api',
   timeout: 15000,
-
-  // Mengirim cookie (biasanya untuk auth/session Laravel Sanctum)
- // withCredentials: true,
-
-  // Header default untuk semua request
   headers: {
     Accept: 'application/json',
     'X-Requested-With': 'XMLHttpRequest',
@@ -20,37 +10,26 @@ baseURL: 'https://codemy.my.id/api',
 })
 
 // ===== REQUEST INTERCEPTOR =====
-api.interceptors.request.use((config) => {
-
-  // Ambil token dari localStorage
-  const token = localStorage.getItem('token')
-
-  // Jika ada token → kirim ke header Authorization
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
   }
-
-  // Kembalikan config yang sudah dimodifikasi
-  return config
-})
+)
 
 // ===== RESPONSE INTERCEPTOR =====
 api.interceptors.response.use(
-
-  // Jika response sukses → langsung return
   (res) => res,
-
-  // Jika error → tangani di sini
   (err) => {
-
-    // Menampilkan error ke console (debugging)
     console.error('API ERROR:', err.response?.data || err.message)
-
-    // Lempar error supaya bisa ditangani di component
     return Promise.reject(err)
   }
 )
 
-
-// Export instance axios agar bisa digunakan di file lain
 export default api
