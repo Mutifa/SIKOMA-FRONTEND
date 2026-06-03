@@ -3,41 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import '../../../assets/css/LaporanKonservasi.css'
 import { laporanKonservasiService } from '../../../services/laporanKonservasi'
-
-// ── Import alert dari utils ──────────────────────────────────────────────────
-// successAlert → muncul setelah laporan berhasil disimpan (SEBELUM navigate)
-// errorAlert   → muncul jika backend mengembalikan error
 import { successAlert, errorAlert } from '../../../utils/alert'
 
-export default function LaporanCreate() {
-  const navigate = useNavigate()
+// ── UTALITAS TANGGAL ─────────────────────────────────────────────────────────
+const bulanIndo = [
+  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+  "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+]
 
-  // ── State form ───────────────────────────────────────────────────────────
-  const [formData, setFormData] = React.useState({
-    judulLaporan:   '',
-    jenisKegiatan:  '',
-tanggalMulai:   (() => { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}` })(),
-tanggalSelesai: (() => { const t = new Date(); t.setDate(t.getDate()+1); return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}` })(),
-    keterangan:     '',
-    daerahLokasi:   '',
-    kabupaten:      '',
-    kecamatan:      '',
-    latitude:       '',
-    longitude:      '',
-    luasArea:       '',
-    suratTugas:  [],
-    fotoSebelum: [],
-    fotoSetelah: []
-  })
-
-  const [loading,        setLoading]        = React.useState(false)
-  const [error,          setError]          = React.useState('')
-  const [locationStatus, setLocationStatus] = React.useState('Belum diverifikasi')
-
-  // Tambahkan ini sebelum handleChange
-const bulanIndo = ["Januari","Februari","Maret","April","Mei","Juni",
-  "Juli","Agustus","September","Oktober","November","Desember"]
-
+// Mengubah objek Date ke string YYYY-MM-DD (format standar HTML date)
 const toYYYYMMDD = (date) => {
   const y = date.getFullYear()
   const m = String(date.getMonth() + 1).padStart(2, '0')
@@ -45,15 +19,52 @@ const toYYYYMMDD = (date) => {
   return `${y}-${m}-${d}`
 }
 
-const toIndonesiaFormat = (dateStr) => {
-  if (!dateStr) return ''
-  const [y, m, d] = dateStr.split('-')
-  return `${d}/${bulanIndo[parseInt(m) - 1]}/${y}`
+const getTodayDateString = () => toYYYYMMDD(new Date())
+
+const getTomorrowDateString = () => {
+  const t = new Date()
+  t.setDate(t.getDate() + 1)
+  return toYYYYMMDD(t)
 }
 
+// Mengubah format YYYY-MM-DD menjadi "DD Bulan YYYY" (Contoh: 2026-06-03 -> 03 Juni 2026)
+const formatKeIndo = (dateStr) => {
+  if (!dateStr) return ''
+  const [y, m, d] = dateStr.split('-')
+  const namaBulan = bulanIndo[parseInt(m, 10) - 1]
+  return `${d} ${namaBulan} ${y}`
+}
 
+export default function LaporanCreate() {
+  const navigate = useNavigate()
 
-  // ── Handler input ────────────────────────────────────────────────────────
+  // ── STATE FORM ───────────────────────────────────────────────────────────
+  const [formData, setFormData] = React.useState({
+    judulLaporan: '',
+    jenisKegiatan: '',
+    tanggalMulai: getTodayDateString(),       // Default: Hari ini (YYYY-MM-DD)
+    tanggalSelesai: getTomorrowDateString(),   // Default: Besok (YYYY-MM-DD)
+    keterangan: '',
+    daerahLokasi: '',
+    kabupaten: '',
+    kecamatan: '',
+    latitude: '',
+    longitude: '',
+    luasArea: '',
+    suratTugas: [],
+    fotoSebelum: [],
+    fotoSetelah: []
+  })
+
+  const [loading, setLoading] = React.useState(false)
+  const [error, setError] = React.useState('')
+  const [locationStatus, setLocationStatus] = React.useState('Belum diverifikasi')
+
+  // State bantuan untuk melacak apakah input tanggal sedang fokus/aktif atau tidak
+  const [focusMulai, setFocusMulai] = React.useState(false)
+  const [focusSelesai, setFocusSelesai] = React.useState(false)
+
+  // ── HANDLER INPUT UMUM ───────────────────────────────────────────────────
   const handleChange = (e) => {
     const { name, value, type, files } = e.target
     setFormData(prev => ({
@@ -62,7 +73,24 @@ const toIndonesiaFormat = (dateStr) => {
     }))
   }
 
-  // ── Ambil GPS + reverse geocoding → isi nama daerah otomatis ────────────
+  // ── HANDLER OTOMATISASI TANGGAL MULAI ────────────────────────────────────
+  const handleTanggalMulaiChange = (e) => {
+    const newMulai = e.target.value
+    if (!newMulai) return
+
+    // Hitung tanggal selesai otomatis (Tanggal Mulai + 1 Hari)
+    const mulaiDate = new Date(newMulai + 'T00:00:00')
+    const selesaiDate = new Date(mulaiDate)
+    selesaiDate.setDate(mulaiDate.getDate() + 1)
+
+    setFormData(prev => ({
+      ...prev,
+      tanggalMulai: newMulai,
+      tanggalSelesai: toYYYYMMDD(selesaiDate)
+    }))
+  }
+
+  // ── AMBIL GPS & REVERSE GEOCODING ────────────────────────────────────────
   const getLocation = () => {
     if (!navigator.geolocation) {
       setLocationStatus('❌ Browser tidak mendukung geolocation!')
@@ -78,18 +106,14 @@ const toIndonesiaFormat = (dateStr) => {
 
         setFormData(prev => ({
           ...prev,
-          latitude:  lat.toString(),
+          latitude: lat.toString(),
           longitude: lng.toString()
         }))
 
         setLocationStatus('🗺️ Sedang mendapatkan informasi daerah...')
 
         try {
-          /*
-           * Reverse Geocoding — OpenStreetMap Nominatim (gratis, tanpa API key).
-           * Mengubah koordinat GPS → nama provinsi, kabupaten, kecamatan.
-           */
-          const res  = await fetch(
+          const res = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1&accept-language=id`
           )
           const data = await res.json()
@@ -98,9 +122,9 @@ const toIndonesiaFormat = (dateStr) => {
             const addr = data.address
             setFormData(prev => ({
               ...prev,
-              daerahLokasi: addr.state  || addr.region  || addr.province     || 'Tidak diketahui',
-              kabupaten:    addr.county || addr.city    || addr.town         || addr.municipality  || 'Tidak diketahui',
-              kecamatan:    addr.suburb || addr.village || addr.hamlet       || addr.neighbourhood || 'Tidak diketahui',
+              daerahLokasi: addr.state || addr.region || addr.province || 'Tidak diketahui',
+              kabupaten: addr.county || addr.city || addr.town || addr.municipality || 'Tidak diketahui',
+              kecamatan: addr.suburb || addr.village || addr.hamlet || addr.neighbourhood || 'Tidak diketahui',
             }))
             setLocationStatus('✅ Lokasi berhasil diverifikasi dan daerah terisi otomatis!')
           } else {
@@ -112,9 +136,9 @@ const toIndonesiaFormat = (dateStr) => {
       },
       (err) => {
         const msgs = {
-          [err.PERMISSION_DENIED]:    '❌ Akses lokasi ditolak! Izinkan akses lokasi di browser.',
+          [err.PERMISSION_DENIED]: '❌ Akses lokasi ditolak! Izinkan akses lokasi di browser.',
           [err.POSITION_UNAVAILABLE]: '❌ Informasi lokasi tidak tersedia!',
-          [err.TIMEOUT]:              '❌ Permintaan lokasi timeout!',
+          [err.TIMEOUT]: '❌ Permintaan lokasi timeout!',
         }
         setLocationStatus(msgs[err.code] || '❌ Gagal mendapatkan lokasi!')
       },
@@ -122,8 +146,8 @@ const toIndonesiaFormat = (dateStr) => {
     )
   }
 
-  // ── Submit form ──────────────────────────────────────────────────────────
-  const handleSubmit = async (e) => { // Simpan laporan baru -- store()
+  // ── SUBMIT FORM ──────────────────────────────────────────────────────────
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError('')
@@ -131,7 +155,6 @@ const toIndonesiaFormat = (dateStr) => {
     const fd = new FormData()
     Object.keys(formData).forEach(key => {
       if (['suratTugas', 'fotoSebelum', 'fotoSetelah'].includes(key)) {
-        // Kirim tiap file satu-per-satu, backend menerima sebagai array
         formData[key].forEach(file => fd.append(key, file))
       } else {
         fd.append(key, formData[key] ?? '')
@@ -139,31 +162,10 @@ const toIndonesiaFormat = (dateStr) => {
     })
 
     try {
-      await laporanKonservasiService.create(fd) // backend menyimpan laporan baru -- store()
-
-      /*
-       * ════════════════════════════════════════════════════
-       * KUNCI MASALAH — URUTAN INI WAJIB DIIKUTI:
-       *
-       *   ✅ BENAR:
-       *      await successAlert(...)   ← tunggu alert selesai dulu
-       *      navigate('/...')          ← baru pindah halaman
-       *
-       *   ❌ SALAH (alert tidak sempat muncul):
-       *      navigate('/...')          ← langsung pindah
-       *      (successAlert tidak dipanggil sama sekali)
-       *
-       * Kenapa? successAlert pakai timer: 1800ms.
-       * Kalau navigate() dipanggil duluan, komponen langsung
-       * unmount dan SweetAlert ikut hilang sebelum tampil.
-       * ════════════════════════════════════════════════════
-       */
+      await laporanKonservasiService.create(fd)
       await successAlert('Berhasil!', 'Laporan konservasi berhasil ditambahkan')
-
       navigate('/laporan-konservasi')
-
     } catch (err) {
-      // Tampilkan SweetAlert error + pesan di atas form
       await errorAlert(
         'Gagal Menyimpan',
         err.response?.data?.message || 'Terjadi kesalahan saat menyimpan laporan'
@@ -174,7 +176,7 @@ const toIndonesiaFormat = (dateStr) => {
     }
   }
 
-  // ── Render ───────────────────────────────────────────────────────────────
+  // ── RENDER COMPONENT ─────────────────────────────────────────────────────
   return (
     <DashboardLayout title="Tambah Laporan Konservasi">
 
@@ -198,9 +200,7 @@ const toIndonesiaFormat = (dateStr) => {
           <div className="lk-card">
             <form onSubmit={handleSubmit} encType="multipart/form-data">
 
-              {/* ══════════════════════════════════════════
-                  SEKSI 1 — DESKRIPSI KEGIATAN
-                  ══════════════════════════════════════════ */}
+              {/* SEKSI 1 — DESKRIPSI KEGIATAN */}
               <div className="mb-4">
                 <h6 className="lk-section-title">
                   <span className="lk-section-dot"></span>
@@ -219,89 +219,35 @@ const toIndonesiaFormat = (dateStr) => {
                       value={formData.jenisKegiatan} onChange={handleChange} required />
                   </div>
                   
+                  {/* TANGGAL MULAI (Dengan Trik Dynamic Type) */}
                   <div className="col-md-6 mb-3">
-  <label className="lk-label">TANGGAL MULAI</label>
-  <div style={{ display: 'flex', border: '1px solid #ced4da', borderRadius: '6px', overflow: 'hidden' }}>
-    <select className="lk-input" style={{ border: 'none', borderRight: '1px solid #ced4da', flex: 1, outline: 'none' }}
-      value={formData.tanggalMulai.split('-')[2] || ''}
-      onChange={(e) => {
-        const [y, m] = formData.tanggalMulai.split('-')
-        const newMulai = `${y}-${m}-${e.target.value}`
-        const mulai = new Date(newMulai + 'T00:00:00')
-        const selesai = new Date(mulai)
-        selesai.setDate(mulai.getDate() + 1)
-        setFormData(prev => ({ ...prev, tanggalMulai: newMulai, tanggalSelesai: toYYYYMMDD(selesai) }))
-      }}>
-      {Array.from({length: 31}, (_, i) => i + 1).map(d => (
-        <option key={d} value={String(d).padStart(2,'0')}>{String(d).padStart(2,'0')}</option>
-      ))}
-    </select>
-    <select className="lk-input" style={{ border: 'none', borderRight: '1px solid #ced4da', flex: 1, outline: 'none' }}
-      value={formData.tanggalMulai.split('-')[1] || ''}
-      onChange={(e) => {
-        const [y, , d] = formData.tanggalMulai.split('-')
-        const newMulai = `${y}-${e.target.value}-${d}`
-        const mulai = new Date(newMulai + 'T00:00:00')
-        const selesai = new Date(mulai)
-        selesai.setDate(mulai.getDate() + 1)
-        setFormData(prev => ({ ...prev, tanggalMulai: newMulai, tanggalSelesai: toYYYYMMDD(selesai) }))
-      }}>
-      {bulanIndo.map((bln, i) => (
-        <option key={i} value={String(i+1).padStart(2,'0')}>{bln}</option>
-      ))}
-    </select>
-    <select className="lk-input" style={{ border: 'none', flex: 1, outline: 'none' }}
-      value={formData.tanggalMulai.split('-')[0] || ''}
-      onChange={(e) => {
-        const [, m, d] = formData.tanggalMulai.split('-')
-        const newMulai = `${e.target.value}-${m}-${d}`
-        const mulai = new Date(newMulai + 'T00:00:00')
-        const selesai = new Date(mulai)
-        selesai.setDate(mulai.getDate() + 1)
-        setFormData(prev => ({ ...prev, tanggalMulai: newMulai, tanggalSelesai: toYYYYMMDD(selesai) }))
-      }}>
-      {Array.from({length: 10}, (_, i) => new Date().getFullYear() - 2 + i).map(y => (
-        <option key={y} value={y}>{y}</option>
-      ))}
-    </select>
-  </div>
-</div>
+                    <label className="lk-label">TANGGAL MULAI</label>
+                    <input 
+                      type={focusMulai ? "date" : "text"} 
+                      name="tanggalMulai" 
+                      className="form-control lk-input"
+                      value={focusMulai ? formData.tanggalMulai : formatKeIndo(formData.tanggalMulai)} 
+                      onFocus={() => setFocusMulai(true)}
+                      onBlur={() => setFocusMulai(false)}
+                      onChange={handleTanggalMulaiChange} 
+                      required 
+                    />
+                  </div>
 
-<div className="col-md-6 mb-3">
-  <label className="lk-label">TANGGAL SELESAI</label>
-  <div style={{ display: 'flex', border: '1px solid #ced4da', borderRadius: '6px', overflow: 'hidden' }}>
-    <select className="lk-input" style={{ border: 'none', borderRight: '1px solid #ced4da', flex: 1, outline: 'none' }}
-      value={formData.tanggalSelesai.split('-')[2] || ''}
-      onChange={(e) => {
-        const [y, m] = formData.tanggalSelesai.split('-')
-        setFormData(prev => ({ ...prev, tanggalSelesai: `${y}-${m}-${e.target.value}` }))
-      }}>
-      {Array.from({length: 31}, (_, i) => i + 1).map(d => (
-        <option key={d} value={String(d).padStart(2,'0')}>{String(d).padStart(2,'0')}</option>
-      ))}
-    </select>
-    <select className="lk-input" style={{ border: 'none', borderRight: '1px solid #ced4da', flex: 1, outline: 'none' }}
-      value={formData.tanggalSelesai.split('-')[1] || ''}
-      onChange={(e) => {
-        const [y, , d] = formData.tanggalSelesai.split('-')
-        setFormData(prev => ({ ...prev, tanggalSelesai: `${y}-${e.target.value}-${d}` }))
-      }}>
-      {bulanIndo.map((bln, i) => (
-        <option key={i} value={String(i+1).padStart(2,'0')}>{bln}</option>
-      ))}
-    </select>
-    <select className="lk-input" style={{ border: 'none', flex: 1, outline: 'none' }}
-      value={formData.tanggalSelesai.split('-')[0] || ''}
-      onChange={(e) => {
-        const [, m, d] = formData.tanggalSelesai.split('-')
-        setFormData(prev => ({ ...prev, tanggalSelesai: `${e.target.value}-${m}-${d}` }))
-      }}>
-      {Array.from({length: 10}, (_, i) => new Date().getFullYear() - 2 + i).map(y => (
-        <option key={y} value={y}>{y}</option>
-      ))}
-    </select>
-  </div>
-</div>
+                  {/* TANGGAL SELESAI (Dengan Trik Dynamic Type) */}
+                  <div className="col-md-6 mb-3">
+                    <label className="lk-label">TANGGAL SELESAI</label>
+                    <input 
+                      type={focusSelesai ? "date" : "text"} 
+                      name="tanggalSelesai" 
+                      className="form-control lk-input"
+                      value={focusSelesai ? formData.tanggalSelesai : formatKeIndo(formData.tanggalSelesai)} 
+                      onFocus={() => setFocusSelesai(true)}
+                      onBlur={() => setFocusSelesai(false)}
+                      onChange={handleChange} 
+                      required 
+                    />
+                  </div>
 
                   <div className="col-12 mb-3">
                     <label className="lk-label">KETERANGAN</label>
@@ -313,9 +259,7 @@ const toIndonesiaFormat = (dateStr) => {
 
               <hr className="lk-form-divider" />
 
-              {/* ══════════════════════════════════════════
-                  SEKSI 2 — DAERAH KAWASAN
-                  ══════════════════════════════════════════ */}
+              {/* SEKSI 2 — DAERAH KAWASAN */}
               <div className="mb-4">
                 <h6 className="lk-section-title">
                   <span className="lk-section-dot"></span>
@@ -339,7 +283,7 @@ const toIndonesiaFormat = (dateStr) => {
                       value={formData.kecamatan} onChange={handleChange} required />
                   </div>
 
-                  <input type="hidden" name="latitude"  value={formData.latitude}  />
+                  <input type="hidden" name="latitude" value={formData.latitude} />
                   <input type="hidden" name="longitude" value={formData.longitude} />
 
                   <div className="col-12 mb-3">
@@ -353,9 +297,7 @@ const toIndonesiaFormat = (dateStr) => {
 
               <hr className="lk-form-divider" />
 
-              {/* ══════════════════════════════════════════
-                  SEKSI 3 — DOKUMENTASI KEGIATAN
-                  ══════════════════════════════════════════ */}
+              {/* SEKSI 3 — DOKUMENTASI KEGIATAN */}
               <div className="mb-4">
                 <h6 className="lk-section-title">
                   <span className="lk-section-dot"></span>
@@ -407,9 +349,7 @@ const toIndonesiaFormat = (dateStr) => {
                 </div>
               </div>
 
-              {/* ══════════════════════════════════════════
-                  ACTION BUTTONS
-                  ══════════════════════════════════════════ */}
+              {/* ACTION BUTTONS */}
               <div className="mt-2 text-end">
                 <button
                   type="button"
@@ -431,4 +371,4 @@ const toIndonesiaFormat = (dateStr) => {
 
     </DashboardLayout>
   )
-}
+} 

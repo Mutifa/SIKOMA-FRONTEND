@@ -135,7 +135,7 @@ const bulanIndo = ["Januari","Februari","Maret","April","Mei","Juni",
 const formatDate = (date) => {
   if (!date) return 'N/A'
   const d = new Date(date)
-  return `${String(d.getDate()).padStart(2,'0')}/${bulanIndo[d.getMonth()]}/${d.getFullYear()}`
+  return `${String(d.getDate()).padStart(2,'0')} ${bulanIndo[d.getMonth()]} ${d.getFullYear()}`
 }
 
   const filteredLaporan = React.useMemo(() => {

@@ -95,7 +95,7 @@ export default function LaporanDetail() {
 const formatDate = (dateString) => {
   if (!dateString) return null
   const d = new Date(dateString)
-  return `${String(d.getDate()).padStart(2, '0')}/${bulanIndo[d.getMonth()]}/${d.getFullYear()}`
+  return `${String(d.getDate()).padStart(2, '0')} ${bulanIndo[d.getMonth()]} ${d.getFullYear()}`
 }
 
   /**

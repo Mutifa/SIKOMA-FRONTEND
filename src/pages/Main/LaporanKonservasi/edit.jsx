@@ -12,7 +12,7 @@ export default function LaporanEdit() {
   const { id } = useParams()
   const navigate = useNavigate()
 
-  // ── State ───────────────────────────────────────────────────────────────
+  // ── State Form ───────────────────────────────────────────────────────────
   const [formData, setFormData] = React.useState({
     judulLaporan: '',
     jenisKegiatan: '',
@@ -38,15 +38,23 @@ export default function LaporanEdit() {
   const [error, setError] = React.useState('')
   const [locationStatus, setLocationStatus] = React.useState('Belum diverifikasi')
 
-  // ── Helper format tanggal Indonesia ─────────────────────────────────────
-const bulanIndo = ["Januari","Februari","Maret","April","Mei","Juni",
-  "Juli","Agustus","September","Oktober","November","Desember"]
+  // State bantuan untuk melacak fokus input tanggal
+  const [focusMulai, setFocusMulai] = React.useState(false)
+  const [focusSelesai, setFocusSelesai] = React.useState(false)
 
-const toIndonesiaFormat = (dateStr) => {
-  if (!dateStr) return ''
-  const [y, m, d] = dateStr.split('-')
-  return `${d}/${bulanIndo[parseInt(m) - 1]}/${y}`
-}
+  // ── Helper format tanggal Indonesia ─────────────────────────────────────
+  const bulanIndo = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ]
+
+  const formatKeIndo = (dateStr) => {
+    if (!dateStr) return ''
+    const parts = dateStr.split('-')
+    if (parts.length !== 3) return dateStr // Jaga-jaga jika format bukan YYYY-MM-DD
+    const [y, m, d] = parts
+    return `${d} ${bulanIndo[parseInt(m, 10) - 1]} ${y}`
+  }
 
   // ── Fetch data laporan saat komponen mount ──────────────────────────────
   React.useEffect(() => {
@@ -131,7 +139,7 @@ const toIndonesiaFormat = (dateStr) => {
   }
 
   // ── Submit update ke backend ────────────────────────────────────────────
-  const handleSubmit = async (e) => { // Update/edit laporan -- update($id)
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setSaving(true)
     setError('')
@@ -147,14 +155,23 @@ const toIndonesiaFormat = (dateStr) => {
         if (formData[key].length > 0 && formData[key][0] instanceof File) {
           formData[key].forEach(file => fd.append(key, file))
         }
-      } else if (formData[key] !== null && formData[key] !== '') {
-        fd.append(key, formData[key])
+      } else {
+        /*
+         * HANYA KIRIM jika inputan tidak kosong string ('') 
+         * DAN nilainya benar-benar berubah dari data original (menghemat data).
+         */
+        if (formData[key] !== null && formData[key] !== '') {
+          // Pengecekan != dipakai (bukan !==) agar "10" (string dari form) dan 10 (int dari db) dianggap sama
+          if (formData[key] != originalData[key]) {
+            fd.append(key, formData[key])
+          }
+        }
       }
     })
 
     try {
       // ✅ pakai service, bukan api langsung
-      await laporanKonservasiService.update(id, fd) // backend memperbarui laporan -- update($id)
+      await laporanKonservasiService.update(id, fd)
 
       await successAlert('Berhasil!', 'Laporan konservasi berhasil diperbarui')
       navigate('/laporan-konservasi')
@@ -222,9 +239,7 @@ const toIndonesiaFormat = (dateStr) => {
           <div className="lk-card">
             <form onSubmit={handleSubmit} encType="multipart/form-data">
 
-              {/* ══════════════════════════════════════════
-                  SEKSI 1 — DESKRIPSI KEGIATAN
-                  ══════════════════════════════════════════ */}
+              {/* SEKSI 1 — DESKRIPSI KEGIATAN */}
               <div className="mb-4">
                 <h6 className="lk-section-title">
                   <span className="lk-section-dot"></span>
@@ -252,39 +267,36 @@ const toIndonesiaFormat = (dateStr) => {
                       className="form-control lk-input"
                       value={formData.jenisKegiatan}
                       onChange={handleChange}
-                      required
                     />
                   </div>
 
+                  {/* TANGGAL MULAI */}
                   <div className="col-md-6 mb-3">
-  <label className="lk-label">TANGGAL MULAI</label>
-  <input
-    type="date"
-    name="tanggalMulai"
-    className="form-control lk-input"
-    value={formData.tanggalMulai}
-    onChange={handleChange}
-    required
-  />
-  <small style={{ color: '#2e7d52', fontWeight: 500 }}>
-    {toIndonesiaFormat(formData.tanggalMulai)}
-  </small>
-</div>
+                    <label className="lk-label">TANGGAL MULAI</label>
+                    <input
+                      type={focusMulai ? "date" : "text"}
+                      name="tanggalMulai"
+                      className="form-control lk-input"
+                      value={focusMulai ? formData.tanggalMulai : formatKeIndo(formData.tanggalMulai)}
+                      onFocus={() => setFocusMulai(true)}
+                      onBlur={() => setFocusMulai(false)}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-<div className="col-md-6 mb-3">
-  <label className="lk-label">TANGGAL SELESAI</label>
-  <input
-    type="date"
-    name="tanggalSelesai"
-    className="form-control lk-input"
-    value={formData.tanggalSelesai}
-    onChange={handleChange}
-    required
-  />
-  <small style={{ color: '#2e7d52', fontWeight: 500 }}>
-    {toIndonesiaFormat(formData.tanggalSelesai)}
-  </small>
-</div>
+                  {/* TANGGAL SELESAI */}
+                  <div className="col-md-6 mb-3">
+                    <label className="lk-label">TANGGAL SELESAI</label>
+                    <input
+                      type={focusSelesai ? "date" : "text"}
+                      name="tanggalSelesai"
+                      className="form-control lk-input"
+                      value={focusSelesai ? formData.tanggalSelesai : formatKeIndo(formData.tanggalSelesai)}
+                      onFocus={() => setFocusSelesai(true)}
+                      onBlur={() => setFocusSelesai(false)}
+                      onChange={handleChange}
+                    />
+                  </div>
 
                   <div className="col-12 mb-3">
                     <label className="lk-label">KETERANGAN</label>
@@ -302,9 +314,7 @@ const toIndonesiaFormat = (dateStr) => {
 
               <hr className="lk-form-divider" />
 
-              {/* ══════════════════════════════════════════
-                  SEKSI 2 — DAERAH KAWASAN
-                  ══════════════════════════════════════════ */}
+              {/* SEKSI 2 — DAERAH KAWASAN */}
               <div className="mb-4">
                 <h6 className="lk-section-title">
                   <span className="lk-section-dot"></span>
@@ -321,7 +331,6 @@ const toIndonesiaFormat = (dateStr) => {
                       className="form-control lk-input"
                       value={formData.daerahLokasi}
                       onChange={handleChange}
-                      required
                     />
                   </div>
 
@@ -333,7 +342,6 @@ const toIndonesiaFormat = (dateStr) => {
                       className="form-control lk-input"
                       value={formData.kabupaten}
                       onChange={handleChange}
-                      required
                     />
                   </div>
 
@@ -345,7 +353,6 @@ const toIndonesiaFormat = (dateStr) => {
                       className="form-control lk-input"
                       value={formData.kecamatan}
                       onChange={handleChange}
-                      required
                     />
                   </div>
 
@@ -368,10 +375,7 @@ const toIndonesiaFormat = (dateStr) => {
 
               <hr className="lk-form-divider" />
 
-              {/* ══════════════════════════════════════════
-                  SEKSI 3 — DOKUMENTASI KEGIATAN
-                  File lama tetap tampil; pilih file baru untuk mengganti
-                  ══════════════════════════════════════════ */}
+              {/* SEKSI 3 — DOKUMENTASI KEGIATAN */}
               <div className="mb-4">
                 <h6 className="lk-section-title">
                   <span className="lk-section-dot"></span>
@@ -380,7 +384,7 @@ const toIndonesiaFormat = (dateStr) => {
 
                 <div className="row">
 
-                  {/* ── Surat Tugas ── */}
+                  {/* Surat Tugas */}
                   <div className="col-md-6 mb-3">
                     <label className="lk-label">
                       SURAT TUGAS
@@ -401,7 +405,6 @@ const toIndonesiaFormat = (dateStr) => {
                         ✅ {formData.suratTugas.length} file(s) baru dipilih
                       </span>
                     )}
-                    {/* Tampilkan file lama yang tersimpan di server */}
                     {suratTugasList.length > 0 && (
                       <div className="mt-2">
                         <small className="text-muted d-block mb-1">File saat ini:</small>
@@ -420,7 +423,7 @@ const toIndonesiaFormat = (dateStr) => {
                     )}
                   </div>
 
-                  {/* ── Luas Area ── */}
+                  {/* Luas Area */}
                   <div className="col-md-6 mb-3">
                     <label className="lk-label">LUAS AREA (ha)</label>
                     <input
@@ -430,11 +433,10 @@ const toIndonesiaFormat = (dateStr) => {
                       className="form-control lk-input"
                       value={formData.luasArea}
                       onChange={handleChange}
-                      required
                     />
                   </div>
 
-                  {/* ── Foto Sebelum ── */}
+                  {/* Foto Sebelum */}
                   <div className="col-md-6 mb-3">
                     <label className="lk-label">
                       FOTO SEBELUM KEGIATAN
@@ -473,7 +475,7 @@ const toIndonesiaFormat = (dateStr) => {
                     )}
                   </div>
 
-                  {/* ── Foto Setelah ── */}
+                  {/* Foto Setelah */}
                   <div className="col-md-6 mb-3">
                     <label className="lk-label">
                       FOTO SETELAH KEGIATAN
@@ -515,9 +517,7 @@ const toIndonesiaFormat = (dateStr) => {
                 </div>
               </div>
 
-              {/* ══════════════════════════════════════════
-                  ACTION BUTTONS
-                  ══════════════════════════════════════════ */}
+              {/* ACTION BUTTONS */}
               <div className="mt-2 text-end">
                 <button
                   type="button"
