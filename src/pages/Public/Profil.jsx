@@ -8,12 +8,14 @@ export default function Profil() {
 
   const [data, setData] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
+  const [imgKey, setImgKey] = React.useState(() => Date.now())
 
   React.useEffect(() => {
     profilPerusahaanService.get()
       .then(res => {
         setData(res.data)
         setLoading(false)
+        setImgKey(Date.now())
       })
       .catch(() => {
         setLoading(false)
@@ -36,16 +38,40 @@ export default function Profil() {
       <section className="container-xxl py-5">
         <div className="container">
 
-          <h1 className="mb-4">{data?.nama}</h1>
+          {/* Logo */}
+          {data?.logo && (
+            <div className="text-center mb-4">
+              <img
+                src={`${FILE_URL}/uploads/profil/${data.logo}?t=${imgKey}`}
+                alt="Logo"
+                style={{
+                  maxHeight: '180px',
+                  maxWidth: '100%',
+                }}
+              />
+            </div>
+          )}
+
+          <h1 className="mb-4 text-center">
+            {data?.nama}
+          </h1>
 
           <div className="mb-4">
             <h3>Visi</h3>
-            <p>{data?.visi}</p>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: data?.visi || ''
+              }}
+            />
           </div>
 
           <div className="mb-4">
             <h3>Misi</h3>
-            <p>{data?.misi}</p>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: data?.misi || ''
+              }}
+            />
           </div>
 
           {data?.struktur && (
@@ -53,7 +79,7 @@ export default function Profil() {
               <h3>Struktur Organisasi</h3>
 
               <img
-                src={`${FILE_URL}/uploads/profil/${data.struktur}`}
+                src={`${FILE_URL}/uploads/profil/${data.struktur}?t=${imgKey}`}
                 alt="Struktur Organisasi"
                 className="img-fluid"
               />

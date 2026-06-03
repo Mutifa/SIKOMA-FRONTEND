@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout'
 import profilPerusahaanService from '../../../services/profilPerusahaanService'
 
@@ -14,22 +14,25 @@ const Field = ({ label, value }) => (
 
 export default function ProfilPerusahaan() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [formData, setFormData] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState('')
+  const [imgKey, setImgKey] = React.useState(() => Date.now())
 
   React.useEffect(() => {
+    setLoading(true)
     profilPerusahaanService.get()
       .then(res => {
         setFormData(res.data)
+        setImgKey(Date.now())
         setLoading(false)
       })
-
       .catch(err => {
         setError(err.response?.data?.message || 'Gagal memuat data')
         setLoading(false)
       })
-  }, [])
+  }, [location.state?.refresh])
 
   const stripHtml = (html) => html ? html.replace(/<[^>]*>/g, '') : ''
 
@@ -79,17 +82,25 @@ export default function ProfilPerusahaan() {
           <div className="col-md-6 mb-3">
             <div className="profil-field-label">Logo Website</div>
             <div className="profil-image-box">
-           {formData?.logo
-    ? <img src={`${FILE_URL}/uploads/profil/${formData.logo}`} alt="Logo" style={{ maxHeight: '80px' }} />
-    : 'Belum ada logo'}
-</div>
-</div>
-<div className="col-md-6 mb-3">
-    <div className="profil-field-label">Struktur Organisasi</div>
-    <div className="profil-image-box">
-    {formData?.struktur
-        ? <img src={`${FILE_URL}/uploads/profil/${formData.struktur}`} alt="Struktur" style={{ maxHeight: '80px' }} />
-        : 'Belum ada gambar'}
+              {formData?.logo
+                ? <img
+                    src={`${FILE_URL}/uploads/profil/${formData.logo}?t=${imgKey}`}
+                    alt="Logo"
+                    style={{ maxHeight: '80px' }}
+                  />
+                : 'Belum ada logo'}
+            </div>
+          </div>
+          <div className="col-md-6 mb-3">
+            <div className="profil-field-label">Struktur Organisasi</div>
+            <div className="profil-image-box">
+              {formData?.struktur
+                ? <img
+                    src={`${FILE_URL}/uploads/profil/${formData.struktur}?t=${imgKey}`}
+                    alt="Struktur"
+                    style={{ maxHeight: '80px' }}
+                  />
+                : 'Belum ada gambar'}
             </div>
           </div>
         </div>

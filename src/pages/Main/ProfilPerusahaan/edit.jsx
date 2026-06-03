@@ -67,8 +67,9 @@ export default function ProfilPerusahaanEdit() {
 
       await profilPerusahaanService.update(fd)
       await successAlert('Berhasil', 'Data profil berhasil diupdate')
-      
-      navigate('/profil-perusahaan')
+
+      // Kirim state refresh supaya halaman index fetch ulang data + gambar terbaru
+      navigate('/profil-perusahaan', { state: { refresh: Date.now() } })
     } catch (err) {
       await errorAlert('Gagal', err.response?.data?.message || 'Gagal menyimpan data')
     } finally {
