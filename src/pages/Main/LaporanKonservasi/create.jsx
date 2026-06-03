@@ -16,8 +16,8 @@ export default function LaporanCreate() {
   const [formData, setFormData] = React.useState({
     judulLaporan:   '',
     jenisKegiatan:  '',
-    tanggalMulai:   '',
-    tanggalSelesai: '',
+tanggalMulai:   (() => { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}` })(),
+tanggalSelesai: (() => { const t = new Date(); t.setDate(t.getDate()+1); return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}` })(),
     keterangan:     '',
     daerahLokasi:   '',
     kabupaten:      '',
@@ -33,6 +33,25 @@ export default function LaporanCreate() {
   const [loading,        setLoading]        = React.useState(false)
   const [error,          setError]          = React.useState('')
   const [locationStatus, setLocationStatus] = React.useState('Belum diverifikasi')
+
+  // Tambahkan ini sebelum handleChange
+const bulanIndo = ["Januari","Februari","Maret","April","Mei","Juni",
+  "Juli","Agustus","September","Oktober","November","Desember"]
+
+const toYYYYMMDD = (date) => {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+const toIndonesiaFormat = (dateStr) => {
+  if (!dateStr) return ''
+  const [y, m, d] = dateStr.split('-')
+  return `${d}/${bulanIndo[parseInt(m) - 1]}/${y}`
+}
+
+
 
   // ── Handler input ────────────────────────────────────────────────────────
   const handleChange = (e) => {
@@ -199,16 +218,91 @@ export default function LaporanCreate() {
                     <input type="text" name="jenisKegiatan" className="form-control lk-input"
                       value={formData.jenisKegiatan} onChange={handleChange} required />
                   </div>
+                  
                   <div className="col-md-6 mb-3">
-                    <label className="lk-label">TANGGAL MULAI</label>
-                    <input type="date" name="tanggalMulai" className="form-control lk-input"
-                      value={formData.tanggalMulai} onChange={handleChange} required />
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <label className="lk-label">TANGGAL SELESAI</label>
-                    <input type="date" name="tanggalSelesai" className="form-control lk-input"
-                      value={formData.tanggalSelesai} onChange={handleChange} required />
-                  </div>
+  <label className="lk-label">TANGGAL MULAI</label>
+  <div style={{ display: 'flex', border: '1px solid #ced4da', borderRadius: '6px', overflow: 'hidden' }}>
+    <select className="lk-input" style={{ border: 'none', borderRight: '1px solid #ced4da', flex: 1, outline: 'none' }}
+      value={formData.tanggalMulai.split('-')[2] || ''}
+      onChange={(e) => {
+        const [y, m] = formData.tanggalMulai.split('-')
+        const newMulai = `${y}-${m}-${e.target.value}`
+        const mulai = new Date(newMulai + 'T00:00:00')
+        const selesai = new Date(mulai)
+        selesai.setDate(mulai.getDate() + 1)
+        setFormData(prev => ({ ...prev, tanggalMulai: newMulai, tanggalSelesai: toYYYYMMDD(selesai) }))
+      }}>
+      {Array.from({length: 31}, (_, i) => i + 1).map(d => (
+        <option key={d} value={String(d).padStart(2,'0')}>{String(d).padStart(2,'0')}</option>
+      ))}
+    </select>
+    <select className="lk-input" style={{ border: 'none', borderRight: '1px solid #ced4da', flex: 1, outline: 'none' }}
+      value={formData.tanggalMulai.split('-')[1] || ''}
+      onChange={(e) => {
+        const [y, , d] = formData.tanggalMulai.split('-')
+        const newMulai = `${y}-${e.target.value}-${d}`
+        const mulai = new Date(newMulai + 'T00:00:00')
+        const selesai = new Date(mulai)
+        selesai.setDate(mulai.getDate() + 1)
+        setFormData(prev => ({ ...prev, tanggalMulai: newMulai, tanggalSelesai: toYYYYMMDD(selesai) }))
+      }}>
+      {bulanIndo.map((bln, i) => (
+        <option key={i} value={String(i+1).padStart(2,'0')}>{bln}</option>
+      ))}
+    </select>
+    <select className="lk-input" style={{ border: 'none', flex: 1, outline: 'none' }}
+      value={formData.tanggalMulai.split('-')[0] || ''}
+      onChange={(e) => {
+        const [, m, d] = formData.tanggalMulai.split('-')
+        const newMulai = `${e.target.value}-${m}-${d}`
+        const mulai = new Date(newMulai + 'T00:00:00')
+        const selesai = new Date(mulai)
+        selesai.setDate(mulai.getDate() + 1)
+        setFormData(prev => ({ ...prev, tanggalMulai: newMulai, tanggalSelesai: toYYYYMMDD(selesai) }))
+      }}>
+      {Array.from({length: 10}, (_, i) => new Date().getFullYear() - 2 + i).map(y => (
+        <option key={y} value={y}>{y}</option>
+      ))}
+    </select>
+  </div>
+</div>
+
+<div className="col-md-6 mb-3">
+  <label className="lk-label">TANGGAL SELESAI</label>
+  <div style={{ display: 'flex', border: '1px solid #ced4da', borderRadius: '6px', overflow: 'hidden' }}>
+    <select className="lk-input" style={{ border: 'none', borderRight: '1px solid #ced4da', flex: 1, outline: 'none' }}
+      value={formData.tanggalSelesai.split('-')[2] || ''}
+      onChange={(e) => {
+        const [y, m] = formData.tanggalSelesai.split('-')
+        setFormData(prev => ({ ...prev, tanggalSelesai: `${y}-${m}-${e.target.value}` }))
+      }}>
+      {Array.from({length: 31}, (_, i) => i + 1).map(d => (
+        <option key={d} value={String(d).padStart(2,'0')}>{String(d).padStart(2,'0')}</option>
+      ))}
+    </select>
+    <select className="lk-input" style={{ border: 'none', borderRight: '1px solid #ced4da', flex: 1, outline: 'none' }}
+      value={formData.tanggalSelesai.split('-')[1] || ''}
+      onChange={(e) => {
+        const [y, , d] = formData.tanggalSelesai.split('-')
+        setFormData(prev => ({ ...prev, tanggalSelesai: `${y}-${e.target.value}-${d}` }))
+      }}>
+      {bulanIndo.map((bln, i) => (
+        <option key={i} value={String(i+1).padStart(2,'0')}>{bln}</option>
+      ))}
+    </select>
+    <select className="lk-input" style={{ border: 'none', flex: 1, outline: 'none' }}
+      value={formData.tanggalSelesai.split('-')[0] || ''}
+      onChange={(e) => {
+        const [, m, d] = formData.tanggalSelesai.split('-')
+        setFormData(prev => ({ ...prev, tanggalSelesai: `${e.target.value}-${m}-${d}` }))
+      }}>
+      {Array.from({length: 10}, (_, i) => new Date().getFullYear() - 2 + i).map(y => (
+        <option key={y} value={y}>{y}</option>
+      ))}
+    </select>
+  </div>
+</div>
+
                   <div className="col-12 mb-3">
                     <label className="lk-label">KETERANGAN</label>
                     <textarea name="keterangan" className="form-control lk-input" rows="3"

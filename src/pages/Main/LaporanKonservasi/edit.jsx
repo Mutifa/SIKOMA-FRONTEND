@@ -38,6 +38,16 @@ export default function LaporanEdit() {
   const [error, setError] = React.useState('')
   const [locationStatus, setLocationStatus] = React.useState('Belum diverifikasi')
 
+  // ── Helper format tanggal Indonesia ─────────────────────────────────────
+const bulanIndo = ["Januari","Februari","Maret","April","Mei","Juni",
+  "Juli","Agustus","September","Oktober","November","Desember"]
+
+const toIndonesiaFormat = (dateStr) => {
+  if (!dateStr) return ''
+  const [y, m, d] = dateStr.split('-')
+  return `${d}/${bulanIndo[parseInt(m) - 1]}/${y}`
+}
+
   // ── Fetch data laporan saat komponen mount ──────────────────────────────
   React.useEffect(() => {
     let mounted = true
@@ -247,28 +257,34 @@ export default function LaporanEdit() {
                   </div>
 
                   <div className="col-md-6 mb-3">
-                    <label className="lk-label">TANGGAL MULAI</label>
-                    <input
-                      type="date"
-                      name="tanggalMulai"
-                      className="form-control lk-input"
-                      value={formData.tanggalMulai}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
+  <label className="lk-label">TANGGAL MULAI</label>
+  <input
+    type="date"
+    name="tanggalMulai"
+    className="form-control lk-input"
+    value={formData.tanggalMulai}
+    onChange={handleChange}
+    required
+  />
+  <small style={{ color: '#2e7d52', fontWeight: 500 }}>
+    {toIndonesiaFormat(formData.tanggalMulai)}
+  </small>
+</div>
 
-                  <div className="col-md-6 mb-3">
-                    <label className="lk-label">TANGGAL SELESAI</label>
-                    <input
-                      type="date"
-                      name="tanggalSelesai"
-                      className="form-control lk-input"
-                      value={formData.tanggalSelesai}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
+<div className="col-md-6 mb-3">
+  <label className="lk-label">TANGGAL SELESAI</label>
+  <input
+    type="date"
+    name="tanggalSelesai"
+    className="form-control lk-input"
+    value={formData.tanggalSelesai}
+    onChange={handleChange}
+    required
+  />
+  <small style={{ color: '#2e7d52', fontWeight: 500 }}>
+    {toIndonesiaFormat(formData.tanggalSelesai)}
+  </small>
+</div>
 
                   <div className="col-12 mb-3">
                     <label className="lk-label">KETERANGAN</label>

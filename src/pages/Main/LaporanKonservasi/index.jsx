@@ -129,13 +129,14 @@ React.useEffect(() => {
     return map[status] ?? '-'
   }
 
-  const formatDate = (date) => {
-    if (!date) return 'N/A'
-    return new Date(date).toLocaleDateString('id-ID', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit', second: '2-digit'
-    })
-  }
+const bulanIndo = ["Januari","Februari","Maret","April","Mei","Juni",
+  "Juli","Agustus","September","Oktober","November","Desember"]
+
+const formatDate = (date) => {
+  if (!date) return 'N/A'
+  const d = new Date(date)
+  return `${String(d.getDate()).padStart(2,'0')}/${bulanIndo[d.getMonth()]}/${d.getFullYear()}`
+}
 
   const filteredLaporan = React.useMemo(() => {
     if (!isAdminPusat) return data.laporan

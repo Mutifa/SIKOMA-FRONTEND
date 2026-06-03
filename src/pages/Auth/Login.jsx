@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import Swal from 'sweetalert2' 
 
 import Template from '../../layouts/Template.jsx'
 import { useAuth } from '../../contexts/AuthContext.jsx'
@@ -32,6 +33,23 @@ export default function Login() {
 
     setError('')        // reset pesan error
     setLoading(true)    // aktifkan loading spinner
+
+
+    if (!email && !password) {
+  setLoading(false)
+  await Swal.fire({ icon: 'warning', title: 'Form Kosong', text: 'Email dan kata sandi wajib diisi.' })
+  return
+}
+if (!email) {
+  setLoading(false)
+  await Swal.fire({ icon: 'warning', title: 'Email Kosong', text: 'Silakan masukkan email Anda.' })
+  return
+}
+if (!password) {
+  setLoading(false)
+  await Swal.fire({ icon: 'warning', title: 'Kata Sandi Kosong', text: 'Silakan masukkan kata sandi Anda.' })
+  return
+}
 
     try {
 
@@ -107,7 +125,7 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="contoh@email.com"
-                  required
+                  
                 />
 
               </div>
@@ -128,7 +146,7 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    required
+                    
                   />
 
                   {/* Tombol toggle tampil/sembunyikan password */}

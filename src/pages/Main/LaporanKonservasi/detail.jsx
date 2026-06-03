@@ -89,15 +89,14 @@ export default function LaporanDetail() {
   }
 
   // ── Format tanggal → DD-MM-YYYY ─────────────────────────────────────────
-  const formatDate = (dateString) => {
-    if (!dateString) return null
-    const d = new Date(dateString)
-    return [
-      d.getDate().toString().padStart(2, '0'),
-      (d.getMonth() + 1).toString().padStart(2, '0'),
-      d.getFullYear()
-    ].join('-')
-  }
+ const bulanIndo = ["Januari","Februari","Maret","April","Mei","Juni",
+  "Juli","Agustus","September","Oktober","November","Desember"]
+
+const formatDate = (dateString) => {
+  if (!dateString) return null
+  const d = new Date(dateString)
+  return `${String(d.getDate()).padStart(2, '0')}/${bulanIndo[d.getMonth()]}/${d.getFullYear()}`
+}
 
   /**
    * renderMultipleFiles — Render daftar file (gambar / PDF / lainnya)

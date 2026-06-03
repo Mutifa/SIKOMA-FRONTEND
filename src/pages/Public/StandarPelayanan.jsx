@@ -3,6 +3,7 @@ import Template from '../../layouts/Template.jsx'
 import standarPelayananService from '../../services/standarPelayananServices.js'
 import { sanitizeHtml } from '../../utils/sanitizeHtml.js'
 import { successAlert, errorAlert } from '../../utils/alert.js'
+import Swal from 'sweetalert2'
 
 export default function StandarPelayanan() {
   const [website, setWebsite] = React.useState(null)
@@ -46,6 +47,30 @@ export default function StandarPelayanan() {
               <p className="text-start">UPT KPH Tasik Besar Serkap menerima pertanyaan Anda, saran dan kritik dalam meningkatkan pelayanan kami</p>
               <form onSubmit={(e) => {
                 e.preventDefault()
+
+                // ── Validasi SweetAlert ──────────────────────────────
+                if (!form.nama) {
+                  Swal.fire({ icon: 'warning', title: 'Nama Kosong', text: 'Silakan masukkan nama lengkap Anda.' })
+                  return
+                }
+                if (!form.email) {
+                  Swal.fire({ icon: 'warning', title: 'Email Kosong', text: 'Silakan masukkan alamat email Anda.' })
+                  return
+                }
+                if (!form.nomor_hp) {
+                  Swal.fire({ icon: 'warning', title: 'Nomor HP Kosong', text: 'Silakan masukkan nomor HP Anda.' })
+                  return
+                }
+                if (!form.judul) {
+                  Swal.fire({ icon: 'warning', title: 'Judul Kosong', text: 'Silakan masukkan judul pesan Anda.' })
+                  return
+                }
+                if (!form.pesan) {
+                  Swal.fire({ icon: 'warning', title: 'Pesan Kosong', text: 'Silakan masukkan pesan Anda.' })
+                  return
+                }
+                // ────────────────────────────────────────────────────
+
                 setLoading(true)
                 standarPelayananService.sendMessage(form)
                   .then(() => {
