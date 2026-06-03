@@ -80,7 +80,7 @@ export default function ProfilPerusahaan() {
             <div className="profil-field-label">Logo Website</div>
             <div className="profil-image-box">
            {formData?.logo
-    ? <img src={`${FILE_URL}/img/${formData.logo}`} alt="Logo" style={{ maxHeight: '80px' }} />
+    ? <img src={`${FILE_URL}/uploads/profil/${formData.logo}`} alt="Logo" style={{ maxHeight: '80px' }} />
     : 'Belum ada logo'}
 </div>
 </div>
@@ -88,7 +88,7 @@ export default function ProfilPerusahaan() {
     <div className="profil-field-label">Struktur Organisasi</div>
     <div className="profil-image-box">
     {formData?.struktur
-        ? <img src={`${FILE_URL}/img/${formData.struktur}`} alt="Struktur" style={{ maxHeight: '80px' }} />
+        ? <img src={`${FILE_URL}/uploads/profil/${formData.struktur}`} alt="Struktur" style={{ maxHeight: '80px' }} />
         : 'Belum ada gambar'}
             </div>
           </div>
