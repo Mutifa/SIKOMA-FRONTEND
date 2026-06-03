@@ -32,7 +32,7 @@ export default function ProfilPerusahaan() {
         setError(err.response?.data?.message || 'Gagal memuat data')
         setLoading(false)
       })
-  }, [location.state?.refresh])
+  }, [location.key])
 
   const stripHtml = (html) => html ? html.replace(/<[^>]*>/g, '') : ''
 
