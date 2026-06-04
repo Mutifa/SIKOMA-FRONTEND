@@ -49,10 +49,10 @@ export default function Home() {
   const formatText = (text) =>
     text
       ? text
-          .replace(/a\./g, '\na.')
-          .replace(/b\./g, '\nb.')
-          .replace(/c\./g, '\nc.')
-          .trim()
+        .replace(/a\./g, '\na.')
+        .replace(/b\./g, '\nb.')
+        .replace(/c\./g, '\nc.')
+        .trim()
       : ''
 
   return (
@@ -132,7 +132,10 @@ export default function Home() {
                 </div>
 
                 {/* mt-0 dan margin reset agar nempel */}
-                <div className="text-center mt-0 p-0 overflow-hidden m-0 g-0" style={{ overflowX: 'auto' }}>
+                <div
+                  className="text-center mt-0 p-0 overflow-hidden m-0 g-0"
+                  style={{ overflowX: 'auto' }}
+                >
                   <img
                     src={
                       website?.struktur
@@ -141,10 +144,11 @@ export default function Home() {
                     }
                     alt="Struktur Organisasi"
                     style={{
+                      maxWidth: '800px',
                       width: '100%',
                       height: 'auto',
-                      // borderRadius dan boxShadow dihapus agar full frame dan nempel
-                      display: 'block' // Hilangkan inline spacing di bawah gambar
+                      display: 'block',
+                      margin: '0 auto'
                     }}
                   />
                 </div>
