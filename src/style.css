@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
 /* ================= ROOT ================= */
 :root {
   --primary-green: #2f6f4f;
   --primary-green-dark: #255c42;
+  --font-main: 'Poppins', sans-serif;
 
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-main);
   line-height: 1.5;
   font-weight: 400;
 
@@ -17,6 +20,7 @@ body {
   padding: 0;
   min-width: 320px;
   overflow-x: hidden;
+  font-family: var(--font-main);
 }
 
 /* ================= LINK ================= */
@@ -673,5 +677,747 @@ a {
   .login-remember-row {
     justify-content: space-between;
     text-align: left;
+  }
+}
+
+/* ================= INFORMASI & EDUKASI PUBLIC ================= */
+.informasi-edukasi-page {
+  width: 100%;
+  padding: 96px 0 56px;
+  background: #f7faf8;
+}
+
+.informasi-edukasi-page .container,
+.public-content-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.public-section {
+  scroll-margin-top: 110px;
+  margin-bottom: 64px;
+}
+
+.public-section-header {
+  max-width: 820px;
+  margin: 0 auto 28px;
+  text-align: center;
+}
+
+.public-section-kicker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #e8f4ed;
+  color: var(--primary-green);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.public-section-title {
+  margin: 0;
+  color: var(--primary-green);
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.public-section-title::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 3px;
+  margin: 14px auto 0;
+  border-radius: 999px;
+  background: var(--primary-green);
+}
+
+.public-section-desc {
+  margin: 18px auto 0;
+  color: #4b5563;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.edukasi-grid,
+.tsl-grid,
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+.edukasi-card,
+.tsl-card,
+.summary-card {
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid #dce7df;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(18, 38, 28, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.edukasi-card:hover,
+.tsl-card:hover,
+.summary-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(47, 111, 79, 0.35);
+  box-shadow: 0 16px 36px rgba(18, 38, 28, 0.12);
+}
+
+.edukasi-card img,
+.tsl-card img,
+.summary-card img,
+.edukasi-card-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+.edukasi-card-body,
+.tsl-card-body,
+.summary-card-body,
+.edukasi-card .card-body,
+.tsl-card .card-body,
+.summary-card .card-body {
+  padding: 18px;
+}
+
+.edukasi-card-date,
+.edukasi-card .date,
+.summary-card-date {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: #1f5139;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.edukasi-card-title,
+.tsl-card-title,
+.summary-card-title,
+.edukasi-card h3,
+.edukasi-card h4,
+.edukasi-card .card-title,
+.tsl-card .card-title,
+.summary-card .card-title {
+  margin: 0 0 10px;
+  color: #0f172a;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.edukasi-card-text,
+.tsl-card-text,
+.summary-card-text,
+.edukasi-card p,
+.tsl-card p,
+.summary-card p {
+  margin: 0;
+  color: #243447;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.edukasi-card .btn,
+.tsl-card .btn,
+.summary-card .btn,
+.edukasi-card-button {
+  margin-top: 16px;
+  border-radius: 6px;
+  padding: 9px 14px;
+  background: var(--primary-green);
+  border-color: var(--primary-green);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.edukasi-card .btn:hover,
+.tsl-card .btn:hover,
+.summary-card .btn:hover,
+.edukasi-card-button:hover {
+  background: var(--primary-green-dark);
+  border-color: var(--primary-green-dark);
+}
+
+.tsl-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.tsl-card img {
+  height: 190px;
+}
+
+.tsl-badge,
+.summary-badge {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #eef7f1;
+  color: var(--primary-green);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.summary-card {
+  padding: 22px;
+}
+
+.summary-card-icon {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  background: #e8f4ed;
+  color: var(--primary-green);
+  font-weight: 800;
+}
+
+.summary-list {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.summary-list li {
+  padding-left: 18px;
+  position: relative;
+  color: #374151;
+  line-height: 1.65;
+}
+
+.summary-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary-green);
+}
+
+@media (max-width: 991px) {
+  .informasi-edukasi-page {
+    padding-top: 84px;
+  }
+
+  .edukasi-grid,
+  .tsl-grid,
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .edukasi-card img,
+  .tsl-card img,
+  .summary-card img,
+  .edukasi-card-image {
+    height: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .informasi-edukasi-page {
+    padding: 76px 0 36px;
+  }
+
+  .informasi-edukasi-page .container,
+  .public-content-container {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .public-section {
+    scroll-margin-top: 92px;
+    margin-bottom: 44px;
+  }
+
+  .public-section-header {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  .public-section-kicker {
+    font-size: 12px;
+  }
+
+  .public-section-title {
+    font-size: 25px;
+  }
+
+  .public-section-title::after {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .public-section-desc {
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .edukasi-grid,
+  .tsl-grid,
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edukasi-card img,
+  .tsl-card img,
+  .summary-card img,
+  .edukasi-card-image {
+    height: 185px;
+  }
+
+  .edukasi-card-body,
+  .tsl-card-body,
+  .summary-card-body,
+  .edukasi-card .card-body,
+  .tsl-card .card-body,
+  .summary-card .card-body {
+    padding: 16px;
+  }
+
+  .edukasi-card-title,
+  .tsl-card-title,
+  .summary-card-title,
+  .edukasi-card h3,
+  .edukasi-card h4,
+  .edukasi-card .card-title,
+  .tsl-card .card-title,
+  .summary-card .card-title {
+    font-size: 19px;
+  }
+}
+
+/* ================= INFORMASI & EDUKASI DETAIL ================= */
+.informasi-detail-page {
+  padding: 112px 0 64px;
+  background: #f7faf8;
+  min-height: calc(100vh - 120px);
+}
+
+.informasi-detail-article {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 34px;
+  border: 1px solid #dce7df;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(18, 38, 28, 0.06);
+}
+
+.informasi-detail-header {
+  max-width: 820px;
+  margin: 0 auto 26px;
+  text-align: center;
+}
+
+.informasi-detail-back {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 18px;
+  color: var(--primary-green);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.informasi-detail-back:hover {
+  color: var(--primary-green-dark);
+}
+
+.informasi-detail-title {
+  margin: 12px 0 12px;
+  color: #0f172a;
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.informasi-detail-meta {
+  margin: 0;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.informasi-detail-image {
+  width: 100%;
+  height: min(460px, 52vw);
+  min-height: 260px;
+  margin-bottom: 28px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+}
+
+.informasi-detail-content {
+  max-width: 820px;
+  margin: 0 auto;
+  color: #243447;
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+.informasi-detail-content ul,
+.informasi-detail-content ol {
+  padding-left: 22px;
+  margin-bottom: 0;
+}
+
+.informasi-detail-content li {
+  margin-bottom: 10px;
+}
+
+.informasi-detail-content p {
+  margin-bottom: 16px;
+}
+
+.informasi-detail-empty {
+  padding: 22px;
+  border-radius: 8px;
+  background: #f1f8f4;
+  color: #486050;
+  text-align: left;
+}
+
+.informasi-detail-empty h2 {
+  margin: 0 0 8px;
+  color: #0f172a;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.informasi-detail-empty p {
+  margin: 0;
+  line-height: 1.75;
+}
+
+.informasi-detail-insight {
+  max-width: 860px;
+  margin: 34px auto 0;
+  padding: 24px;
+  border-radius: 8px;
+  background: #f8fbf9;
+  border: 1px solid #e2ebe5;
+}
+
+.informasi-detail-insight h2 {
+  margin: 8px 0 16px;
+  color: #0f172a;
+  font-size: clamp(22px, 2.5vw, 30px);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.informasi-detail-insight ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.informasi-detail-insight li {
+  position: relative;
+  padding: 14px 14px 14px 38px;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #334155;
+  line-height: 1.65;
+  box-shadow: 0 6px 16px rgba(18, 38, 28, 0.05);
+}
+
+.informasi-detail-insight li::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 23px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary-green);
+}
+
+.informasi-detail-info {
+  max-width: 860px;
+  margin: 36px auto 0;
+  padding-top: 30px;
+  border-top: 1px solid #e2ebe5;
+}
+
+.informasi-detail-subheader {
+  margin-bottom: 20px;
+}
+
+.informasi-detail-subheader .public-section-title {
+  font-size: clamp(24px, 2vw, 30px);
+}
+
+.detail-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.detail-info-card {
+  padding: 18px;
+  border: 1px solid #e3ece6;
+  border-radius: 8px;
+  background: #fbfdfb;
+}
+
+.detail-info-card h3 {
+  margin: 0 0 8px;
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.detail-info-card p {
+  margin: 0;
+  color: #435466;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.informasi-detail-note {
+  max-width: 860px;
+  margin: 28px auto 0;
+  padding: 18px;
+  border: 1px solid #a7d7ba;
+  border-radius: 8px;
+  background: #e8f5ee;
+  color: #214a35;
+}
+
+.informasi-detail-note strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--primary-green-dark);
+}
+
+.informasi-detail-note p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.informasi-detail-state {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 28px;
+  border-radius: 8px;
+  background: #ffffff;
+  text-align: center;
+  color: #4b5563;
+  box-shadow: 0 10px 26px rgba(18, 38, 28, 0.06);
+}
+
+@media (max-width: 576px) {
+  .informasi-detail-page {
+    padding: 76px 0 36px;
+  }
+
+  .informasi-detail-article {
+    padding: 18px;
+  }
+
+  .informasi-detail-header {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  .informasi-detail-image {
+    height: 220px;
+    min-height: 220px;
+    margin-bottom: 20px;
+  }
+
+  .informasi-detail-content {
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  .detail-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .informasi-detail-insight {
+    padding: 18px;
+  }
+}
+
+/* Active markup hooks for InformasiEdukasi.jsx */
+.informasi-section {
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 56px 20px;
+}
+
+.informasi-section + .informasi-section {
+  padding-top: 24px;
+}
+
+.edukasi-card,
+.summary-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-card {
+  padding: 0;
+}
+
+.edukasi-card-body,
+.summary-card-body {
+  flex: 1 1 auto;
+}
+
+.edukasi-card-action {
+  padding: 0 18px 18px;
+  margin-top: auto;
+}
+
+.edukasi-card-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  text-decoration: none;
+}
+
+.truncate-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.truncate-4 p {
+  margin-bottom: 0;
+}
+
+@media (max-width: 576px) {
+  .informasi-section {
+    padding: 38px 14px;
+  }
+
+  .edukasi-card-action {
+    padding: 0 16px 16px;
+  }
+}
+
+/* ================= DETAIL INFORMASI SIMPLE ================= */
+.detail-page-simple {
+  padding: 96px 0 56px;
+  background: #f8faf8;
+  min-height: calc(100vh - 120px);
+}
+
+.detail-page-simple .container {
+  max-width: 920px;
+}
+
+.detail-back-simple {
+  display: inline-block;
+  margin-bottom: 18px;
+  color: var(--primary-green);
+  font-weight: 700;
+}
+
+.detail-back-simple:hover {
+  color: var(--primary-green-dark);
+}
+
+.detail-card-simple {
+  overflow: hidden;
+  border: 1px solid #e2e8e4;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(18, 38, 28, 0.06);
+}
+
+.detail-image-simple {
+  width: 100%;
+  height: 420px;
+  display: block;
+  object-fit: cover;
+}
+
+.detail-content-simple {
+  padding: 28px;
+}
+
+.detail-date-simple {
+  margin: 0 0 8px;
+  color: var(--primary-green);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.detail-content-simple h1 {
+  margin: 0;
+  color: #111827;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.detail-divider-simple {
+  width: 56px;
+  height: 3px;
+  margin: 16px 0 22px;
+  border-radius: 999px;
+  background: var(--primary-green);
+}
+
+.detail-description-simple {
+  color: #374151;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.detail-description-simple p {
+  margin-bottom: 14px;
+}
+
+.detail-description-simple ul,
+.detail-description-simple ol {
+  padding-left: 22px;
+}
+
+.detail-description-simple li {
+  margin-bottom: 8px;
+}
+
+@media (max-width: 576px) {
+  .detail-page-simple {
+    padding: 78px 0 36px;
+  }
+
+  .detail-image-simple {
+    height: 230px;
+  }
+
+  .detail-content-simple {
+    padding: 18px;
   }
 }

@@ -2,8 +2,17 @@ import React from 'react'
 import Template from '../../layouts/Template.jsx'
 import { assetUrl } from '../../lib/assets.js'
 import api from '../../lib/api.js'
-import { sanitizeHtml } from '../../utils/sanitizeHtml.js'
 import { Link } from 'react-router-dom'
+
+// Fungsi strip HTML lalu potong teks bersih
+function stripHtml(html = '') {
+  return html.replace(/<[^>]*>/g, '').replace(/&[^;]+;/g, ' ').trim()
+}
+
+function truncate(text, max = 110) {
+  if (text.length <= max) return text
+  return text.slice(0, max).replace(/\s+\S*$/, '') + '...'
+}
 
 export default function Program() {
   const [items, setItems] = React.useState([])
@@ -17,14 +26,14 @@ export default function Program() {
     api.get('/program')
       .then(res => {
         if (mounted) {
-          setItems(Array.isArray(res.data) ? res.data : res.data.data || [])   // ✅ FIX sesuai API
+          setItems(Array.isArray(res.data) ? res.data : res.data.data || [])
           setKategori(res.data.kategori || '')
           setLoading(false)
         }
       })
       .catch(err => {
         if (mounted) {
-          setError(err.response?.data?.message || 'Gagal memuat edukasi')
+          setError(err.response?.data?.message || 'Gagal memuat program')
           setLoading(false)
         }
       })
@@ -48,64 +57,77 @@ export default function Program() {
       <section className="container-xxl py-5">
         <div className="container">
 
-          <h2 className="mb-4 heading-green">Program UPT KPH Tasik Besar Serkap</h2>
+          <h2 className="mb-4 heading-green">
+            Berbagai kegiatan yang mendukung pengelolaan kawasan hutan.
+          </h2>
 
-          {loading && <p>Memuat...</p>}
+          {loading && <p>Memuat data program...</p>}
           {error && <div className="alert alert-danger">{error}</div>}
 
           <div className="row g-4">
-
             {items.length > 0 ? (
               items.map((p) => (
-                <div key={p.id} className="col-md-6 col-lg-4">
-
-                  <div className="card h-100 shadow-sm">
+                <div key={p.id} className="col-md-6 col-lg-4 d-flex">
+                  <div className="card w-100 shadow-sm" style={{ borderRadius: 12, overflow: 'hidden' }}>
 
                     {/* IMAGE */}
-                    {p.foto && (
-                      <img
-                        src={`https://codemy.my.id/uploads/program/${p.foto}`}
-                        alt={p.judul}
-                        className="card-img-top"
-                        style={{
-                          height: '200px',
-                          objectFit: 'cover',
-                          width: '100%'
-                        }}
-                      />
-                    )}
+                    <img
+                      src={`https://codemy.my.id/uploads/program/${p.foto}`}
+                      alt={p.judul}
+                      className="card-img-top"
+                      style={{ height: 200, objectFit: 'cover', width: '100%' }}
+                      onError={e => { e.currentTarget.style.display = 'none' }}
+                    />
 
                     {/* BODY */}
-                    <div className="card-body d-flex flex-column">
+                    <div className="card-body d-flex flex-column p-4">
 
-                      <h5 className="card-title">{p.judul}</h5>
-
-                      {/* DESKRIPSI (optional tampilkan) */}
-                      <div
-                        className="card-text mb-3"
-                        dangerouslySetInnerHTML={{
-                          __html: sanitizeHtml(`${p.deskripsi?.slice(0, 100) || ''}...`)
+                      {/* Judul — tinggi tetap 2 baris */}
+                      <h5
+                        className="card-title fw-bold mb-2"
+                        style={{
+                          minHeight: '3rem',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
                         }}
-                      />
+                      >
+                        {p.judul}
+                      </h5>
 
-                      {/* BUTTON */}
-                      <a
-                        href={`/program/${p.id}`}
-                        className="btn btn-success mt-auto"
+                      {/* Deskripsi bersih, potong di batas kata */}
+                      <p
+                        className="card-text text-muted mb-4"
+                        style={{
+                          fontSize: '0.9rem',
+                          lineHeight: '1.6',
+                          minHeight: '4rem',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {truncate(stripHtml(p.deskripsi), 110)}
+                      </p>
+
+                      {/* BUTTON selalu di bawah */}
+                      <Link
+                        to={`/program/${p.id}`}
+                        className="btn btn-success mt-auto w-100"
+                        style={{ borderRadius: 8 }}
                       >
                         Selengkapnya
-                      </a>
+                      </Link>
 
                     </div>
-
                   </div>
-
                 </div>
               ))
             ) : (
-              !loading && <p className="text-muted">Belum ada data edukasi</p>
+              !loading && <p className="text-muted">Belum ada data program.</p>
             )}
-
           </div>
 
         </div>

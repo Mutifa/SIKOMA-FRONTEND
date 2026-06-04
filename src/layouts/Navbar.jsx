@@ -1,16 +1,8 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext' 
 
 export default function Navbar({ website }) {
   const FILE_URL = 'https://codemy.my.id'
-  const { user, isAuthenticated, logout } = useAuth()
-
-  const getProfileLink = () => {
-    if (user?.role === 'admin_pusat') return '/admin_pusat/profile'
-    if (user?.role === 'admin_lapangan') return '/admin_lapangan/profile'
-    return '/dashboard'
-  }
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light sticky-top">
@@ -139,54 +131,16 @@ export default function Navbar({ website }) {
               </NavLink>
             </li>
 
-            {/* Kondisional Menu Login / Akun User */}
-            {!isAuthenticated ? (
-              <li className="nav-item ms-lg-2 mt-2 mt-lg-0">
-                <NavLink
-                  to="/login"
-                  className={({ isActive }) =>
-                    `nav-link nav-login ${isActive ? 'active' : ''}`
-                  }
-                >
-                  Login
-                </NavLink>
-              </li>
-            ) : (
-              <li className="nav-item dropdown ms-lg-2 mt-2 mt-lg-0">
-                <a
-                  className="nav-link dropdown-toggle nav-login text-center text-lg-start"
-                  href="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  style={{ minWidth: '120px' }}
-                >
-                  <i className="fas fa-user-circle me-1"></i> {user?.nama || user?.name || 'User'}
-                </a>
-                <ul className="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                  <li>
-                    <Link to="/dashboard" className="dropdown-item py-2">
-                      <i className="fas fa-tachometer-alt text-muted me-2"></i> Dashboard
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={getProfileLink()} className="dropdown-item py-2">
-                      <i className="fas fa-user-cog text-muted me-2"></i> Profil Saya
-                    </Link>
-                  </li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li>
-                    <button 
-                      onClick={logout} 
-                      className="dropdown-item text-danger py-2"
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <i className="fas fa-sign-out-alt me-2"></i> Keluar
-                    </button>
-                  </li>
-                </ul>
-              </li>
-            )}
+            <li className="nav-item ms-lg-2 mt-2 mt-lg-0">
+              <NavLink
+                to="/login"
+                className={({ isActive }) =>
+                  `nav-link nav-login ${isActive ? 'active' : ''}`
+                }
+              >
+                Login
+              </NavLink>
+            </li>
 
           </ul>
         </div>

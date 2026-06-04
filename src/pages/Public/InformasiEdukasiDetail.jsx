@@ -1,151 +1,148 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import Template from '../../layouts/Template.jsx'
 import informasiEdukasiService from '../../services/informasiEdukasiService.js'
-import { satwaInfo } from '../../data/satwaInfo.js'
+import { assetUrl } from '../../lib/assets.js'
+import { sanitizeHtml } from '../../utils/sanitizeHtml.js'
 
 export default function InformasiDetail() {
-    const { id } = useParams()
-    const info = satwaInfo[id]
+  const { id } = useParams()
+  const navigate = useNavigate()
 
-    const [data, setData] = React.useState(null)
-    const [loading, setLoading] = React.useState(true)
-    const [error, setError] = React.useState('')
+  const [data, setData] = React.useState(null)
+  const [loading, setLoading] = React.useState(true)
+  const [error, setError] = React.useState('')
 
-    React.useEffect(() => {
-        let mounted = true
-
-informasiEdukasiService.getById(id)   // ← ganti getAll() dengan getById(id)
-        .then(res => {
-            if (mounted) {
-                const found = res.data    // ← langsung pakai, tidak perlu find()
-                if (!found) {
-                    setError('Data tidak ditemukan')
-                } else {
-                    setData(found)
-                }
-                setLoading(false)
-            }
-        })
-        .catch(err => {
-            if (mounted) {
-                setError(err.message)
-                setLoading(false)
-            }
-        })
-
+  React.useEffect(() => {
+    let mounted = true
+  informasiEdukasiService.getById(id)
+  .then(res => {
+    if (!mounted) return
+    const result = res.data.data || res.data
+    if (!result) setError('Data tidak ditemukan')
+    else setData(result)
+    setLoading(false)
+  })
+      .catch(err => {
+        if (!mounted) return
+        setError(err.message)
+        setLoading(false)
+      })
     return () => { mounted = false }
-}, [id])
+  }, [id])
 
-    const formatDeskripsi = (text) => {
-        if (!text) return null
-        return text.split('\n').map((item, index) => {
-            if (!item.trim()) return null
-            return <li key={index}>{item.replace('• ', '')}</li>
-        })
-    }
+  const tanggal = data?.created_at
+    ? new Date(data.created_at).toLocaleDateString('id-ID', {
+        day: 'numeric', month: 'long', year: 'numeric'
+      })
+    : null
 
-    return (
-        <Template title="Detail Informasi" active="informasi">
-            <div className="container my-5">
+  return (
+    <Template title={data?.judul || 'Detail Informasi'} active="informasi">
 
-                {loading && <p>Memuat...</p>}
+      {/* Loading */}
+      {loading && (
+        <div className="container my-5 text-center">
+          <p className="text-muted">Memuat data...</p>
+        </div>
+      )}
 
-                {error && <div className="alert alert-danger">{error}</div>}
+      {/* Error */}
+      {error && (
+        <div className="container my-5">
+          <div className="alert alert-danger">{error}</div>
+        </div>
+      )}
 
-                {!loading && !error && data && (
-                    <div className="row align-items-start">
-
-                        <div className="col-lg-6 mb-4">
-                            {data?.foto && (
-                                <img
-                                    src={`https://codemy.my.id/uploads/edukasi/${data.foto}`}
-                                    alt={data.judul}
-                                    style={{
-                                        width: '100%',
-                                        height: 400,
-                                        objectFit: 'cover',
-                                        borderRadius: 12,
-                                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                                    }}
-                                />
-                            )}
-                        </div>
-
-                        <div className="col-lg-6 mb-4">
-                            <h1 style={{ fontWeight: 'bold' }}>{data?.judul}</h1>
-
-                            <div style={{
-                                width: 60, height: 4,
-                                backgroundColor: '#2e7d32',
-                                marginBottom: 15, borderRadius: 2
-                            }} />
-
-                            <div className="deskripsi-content">
-                                {data?.deskripsi ? (
-                                    <ul>{formatDeskripsi(data.deskripsi)}</ul>
-                                ) : (
-                                    <p>{data?.lokasi || 'Tidak ada deskripsi'}</p>
-                                )}
-                            </div>
-
-                            <div className="mt-4">
-                                <div className="row g-3">
-
-                                    <div className="col-md-6">
-                                        <div className="card border-0 shadow-sm p-3">
-                                            <h6>Nama Ilmiah</h6>
-                                            <p>{info?.namaIlmiah || '-'}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-6">
-                                        <div className="card border-0 shadow-sm p-3">
-                                            <h6>Status Konservasi</h6>
-                                            <p>{info?.status || '-'}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-6">
-                                        <div className="card border-0 shadow-sm p-3">
-                                            <h6>Habitat</h6>
-                                            <p>{info?.habitat || '-'}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-6">
-                                        <div className="card border-0 shadow-sm p-3">
-                                            <h6>Makanan</h6>
-                                            <p>{info?.makanan || '-'}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-6">
-                                        <div className="card border-0 shadow-sm p-3">
-                                            <h6>Ancaman</h6>
-                                            <p>{info?.ancaman || '-'}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-6">
-                                        <div className="card border-0 shadow-sm p-3">
-                                            <h6>Persebaran</h6>
-                                            <p>{info?.persebaran || '-'}</p>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div className="alert alert-success mt-4">
-                                    🌿 {info?.edukasi}
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                )}
-
+      {!loading && !error && data && (
+        <>
+          {/* Hero Image */}
+          {data.foto && (
+            <div style={{ width: '100%', maxHeight: 460, overflow: 'hidden' }}>
+              <img
+                src={assetUrl(`/uploads/edukasi/${data.foto}`)}
+                alt={data.judul}
+                style={{ width: '100%', height: 460, objectFit: 'cover' }}
+              />
             </div>
-        </Template>
-    )
+          )}
+
+          {/* Artikel */}
+          <section className="container my-5" style={{ maxWidth: 820 }}>
+
+            {/* Tanggal */}
+            {tanggal && (
+              <p style={{ color: '#6c757d', fontSize: '0.875rem', marginBottom: 8 }}>
+                📅 {tanggal}
+              </p>
+            )}
+
+            {/* Judul */}
+            <h1 className="fw-bold mb-3" style={{ lineHeight: 1.4 }}>
+              {data.judul}
+            </h1>
+
+            {/* Garis aksen hijau */}
+            <div style={{
+              width: 60, height: 3,
+              backgroundColor: '#2d7a3a',
+              borderRadius: 4,
+              marginBottom: 28
+            }} />
+
+            {/* Deskripsi */}
+            {data.deskripsi ? (
+              <div
+                style={{
+                  textAlign: 'justify',
+                  lineHeight: '1.85',
+                  fontSize: '1rem',
+                  color: '#333'
+                }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.deskripsi) }}
+              />
+            ) : (
+              <p className="text-muted fst-italic">Tidak ada deskripsi untuk artikel ini.</p>
+            )}
+
+          </section>
+        </>
+      )}
+
+      {/* Tombol Kembali Floating */}
+      <button
+        onClick={() => navigate(-1)}
+        style={{
+          position: 'fixed',
+          bottom: 32,
+          left: 32,
+          zIndex: 1000,
+          backgroundColor: '#2d7a3a',
+          color: '#fff',
+          border: 'none',
+          borderRadius: 50,
+          padding: '12px 24px',
+          fontSize: '15px',
+          fontWeight: 600,
+          cursor: 'pointer',
+          boxShadow: '0 4px 14px rgba(0,0,0,0.25)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          transition: 'background-color 0.2s ease, transform 0.2s ease',
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.backgroundColor = '#245f2d'
+          e.currentTarget.style.transform = 'scale(1.05)'
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.backgroundColor = '#2d7a3a'
+          e.currentTarget.style.transform = 'scale(1)'
+        }}
+      >
+        ← Kembali
+      </button>
+
+    </Template>
+  )
 }
