@@ -15,14 +15,14 @@ export default function InformasiDetail() {
 
   React.useEffect(() => {
     let mounted = true
-  informasiEdukasiService.getById(id)
-  .then(res => {
-    if (!mounted) return
-    const result = res.data.data || res.data
-    if (!result) setError('Data tidak ditemukan')
-    else setData(result)
-    setLoading(false)
-  })
+    informasiEdukasiService.getById(id)
+      .then(res => {
+        if (!mounted) return
+        const result = res.data.data || res.data
+        if (!result) setError('Data tidak ditemukan')
+        else setData(result)
+        setLoading(false)
+      })
       .catch(err => {
         if (!mounted) return
         setError(err.message)
@@ -37,17 +37,18 @@ export default function InformasiDetail() {
       })
     : null
 
+  // Cek apakah kategori Executive Summary
+  const isExecutive = data?.kategori === 'Edukasi' || data?.kategori === 'Executive'
+
   return (
     <Template title={data?.judul || 'Detail Informasi'} active="informasi">
 
-      {/* Loading */}
       {loading && (
         <div className="container my-5 text-center">
           <p className="text-muted">Memuat data...</p>
         </div>
       )}
 
-      {/* Error */}
       {error && (
         <div className="container my-5">
           <div className="alert alert-danger">{error}</div>
@@ -56,56 +57,95 @@ export default function InformasiDetail() {
 
       {!loading && !error && data && (
         <>
-          {/* Hero Image */}
-          {data.foto && (
-            <div style={{ width: '100%', maxHeight: 460, overflow: 'hidden' }}>
-              <img
-                src={assetUrl(`/uploads/edukasi/${data.foto}`)}
-                alt={data.judul}
-                style={{ width: '100%', height: 460, objectFit: 'cover' }}
-              />
-            </div>
+          {isExecutive ? (
+            /* ── LAYOUT EXECUTIVE SUMMARY: foto kiri + konten kanan ── */
+            <section className="container my-5">
+              <div className="row g-4 align-items-start">
+
+                {/* Kolom Foto */}
+                {data.foto && (
+                  <div className="col-lg-5 col-md-12 text-center">
+                    <img
+                      src={assetUrl(`/uploads/edukasi/${data.foto}`)}
+                      alt={data.judul}
+                      style={{
+                        width: '100%',
+                        maxHeight: 620,
+                        objectFit: 'contain',
+                        borderRadius: 10,
+                        background: '#f8f9fa',
+                        padding: 8,
+                      }}
+                    />
+                  </div>
+                )}
+
+                {/* Kolom Konten */}
+                <div className={data.foto ? 'col-lg-7 col-md-12' : 'col-12'}>
+                  {tanggal && (
+                    <p style={{ color: '#6c757d', fontSize: '0.875rem', marginBottom: 8 }}>
+                      📅 {tanggal}
+                    </p>
+                  )}
+                  <h1 className="fw-bold mb-3" style={{ lineHeight: 1.4 }}>
+                    {data.judul}
+                  </h1>
+                  <div style={{
+                    width: 60, height: 3,
+                    backgroundColor: '#2d7a3a',
+                    borderRadius: 4,
+                    marginBottom: 28
+                  }} />
+                  {data.deskripsi ? (
+                    <div
+                      style={{ textAlign: 'justify', lineHeight: '1.85', fontSize: '1rem', color: '#333' }}
+                      dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.deskripsi) }}
+                    />
+                  ) : (
+                    <p className="text-muted fst-italic">Tidak ada deskripsi untuk artikel ini.</p>
+                  )}
+                </div>
+
+              </div>
+            </section>
+          ) : (
+            /* ── LAYOUT INFORMASI / SATWA: hero image atas + konten bawah ── */
+            <>
+              {data.foto && (
+                <div style={{ width: '100%', background: '#f8f9fa', textAlign: 'center', padding: '24px 0' }}>
+                  <img
+                    src={assetUrl(`/uploads/edukasi/${data.foto}`)}
+                    alt={data.judul}
+                    style={{ maxWidth: '100%', maxHeight: 600, objectFit: 'contain', borderRadius: 8 }}
+                  />
+                </div>
+              )}
+              <section className="container my-5" style={{ maxWidth: 820 }}>
+                {tanggal && (
+                  <p style={{ color: '#6c757d', fontSize: '0.875rem', marginBottom: 8 }}>
+                    📅 {tanggal}
+                  </p>
+                )}
+                <h1 className="fw-bold mb-3" style={{ lineHeight: 1.4 }}>
+                  {data.judul}
+                </h1>
+                <div style={{
+                  width: 60, height: 3,
+                  backgroundColor: '#2d7a3a',
+                  borderRadius: 4,
+                  marginBottom: 28
+                }} />
+                {data.deskripsi ? (
+                  <div
+                    style={{ textAlign: 'justify', lineHeight: '1.85', fontSize: '1rem', color: '#333' }}
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.deskripsi) }}
+                  />
+                ) : (
+                  <p className="text-muted fst-italic">Tidak ada deskripsi untuk artikel ini.</p>
+                )}
+              </section>
+            </>
           )}
-
-          {/* Artikel */}
-          <section className="container my-5" style={{ maxWidth: 820 }}>
-
-            {/* Tanggal */}
-            {tanggal && (
-              <p style={{ color: '#6c757d', fontSize: '0.875rem', marginBottom: 8 }}>
-                📅 {tanggal}
-              </p>
-            )}
-
-            {/* Judul */}
-            <h1 className="fw-bold mb-3" style={{ lineHeight: 1.4 }}>
-              {data.judul}
-            </h1>
-
-            {/* Garis aksen hijau */}
-            <div style={{
-              width: 60, height: 3,
-              backgroundColor: '#2d7a3a',
-              borderRadius: 4,
-              marginBottom: 28
-            }} />
-
-            {/* Deskripsi */}
-            {data.deskripsi ? (
-              <div
-                style={{
-                  textAlign: 'justify',
-                  lineHeight: '1.85',
-                  fontSize: '1rem',
-                  color: '#333'
-                }}
-                dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.deskripsi) }}
-              />
-            ) : (
-              <p className="text-muted fst-italic">Tidak ada deskripsi untuk artikel ini.</p>
-            )}
-
-          </section>
         </>
       )}
 

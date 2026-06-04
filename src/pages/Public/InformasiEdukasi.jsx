@@ -45,8 +45,6 @@ export default function Informasi() {
       {/* KAWASAN KONSERVASI */}
       <section id="kawasan-konservasi" className="container-fluid py-3 px-4 px-lg-5">
         <div className="row g-4 align-items-start">
-
-          {/* Gambar Peta */}
           <div className="col-lg-7 col-md-12">
             {loading ? (
               <div style={{ height: 340, background: '#e9ecef', borderRadius: 12 }} />
@@ -62,17 +60,14 @@ export default function Informasi() {
             )}
           </div>
 
-          {/* Info Kawasan */}
           <div className="col-lg-5 col-md-12">
             <h4 className="fw-bold mb-3">Kawasan Konservasi</h4>
-
             {loading ? <p>Memuat...</p> : (
               <div
                 style={{ textAlign: 'justify', lineHeight: '1.8', color: '#444', fontSize: '0.95rem' }}
                 dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.kawasan?.deskripsi || '') }}
               />
             )}
-
             <h5 className="fw-bold mt-4 mb-2">Data Statistik</h5>
             <div className="row g-2">
               <div className="col-md-4 d-flex">
@@ -94,17 +89,15 @@ export default function Informasi() {
                 </div>
               </div>
             </div>
-
             <div className="mt-3">
               <h5 className="fw-bold">Status Kawasan</h5>
               <p className="mb-0">{data.kawasan?.status || '-'}</p>
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* TUMBUHAN & SATWA DILINDUNGI */}
+      {/* TUMBUHAN & SATWA DILINDUNGI — grid card */}
       <section id="dilindungi" className="public-section informasi-section">
         <div className="public-section-header">
           <h2 className="public-section-title animate-title">Tumbuhan dan Satwa Dilindungi</h2>
@@ -150,7 +143,7 @@ export default function Informasi() {
         </div>
       </section>
 
-      {/* EXECUTIVE SUMMARY */}
+      {/* EXECUTIVE SUMMARY — layout horizontal artikel berita */}
       <section id="executive-summary" className="public-section informasi-section">
         <div className="public-section-header">
           <h2 className="public-section-title animate-title">Executive Summary</h2>
@@ -165,31 +158,88 @@ export default function Informasi() {
           <p className="text-center text-muted fst-italic">Belum ada data.</p>
         )}
 
-        <div className="summary-grid">
-          {data.edukasi?.map((p) => (
-            <article key={p.id} className="summary-card wow fadeInUp" data-wow-delay="0.1s">
-              <img
-                loading="lazy"
-                src={assetUrl(`/uploads/edukasi/${p.foto}`)}
-                alt={p.judul}
-                className="edukasi-card-image"
-                onError={e => { e.currentTarget.style.display = 'none' }}
-              />
-              <div className="summary-card-body">
-                <span className="summary-badge">
-                  {new Date(p.created_at).toLocaleDateString('id-ID', {
+        <div className="container" style={{ maxWidth: 900 }}>
+          {data.edukasi?.map((p, index) => (
+            <article
+              key={p.id}
+              className="wow fadeInUp"
+              data-wow-delay="0.1s"
+              style={{
+                display: 'flex',
+                flexDirection: index % 2 === 0 ? 'row' : 'row-reverse',
+                gap: 0,
+                marginBottom: 28,
+                background: '#fff',
+                borderRadius: 12,
+                overflow: 'hidden',
+                boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                alignItems: 'stretch',
+              }}
+            >
+              {/* Gambar */}
+              <div style={{ flexShrink: 0, width: 260 }}>
+                <img
+                  loading="lazy"
+                  src={assetUrl(`/uploads/edukasi/${p.foto}`)}
+                  alt={p.judul}
+                  style={{ width: '100%', height: '100%', minHeight: 200, objectFit: 'cover', display: 'block' }}
+                  onError={e => { e.currentTarget.style.display = 'none' }}
+                />
+              </div>
+
+              {/* Konten */}
+              <div style={{
+                flex: 1,
+                padding: '24px 28px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                borderLeft: index % 2 === 0 ? '4px solid #2d7a3a' : 'none',
+                borderRight: index % 2 !== 0 ? '4px solid #2d7a3a' : 'none',
+              }}>
+                <span style={{
+                  fontSize: '0.8rem',
+                  color: '#2d7a3a',
+                  fontWeight: 600,
+                  marginBottom: 8,
+                  display: 'block'
+                }}>
+                  📅 {new Date(p.created_at).toLocaleDateString('id-ID', {
                     day: 'numeric', month: 'long', year: 'numeric'
                   })}
                 </span>
-                <h3 className="summary-card-title">{p.judul}</h3>
-                <p className="summary-card-text">
-                  {truncate(stripHtml(p.deskripsi), 110)}
+
+                <h3 style={{ fontWeight: 700, fontSize: '1.15rem', marginBottom: 10, color: '#1a1a1a' }}>
+                  {p.judul}
+                </h3>
+
+                <p style={{
+                  color: '#555',
+                  fontSize: '0.92rem',
+                  lineHeight: '1.7',
+                  marginBottom: 20,
+                  flex: 1,
+                }}>
+                  {truncate(stripHtml(p.deskripsi), 160)}
                 </p>
-              </div>
-              <div className="edukasi-card-action">
-                <Link to={`/informasi-edukasi/${p.id}`} className="edukasi-card-button">
-                  Selengkapnya
-                </Link>
+
+                <div>
+                  <Link
+                    to={`/informasi-edukasi/${p.id}`}
+                    style={{
+                      display: 'inline-block',
+                      backgroundColor: '#2d7a3a',
+                      color: '#fff',
+                      padding: '8px 20px',
+                      borderRadius: 8,
+                      fontSize: '0.875rem',
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                    }}
+                  >
+                    Selengkapnya →
+                  </Link>
+                </div>
               </div>
             </article>
           ))}
@@ -208,11 +258,7 @@ export default function Informasi() {
         )}
 
         {data.peraturan?.map((p) => (
-          <div
-            key={p.id}
-            className="border rounded p-4 mb-3 shadow-sm"
-            style={{ borderRadius: 10 }}
-          >
+          <div key={p.id} className="border rounded p-4 mb-3 shadow-sm" style={{ borderRadius: 10 }}>
             <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
               <div>
                 <h5 className="fw-bold mb-1">{p.nama}</h5>

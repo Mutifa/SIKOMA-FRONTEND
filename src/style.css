@@ -1421,3 +1421,19 @@ a {
     padding: 18px;
   }
 }
+
+/* Executive Summary responsive */
+@media (max-width: 640px) {
+  #executive-summary article {
+    flex-direction: column !important;
+  }
+  #executive-summary article > div:first-child {
+    width: 100% !important;
+    height: 200px;
+  }
+  #executive-summary article > div:last-child {
+    border-left: none !important;
+    border-right: none !important;
+    border-top: 4px solid #2d7a3a !important;
+  }
+}
