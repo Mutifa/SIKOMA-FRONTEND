@@ -14,6 +14,9 @@ export default function Peraturan() {
   const [data, setData] = React.useState([])
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(true)
+  const [searchTerm, setSearchTerm] = React.useState('')
+  const [currentPage, setCurrentPage] = React.useState(1)
+  const [itemsPerPage, setItemsPerPage] = React.useState(10)
 
 
 
@@ -52,6 +55,34 @@ export default function Peraturan() {
     }
   }
 
+  const filteredData = data.filter(item => {
+    const keyword = searchTerm.toLowerCase()
+    const tahunNomor = `${item.tahun || ''} ${item.nomor || ''}`
+
+    return (
+      (item.nama || '').toLowerCase().includes(keyword) ||
+      (item.deskripsi || '').toLowerCase().includes(keyword) ||
+      tahunNomor.toLowerCase().includes(keyword)
+    )
+  })
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentData = filteredData.slice(startIndex, endIndex)
+
+  const handlePageChange = (page) => setCurrentPage(page)
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(parseInt(e.target.value))
+    setCurrentPage(1)
+  }
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value)
+    setCurrentPage(1)
+  }
+
   if (loading) {
     return (
       <DashboardLayout title="Peraturan">
@@ -82,6 +113,42 @@ export default function Peraturan() {
             </Link>
           </div>
 
+          <div className="white-box">
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <div className="d-flex align-items-center">
+                  <label className="me-2">Tampilkan</label>
+                  <select
+                    className="form-select form-select-sm me-2"
+                    style={{ width: 'auto' }}
+                    value={itemsPerPage}
+                    onChange={handleItemsPerPageChange}
+                  >
+                    <option value={10}>10</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
+                  </select>
+                  <span>entri</span>
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <div className="d-flex justify-content-end align-items-center">
+                  <label className="me-2">Cari:</label>
+                  <input
+                    type="text"
+                    className="form-control form-control-sm"
+                    style={{ width: '200px' }}
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    placeholder="Search..."
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Table */}
           <div className="white-box p-0 overflow-hidden">
             <div className="table-responsive">
@@ -97,21 +164,23 @@ export default function Peraturan() {
                 </thead>
                 <tbody>
 
-                  {data.length === 0 ? (
+                  {currentData.length === 0 ? (
                     <tr>
                       <td colSpan="5">
                         <div className="empty-state">
                           <i className="fas fa-gavel"></i>
                           <p className="empty-state__title">Belum ada peraturan</p>
-                          <p className="empty-state__text">Dokumen peraturan akan muncul setelah ditambahkan.</p>
+                          <p className="empty-state__text">
+                            {searchTerm ? 'Tidak ada peraturan yang sesuai dengan pencarian.' : 'Dokumen peraturan akan muncul setelah ditambahkan.'}
+                          </p>
                         </div>
                       </td>
                     </tr>
                   ) : (
-                    data.map((item, index) => (
+                    currentData.map((item, index) => (
                       <tr key={item.id} className="align-middle">
 
-                        <td className="ps-3">{index + 1}</td>
+                        <td className="ps-3">{startIndex + index + 1}</td>
                         <td>{item.nama}</td>
                         <td>{item.deskripsi || '-'}</td>
 
@@ -166,6 +235,42 @@ export default function Peraturan() {
               </table>
             </div>
           </div>
+
+          {filteredData.length > 0 && (
+            <div className="row mt-3">
+              <div className="col-md-6">
+                <p className="text-muted">
+                  Menampilkan {startIndex + 1} sampai {Math.min(endIndex, filteredData.length)} dari {filteredData.length} entri
+                </p>
+              </div>
+
+              <div className="col-md-6">
+                <nav>
+                  <ul className="pagination justify-content-end">
+                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                      <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
+                        Sebelumnya
+                      </button>
+                    </li>
+
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                      <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+                        <button className="page-link" onClick={() => handlePageChange(page)}>
+                          {page}
+                        </button>
+                      </li>
+                    ))}
+
+                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                      <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+                        Berikutnya
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          )}
 
         </div>
       </div>
