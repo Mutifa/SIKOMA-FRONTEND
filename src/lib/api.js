@@ -27,7 +27,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    console.error('API ERROR:', err.response?.data || err.message)
+    // Suppress 404 - endpoint belum tersedia di backend
+    if (err.response?.status !== 404) {
+      console.error('API ERROR:', err.response?.data || err.message)
+    }
     return Promise.reject(err)
   }
 )

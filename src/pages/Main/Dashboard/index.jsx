@@ -9,9 +9,11 @@ import {
   ArcElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler   
 } from 'chart.js'
 import { Bar, Pie, Line } from 'react-chartjs-2'
+import { useNavigate } from 'react-router-dom'
 import { dashboardService } from '../../../services/dashboardService.js'
 import DashboardLayout from '../../../layouts/DashboardLayout'
 import { useAuth } from '../../../contexts/AuthContext'
@@ -29,7 +31,8 @@ ChartJS.register(
   ArcElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 )
 
 // ─────────────────────────────────────────────
@@ -39,13 +42,15 @@ ChartJS.register(
 // - Admin Lapangan: summary card, pie chart status, line chart
 // ─────────────────────────────────────────────
 export default function AdminPusatDashboard() {
+  const navigate = useNavigate()
 
   // State data dashboard dari API
   const [data, setData] = React.useState({
-    customer: 0,
+    masyarakat: 0,
     laporanTerakhir: 0,
     laporanDisetujui: 0,
-    laporanTahunan: {},
+    feedback: 0,
+    laporanTahunan: [],
     daerah: []
   })
 
@@ -54,13 +59,17 @@ export default function AdminPusatDashboard() {
   const [loading, setLoading] = React.useState(true)
 
   // Ringkasan data yang digunakan di summary card
-const summary = {
-  total_laporan: data.jumlahLaporan,
-  disetujui: data.diterima
+ const summary = {
+  total_laporan: data.jumlahLaporan || data.laporanTerakhir,
+  disetujui: data.diterima || data.laporanDisetujui
 }
 
   // Data chart tahunan dan daftar daerah (dengan fallback ke default kosong)
-const daerahList = data.daerah || []
+  const daerahList = data.daerah || []
+
+  const goToLaporanKonservasi = () => {
+    navigate('/laporan-konservasi')
+  }
 
   // Ambil data user dari context dan tentukan role-nya
   const { user } = useAuth()
@@ -78,42 +87,44 @@ const daerahList = data.daerah || []
   // Menggunakan flag `mounted` untuk mencegah setState setelah unmount
   // ─────────────────────────────────────────────
 
-React.useEffect(() => {
-  let mounted = true
+  React.useEffect(() => {
+    let mounted = true
 
-  const fetchData = isAdminPusat
-    ? dashboardService.getAdminPusat()
-    : dashboardService.getAdminLapangan()
+    const fetchData = isAdminPusat
+      ? dashboardService.getAdminPusat()
+      : dashboardService.getAdminLapangan()
 
-  fetchData
-    .then(res => {
-      if (mounted) {
-        const result = res.data.data || res.data
-        if (result.daerah && !Array.isArray(result.daerah)) {
-          result.daerah = [result.daerah]
+    fetchData
+      .then(res => {
+        if (mounted) {
+          const result = res.data.data || res.data
+          if (result.daerah && !Array.isArray(result.daerah)) {
+            result.daerah = [result.daerah]
+          }
+          setData(result)
+          setLoading(false)
         }
-        setData(result)
-        setLoading(false)
-      }
-    })
-    .catch(err => {
-      if (mounted) {
-        setError(err.response?.data?.message || 'Gagal memuat data')
-        setLoading(false)
-      }
-    })
+      })
+      .catch(err => {
+        if (mounted) {
+          setError(err.response?.data?.message || 'Gagal memuat data')
+          setLoading(false)
+        }
+      })
 
-  return () => { mounted = false }
-}, [isAdminPusat])
+    return () => { mounted = false }
+  }, [isAdminPusat])
 
   // ─────────────────────────────────────────────
   // Persiapan data chart laporan tahunan
   // ─────────────────────────────────────────────
-// ✅ GANTI JADI
-const chartDataFix = Array.isArray(data.laporanBulanan)
+  // ✅ GANTI JADI
+  const chartDataFix = Array.isArray(data.laporanBulanan)
   ? data.laporanBulanan
-  : Array(12).fill(0)
-  
+  : Array.isArray(data.laporanTahunan)
+    ? data.laporanTahunan
+    : Array(12).fill(0)
+
 
   // Konfigurasi data Bar chart untuk Admin Pusat
   const tahunanChartData = {
@@ -150,7 +161,7 @@ const chartDataFix = Array.isArray(data.laporanBulanan)
       {/* Pesan error (muncul jika fetch gagal) */}
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <div className="row">
+      <div className="dashboard-content">
 
         {/* ══════════════════════════════════════
             DASHBOARD ADMIN PUSAT
@@ -160,7 +171,7 @@ const chartDataFix = Array.isArray(data.laporanBulanan)
           <>
 
             {/* ── SUMMARY CARDS ── */}
-            <div className="row">
+            <div className="row g-4 align-items-stretch dashboard-lapangan-summary">
 
               {/* Card: Total Laporan (30 Hari Terakhir) */}
               <div className="col-lg-4 col-md-6 col-sm-12">
@@ -171,7 +182,7 @@ const chartDataFix = Array.isArray(data.laporanBulanan)
 
                     <div>
                       <h5 className="mb-1 text-muted">
-                        Pelaporan Konservasi
+                        Laporan Masuk
                       </h5>
                     </div>
 
@@ -183,9 +194,7 @@ const chartDataFix = Array.isArray(data.laporanBulanan)
 
                   <div className="mt-3">
 
-                    <h2 className="fw-bold">
-                      {data.feedback || 0}
-                    </h2>
+                    <h2 className="fw-bold">{data.laporanTerakhir || 0}</h2>
 
                     <small className="text-muted">
                       30 Hari Terakhir
@@ -206,7 +215,7 @@ const chartDataFix = Array.isArray(data.laporanBulanan)
 
                     <div>
                       <h5 className="mb-1 text-muted">
-                        Pelaporan Konservasi
+                        Laporan Disetujui
                       </h5>
                     </div>
 
@@ -254,7 +263,7 @@ const chartDataFix = Array.isArray(data.laporanBulanan)
                   <div className="mt-3">
 
                     <h2 className="fw-bold">
-                      0
+                      {data.feedback || 0}
                     </h2>
 
                     <small className="text-muted">
@@ -381,63 +390,49 @@ const chartDataFix = Array.isArray(data.laporanBulanan)
             <div className="row">
 
               {/* Card: Total Laporan Kegiatan */}
-              <div className="col-lg-6 col-md-6 col-sm-12">
+              <div className="col-lg-6 col-md-6 col-sm-12 d-flex">
 
                 <div
-                  className="white-box p-4"
-                  style={{
-                    borderRadius: '18px',
-                    minHeight: '170px'
+                  className="white-box lapangan-dashboard-card lapangan-stat-card dashboard-action-card w-100"
+                  onClick={goToLaporanKonservasi}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault()
+                      goToLaporanKonservasi()
+                    }
                   }}
+                  role="button"
+                  tabIndex={0}
                 >
 
-                  <div className="d-flex justify-content-between align-items-start">
+                  <div className="lapangan-card-header">
 
                     <div>
                       <h5
-                        className="mb-1 text-muted"
-                        style={{ fontWeight: '600' }}
+                        className="lapangan-card-title"
                       >
                         Jumlah Laporan Kegiatan
                       </h5>
                     </div>
 
                     {/* Ikon arsip dengan background biru gelap */}
-                    <div
-                      style={{
-                        background: '#1f3a68',
-                        width: '58px',
-                        height: '58px',
-                        borderRadius: '10px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                      }}
-                    >
+                    <div className="lapangan-card-icon">
                       <i
                         className="fas fa-archive"
-                        style={{
-                          color: '#fff',
-                          fontSize: '26px'
-                        }}
                       ></i>
                     </div>
 
                   </div>
 
-                  <div className="mt-4">
+                  <div className="lapangan-stat-body">
 
                     <h2
-                      className="fw-bold"
-                      style={{
-                        fontSize: '42px',
-                        color: '#2d0c73'
-                      }}
+                      className="lapangan-stat-number"
                     >
                       {summary.total_laporan || 0}
                     </h2>
 
-                    <small className="text-muted">
+                    <small className="lapangan-stat-caption">
                       Jumlah laporan kegiatan
                     </small>
 
@@ -448,24 +443,28 @@ const chartDataFix = Array.isArray(data.laporanBulanan)
               </div>
 
               {/* Card: Pie Chart Status Laporan (Diterima vs Ditolak) */}
-              <div className="col-lg-6 col-md-6 col-sm-12">
+              <div className="col-lg-6 col-md-6 col-sm-12 d-flex">
 
                 <div
-                  className="white-box p-4"
-                  style={{
-                    borderRadius: '18px',
-                    minHeight: '170px'
+                  className="white-box lapangan-dashboard-card lapangan-chart-card dashboard-action-card w-100"
+                  onClick={goToLaporanKonservasi}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault()
+                      goToLaporanKonservasi()
+                    }
                   }}
+                  role="button"
+                  tabIndex={0}
                 >
 
                   <h5
-                    className="mb-3"
-                    style={{ fontWeight: '600' }}
+                    className="lapangan-card-title"
                   >
                     Status Laporan
                   </h5>
 
-                  <div style={{ height: '220px' }}>
+                  <div className="lapangan-pie-chart">
 
                     <Pie
                       data={{
@@ -510,18 +509,16 @@ const chartDataFix = Array.isArray(data.laporanBulanan)
               <div className="col-12">
 
                 <div
-                  className="white-box p-4"
-                  style={{ borderRadius: '18px' }}
+                  className="white-box lapangan-dashboard-card lapangan-line-card"
                 >
 
                   <h5
-                    className="mb-3"
-                    style={{ fontWeight: '600' }}
+                    className="lapangan-card-title mb-3"
                   >
                     Pelaporan Kegiatan
                   </h5>
 
-                  <div style={{ height: '420px' }}>
+                  <div className="lapangan-line-chart">
 
                     <Line
                       data={{

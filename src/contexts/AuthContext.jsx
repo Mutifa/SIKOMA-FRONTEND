@@ -87,8 +87,11 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(nextUser))
       setIsAuthenticated(true)
 
-    } catch (error) {
-      console.error('CHECK AUTH ERROR:', error)
+} catch (error) {
+      // Suppress 404 - endpoint profile belum ada di backend
+      if (error.response?.status !== 404) {
+        console.error('CHECK AUTH ERROR:', error)
+      }
 
       // Hanya logout jika token benar-benar kedaluwarsa / tidak valid (status 401 / 403)
       if (error.response?.status === 401 || error.response?.status === 403) {
@@ -98,7 +101,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('role')
         localStorage.removeItem('user')
       }
-    } finally {
+    }finally {
       setLoading(false)
     }
   }

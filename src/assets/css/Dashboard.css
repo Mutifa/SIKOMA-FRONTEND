@@ -327,6 +327,115 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ============================================================
+   DASHBOARD ADMIN LAPANGAN
+   ============================================================ */
+.dashboard-content {
+  width: 100%;
+}
+
+.dashboard-lapangan-summary {
+  margin-bottom: 0;
+}
+
+.lapangan-dashboard-card {
+  border-radius: var(--radius-lg);
+  padding: 28px 30px;
+  margin-bottom: 0;
+}
+
+.lapangan-stat-card,
+.lapangan-chart-card {
+  min-height: 320px;
+}
+
+.lapangan-stat-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dashboard-action-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.dashboard-action-card:hover {
+  transform: translateY(-4px);
+  border-color: #cfe4d8;
+  box-shadow: 0 14px 32px rgba(26,71,49,0.12);
+}
+
+.dashboard-action-card:focus-visible {
+  outline: 3px solid rgba(58,138,99,0.26);
+  outline-offset: 3px;
+}
+
+.lapangan-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.lapangan-card-title {
+  color: #17231d;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.lapangan-card-icon {
+  align-items: center;
+  background: #1f3a68;
+  border-radius: 10px;
+  color: #fff;
+  display: flex;
+  flex: 0 0 58px;
+  font-size: 26px;
+  height: 58px;
+  justify-content: center;
+  width: 58px;
+}
+
+.lapangan-stat-body {
+  padding-top: 28px;
+}
+
+.lapangan-stat-number {
+  color: #2d0c73;
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1;
+  margin: 0 0 16px;
+}
+
+.lapangan-stat-caption {
+  color: #58665f;
+  display: block;
+  font-size: 14px;
+}
+
+.lapangan-chart-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.lapangan-pie-chart {
+  flex: 1;
+  min-height: 240px;
+  padding-top: 10px;
+}
+
+.lapangan-line-card {
+  margin-top: 8px;
+}
+
+.lapangan-line-chart {
+  height: 420px;
+}
+
+/* ============================================================
    TABLE CONTROLS — search + show entries (BARU, wajib konsisten)
    Cara pakai:
      <div className="table-controls">
