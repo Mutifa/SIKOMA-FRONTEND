@@ -33,14 +33,18 @@ export default function StandarPelayanan() {
     setShowViewModal(true)
   }
 
-  const formatDate = (dateString) => {
-    if (!dateString) return '-'
-    const date = new Date(dateString)
-    const day = date.getDate().toString().padStart(2, '0')
-    const month = (date.getMonth() + 1).toString().padStart(2, '0')
-    const year = date.getFullYear()
-    return `${day}-${month}-${year}`
-  }
+const formatDate = (dateString) => {
+  if (!dateString) return '-'
+  const bulan = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+  ]
+  const date = new Date(dateString)
+  const day = date.getDate()
+  const month = bulan[date.getMonth()]
+  const year = date.getFullYear()
+  return `${day} ${month} ${year}`
+}
 
   const truncateText = (text, maxLength = 80) => {
     if (!text) return '-'
