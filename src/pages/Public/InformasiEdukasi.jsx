@@ -129,7 +129,7 @@ export default function Informasi() {
                   })}
                 </span>
                 <h3 className="edukasi-card-title">{p.judul}</h3>
-                <p className="edukasi-card-text">
+                <p className="edukasi-card-text" style={{ textAlign: 'justify' }}>
                   {truncate(stripHtml(p.deskripsi), 110)}
                 </p>
               </div>
@@ -219,6 +219,7 @@ export default function Informasi() {
                   lineHeight: '1.7',
                   marginBottom: 20,
                   flex: 1,
+                  textAlign: 'justify', 
                 }}>
                   {truncate(stripHtml(p.deskripsi), 160)}
                 </p>
@@ -235,6 +236,7 @@ export default function Informasi() {
                       fontSize: '0.875rem',
                       fontWeight: 600,
                       textDecoration: 'none',
+
                     }}
                   >
                     Selengkapnya →

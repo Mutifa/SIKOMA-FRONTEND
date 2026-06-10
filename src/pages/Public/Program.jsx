@@ -107,6 +107,7 @@ export default function Program() {
                           WebkitLineClamp: 3,
                           WebkitBoxOrient: 'vertical',
                           overflow: 'hidden',
+                          textAlign: 'justify', 
                         }}
                       >
                         {truncate(stripHtml(p.deskripsi), 110)}
