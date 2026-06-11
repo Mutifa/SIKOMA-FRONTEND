@@ -12,6 +12,7 @@ export default function KawasanEdit() {
   const [loading, setLoading] = React.useState(true)
   const [saving, setSaving] = React.useState(false)
   const [preview, setPreview] = React.useState('')
+  const [error, setError] = React.useState('')
 
   const [formData, setFormData] = React.useState({
     deskripsi: '',
@@ -40,9 +41,15 @@ export default function KawasanEdit() {
           // getById mengembalikan satu object, bukan array
           const item = res.data.data || res.data
 
+          if (!item) {
+            setError('Data kawasan tidak ditemukan')
+            setLoading(false)
+            return
+          }
+
           // Isi formData dengan data dari API
           setFormData({
-            deskripsi: item.deskripsi || '',
+            deskripsi: stripHtmlTags(item.deskripsi) || '',
             luasKawasan: item.luasKawasan || '',
             jenisKawasan: item.jenisKawasan || '',
             alamat: item.alamat || '',
@@ -57,7 +64,12 @@ export default function KawasanEdit() {
           setLoading(false)
         }
       })
-      .catch(() => setLoading(false))
+      .catch(err => {
+        if (mounted) {
+          setError(err.response?.data?.message || 'Gagal memuat data kawasan')
+          setLoading(false)
+        }
+      })
 
     return () => { mounted = false }
   }, [id])
@@ -70,8 +82,21 @@ export default function KawasanEdit() {
 
   // Handle perubahan input file
   const handleFileChange = (e) => {
-    setFormData(prev => ({ ...prev, gambar: e.target.files[0] }))
+    const file = e.target.files[0] || null
+    setFormData(prev => ({ ...prev, gambar: file }))
+
+    if (file) {
+      setPreview(URL.createObjectURL(file))
+    }
   }
+
+  React.useEffect(() => {
+    return () => {
+      if (preview.startsWith('blob:')) {
+        URL.revokeObjectURL(preview)
+      }
+    }
+  }, [preview])
 
   // Handle submit form
   const handleSubmit = async (e) => {
@@ -99,7 +124,6 @@ export default function KawasanEdit() {
       // Hanya append gambar jika ada file baru dipilih
       if (formData.gambar) formDataToSend.append('gambar', formData.gambar)
 
-      // kawasanService.update sudah pakai api.put, tidak perlu _method: PUT
       await kawasanService.update(id, formDataToSend)
 
       await successAlert('Berhasil', 'Kawasan berhasil diperbarui')
@@ -116,6 +140,9 @@ export default function KawasanEdit() {
   if (loading) {
     return (
       <DashboardLayout title="Edit Kawasan Konservasi">
+        <div className="d-flex justify-content-center">
+          <div className="spinner-border"></div>
+        </div>
       </DashboardLayout>
     )
   }
@@ -123,6 +150,8 @@ export default function KawasanEdit() {
   return (
 
     <DashboardLayout title="Edit Kawasan Konservasi">
+
+      {error && <div className="alert alert-danger">{error}</div>}
 
       <form onSubmit={handleSubmit}>
         <div className="white-box">
@@ -204,14 +233,13 @@ export default function KawasanEdit() {
               />
             </div>
 
-            {/* Tampilkan preview foto yang sudah ada sebelumnya */}
+            {/* Tampilkan preview foto yang sudah ada atau baru dipilih */}
             {preview && (
               <div className="col-md-12 mb-3">
-                <label className="form-label">Foto Saat Ini</label>
+                <label className="form-label">{formData.gambar ? 'Foto Baru' : 'Foto Saat Ini'}</label>
                 <div>
                   <img
-                    // ✅ Kembalikan ke
-src={`https://codemy.my.id/uploads/kawasan/${preview}`}
+                    src={formData.gambar ? preview : `https://codemy.my.id/uploads/kawasan/${preview}`}
                     alt="Preview"
                     className="img-thumbnail"
                     style={{ maxHeight: '200px' }}

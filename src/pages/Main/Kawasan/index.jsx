@@ -73,8 +73,7 @@ export default function Kawasan() {
             >
               {data?.gambar ? (
                 <img
-                  // ✅ Kembalikan ke
-src={`https://codemy.my.id/uploads/kawasan/${data.gambar}`}
+                  src={`https://codemy.my.id/uploads/kawasan/${data.gambar}`}
                   alt="Foto Kawasan"
                   style={{ maxHeight: '120px' }}
                 />
