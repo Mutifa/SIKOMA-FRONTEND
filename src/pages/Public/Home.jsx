@@ -59,17 +59,22 @@ export default function Home() {
     <Template title={website?.nama || 'Beranda'} active="home">
 
       {/* Carousel Start */}
-      <div className="container-fluid p-0 hero-section" style={{ marginTop: '80px' }}>
-        <div id="header-carousel" className="carousel slide" data-bs-ride="carousel">
-          <div className="carousel-inner">
+      <div className="container-fluid p-0 hero-section" style={{ marginTop: '80px', aspectRatio: '16/9', overflow: 'hidden' }}>
+        <div id="header-carousel" className="carousel slide h-100" data-bs-ride="carousel" style={{ position: 'relative' }}>
+          <div className="carousel-inner h-100">
             {Array.isArray(banner) && banner.length > 0 ? (
               banner.map((b, idx) => (
-                <div key={b.id} className={`carousel-item ${idx === 0 ? 'active' : ''}`}>
+                <div key={b.id} className={`carousel-item h-100 ${idx === 0 ? 'active' : ''}`} style={{ position: 'relative' }}>
                   {b?.gambar && (
                     <img
-                      className="w-100"
+                      className="w-100 h-100"
                       src={assetUrl(`/uploads/galeri/${b.gambar}`)}
-                      alt="Image"
+                      alt="Banner"
+                      width={1920}
+                      height={1080}
+                      loading={idx === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                      style={{ objectFit: 'cover' }}
                     />
                   )}
                   <div className="carousel-caption w-100 h-100 d-flex align-items-center justify-content-center text-center">
@@ -91,7 +96,7 @@ export default function Home() {
                 </div>
               ))
             ) : (
-              <div className="carousel-item active">
+              <div className="carousel-item h-100 active" style={{ position: 'relative' }}>
                 <div className="carousel-caption">
                   <div className="container-fluid p-0">
                     <div className="row justify-content-center">

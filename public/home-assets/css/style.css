@@ -157,6 +157,30 @@ h6,
 
 
 /*** Header ***/
+/* Hero section dengan fixed aspect ratio untuk mencegah layout shift */
+.hero-section {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    overflow: hidden;
+}
+
+.carousel-inner {
+    height: 100%;
+    position: relative;
+}
+
+.carousel-item {
+    height: 100%;
+    position: relative;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .carousel-caption {
     top: 0;
     left: 0;

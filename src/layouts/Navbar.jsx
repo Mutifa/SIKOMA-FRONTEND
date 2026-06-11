@@ -17,7 +17,11 @@ export default function Navbar({ website }) {
                 : `${FILE_URL}/uploads/profil/logo.png?t=${Date.now()}`
             }
             alt="Logo"
-            style={{ width: 55, height: 55, objectFit: 'contain' }}
+            width={55}
+            height={55}
+            loading="lazy"
+            decoding="async"
+            style={{ objectFit: 'contain' }}
             className="me-2"
           />
           <span className="fw-semibold">

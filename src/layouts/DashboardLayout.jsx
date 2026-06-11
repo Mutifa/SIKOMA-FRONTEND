@@ -152,6 +152,10 @@ export default function DashboardLayout({
                   : `${FILE_URL}/uploads/profil/logo.png?t=${Date.now()}`
               }
               alt="logo"
+              width={40}
+              height={40}
+              loading="lazy"
+              decoding="async"
               style={{ objectFit: 'contain' }}
             />
             <span className="logo-text">
@@ -180,8 +184,10 @@ export default function DashboardLayout({
                     className="img-circle"
                     src="/img/user.png"
                     alt="user"
-                    width="36"
-                    height="36"
+                    width={36}
+                    height={36}
+                    loading="lazy"
+                    decoding="async"
                   />
 
                   {/* Nama & Email */}
@@ -224,6 +230,10 @@ export default function DashboardLayout({
                   : `${FILE_URL}/uploads/profil/logo.png?t=${Date.now()}`
               }
               alt="logo"
+              width={40}
+              height={40}
+              loading="lazy"
+              decoding="async"
               style={{ objectFit: 'contain' }}
             />
             <span>

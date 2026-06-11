@@ -68,8 +68,13 @@ export default function InformasiDetail() {
                     <img
                       src={assetUrl(`/uploads/edukasi/${data.foto}`)}
                       alt={data.judul}
+                      width={500}
+                      height={620}
+                      loading="eager"
+                      decoding="async"
                       style={{
                         width: '100%',
+                        height: 'auto',
                         maxHeight: 620,
                         objectFit: 'contain',
                         borderRadius: 10,
@@ -116,6 +121,10 @@ export default function InformasiDetail() {
                   <img
                     src={assetUrl(`/uploads/edukasi/${data.foto}`)}
                     alt={data.judul}
+                    width={1200}
+                    height={600}
+                    loading="eager"
+                    decoding="async"
                     style={{ maxWidth: '100%', maxHeight: 600, objectFit: 'contain', borderRadius: 8 }}
                   />
                 </div>

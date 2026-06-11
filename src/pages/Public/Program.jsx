@@ -3,6 +3,7 @@ import Template from '../../layouts/Template.jsx'
 import { assetUrl } from '../../lib/assets.js'
 import api from '../../lib/api.js'
 import { Link } from 'react-router-dom'
+import { SkeletonCard } from '../../components/Skeleton.jsx'
 
 // Fungsi strip HTML lalu potong teks bersih
 function stripHtml(html = '') {
@@ -61,11 +62,17 @@ export default function Program() {
             Berbagai kegiatan yang mendukung pengelolaan kawasan hutan.
           </h2>
 
-          {loading && <p>Memuat data program...</p>}
           {error && <div className="alert alert-danger">{error}</div>}
 
           <div className="row g-4">
-            {items.length > 0 ? (
+            {loading ? (
+              // Skeleton loading: tampilkan 6 skeleton cards dengan reserved space
+              Array.from({ length: 6 }).map((_, idx) => (
+                <div key={`skeleton-${idx}`} className="col-md-6 col-lg-4 d-flex">
+                  <SkeletonCard />
+                </div>
+              ))
+            ) : items.length > 0 ? (
               items.map((p) => (
                 <div key={p.id} className="col-md-6 col-lg-4 d-flex">
                   <div className="card w-100 shadow-sm" style={{ borderRadius: 12, overflow: 'hidden' }}>
@@ -75,7 +82,11 @@ export default function Program() {
                       src={`https://codemy.my.id/uploads/program/${p.foto}`}
                       alt={p.judul}
                       className="card-img-top"
-                      style={{ height: 200, objectFit: 'cover', width: '100%' }}
+                      width={400}
+                      height={200}
+                      loading="lazy"
+                      decoding="async"
+                      style={{ objectFit: 'cover', width: '100%' }}
                       onError={e => { e.currentTarget.style.display = 'none' }}
                     />
 
@@ -127,7 +138,7 @@ export default function Program() {
                 </div>
               ))
             ) : (
-              !loading && <p className="text-muted">Belum ada data program.</p>
+              <p className="text-muted">Belum ada data program.</p>
             )}
           </div>
 

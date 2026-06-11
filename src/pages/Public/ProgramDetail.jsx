@@ -47,22 +47,32 @@ export default function ProgramDetail() {
               <img
                 src={assetUrl(`/uploads/program/${data.foto}`)}
                 alt={data.judul}
-                style={{ width: '100%', height: 400, objectFit: 'cover', borderRadius: 10 }}
+                width={600}
+                height={400}
+                loading="eager"
+                decoding="async"
+                style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: 10 }}
               />
               <div className="mt-3" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 <img
-                  loading="lazy"
                   src={assetUrl(`/uploads/program/${data.foto}`)}
                   alt={`Thumbnail ${data.judul}`}
-                  style={{ width: 100, height: 80, objectFit: 'cover', borderRadius: 6 }}
+                  width={100}
+                  height={80}
+                  loading="lazy"
+                  decoding="async"
+                  style={{ objectFit: 'cover', borderRadius: 6 }}
                 />
-                {data?.galeri?.map((g) => (
+                {data?.galeri?.map((g, idx) => (
                   <img
-                    loading="lazy"
                     key={g.id}
                     src={assetUrl(`/uploads/galeri/${g.gambar}`)}
                     alt={`Galeri ${g.id}`}
-                    style={{ width: 100, height: 80, objectFit: 'cover', borderRadius: 6 }}
+                    width={100}
+                    height={80}
+                    loading="lazy"
+                    decoding="async"
+                    style={{ objectFit: 'cover', borderRadius: 6 }}
                   />
                 ))}
               </div>
