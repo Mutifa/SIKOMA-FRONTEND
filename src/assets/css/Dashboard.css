@@ -211,8 +211,10 @@ a { text-decoration: none; color: inherit; }
   color: rgba(255,255,255,0.88);
   font-size: 13px;
   font-weight: 500;
-  transition: background 0.18s, color 0.18s, transform 0.18s;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-radius 0.2s ease;
   white-space: nowrap;
+  position: relative;
+  margin-right: 8px;
 }
 .sidebar-link i {
   font-size: 14px;
@@ -230,12 +232,44 @@ a { text-decoration: none; color: inherit; }
   color: #fff;
   transform: translateX(3px);
 }
+
+/* ============================================================
+   ACTIVE MENU — Pill/Capsule Style
+   ============================================================ */
 .sidebar-link.active {
   background: #fff;
   color: var(--green-700) !important;
-  font-weight: 400;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  font-weight: 500;
+  
+  /* Border-radius: 20-30px untuk bentuk pill/capsule 
+     - Sisi kiri tetap small (14px) untuk keep attached ke edge
+     - Sisi kanan besar (25px) untuk pill effect 
+  */
+  border-radius: 14px 25px 25px 14px;
+  
+  /* Padding lebih besar untuk tampilan lebih premium */
+  padding: 11px 18px 11px 14px;
+  
+  /* Shadow lebih prominent untuk menonjol */
+  box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+  
+  /* Margin right berkurang untuk balance */
+  margin-right: 0;
+  
+  /* Transform scale-up ringan untuk efek "pop" */
+  transform: scaleX(1.02);
+  
+  /* Highlight effect pada edges */
+  border: 1px solid rgba(47, 111, 79, 0.1);
 }
+
+/* Hover effect untuk active menu */
+.sidebar-link.active:hover {
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+  transform: scaleX(1.03) translateY(-1px);
+}
+
 .sidebar-link.active i,
 .sidebar-link.active .hide-menu {
   color: var(--green-700) !important;
@@ -1739,6 +1773,20 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   .topbar .navbar { padding: 0 16px; }
   .user-info .email { display: none; }
   .white-box { padding: 16px; }
+  
+  /* Responsive sidebar menu styling */
+  .sidebar-link {
+    margin-right: 8px;
+  }
+  
+  /* Tetap maintain pill effect di mobile */
+  .sidebar-link.active {
+    border-radius: 12px 20px 20px 12px;
+    padding: 10px 16px 10px 12px;
+    margin-right: 6px;
+    transform: scaleX(1.01);
+  }
+  
   .table thead tr th,
   .table tbody tr td { padding: 10px 12px; font-size: 12.5px; }
   .modal-dialog { max-width: calc(100% - 32px); margin: 16px; }
