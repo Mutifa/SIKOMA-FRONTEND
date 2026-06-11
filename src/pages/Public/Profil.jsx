@@ -8,6 +8,7 @@ export default function Profil() {
 
   const [data, setData] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
+  const [logoKey, setLogoKey] = React.useState(Date.now())
 
 React.useEffect(() => {
   profilPerusahaanService.get()
@@ -22,6 +23,10 @@ React.useEffect(() => {
       setLoading(false)
     })
 }, [])
+
+React.useEffect(() => {
+  if (data?.logo) setLogoKey(Date.now())
+}, [data?.logo])
 
   if (loading) {
     return (
@@ -45,7 +50,7 @@ React.useEffect(() => {
           {data?.logo && (
             <div className="text-center mb-4">
               <img
-                src={`${FILE_URL}/uploads/profil/${data.logo}`}
+                src={`${FILE_URL}/uploads/profil/${data.logo}?t=${logoKey}`}
                 alt="Logo"
                 width={225}
                 height={225}

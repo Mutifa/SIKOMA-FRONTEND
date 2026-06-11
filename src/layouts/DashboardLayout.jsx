@@ -6,6 +6,7 @@ import { Link, useLocation } from 'react-router-dom'
 
 // Mengambil data login dari AuthContext
 import { useAuth } from '../contexts/AuthContext.jsx'
+import profilPerusahaanService from '../services/profilPerusahaanService.js'
 
 // Import CSS dashboard universal
 import '../assets/css/Dashboard.css'
@@ -46,6 +47,8 @@ export default function DashboardLayout({
   // STATE SIDEBAR MOBILE
   // ===================================================
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
+  const [websiteData, setWebsiteData] = React.useState(website || null)
+  const [logoKey, setLogoKey] = React.useState(Date.now())
 
   const FILE_URL = 'https://codemy.my.id'
 
@@ -115,6 +118,23 @@ export default function DashboardLayout({
     setSidebarOpen(false)
   }, [location.pathname])
 
+  React.useEffect(() => {
+    if (website) return
+
+    let mounted = true
+
+    profilPerusahaanService.get()
+      .then(res => {
+        if (mounted) {
+          setWebsiteData(res.data)
+          setLogoKey(Date.now())
+        }
+      })
+      .catch(() => {})
+
+    return () => { mounted = false }
+  }, [website])
+
 
   // ===================================================
   // LOGOUT
@@ -147,8 +167,8 @@ export default function DashboardLayout({
           <div className="topbar-brand">
             <img
               src={
-                website?.logo
-                  ? `${FILE_URL}/uploads/profil/${website.logo}`
+                websiteData?.logo
+                  ? `${FILE_URL}/uploads/profil/${websiteData.logo}?t=${logoKey}`
                   : `${FILE_URL}/uploads/profil/logo.png`
               }
               alt="logo"
@@ -159,7 +179,7 @@ export default function DashboardLayout({
               style={{ objectFit: 'contain' }}
             />
             <span className="logo-text">
-              {website?.nama || 'SIKOMA'}
+              {websiteData?.nama || 'SIKOMA'}
             </span>
           </div>
 
@@ -225,8 +245,8 @@ export default function DashboardLayout({
           <div className="sidebar-header-pusat horizontal">
             <img
               src={
-                website?.logo
-                  ? `${FILE_URL}/uploads/profil/${website.logo}`
+                websiteData?.logo
+                  ? `${FILE_URL}/uploads/profil/${websiteData.logo}?t=${logoKey}`
                   : `${FILE_URL}/uploads/profil/logo.png`
               }
               alt="logo"
@@ -237,7 +257,7 @@ export default function DashboardLayout({
               style={{ objectFit: 'contain' }}
             />
             <span>
-              {website?.nama || 'SIKOMA'}
+              {websiteData?.nama || 'SIKOMA'}
             </span>
           </div>
 
@@ -308,7 +328,7 @@ export default function DashboardLayout({
 
         {/* FOOTER */}
         <footer className="footer">
-          © 2026 {website?.nama || 'SIKOMA'}. All rights reserved.
+          © 2026 {websiteData?.nama || 'SIKOMA'}. All rights reserved.
         </footer>
 
       </div>

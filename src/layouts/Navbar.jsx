@@ -3,6 +3,15 @@ import { Link, NavLink } from 'react-router-dom'
 
 function Navbar({ website }) {
   const FILE_URL = 'https://codemy.my.id'
+  const [logoKey, setLogoKey] = React.useState(Date.now())
+
+  React.useEffect(() => {
+    if (website?.logo) setLogoKey(Date.now())
+  }, [website?.logo])
+
+  const logoSrc = website?.logo
+    ? `${FILE_URL}/uploads/profil/${website.logo}?t=${logoKey}`
+    : `${FILE_URL}/uploads/profil/logo.png`
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light sticky-top">
@@ -11,11 +20,7 @@ function Navbar({ website }) {
         {/* Brand / Logo Start */}
         <Link to="/" className="navbar-brand d-flex align-items-center">
           <img
-            src={
-              website?.logo
-                ? `${FILE_URL}/uploads/profil/${website.logo}`
-                : `${FILE_URL}/uploads/profil/logo.png`
-            }
+            src={logoSrc}
             alt="Logo"
             width={55}
             height={55}
