@@ -53,7 +53,11 @@ export default function Informasi() {
                 src={assetUrl(`/uploads/kawasan/${data.kawasan.gambar}`)}
                 alt="Peta Kawasan"
                 className="img-fluid shadow-sm peta-img"
-                style={{ borderRadius: 12, width: '100%', objectFit: 'cover' }}
+                width={913}
+                height={671}
+                loading="lazy"
+                decoding="async"
+                style={{ borderRadius: 12, width: '100%', aspectRatio: '913 / 671', objectFit: 'cover' }}
               />
             ) : (
               <div style={{ height: 340, background: '#e9ecef', borderRadius: 12 }} />
@@ -117,8 +121,11 @@ export default function Informasi() {
             <article key={p.id} className="edukasi-card wow fadeInUp" data-wow-delay="0.1s">
               <img
                 loading="lazy"
+                decoding="async"
                 src={assetUrl(`/uploads/edukasi/${p.foto}`)}
                 alt={p.judul}
+                width={360}
+                height={220}
                 className="edukasi-card-image"
                 onError={e => { e.currentTarget.style.display = 'none' }}
               />
@@ -180,8 +187,11 @@ export default function Informasi() {
               <div style={{ flexShrink: 0, width: 260 }}>
                 <img
                   loading="lazy"
+                  decoding="async"
                   src={assetUrl(`/uploads/edukasi/${p.foto}`)}
                   alt={p.judul}
+                  width={260}
+                  height={200}
                   style={{ width: '100%', height: '100%', minHeight: 200, objectFit: 'cover', display: 'block' }}
                   onError={e => { e.currentTarget.style.display = 'none' }}
                 />

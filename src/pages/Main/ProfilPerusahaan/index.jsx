@@ -109,7 +109,11 @@ const stripHtml = (html) =>
                 ? <img
                     src={`${FILE_URL}/uploads/profil/${formData.logo}?t=${imgKey}`}
                     alt="Logo"
-                    style={{ maxHeight: '80px' }}
+                    width={225}
+                    height={225}
+                    loading="lazy"
+                    decoding="async"
+                    style={{ width: 80, height: 80, objectFit: 'contain' }}
                   />
                 : 'Belum ada logo'}
             </div>
@@ -121,7 +125,11 @@ const stripHtml = (html) =>
                 ? <img
                     src={`${FILE_URL}/uploads/profil/${formData.struktur}?t=${imgKey}`}
                     alt="Struktur"
-                    style={{ maxHeight: '80px' }}
+                    width={1448}
+                    height={720}
+                    loading="lazy"
+                    decoding="async"
+                    style={{ width: 160, height: 80, objectFit: 'contain' }}
                   />
                 : 'Belum ada gambar'}
             </div>

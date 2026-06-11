@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
-export default function Navbar({ website }) {
+function Navbar({ website }) {
   const FILE_URL = 'https://codemy.my.id'
 
   return (
@@ -13,8 +13,8 @@ export default function Navbar({ website }) {
           <img
             src={
               website?.logo
-                ? `${FILE_URL}/uploads/profil/${website.logo}?t=${Date.now()}`
-                : `${FILE_URL}/uploads/profil/logo.png?t=${Date.now()}`
+                ? `${FILE_URL}/uploads/profil/${website.logo}`
+                : `${FILE_URL}/uploads/profil/logo.png`
             }
             alt="Logo"
             width={55}
@@ -153,3 +153,5 @@ export default function Navbar({ website }) {
     </nav>
   )
 }
+
+export default React.memo(Navbar)

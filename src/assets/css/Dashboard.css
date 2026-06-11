@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-
 /* ============================================================
    SIKOMA — Shared Admin Styles (Admin Lapangan & Admin Pusat)
    ============================================================ */
@@ -91,6 +89,10 @@ a { text-decoration: none; color: inherit; }
   font-weight: 500;
   letter-spacing: 1px;
   color: #1a1a1a;
+  max-width: 168px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* User info chip */

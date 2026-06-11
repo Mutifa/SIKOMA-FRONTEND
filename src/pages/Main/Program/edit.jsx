@@ -99,7 +99,11 @@ export default function ProgramEdit() {
                   src={`https://codemy.my.id/uploads/program/${preview}`}
                   alt="Preview"
                   className="img-thumbnail"
-                  style={{ maxHeight: '200px' }}
+                  width={320}
+                  height={200}
+                  loading="lazy"
+                  decoding="async"
+                  style={{ width: 'auto', maxHeight: '200px', objectFit: 'contain' }}
                 />
               </div>
             </div>

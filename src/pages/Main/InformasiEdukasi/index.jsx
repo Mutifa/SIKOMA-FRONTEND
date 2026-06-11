@@ -180,7 +180,11 @@ export default function Konten() {
                               src={assetUrl(`/uploads/edukasi/${item.foto}`)}
                               alt="Foto Edukasi"
                               className="img-fluid"
-                              width="100px"
+                              width={100}
+                              height={75}
+                              loading="lazy"
+                              decoding="async"
+                              style={{ objectFit: 'cover' }}
                             />
                           ) : '-'}
                         </td>

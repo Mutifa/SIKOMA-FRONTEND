@@ -47,6 +47,10 @@ export default function VerifyEmail() {
             src="/img/login-illustration.png"
             alt="Ilustrasi Verifikasi Email"
             className="login-image"
+            width={1058}
+            height={733}
+            loading="eager"
+            decoding="async"
           />
         </div>
 

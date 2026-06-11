@@ -212,6 +212,10 @@ export default function Login() {
             src="/img/login-illustration.png"
             alt="Ilustrasi Login"
             className="login-image"
+            width={1058}
+            height={733}
+            loading="eager"
+            decoding="async"
           />
         </div>
 

@@ -15,7 +15,16 @@ export default function ImageModal({ src, onClose }) {
       >
         <div className="modal-content bg-transparent border-0 shadow-none">
           <div className="modal-body text-center p-0">
-            <img src={src} alt="Preview" className="img-fluid rounded" />
+            <img
+              src={src}
+              alt="Preview"
+              className="img-fluid rounded"
+              width={960}
+              height={640}
+              loading="lazy"
+              decoding="async"
+              style={{ maxHeight: '80vh', objectFit: 'contain' }}
+            />
           </div>
 
           <button

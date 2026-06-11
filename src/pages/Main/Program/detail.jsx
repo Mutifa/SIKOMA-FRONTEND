@@ -85,7 +85,11 @@ export default function ProgramDetail() {
                 src={`https://codemy.my.id/uploads/program/${data.foto}`}
                 alt="Program"
                 className="img-thumbnail"
-                style={{ maxHeight: '250px' }}
+                width={400}
+                height={250}
+                loading="lazy"
+                decoding="async"
+                style={{ width: 'auto', maxHeight: '250px', objectFit: 'contain' }}
               />
 
             ) : (

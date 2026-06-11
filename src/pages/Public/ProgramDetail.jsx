@@ -36,7 +36,17 @@ export default function ProgramDetail() {
     <Template title={data?.judul || 'Detail Program'} active="edukasi">
       <section className="container my-5">
 
-        {loading && <p>Memuat data program...</p>}
+        {loading && (
+          <div className="row">
+            <div className="col-lg-6 mb-4">
+              <div className="image-placeholder" style={{ aspectRatio: '600 / 400', borderRadius: 10 }} />
+            </div>
+            <div className="col-lg-6 mb-4">
+              <div className="image-placeholder mb-3" style={{ height: 42, borderRadius: 8 }} />
+              <div className="image-placeholder" style={{ height: 220, borderRadius: 8 }} />
+            </div>
+          </div>
+        )}
         {error && <div className="alert alert-danger">Terjadi kesalahan: {error}</div>}
 
         {!loading && !error && data && (
@@ -51,7 +61,8 @@ export default function ProgramDetail() {
                 height={400}
                 loading="eager"
                 decoding="async"
-                style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: 10 }}
+                fetchPriority="high"
+                style={{ width: '100%', aspectRatio: '600 / 400', height: 'auto', objectFit: 'cover', borderRadius: 10 }}
               />
               <div className="mt-3" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 <img

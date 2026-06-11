@@ -94,8 +94,16 @@ export default function KontenEdit() {
             <div className="mb-3">
               <label className="form-label">Foto Saat Ini</label>
               <div>
-                <img src={assetUrl(`/uploads/edukasi/${preview}`)}
-                  alt="Preview" className="img-thumbnail" style={{ maxHeight: '200px' }} />
+                <img
+                  src={assetUrl(`/uploads/edukasi/${preview}`)}
+                  alt="Preview"
+                  className="img-thumbnail"
+                  width={320}
+                  height={200}
+                  loading="lazy"
+                  decoding="async"
+                  style={{ width: 'auto', maxHeight: '200px', objectFit: 'contain' }}
+                />
               </div>
             </div>
           )}

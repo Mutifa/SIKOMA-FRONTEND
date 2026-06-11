@@ -100,6 +100,10 @@ export default function ForgotPassword() {
             src="/img/login-illustration.png"
             alt="Ilustrasi Lupa Kata Sandi"
             className="login-image"
+            width={1058}
+            height={733}
+            loading="eager"
+            decoding="async"
           />
         </div>
 

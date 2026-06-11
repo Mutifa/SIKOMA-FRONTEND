@@ -174,8 +174,12 @@ export default function Program() {
                         <img
                           src={`https://codemy.my.id/uploads/program/${item.foto}`}
                           alt="Foto"
-                          width="100"
+                          width={100}
+                          height={75}
+                          loading="lazy"
+                          decoding="async"
                           className="img-fluid"
+                          style={{ objectFit: 'cover' }}
                         />
                       ) : '-'}
                     </td>

@@ -44,8 +44,10 @@ export default function InformasiDetail() {
     <Template title={data?.judul || 'Detail Informasi'} active="informasi">
 
       {loading && (
-        <div className="container my-5 text-center">
-          <p className="text-muted">Memuat data...</p>
+        <div className="container my-5">
+          <div className="image-placeholder mb-4" style={{ height: 360, borderRadius: 8 }} />
+          <div className="image-placeholder mb-3" style={{ height: 36, maxWidth: 640, borderRadius: 8 }} />
+          <div className="image-placeholder" style={{ height: 160, borderRadius: 8 }} />
         </div>
       )}
 
@@ -72,8 +74,10 @@ export default function InformasiDetail() {
                       height={620}
                       loading="eager"
                       decoding="async"
+                      fetchPriority="high"
                       style={{
                         width: '100%',
+                        aspectRatio: '500 / 620',
                         height: 'auto',
                         maxHeight: 620,
                         objectFit: 'contain',
@@ -125,6 +129,7 @@ export default function InformasiDetail() {
                     height={600}
                     loading="eager"
                     decoding="async"
+                    fetchPriority="high"
                     style={{ maxWidth: '100%', maxHeight: 600, objectFit: 'contain', borderRadius: 8 }}
                   />
                 </div>

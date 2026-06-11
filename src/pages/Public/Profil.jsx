@@ -8,7 +8,6 @@ export default function Profil() {
 
   const [data, setData] = React.useState(null)
   const [loading, setLoading] = React.useState(true)
-  const [imgKey, setImgKey] = React.useState(() => Date.now())
 
 React.useEffect(() => {
   profilPerusahaanService.get()
@@ -18,7 +17,6 @@ React.useEffect(() => {
 
       setData(res.data)
       setLoading(false)
-      setImgKey(Date.now())
     })
     .catch(() => {
       setLoading(false)
@@ -29,7 +27,9 @@ React.useEffect(() => {
     return (
       <Template title="Profil" active="profil">
         <div className="container py-5">
-          Loading...
+          <div className="image-placeholder mb-4" style={{ height: 180, maxWidth: 180, margin: '0 auto', borderRadius: 8 }} />
+          <div className="image-placeholder mb-4" style={{ height: 42, maxWidth: 420, margin: '0 auto', borderRadius: 8 }} />
+          <div className="image-placeholder" style={{ aspectRatio: '1448 / 720', borderRadius: 8 }} />
         </div>
       </Template>
     )
@@ -45,11 +45,16 @@ React.useEffect(() => {
           {data?.logo && (
             <div className="text-center mb-4">
               <img
-                src={`${FILE_URL}/uploads/profil/${data.logo}?t=${imgKey}`}
+                src={`${FILE_URL}/uploads/profil/${data.logo}`}
                 alt="Logo"
+                width={225}
+                height={225}
+                loading="lazy"
+                decoding="async"
                 style={{
                   maxHeight: '180px',
                   maxWidth: '100%',
+                  objectFit: 'contain',
                 }}
               />
             </div>
@@ -82,9 +87,13 @@ React.useEffect(() => {
               <h3>Struktur Organisasi</h3>
 
               <img
-                src={`${FILE_URL}/uploads/profil/${data.struktur}?t=${imgKey}`}
+                src={`${FILE_URL}/uploads/profil/${data.struktur}`}
                 alt="Struktur Organisasi"
                 className="img-fluid"
+                width={1448}
+                height={720}
+                loading="lazy"
+                decoding="async"
               />
             </div>
           )}

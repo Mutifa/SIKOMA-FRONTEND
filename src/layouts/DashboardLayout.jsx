@@ -148,8 +148,8 @@ export default function DashboardLayout({
             <img
               src={
                 website?.logo
-                  ? `${FILE_URL}/uploads/profil/${website.logo}?t=${Date.now()}`
-                  : `${FILE_URL}/uploads/profil/logo.png?t=${Date.now()}`
+                  ? `${FILE_URL}/uploads/profil/${website.logo}`
+                  : `${FILE_URL}/uploads/profil/logo.png`
               }
               alt="logo"
               width={40}
@@ -226,8 +226,8 @@ export default function DashboardLayout({
             <img
               src={
                 website?.logo
-                  ? `${FILE_URL}/uploads/profil/${website.logo}?t=${Date.now()}`
-                  : `${FILE_URL}/uploads/profil/logo.png?t=${Date.now()}`
+                  ? `${FILE_URL}/uploads/profil/${website.logo}`
+                  : `${FILE_URL}/uploads/profil/logo.png`
               }
               alt="logo"
               width={40}

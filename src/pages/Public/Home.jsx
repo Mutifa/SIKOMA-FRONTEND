@@ -13,6 +13,12 @@ export default function Home() {
   const [error, setError] = useState(null);
   const location = useLocation()
   const FILE_URL = 'https://codemy.my.id'
+  const fallbackHero = {
+    id: 'fallback-hero',
+    gambar: null,
+    src: '/home-assets/img/carousel-1.jpg',
+    alt: 'Kawasan konservasi'
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,23 +65,25 @@ export default function Home() {
     <Template title={website?.nama || 'Beranda'} active="home">
 
       {/* Carousel Start */}
-      <div className="container-fluid p-0 hero-section" style={{ marginTop: '80px', aspectRatio: '16/9', overflow: 'hidden' }}>
+      <div className="container-fluid p-0 hero-section">
         <div id="header-carousel" className="carousel slide h-100" data-bs-ride="carousel" style={{ position: 'relative' }}>
           <div className="carousel-inner h-100">
-            {Array.isArray(banner) && banner.length > 0 ? (
-              banner.map((b, idx) => (
+            {(Array.isArray(banner) && banner.length > 0 ? banner : [fallbackHero]).map((b, idx) => (
                 <div key={b.id} className={`carousel-item h-100 ${idx === 0 ? 'active' : ''}`} style={{ position: 'relative' }}>
-                  {b?.gambar && (
+                  {(b?.gambar || b?.src) ? (
                     <img
                       className="w-100 h-100"
-                      src={assetUrl(`/uploads/galeri/${b.gambar}`)}
-                      alt="Banner"
+                      src={b.src || assetUrl(`/uploads/galeri/${b.gambar}`)}
+                      alt={b.alt || 'Banner'}
                       width={1920}
                       height={1080}
                       loading={idx === 0 ? "eager" : "lazy"}
                       decoding="async"
+                      fetchPriority={idx === 0 ? "high" : "auto"}
                       style={{ objectFit: 'cover' }}
                     />
+                  ) : (
+                    <div className="hero-media-placeholder" />
                   )}
                   <div className="carousel-caption w-100 h-100 d-flex align-items-center justify-content-center text-center">
                     <div className="w-100 px-3">
@@ -94,25 +102,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className="carousel-item h-100 active" style={{ position: 'relative' }}>
-                <div className="carousel-caption">
-                  <div className="container-fluid p-0">
-                    <div className="row justify-content-center">
-                      <div className="col-lg-8">
-                        <h1 className="display-3 text-white mb-2">
-                          Selamat Datang di Sistem Informasi Konservasi
-                        </h1>
-                        <p className="fs-4">
-                          Unit Pelaksana Teknis Tasik Besar Serkap
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+              ))}
           </div>
         </div>
       </div>
@@ -120,7 +110,12 @@ export default function Home() {
 
       <section className="container-fluid p-0 py-0">
         <div className="w-100 p-0">
-          {loading && <div className="container py-5 text-center"><p>Memuat...</p></div>}
+          {loading && (
+            <div className="container py-5 home-section-placeholder">
+              <div className="image-placeholder mb-4" style={{ height: 48, maxWidth: 720, margin: '0 auto', borderRadius: 8 }} />
+              <div className="image-placeholder" style={{ aspectRatio: '1448 / 720', maxWidth: 800, margin: '0 auto', borderRadius: 8 }} />
+            </div>
+          )}
           {error && <div className="container py-5"><div className="alert alert-danger">{error}</div></div>}
 
           {!loading && !error && (
@@ -144,10 +139,14 @@ export default function Home() {
                   <img
                     src={
                       website?.struktur
-                        ? `${FILE_URL}/uploads/profil/${website.struktur}?t=${Date.now()}`
-                        : `${FILE_URL}/uploads/profil/struktur.png?t=${Date.now()}`
+                        ? `${FILE_URL}/uploads/profil/${website.struktur}`
+                        : `${FILE_URL}/uploads/profil/struktur.png`
                     }
                     alt="Struktur Organisasi"
+                    width={1448}
+                    height={720}
+                    loading="lazy"
+                    decoding="async"
                     style={{
                       maxWidth: '800px',
                       width: '100%',

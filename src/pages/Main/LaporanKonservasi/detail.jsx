@@ -140,6 +140,10 @@ const formatDate = (dateString) => {
                   src={`${FILE_URL}/uploads/laporan/${filename}`}
                   alt={`${label} ${i + 1}`}
                   className="lk-img-thumb"
+                  width={120}
+                  height={90}
+                  loading="lazy"
+                  decoding="async"
                   onClick={() => window.open(`${FILE_URL}/uploads/laporan/${filename}`, '_blank')}
                 />
                 <span style={{ fontSize: '11px', color: '#aaa' }}>#{i + 1}</span>

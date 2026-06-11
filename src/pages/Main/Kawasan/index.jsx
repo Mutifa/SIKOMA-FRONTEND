@@ -75,7 +75,11 @@ export default function Kawasan() {
                 <img
                   src={`https://codemy.my.id/uploads/kawasan/${data.gambar}`}
                   alt="Foto Kawasan"
-                  style={{ maxHeight: '120px' }}
+                  width={240}
+                  height={120}
+                  loading="lazy"
+                  decoding="async"
+                  style={{ width: 'auto', maxHeight: '120px', objectFit: 'contain' }}
                 />
               ) : (
                 <span className="text-muted">Tidak ada gambar</span>

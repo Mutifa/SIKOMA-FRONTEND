@@ -132,6 +132,10 @@ export default function ResetPassword() {
             src="/img/login-illustration.png"
             alt="Ilustrasi Reset Kata Sandi"
             className="login-image"
+            width={1058}
+            height={733}
+            loading="eager"
+            decoding="async"
           />
         </div>
 
