@@ -216,7 +216,7 @@ a { text-decoration: none; color: inherit; }
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-radius 0.2s ease;
   white-space: nowrap;
   position: relative;
-  margin-right: 8px;
+  margin: 0 10px 0 8px;
 }
 .sidebar-link i {
   font-size: 14px;
@@ -241,35 +241,20 @@ a { text-decoration: none; color: inherit; }
 .sidebar-link.active {
   background: #fff;
   color: var(--green-700) !important;
-  font-weight: 500;
-  
-  /* Border-radius: 20-30px untuk bentuk pill/capsule 
-     - Sisi kiri tetap small (14px) untuk keep attached ke edge
-     - Sisi kanan besar (25px) untuk pill effect 
-  */
-  border-radius: 14px 25px 25px 14px;
-  
-  /* Padding lebih besar untuk tampilan lebih premium */
+  font-weight: 700;
   padding: 11px 18px 11px 14px;
-  
-  /* Shadow lebih prominent untuk menonjol */
-  box-shadow: 0 4px 16px rgba(0,0,0,0.14);
-  
-  /* Margin right berkurang untuk balance */
-  margin-right: 0;
-  
-  /* Transform scale-up ringan untuk efek "pop" */
-  transform: scaleX(1.02);
-  
-  /* Highlight effect pada edges */
-  border: 1px solid rgba(47, 111, 79, 0.1);
+  border-radius: 28px;
+  margin: 0 12px 0 10px;
+  box-shadow: 0 8px 20px rgba(7, 40, 24, 0.22);
+  transform: translateX(2px);
+  border: 1px solid rgba(255, 255, 255, 0.82);
 }
 
 /* Hover effect untuk active menu */
 .sidebar-link.active:hover {
   background: #fff;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
-  transform: scaleX(1.03) translateY(-1px);
+  box-shadow: 0 10px 24px rgba(7, 40, 24, 0.26);
+  transform: translateX(3px);
 }
 
 .sidebar-link.active i,
@@ -1778,15 +1763,15 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   
   /* Responsive sidebar menu styling */
   .sidebar-link {
-    margin-right: 8px;
+    margin: 0 10px 0 8px;
   }
   
   /* Tetap maintain pill effect di mobile */
   .sidebar-link.active {
-    border-radius: 12px 20px 20px 12px;
+    border-radius: 28px;
     padding: 10px 16px 10px 12px;
-    margin-right: 6px;
-    transform: scaleX(1.01);
+    margin: 0 12px 0 10px;
+    transform: translateX(2px);
   }
   
   .table thead tr th,
