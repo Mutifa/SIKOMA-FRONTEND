@@ -115,7 +115,7 @@ export default function KontenEdit() {
           </div>
 
           <div className="d-flex gap-2">
-            <button type="submit" className="btn-primary-custom">Update</button>
+            <button type="submit" className="btn btn-success">Update</button>
             <Link to="/dashboard/informasi-edukasi" className="btn btn-secondary">Kembali</Link>
           </div>
 

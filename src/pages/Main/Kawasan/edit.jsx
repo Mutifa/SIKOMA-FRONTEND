@@ -257,7 +257,7 @@ export default function KawasanEdit() {
           <div className="d-flex gap-2">
             <button
               type="submit"
-              className="btn-primary-custom"
+              className="btn btn-success"
               disabled={saving}
             >
               {saving ? 'Menyimpan...' : 'Simpan'}

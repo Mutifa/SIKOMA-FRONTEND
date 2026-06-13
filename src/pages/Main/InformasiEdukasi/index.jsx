@@ -88,27 +88,22 @@ export default function Konten() {
 
   return (
 
-    <DashboardLayout title="Informasi & Edukasi">
-
+    <DashboardLayout
+      title="Informasi & Edukasi"
+      actions={
+        <Link
+          to="/dashboard/informasi-edukasi/create"
+          className="btn-primary-custom"
+        >
+          <i className="fas fa-plus"></i>
+          Tambah Edukasi
+        </Link>
+      }
+    >
       {error && <div className="alert alert-danger">{error}</div>}
-
       <div className="row">
         <div className="col-12">
-
-          {/* Tombol Tambah — btn-primary-custom */}
           <div className="white-box">
-
-            <div className="admin-card-header">
-              <div className="box-title mb-0">
-                Kelola halaman Informasi & edukasi
-              </div>
-
-              <Link to="/dashboard/informasi-edukasi/create" className="btn-primary-custom">
-                <i className="fas fa-plus"></i>
-                Tambah Edukasi
-              </Link>
-            </div>
-
             <div className="row mb-3">
               <div className="col-md-6">
                 <div className="d-flex align-items-center">

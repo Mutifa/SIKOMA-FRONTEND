@@ -76,34 +76,27 @@ export default function Program() {
     )
   }
 
-  return (
+return (
 
-    <DashboardLayout title="Program">
+  <DashboardLayout
+    title="Program"
+    actions={
+      <Link
+        to="/dashboard/program/create"
+        className="btn-primary-custom"
+      >
+        <i className="fas fa-plus me-1"></i>
+        Tambah Program
+      </Link>
+    }
+  >
 
-      {error && <div className="alert alert-danger">{error}</div>}
+    {error && <div className="alert alert-danger">{error}</div>}
 
-      {/* Tombol Tambah — btn-primary-custom */}
-      <div className="white-box">
+    <div className="white-box">
 
-        {/* Header */}
-        <div className="d-flex justify-content-between align-items-center mb-3">
-
-          <div className="box-title mb-0">
-            Kelola halaman program
-          </div>
-
-          <Link
-            to="/dashboard/program/create"
-            className="btn-primary-custom"
-          >
-            <i className="fas fa-plus me-1"></i>
-            Tambah Program
-          </Link>
-
-        </div>
-
-        {/* Search & Items per page */}
-        <div className="row mb-3">
+      {/* Search & Items per page */}
+      <div className="row mb-3">
 
           <div className="col-md-6">
             <div className="d-flex align-items-center">

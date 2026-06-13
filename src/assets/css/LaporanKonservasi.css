@@ -60,7 +60,7 @@
   background: #fff;
   border: 1px solid var(--lk-border);
   border-radius: var(--lk-radius);
-  padding: 28px 32px;
+  padding: 20px 24px;
   margin-bottom: 1rem;
 }
 
@@ -148,7 +148,7 @@
 /* HR pemisah antar seksi dalam form */
 .lk-form-divider {
   border-color: #e8e8e8;
-  margin: 1.5rem 0;
+  margin: 1rem 0;
 }
 
 
@@ -599,7 +599,7 @@
 .lk-divider {
   height: 1px;
   background: var(--lk-divider);
-  margin: 1.25rem 0;
+  margin: 1rem 0;
   border: none;
 }
 

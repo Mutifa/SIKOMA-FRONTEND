@@ -61,23 +61,21 @@ const stripHtml = (html) =>
   }
 
   return (
-    <DashboardLayout title="Profil Perusahaan">
+    <DashboardLayout
+      title="Profil Perusahaan"
+      actions={
+        <button
+          className="btn-primary-custom"
+          onClick={() => navigate('/profil-perusahaan/edit')}
+        >
+          <i className="fas fa-pencil-alt"></i> Edit Profil
+        </button>
+      }
+    >
 
       {error && <div className="alert alert-danger">{error}</div>}
 
       <div className="white-box">
-
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <div className="box-title">Kelola halaman profil perusahaan</div>
-          <button
-            className="btn-primary-custom"
-            onClick={() => navigate('/profil-perusahaan/edit')}
-          >
-            <i className="fas fa-pencil-alt"></i> Edit Profil
-          </button>
-        </div>
-
-        <hr />
 
         <div className="row">
           <div className="col-md-6"><Field label="Nama Website"   value={stripHtml(formData?.nama)}      /></div>

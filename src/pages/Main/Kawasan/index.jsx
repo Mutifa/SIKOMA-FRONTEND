@@ -41,30 +41,25 @@ export default function Kawasan() {
 
   return (
 
-    <DashboardLayout title="Kawasan Konservasi">
-
+    <DashboardLayout
+      title="Kawasan Konservasi"
+      actions={
+        data && (
+          <Link
+            to={`/kawasan/edit/${data.id}`}
+            className="btn-primary-custom"
+          >
+            <i className="fas fa-pen"></i>
+            Edit Kawasan
+          </Link>
+        )
+      }
+    >
       {error && <div className="alert alert-danger">{error}</div>}
-
       <div className="white-box">
 
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <div className="box-title mb-0">
-            Kelola halaman kawasan konservasi
-          </div>
-
-          {data && (
-            <Link
-              to={`/kawasan/edit/${data.id}`}
-              className="btn-primary-custom"
-            >
-              <i className="fas fa-pen"></i>
-              Edit Kawasan
-            </Link>
-          )}
-        </div>
-
         {/* Foto */}
-        <div className="row mt-3">
+        <div className="row">
           <div className="col-md-12 mb-3">
             <label className="form-label">Foto Kawasan</label>
             <div

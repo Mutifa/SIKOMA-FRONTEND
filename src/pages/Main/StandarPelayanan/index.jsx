@@ -106,8 +106,6 @@ const formatDate = (dateString) => {
 
       <div className="row">
         <div className="col-12">
-          <div className="box-title mb-3">Pesan Masuk dari Masyarakat</div>
-
           <div className="white-box">
             <div className="row mb-3">
               <div className="col-md-6">

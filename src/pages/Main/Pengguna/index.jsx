@@ -108,9 +108,17 @@ export default function Pengguna() {
     )
   }
 
-  return (
+return (
 
-    <DashboardLayout title="Pengguna">
+  <DashboardLayout
+    title="Pengguna"
+    actions={
+      <Link to="/pengguna/create" className="btn-primary-custom">
+        <i className="fas fa-plus"></i>
+        Tambah Pengguna
+      </Link>
+    }
+  >
 
       {error && (
         <div className="alert alert-danger">
@@ -125,15 +133,6 @@ export default function Pengguna() {
 
       {/* Tombol Tambah — btn-primary-custom */}
       <div className="white-box">
-
-        <div className="admin-card-header">
-          <div className="box-title mb-0">Kelola halaman pengguna</div>
-
-          <Link to="/pengguna/create" className="btn-primary-custom">
-            <i className="fas fa-plus"></i>
-            Tambah Pengguna
-          </Link>
-        </div>
 
         <div className="row mb-3">
           <div className="col-md-6">

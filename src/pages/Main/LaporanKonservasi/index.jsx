@@ -207,16 +207,14 @@ const formatDate = (date) => {
       {/* Tombol Tambah — hanya tampil untuk Admin Lapangan */}
       {/* White box / card tabel */}
       <div className="white-box">
-        <div className="admin-card-header">
-          <div className="box-title mb-0">Semua Laporan</div>
-
-          {isAdminLapangan && (
+        {isAdminLapangan && (
+          <div className="admin-card-toolbar">
             <Link to="/laporan-konservasi/create" className="btn-primary-custom">
               <i className="fas fa-plus"></i>
               Tambah Laporan
             </Link>
-          )}
-        </div>
+          </div>
+        )}
 
         {isAdminPusat && (
           <div className="row mb-3">

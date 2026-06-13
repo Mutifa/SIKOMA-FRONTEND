@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import peraturanService from '../../../services/peraturan.js'
+import Swal from 'sweetalert2'
 import {
   confirmDelete,
   successAlert,
@@ -17,8 +18,6 @@ export default function Peraturan() {
   const [searchTerm, setSearchTerm] = React.useState('')
   const [currentPage, setCurrentPage] = React.useState(1)
   const [itemsPerPage, setItemsPerPage] = React.useState(10)
-
-
 
   React.useEffect(() => {
     let mounted = true
@@ -43,14 +42,19 @@ export default function Peraturan() {
   }, [])
 
   const handleDelete = async (id) => {
+    console.log('handleDelete dipanggil, id:', id)
     const result = await confirmDelete()
+    console.log('result confirmDelete:', result)
     if (result.isConfirmed) {
       try {
         await peraturanService.delete(id)
         setData(prev => prev.filter(item => item.id !== id))
+        console.log('sebelum successAlert')
         await successAlert('Berhasil', 'Peraturan berhasil dihapus')
+        console.log('setelah successAlert')
       } catch (err) {
-        setError(err.response?.data?.message || 'Gagal menghapus peraturan')
+        console.log('masuk catch:', err)
+        await errorAlert('Gagal', err.response?.data?.message || 'Gagal menghapus peraturan')
       }
     }
   }
@@ -95,25 +99,21 @@ export default function Peraturan() {
 
   return (
 
-    <DashboardLayout title="Peraturan">
-
-      {error && <div className="alert alert-danger">{error}</div>}
-
+    <DashboardLayout
+      title="Peraturan"
+      actions={
+        <Link to="/peraturan/create" className="btn-primary-custom">
+          <i className="fas fa-plus"></i>
+          Tambah Peraturan
+        </Link>
+      }
+    >
       <div className="row">
         <div className="col-12">
 
-          {/* Header */}
-          <div className="admin-card-header">
-            <div className="box-title mb-0">Kelola halaman peraturan</div>
-
-            {/* Tombol Tambah — btn-primary-custom */}
-            <Link to="/peraturan/create" className="btn-primary-custom">
-              <i className="fas fa-plus"></i>
-              Tambah Peraturan
-            </Link>
-          </div>
-
           <div className="white-box">
+
+
             <div className="row mb-3">
               <div className="col-md-6">
                 <div className="d-flex align-items-center">

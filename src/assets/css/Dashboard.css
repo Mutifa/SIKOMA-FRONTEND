@@ -285,15 +285,51 @@ a { text-decoration: none; color: inherit; }
    ============================================================ */
 .page-breadcrumb {
   background: #fff;
-  padding: 14px 28px;
+  padding: 12px 28px;
   border-bottom: 1px solid #e2ece7;
+}
+
+.page-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.page-header-main {
+  min-width: 0;
+}
+
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.page-header-actions .btn,
+.page-header-actions .btn-primary-custom,
+.page-header-actions .btn-warning-custom,
+.page-header-actions .btn-danger-custom {
+  margin: 0;
 }
 
 .page-title {
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--green-800);
-  margin: 0 0 2px;
+  margin: 0;
+  .breadcrumb {
+  margin-top: 2px;
+}
   line-height: 1.3;
 }
 
@@ -319,7 +355,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .container-fluid {
-  padding: 24px 28px;
+  padding: 16px 24px;
   flex: 1;
 }
 
@@ -329,10 +365,10 @@ a { text-decoration: none; color: inherit; }
 .white-box {
   background: #fff;
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 16px 20px;
   box-shadow: var(--shadow-sm);
   border: 1px solid #e8f0eb;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .box-title {
@@ -1439,36 +1475,64 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding-bottom: 14px;
-  margin-bottom: 16px;
-  border-bottom: 1px solid #e8f0eb;
+  padding-bottom: 0;
+  margin-bottom: 12px;
+  border-bottom: none;
+}
+
+.admin-card-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 14px;
+  min-height: 36px;
+}
+
+.admin-card-toolbar:empty {
+  display: none;
 }
 
 .page-wrapper .white-box.p-0 > .admin-card-header,
 .page-wrapper .white-box.overflow-hidden > .admin-card-header {
-  padding: 18px 20px 14px;
+  padding: 14px 16px 0;
   margin-bottom: 0;
 }
 
 .page-wrapper .container-fluid > .row > .col-12 > .admin-card-header {
   background: #fff;
   border: 1px solid #e3eee8;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-radius: var(--radius-lg);
   box-shadow: 0 8px 24px rgba(26,71,49,0.06);
-  padding: 18px 20px 14px;
-  margin-bottom: 0;
+  padding: 14px 16px;
+  margin-bottom: 12px;
 }
 
 .page-wrapper .container-fluid > .row > .col-12 > .admin-card-header + .white-box {
-  border-top: none;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  border-top: 1px solid #e3eee8;
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
 }
 
 .page-wrapper .white-box {
   border-radius: var(--radius-lg);
   border: 1px solid #e3eee8;
   box-shadow: 0 8px 24px rgba(26,71,49,0.06);
+}
+
+.page-wrapper .white-box > .row.mb-3:first-child,
+.page-wrapper .white-box > .admin-card-toolbar + .row.mb-3 {
+  margin-top: 0;
+  margin-bottom: 12px !important;
+}
+
+.page-wrapper .white-box .row.mt-3:first-child,
+.page-wrapper .white-box .row.mt-3 {
+  margin-top: 12px !important;
+}
+
+.page-wrapper .white-box .text-muted {
+  margin-bottom: 0;
 }
 
 .page-wrapper .white-box.p-0,
@@ -1479,9 +1543,9 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 .page-wrapper .white-box > .d-flex.justify-content-between.align-items-center:first-child,
 .page-wrapper .container-fluid > .row > .col-12 > .d-flex.justify-content-between.align-items-center:first-child {
   gap: 12px;
-  padding-bottom: 14px;
-  margin-bottom: 16px !important;
-  border-bottom: 1px solid #e8f0eb;
+  padding-bottom: 0;
+  margin-bottom: 14px !important;
+  border-bottom: none;
 }
 
 .page-wrapper .box-title,
@@ -1510,20 +1574,14 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 .page-wrapper h3.box-title::before,
 .page-wrapper .white-box h5.mb-0::before,
 .page-wrapper .admin-card-title::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--green-700);
-  display: inline-block;
-  margin-right: 8px;
-  vertical-align: middle;
+  content: none;
+  display: none;
 }
 
 .page-wrapper .white-box > .box-title:first-child,
 .page-wrapper .white-box > h3.box-title:first-child {
-  padding-bottom: 14px;
-  border-bottom: 1px solid #e8f0eb;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .page-wrapper .table-responsive,
@@ -1979,3 +2037,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 hr:not([class]) { display: none; }
 
 .logo-text { font-size: 28px; font-weight: 800; letter-spacing: 1px; color: white; }
+
+.swal2-container {
+  z-index: 99999 !important;
+}

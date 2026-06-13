@@ -90,7 +90,7 @@ export default function KontenCreate() {
           </div>
 
           <div className="d-flex gap-2">
-            <button type="submit" className="btn-primary-custom" disabled={saving}>
+            <button type="submit" className="btn btn-success" disabled={saving}>
               {saving ? 'Menyimpan...' : 'Simpan'}
             </button>
             <Link to="/dashboard/informasi-edukasi" className="btn btn-secondary">

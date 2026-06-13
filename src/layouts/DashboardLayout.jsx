@@ -25,6 +25,7 @@ import '../assets/css/Dashboard.css'
 export default function DashboardLayout({
   children,
   title = "Admin Pusat",
+  actions,
   website // 🔥 Menerima properti data website dari parent component
 }) {
 
@@ -295,8 +296,8 @@ export default function DashboardLayout({
 
         {/* BREADCRUMB */}
         <div className="page-breadcrumb">
-          <div className="row align-items-center">
-            <div className="col-md-6 col-8 align-self-center">
+          <div className="page-header-row">
+            <div className="page-header-main">
               
               {/* Title halaman */}
               <h3 className="page-title">
@@ -316,6 +317,11 @@ export default function DashboardLayout({
               </nav>
 
             </div>
+            {actions && (
+              <div className="page-header-actions">
+                {actions}
+              </div>
+            )}
           </div>
         </div>
 

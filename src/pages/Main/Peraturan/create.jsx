@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import peraturanService from '../../../services/peraturan.js'
+import { successAlert, errorAlert } from '../../../utils/alert'
 
 export default function PeraturanCreate() {
 
@@ -39,10 +40,12 @@ export default function PeraturanCreate() {
 
       await peraturanService.create(formDataToSend)
 
+      await successAlert('Berhasil', 'Peraturan berhasil ditambahkan')
       navigate('/peraturan')
 
     } catch (err) {
 
+      await errorAlert('Gagal', err.response?.data?.message || 'Gagal menambahkan peraturan')
 
     } finally {
 
