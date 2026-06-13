@@ -149,11 +149,21 @@ export default function KawasanEdit() {
 
   return (
 
-    <DashboardLayout title="Edit Kawasan Konservasi">
+    <DashboardLayout
+      title="Edit Kawasan Konservasi"
+      actions={
+        <div className="d-flex flex-wrap gap-2 justify-content-between align-items-center">
+          <button type="submit" form="kawasan-edit-form" className="btn btn-success" disabled={saving}>
+            {saving ? 'Menyimpan...' : 'Simpan'}
+          </button>
+          <Link to="/kawasan" className="btn btn-secondary">Kembali</Link>
+        </div>
+      }
+    >
 
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <form onSubmit={handleSubmit}>
+      <form id="kawasan-edit-form" onSubmit={handleSubmit}>
         <div className="white-box">
 
           <div className="row">
@@ -252,20 +262,6 @@ export default function KawasanEdit() {
               </div>
             )}
 
-          </div>
-
-          <div className="d-flex gap-2">
-            <button
-              type="submit"
-              className="btn btn-success"
-              disabled={saving}
-            >
-              {saving ? 'Menyimpan...' : 'Simpan'}
-            </button>
-
-            <Link to="/kawasan" className="btn btn-secondary">
-              Kembali
-            </Link>
           </div>
 
         </div>

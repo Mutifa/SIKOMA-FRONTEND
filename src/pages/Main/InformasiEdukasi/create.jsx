@@ -30,19 +30,29 @@ export default function KontenCreate() {
       }
 
       await adminInformasiEdukasiService.create(formDataToSend)
-      successAlert('Berhasil', 'Konten berhasil disimpan')
+      await successAlert('Berhasil', 'Konten berhasil disimpan')
       navigate('/dashboard/informasi-edukasi')
     } catch (err) {
       console.error(err)
-      errorAlert('Gagal', err.response?.data?.message || 'Gagal menyimpan konten')
+      await errorAlert('Gagal', err.response?.data?.message || 'Gagal menyimpan konten')
     } finally {
       setSaving(false)
     }
   }
 
   return (
-    <DashboardLayout title="Tambah Konten">
-      <form onSubmit={handleSubmit}>
+    <DashboardLayout 
+      title="Tambah Konten"
+      actions={
+        <div className="d-flex flex-wrap gap-2 justify-content-between align-items-center">
+          <button type="submit" form="edukasi-form" className="btn btn-success" disabled={saving}>
+            {saving ? 'Menyimpan...' : 'Simpan'}
+          </button>
+          <Link to="/dashboard/informasi-edukasi" className="btn btn-secondary">Kembali</Link>
+        </div>
+      }
+    >
+      <form id="edukasi-form" onSubmit={handleSubmit}>
         <div className="white-box">
 
           <div className="mb-3">
@@ -87,15 +97,6 @@ export default function KontenCreate() {
               value={formData.deskripsi}
               onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
             />
-          </div>
-
-          <div className="d-flex gap-2">
-            <button type="submit" className="btn btn-success" disabled={saving}>
-              {saving ? 'Menyimpan...' : 'Simpan'}
-            </button>
-            <Link to="/dashboard/informasi-edukasi" className="btn btn-secondary">
-              Kembali
-            </Link>
           </div>
 
         </div>

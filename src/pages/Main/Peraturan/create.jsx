@@ -57,9 +57,25 @@ export default function PeraturanCreate() {
 
   return (
 
-    <DashboardLayout title="Tambah Peraturan">
+    <DashboardLayout 
+      title="Tambah Peraturan"
+      actions={
+        <div className="d-flex flex-wrap gap-2 justify-content-between align-items-center">
+          <button
+            type="submit"
+            form="peraturan-form"
+            className="btn btn-success"
+            disabled={saving}
+          >
+            {saving ? 'Menyimpan...' : 'Simpan'}
+          </button>
 
-      <form onSubmit={handleSubmit}>
+          <Link to="/peraturan" className="btn btn-secondary">Kembali</Link>
+        </div>
+      }
+    >
+
+      <form id="peraturan-form" onSubmit={handleSubmit}>
 
         <div className="white-box">
 
@@ -165,27 +181,6 @@ export default function PeraturanCreate() {
                 })
               }
             />
-
-          </div>
-
-          <div className="d-flex gap-2">
-
-            <button
-              type="submit"
-              className="btn btn-success"
-              disabled={saving}
-            >
-
-              {saving ? 'Menyimpan...' : 'Simpan'}
-
-            </button>
-
-            <Link
-              to="/peraturan"
-              className="btn btn-secondary"
-            >
-              Kembali
-            </Link>
 
           </div>
 

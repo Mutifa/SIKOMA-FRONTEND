@@ -213,7 +213,17 @@ export default function LaporanEdit() {
 
   // ── Render ──────────────────────────────────────────────────────────────
   return (
-    <DashboardLayout title="Edit Laporan Konservasi">
+    <DashboardLayout
+      title="Edit Laporan Konservasi"
+      actions={
+        <div className="d-flex flex-wrap gap-2 justify-content-between align-items-center">
+          <button type="button" className="btn btn-outline-secondary" style={{ borderRadius: '6px', fontWeight: 500 }} onClick={() => navigate('/laporan-konservasi')}>
+            &#171; Kembali
+          </button>
+          <button type="submit" form="laporan-edit-form" className="btn-primary-custom" disabled={saving}>{saving ? 'Menyimpan...' : 'Update Laporan'}</button>
+        </div>
+      }
+    >
 
       {/* Pesan error dari backend */}
       {error && (
@@ -237,7 +247,7 @@ export default function LaporanEdit() {
 
           {/* Card / box putih utama */}
           <div className="lk-card">
-            <form onSubmit={handleSubmit} encType="multipart/form-data">
+            <form id="laporan-edit-form" onSubmit={handleSubmit} encType="multipart/form-data">
 
               {/* SEKSI 1 — DESKRIPSI KEGIATAN */}
               <div className="mb-4">
@@ -517,24 +527,7 @@ export default function LaporanEdit() {
                 </div>
               </div>
 
-              {/* ACTION BUTTONS */}
-              <div className="mt-2 text-end">
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary me-2"
-                  style={{ borderRadius: '6px', fontWeight: 500, fontSize: '14px' }}
-                  onClick={() => navigate('/laporan-konservasi')}
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  className="lk-btn-primary"
-                  disabled={saving}
-                >
-                  {saving ? 'Menyimpan...' : 'Update Laporan'}
-                </button>
-              </div>
+              {/* ACTION BUTTONS: moved to DashboardLayout actions */}
 
             </form>
           </div>

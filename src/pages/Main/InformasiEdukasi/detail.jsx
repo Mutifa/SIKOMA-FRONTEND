@@ -64,7 +64,17 @@ export default function KontenDetail() {
 
   return (
 
-    <DashboardLayout title="Detail Konten">
+    <DashboardLayout 
+      title="Detail Konten"
+      actions={
+        <Link
+          to="/dashboard/informasi-edukasi"
+          className="btn btn-secondary"
+        >
+          Kembali
+        </Link>
+      }
+    >
 
       <div className="white-box">
 
@@ -145,13 +155,6 @@ export default function KontenDetail() {
           />
 
         </div>
-
-        <Link
-          to="/dashboard/informasi-edukasi"
-          className="btn-secondary-custom"
-        >
-          Kembali
-        </Link>
 
       </div>
 

@@ -52,7 +52,14 @@ export default function ProgramDetail() {
 
   return (
 
-    <DashboardLayout title="Detail Program">
+    <DashboardLayout
+      title="Detail Program"
+      actions={
+        <div className="d-flex flex-wrap gap-2 justify-content-between align-items-center">
+          <Link to="/dashboard/program" className="btn btn-secondary">Kembali</Link>
+        </div>
+      }
+    >
 
       <div className="white-box">
 
@@ -116,13 +123,6 @@ export default function ProgramDetail() {
           />
 
         </div>
-
-        <Link
-          to="/dashboard/program"
-          className="btn btn-secondary"
-        >
-          Kembali
-        </Link>
 
       </div>
 

@@ -65,8 +65,16 @@ export default function KontenEdit() {
   }
 
   return (
-    <DashboardLayout title="Edit Konten">
-      <form onSubmit={handleSubmit}>
+    <DashboardLayout
+      title="Edit Konten"
+      actions={
+        <div className="d-flex flex-wrap gap-2 justify-content-between align-items-center">
+          <button type="submit" form="edukasi-edit-form" className="btn btn-success">Update</button>
+          <Link to="/dashboard/informasi-edukasi" className="btn btn-secondary">Kembali</Link>
+        </div>
+      }
+    >
+      <form id="edukasi-edit-form" onSubmit={handleSubmit}>
         <div className="white-box">
 
           <div className="mb-3">
@@ -112,11 +120,6 @@ export default function KontenEdit() {
             <label className="form-label">Deskripsi</label>
             <textarea className="form-control" rows="5" value={formData.deskripsi}
               onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })} />
-          </div>
-
-          <div className="d-flex gap-2">
-            <button type="submit" className="btn btn-success">Update</button>
-            <Link to="/dashboard/informasi-edukasi" className="btn btn-secondary">Kembali</Link>
           </div>
 
         </div>

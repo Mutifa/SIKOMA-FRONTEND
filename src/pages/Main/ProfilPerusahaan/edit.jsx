@@ -101,9 +101,17 @@ const cleanHtml = (html) =>
   }
 
   return (
-    <DashboardLayout title="Edit Profil Perusahaan">
+    <DashboardLayout
+      title="Edit Profil Perusahaan"
+      actions={
+        <div className="d-flex flex-wrap gap-2 justify-content-between align-items-center">
+          <button type="submit" form="form-profil-perusahaan" className="btn btn-success" disabled={saving}>{saving ? 'Menyimpan...' : 'Simpan'}</button>
+          <button type="button" className="btn btn-secondary" onClick={() => navigate('/profil-perusahaan')}>Kembali</button>
+        </div>
+      }
+    >
 
-      <div className="white-box">
+      <form id="form-profil-perusahaan" onSubmit={handleSubmit} className="white-box">
 
         <div className="row">
 
@@ -184,26 +192,7 @@ const cleanHtml = (html) =>
 
         </div>
 
-        <div className="d-flex gap-2">
-          <button
-            type="button"
-            className="btn btn-success"
-            disabled={saving}
-            onClick={handleSubmit}
-          >
-            {saving ? 'Menyimpan...' : 'Simpan'}
-          </button>
-
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => navigate('/profil-perusahaan')}
-          >
-            Kembali
-          </button>
-        </div>
-
-      </div>
+      </form>
 
     </DashboardLayout>
   )

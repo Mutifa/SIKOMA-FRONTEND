@@ -178,27 +178,26 @@ export default function LaporanCreate() {
 
   // ── RENDER COMPONENT ─────────────────────────────────────────────────────
   return (
-    <DashboardLayout title="Tambah Laporan Konservasi">
+    <DashboardLayout 
+      title="Tambah Laporan Konservasi"
+      actions={
+        <div className="d-flex flex-wrap gap-2 justify-content-between align-items-center">
+          <button type="submit" form="laporan-create-form" className="btn-primary-custom" disabled={loading}>
+            {loading ? 'Menyimpan...' : 'Simpan Laporan'}
+          </button>
+          <button type="button" className="btn btn-outline-secondary" onClick={() => navigate('/laporan-konservasi')}>Batal</button>
+        </div>
+      }
+    >
 
       {error && (
         <div className="alert alert-danger mb-4" role="alert">{error}</div>
       )}
 
-      <div className="mb-3">
-        <button
-          type="button"
-          className="btn btn-outline-secondary btn-laporan"
-          style={{ borderRadius: '6px', fontWeight: 500 }}
-          onClick={() => navigate('/laporan-konservasi')}
-        >
-          &#171; Kembali
-        </button>
-      </div>
-
       <div className="row">
         <div className="col-12">
           <div className="lk-card">
-            <form onSubmit={handleSubmit} encType="multipart/form-data">
+            <form id="laporan-create-form" onSubmit={handleSubmit} encType="multipart/form-data">
 
               {/* SEKSI 1 — DESKRIPSI KEGIATAN */}
               <div className="mb-4">
@@ -347,21 +346,6 @@ export default function LaporanCreate() {
                     )}
                   </div>
                 </div>
-              </div>
-
-              {/* ACTION BUTTONS */}
-              <div className="mt-2 text-end">
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary me-2"
-                  style={{ borderRadius: '6px', fontWeight: 500, fontSize: '14px' }}
-                  onClick={() => navigate('/laporan-konservasi')}
-                >
-                  Batal
-                </button>
-                <button type="submit" className="lk-btn-primary" disabled={loading}>
-                  {loading ? 'Menyimpan...' : 'Simpan Laporan'}
-                </button>
               </div>
 
             </form>

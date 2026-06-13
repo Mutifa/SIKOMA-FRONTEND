@@ -50,7 +50,17 @@ export default function PenggunaDetail() {
 
     return (
 
-        <DashboardLayout title="Detail Pengguna">
+        <DashboardLayout 
+            title="Detail Pengguna"
+            actions={
+                <Link
+                    to="/pengguna"
+                    className="btn btn-secondary"
+                >
+                    Kembali
+                </Link>
+            }
+        >
 
             <div className="white-box">
 
@@ -112,13 +122,6 @@ export default function PenggunaDetail() {
                     />
 
                 </div>
-
-                <Link
-                    to="/pengguna"
-                    className="btn btn-secondary"
-                >
-                    Kembali
-                </Link>
 
             </div>
 

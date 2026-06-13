@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout'
 import { penggunaService } from '../../../services/penggunaService'
 import {
@@ -89,9 +89,29 @@ export default function PenggunaCreate() {
     }
 
     return (
-        <DashboardLayout title="Tambah Pengguna">
+        <DashboardLayout 
+            title="Tambah Pengguna"
+            actions={
+                <div className="d-flex gap-2 flex-wrap">
+                    <button
+                        type="submit"
+                        form="pengguna-form"
+                        className="btn btn-success"
+                    >
+                        Simpan
+                    </button>
 
-            <form onSubmit={handleSubmit} autoComplete="off">
+                    <Link
+                        to="/pengguna"
+                        className="btn btn-secondary"
+                    >
+                        Kembali
+                    </Link>
+                </div>
+            }
+        >
+
+            <form id="pengguna-form" onSubmit={handleSubmit} autoComplete="off">
                 <div className="white-box">
 
                  {/* ── Field Nama ── */}
@@ -172,23 +192,6 @@ export default function PenggunaCreate() {
                         </select>
                     </div>
 
-                    {/* ── Tombol ── */}
-                    <div className="d-flex gap-2">
-                        <button
-                            type="submit"
-                            className="btn btn-success"
-                        >
-                            Simpan
-                        </button>
-
-                        <button
-                            type="button"
-                            className="btn btn-secondary"
-                            onClick={() => navigate('/pengguna')}
-                        >
-                            Kembali
-                        </button>
-                    </div>
                 </div>
             </form>
         </DashboardLayout>

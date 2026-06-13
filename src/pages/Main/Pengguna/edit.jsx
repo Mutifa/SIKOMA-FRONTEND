@@ -77,9 +77,29 @@ export default function PenggunaEdit() {
 
   return (
 
-    <DashboardLayout title="Edit Pengguna">
+    <DashboardLayout 
+      title="Edit Pengguna"
+      actions={
+        <div className="d-flex gap-2 flex-wrap">
+          <button
+            type="submit"
+            form="pengguna-edit-form"
+            className="btn btn-success"
+          >
+            Update
+          </button>
 
-      <form onSubmit={handleSubmit}>
+          <Link
+            to="/pengguna"
+            className="btn btn-secondary"
+          >
+            Kembali
+          </Link>
+        </div>
+      }
+    >
+
+      <form id="pengguna-edit-form" onSubmit={handleSubmit}>
 
         <div className="white-box">
 
@@ -193,24 +213,6 @@ export default function PenggunaEdit() {
               </option>
 
             </select>
-
-          </div>
-
-          <div className="d-flex gap-2">
-
-            <button
-              type="submit"
-              className="btn btn-success"
-            >
-              Update
-            </button>
-
-            <Link
-              to="/pengguna"
-              className="btn btn-secondary"
-            >
-              Kembali
-            </Link>
 
           </div>
 

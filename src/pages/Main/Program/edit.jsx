@@ -67,8 +67,16 @@ export default function ProgramEdit() {
   }
 
   return (
-    <DashboardLayout title="Edit Program">
-      <form onSubmit={handleSubmit}>
+    <DashboardLayout
+      title="Edit Program"
+      actions={
+        <div className="d-flex flex-wrap gap-2 justify-content-between align-items-center">
+          <button type="submit" form="program-edit-form" className="btn btn-success">Update</button>
+          <Link to="/dashboard/program" className="btn btn-secondary">Kembali</Link>
+        </div>
+      }
+    >
+      <form id="program-edit-form" onSubmit={handleSubmit}>
         <div className="white-box">
 
           <div className="mb-3">
@@ -117,11 +125,6 @@ export default function ProgramEdit() {
               value={formData.deskripsi}
               onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
             />
-          </div>
-
-          <div className="d-flex gap-2">
-            <button type="submit" className="btn btn-success">Update</button>
-            <Link to="/dashboard/program" className="btn btn-secondary">Kembali</Link>
           </div>
 
         </div>

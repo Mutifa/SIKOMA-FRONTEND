@@ -53,7 +53,17 @@ export default function PeraturanDetail() {
 
   return (
 
-    <DashboardLayout title="Detail Peraturan">
+    <DashboardLayout 
+      title="Detail Peraturan"
+      actions={
+        <Link
+          to="/peraturan"
+          className="btn btn-secondary"
+        >
+          Kembali
+        </Link>
+      }
+    >
 
       <div className="white-box">
 
@@ -154,13 +164,6 @@ export default function PeraturanDetail() {
           </div>
 
         </div>
-
-        <Link
-          to="/peraturan"
-          className="btn btn-secondary"
-        >
-          Kembali
-        </Link>
 
       </div>
 

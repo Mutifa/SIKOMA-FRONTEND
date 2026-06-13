@@ -86,7 +86,7 @@ export default function PeraturanEdit() {
 
     } catch (err) {
 
-      errorAlert('Gagal', err.response?.data?.message || 'Gagal mengupdate peraturan')
+      await errorAlert('Gagal', err.response?.data?.message || 'Gagal mengupdate peraturan')
     }
 
   }
@@ -102,9 +102,17 @@ export default function PeraturanEdit() {
 
   return (
 
-    <DashboardLayout title="Edit Peraturan">
+    <DashboardLayout
+      title="Edit Peraturan"
+      actions={
+        <div className="d-flex flex-wrap gap-2 justify-content-between align-items-center">
+          <button type="submit" form="peraturan-edit-form" className="btn btn-success">Update</button>
+          <Link to="/peraturan" className="btn btn-secondary">Kembali</Link>
+        </div>
+      }
+    >
 
-      <form onSubmit={handleSubmit}>
+      <form id="peraturan-edit-form" onSubmit={handleSubmit}>
 
         <div className="white-box">
 
@@ -239,24 +247,6 @@ export default function PeraturanEdit() {
             </div>
 
           )}
-
-          <div className="d-flex gap-2">
-
-            <button
-              type="submit"
-              className="btn btn-success"
-            >
-              Update
-            </button>
-
-            <Link
-              to="/peraturan"
-              className="btn btn-secondary"
-            >
-              Kembali
-            </Link>
-
-          </div>
 
         </div>
 
