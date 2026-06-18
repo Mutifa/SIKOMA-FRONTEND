@@ -257,25 +257,19 @@ export default function AdminPusatDashboard() {
                     <div className="text-warning fs-2">
                       <i className="fas fa-file-alt"></i>
                     </div>
-
                   </div>
 
                   <div className="mt-3">
-
                     <h2 className="fw-bold">
                       {data.feedback || 0}
                     </h2>
-
                     <small className="text-muted">
                       Standar Pelayanan
                     </small>
 
                   </div>
-
                 </div>
-
               </div>
-
             </div>
 
             {/* ── CHART + TABEL DAERAH ── */}
@@ -283,15 +277,12 @@ export default function AdminPusatDashboard() {
 
               {/* Bar Chart: Laporan Tahunan */}
               <div className="col-lg-8 col-md-12">
-
                 <div className="white-box">
-
                   <h3 className="box-title">
                     Laporan Tahun 2026
                   </h3>
 
                   <div style={{ height: '400px' }}>
-
                     <Bar
                       data={tahunanChartData}
                       options={{
@@ -314,31 +305,24 @@ export default function AdminPusatDashboard() {
                     />
 
                   </div>
-
                 </div>
-
               </div>
 
               {/* Tabel: Daftar Daerah Konservasi */}
               <div className="col-lg-4 col-md-12">
-
                 <div className="white-box">
-
                   <h3 className="box-title">
                     Daerah
                   </h3>
 
                   <div className="table-responsive">
-
                     <table className="table">
-
                       <thead>
                         <tr>
                           <th>Daerah Konservasi</th>
                           <th>Aksi</th>
                         </tr>
                       </thead>
-
                       <tbody>
 
                         {/* Tampilkan list daerah jika ada, atau pesan kosong */}
@@ -350,42 +334,29 @@ export default function AdminPusatDashboard() {
                               <td>{item.jenisKawasan}</td>
                               <td>-</td>
                             </tr>
-
                           ))
-
                         ) : (
-
                           <tr>
                             <td colSpan="2">
                               Tidak ada data
                             </td>
                           </tr>
-
                         )}
 
                       </tbody>
-
                     </table>
-
                   </div>
-
                 </div>
-
               </div>
-
             </div>
-
           </>
-
         )}
 
         {/* ══════════════════════════════════════
             DASHBOARD ADMIN LAPANGAN
         ══════════════════════════════════════ */}
         {isAdminLapangan && (
-
           <>
-
             {/* ── SUMMARY CARDS ── */}
             <div className="row">
 
@@ -435,11 +406,8 @@ export default function AdminPusatDashboard() {
                     <small className="lapangan-stat-caption">
                       Jumlah laporan kegiatan
                     </small>
-
                   </div>
-
                 </div>
-
               </div>
 
               {/* Card: Pie Chart Status Laporan (Diterima vs Ditolak) */}
@@ -496,30 +464,22 @@ export default function AdminPusatDashboard() {
                     />
 
                   </div>
-
                 </div>
-
               </div>
-
             </div>
 
             {/* ── LINE CHART: Pelaporan Kegiatan per Bulan ── */}
             <div className="row mt-4">
-
               <div className="col-12">
-
                 <div
                   className="white-box lapangan-dashboard-card lapangan-line-card"
                 >
-
                   <h5
                     className="lapangan-card-title mb-3"
                   >
                     Pelaporan Kegiatan
                   </h5>
-
                   <div className="lapangan-line-chart">
-
                     <Line
                       data={{
                         labels: [
@@ -549,19 +509,12 @@ export default function AdminPusatDashboard() {
                     />
 
                   </div>
-
                 </div>
-
               </div>
-
             </div>
-
           </>
-
         )}
-
       </div>
-
     </DashboardLayout>
   )
 }

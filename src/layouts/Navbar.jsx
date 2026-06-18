@@ -5,14 +5,17 @@ function Navbar({ website }) {
   const FILE_URL = 'https://codemy.my.id'
   const [logoKey, setLogoKey] = React.useState(Date.now())
 
+// Gunakan useEffect untuk memperbarui logoKey saat website.logo berubah
   React.useEffect(() => {
     if (website?.logo) setLogoKey(Date.now())
   }, [website?.logo])
 
+  // Tentukan sumber logo berdasarkan apakah website.logo tersedia atau tidak
   const logoSrc = website?.logo
     ? `${FILE_URL}/uploads/profil/${website.logo}?t=${logoKey}`
     : `${FILE_URL}/uploads/profil/logo.png`
 
+    // Render Navbar
   return (
     <nav className="navbar navbar-expand-lg navbar-light sticky-top">
       <div className="container">

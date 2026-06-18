@@ -7,8 +7,12 @@ import React, {
 
 import { authService } from '../services/authService'
 
+// AuthContext & Provider
+// Menyediakan state auth global untuk seluruh aplikasi
+// Menangani login, logout, dan pengecekan auth secara otomatis saat aplikasi dibuka
 const AuthContext = createContext()
 
+// Fungsi untuk mengambil user dari localStorage dengan penanganan error parsing
 const parseStoredUser = () => {
   try {
     const savedUser = localStorage.getItem('user')
@@ -19,16 +23,9 @@ const parseStoredUser = () => {
   }
 }
 
-// 🔥 PERBAIKAN: Tambahkan kondisi untuk role perusahaan agar tidak salah ambil endpoint profile
-const getProfileEndpoint = (role) => {
-  if (role === 'admin_pusat') return '/admin_pusat/profile'
-  if (role === 'admin_lapangan') return '/admin_lapangan/profile'
-  if (role === 'perusahaan') return '/perusahaan/profile' // <-- Sesuaikan dengan endpoint & role perusahaan kamu
-  
-  // Jika nama role sama dengan nama endpoint backend, bisa gunakan fallback dinamis ini:
-  return `/${role}/profile` 
-}
+const getProfileEndpoint = () => '/profile'
 
+// Custom hook untuk mengakses AuthContext
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
@@ -37,6 +34,7 @@ export const useAuth = () => {
   return context
 }
 
+// AuthProvider component untuk membungkus aplikasi dan menyediakan state auth
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -60,7 +58,7 @@ export const AuthProvider = ({ children }) => {
       checkAuth()
       return
     }
-
+// Jika tidak ada token, pastikan state auth di-reset
     localStorage.removeItem('role')
     localStorage.removeItem('user')
     setIsAuthenticated(false)
@@ -82,7 +80,7 @@ export const AuthProvider = ({ children }) => {
         ...userData,
         role
       }
-
+// Update state dan localStorage dengan data user terbaru
       setUser(nextUser)
       localStorage.setItem('user', JSON.stringify(nextUser))
       setIsAuthenticated(true)
@@ -118,6 +116,7 @@ export const AuthProvider = ({ children }) => {
       const token = res.data.data?.token || res.data.token
       const role = res.data.data?.role || res.data.role
 
+      // Update state dan localStorage dengan data user terbaru
       setUser({ ...userData, role })
       localStorage.setItem('user', JSON.stringify({ ...userData, role }))
       setIsAuthenticated(true)
@@ -125,12 +124,14 @@ export const AuthProvider = ({ children }) => {
       if (token) localStorage.setItem('token', token)
       if (role) localStorage.setItem('role', role)
 
+      // Kembalikan data user dan role untuk redirect atau kebutuhan lain di komponen login  
       return {
         success: true,
         user: userData,
         role,
         redirect: '/dashboard',
       }
+
     } catch (error) {
       return {
         success: false,
@@ -156,12 +157,12 @@ export const AuthProvider = ({ children }) => {
       window.location.href = '/login'
     }
   }
-
+// =====================================================  
   const hasRole = (role) => user?.role === role
   const hasAnyRole = (roles = []) => roles.includes(user?.role)
 
   const value = {
-    user,
+    user, 
     loading,
     isAuthenticated,
     login,

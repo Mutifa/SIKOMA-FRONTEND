@@ -6,6 +6,7 @@ import React from 'react'
  * Mengurangi Cumulative Layout Shift dengan reserve space
  */
 
+// SkeletonCard: placeholder untuk kartu dengan gambar, judul, deskripsi, dan tombol
 export function SkeletonCard() {
   return (
     <div className="card w-100 shadow-sm" style={{ borderRadius: 12, overflow: 'hidden', animation: 'pulse 1.5s ease-in-out infinite' }}>
@@ -17,6 +18,7 @@ export function SkeletonCard() {
           animation: 'pulse 1.5s ease-in-out infinite'
         }}
       />
+      // Card body dengan placeholder untuk judul, deskripsi, dan tombol
       <div className="card-body d-flex flex-column p-4">
         <div
           style={{
@@ -50,6 +52,7 @@ export function SkeletonCard() {
   )
 }
 
+// SkeletonImage: placeholder untuk gambar dengan ukuran yang dapat disesuaikan
 export function SkeletonImage({ width = '100%', height = 200 }) {
   return (
     <div

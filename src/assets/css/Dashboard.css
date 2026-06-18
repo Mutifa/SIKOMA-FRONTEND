@@ -83,12 +83,13 @@ a { text-decoration: none; color: inherit; }
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
+/* ===== TOPBAR BRAND TEXT ===== */
 .topbar-brand span {
   font-family: var(--font-main);
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 1px;
-  color: #1a1a1a;
+  color: #fff;
   max-width: 168px;
   overflow: hidden;
   text-overflow: ellipsis;

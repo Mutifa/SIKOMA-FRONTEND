@@ -1,70 +1,103 @@
+/* ================================================================
+   STYLE.CSS — SIKOMA (Landing Page / Halaman Publik)
+   ================================================================
+   File ini berisi semua styling untuk halaman PUBLIK (yang bisa
+   diakses tanpa login), seperti: Home, Login, Program, Informasi
+   & Edukasi, dll.
+
+   File ini BERBEDA dari Dashboard.css — Dashboard.css khusus untuk
+   tampilan admin (setelah login), sedangkan style.css ini khusus
+   untuk tampilan yang dilihat masyarakat umum / pengunjung website.
+   ================================================================ */
+
 /* ================= ROOT ================= */
+/* :root mendefinisikan "variabel CSS" global (CSS Custom Properties).
+   Tujuannya: supaya warna hijau utama cukup didefinisikan SEKALI di
+   sini, lalu dipakai berulang di seluruh file dengan var(--primary-green).
+   Keuntungan: kalau suatu saat warna brand berubah, cukup ubah di 1
+   tempat ini saja, tidak perlu cari satu-satu di seluruh file. */
 :root {
-  --primary-green: #2f6f4f;
-  --primary-green-dark: #255c42;
-  --font-main: 'Poppins', sans-serif;
+  --primary-green: #2f6f4f;       /* warna hijau utama brand SIKOMA */
+  --primary-green-dark: #255c42;  /* varian hijau lebih gelap, dipakai untuk efek hover */
+  --font-main: 'Poppins', sans-serif; /* font utama seluruh website */
 
   font-family: var(--font-main);
   line-height: 1.5;
   font-weight: 400;
 
-  color: #213547;
-  background-color: #ffffff;
+  color: #213547;          /* warna teks default (gelap, hampir hitam) */
+  background-color: #ffffff; /* background default halaman (putih) */
 }
 
 /* ================= RESET ================= */
+/* "CSS Reset" — menghapus margin/padding bawaan browser yang berbeda-beda
+   di setiap browser, supaya tampilan konsisten di semua browser. */
 body {
   margin: 0;
   padding: 0;
-  min-width: 320px;
-  overflow-x: hidden;
+  min-width: 320px;       /* lebar minimum, mencegah layout pecah di HP sangat kecil */
+  overflow-x: hidden;     /* mencegah scroll horizontal tidak sengaja */
   font-family: var(--font-main);
 }
 
 /* ================= LINK ================= */
+/* Menghilangkan garis bawah bawaan <a> dan membuat warnanya
+   mengikuti warna teks induknya (bukan biru bawaan browser) */
 a {
   text-decoration: none;
   color: inherit;
 }
 
 /* ================= HERO ================= */
+/* "Hero section" = bagian banner besar paling atas halaman Home,
+   biasanya berisi judul besar + gambar/carousel */
 .hero-title {
-  font-size: clamp(30px, 5vw, 60px);
+  font-size: clamp(30px, 5vw, 60px); /* ukuran font otomatis menyesuaikan lebar layar (responsive) */
   line-height: 1.2;
-  text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  text-shadow: 0 4px 12px rgba(0,0,0,0.5); /* bayangan teks agar tetap terbaca di atas gambar */
 }
 
 .hero-subtitle {
   font-size: 20px;
-  color: #fff;
+  color: #fff;              /* putih, karena ditampilkan di atas gambar/banner gelap */
   margin-top: 12px;
   line-height: 1.6;
   text-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
+/* Media query = aturan CSS khusus untuk ukuran layar tertentu.
+   Di bawah ini: khusus untuk layar HP/tablet (lebar ≤ 768px) */
 @media (max-width: 768px) {
   .hero-subtitle {
-    font-size: 14px;
+    font-size: 14px; /* font diperkecil di HP supaya tidak terlalu besar */
   }
 }
 
 /* ================= CARD ================= */
+/* Style umum untuk komponen "card" (kotak konten dengan efek hover terangkat) */
 .card {
   padding: 2em;
-  transition: 0.3s;
+  transition: 0.3s; /* animasi halus saat hover */
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-5px); /* card naik sedikit saat di-hover (efek interaktif) */
 }
 
-/* ================= NAVBAR ================= */
+/* ================================================================
+   NAVBAR (Halaman Publik)
+   ================================================================
+   Ini navbar yang muncul di Navbar.jsx — beda dengan topbar di
+   Dashboard.css. Background-nya PUTIH (bukan hijau), makanya warna
+   teks "SIKOMA" di sini gelap (#213547 dari :root), supaya tetap
+   kontras/terbaca di atas background putih.
+   ================================================================ */
 .navbar {
   min-height: 80px;
   padding: 12px 0 !important;
-  background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  z-index: 999;
+  background: white;                       /* background navbar publik: putih */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);  /* bayangan halus di bawah navbar */
+  z-index: 999;                            /* memastikan navbar selalu di atas konten lain */
 }
 
 .navbar-brand {
@@ -73,6 +106,9 @@ a {
 }
 
 /* BRAND */
+/* Teks "SIKOMA" di navbar publik. Tidak ada `color` di sini secara
+   sengaja, sehingga warnanya otomatis ikut warna default dari :root
+   (#213547 — gelap), karena background navbar di sini putih. */
 .navbar-brand span {
   font-size: 18px;
   font-weight: 600;
@@ -80,33 +116,38 @@ a {
   display: inline-block;
   max-width: 185px;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis;  /* teks kepanjangan dipotong + diberi "..." */
   white-space: nowrap;
 }
 
 /* NAV LINK */
+/* Style untuk setiap menu di navbar (Program, Informasi & Edukasi, dst) */
 .navbar-nav .nav-link {
   font-size: 15px;
   font-weight: 500;
   padding: 10px 16px;
-  position: relative;
+  position: relative;       /* dibutuhkan agar ::after (garis bawah animasi) bisa diposisikan */
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
 }
 
 /* HOVER */
+/* Saat menu di-hover (kursor diarahkan ke menu), teks berubah hijau */
 .navbar-nav .nav-link:hover {
   color: var(--primary-green);
 }
 
 /* ACTIVE */
+/* Menu yang sedang aktif (sesuai halaman yang dibuka) ditandai hijau + tebal */
 .navbar-nav .nav-link.active {
   color: var(--primary-green) !important;
   font-weight: 600;
 }
 
 /* UNDERLINE */
+/* ::after membuat elemen "virtual" tambahan di bawah teks menu,
+   dipakai sebagai garis bawah animasi (awalnya lebar 0%) */
 .navbar-nav .nav-link::after {
   content: "";
   position: absolute;
@@ -118,12 +159,15 @@ a {
   transition: 0.3s;
 }
 
+/* Saat hover ATAU menu aktif, garis bawah animasinya melebar jadi 100% */
 .navbar-nav .nav-link:hover::after,
 .navbar-nav .nav-link.active::after {
   width: 100%;
 }
 
 /* ================= LOGIN ================= */
+/* Tombol/menu "Login" di navbar dibuat beda dari menu lain — diberi
+   background hijau solid supaya lebih menonjol (call-to-action) */
 .nav-login {
   background-color: var(--primary-green);
   color: #fff !important;
@@ -135,18 +179,20 @@ a {
 }
 
 .navbar-nav .nav-link.nav-login {
-  color: #fff !important;
+  color: #fff !important; /* memastikan teks "Login" tetap putih meski rule .nav-link umum lain mencoba override */
 }
 
 .nav-login:hover {
-  background-color: var(--primary-green-dark);
+  background-color: var(--primary-green-dark); /* hijau lebih gelap saat hover */
 }
 
 .nav-login::after {
-  display: none !important;
+  display: none !important; /* tombol Login tidak perlu garis bawah animasi seperti menu biasa */
 }
 
 /* ================= DROPDOWN ================= */
+/* Style untuk dropdown menu (misal dropdown "Profil" dan
+   "Informasi & Edukasi" di navbar) */
 .dropdown-menu {
   border: none;
   border-radius: 10px;
@@ -161,13 +207,17 @@ a {
 }
 
 .dropdown-item:hover {
-  background-color: #f1fdf5;
+  background-color: #f1fdf5; /* hijau sangat muda saat item dropdown di-hover */
   color: var(--primary-green);
 }
 
 /* ================= MOBILE ================= */
+/* Semua style di bawah ini HANYA berlaku saat lebar layar ≤ 991px
+   (tablet & HP) — supaya tampilan navbar tetap rapi di layar kecil */
 @media (max-width: 991px) {
 
+  /* Saat menu mobile dibuka (hamburger diklik), tampilkan sebagai
+     kotak melayang dengan shadow, bukan menyatu dengan navbar */
   .mobile-menu {
     background: white;
     margin-top: 10px;
@@ -178,7 +228,7 @@ a {
 
   .mobile-nav {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* menu disusun vertikal di mobile (bukan horizontal seperti desktop) */
     gap: 12px;
   }
 
@@ -191,7 +241,7 @@ a {
     padding: 14px 16px;
     border-radius: 10px;
     font-size: 16px;
-    background: #f8f9fa;
+    background: #f8f9fa; /* tiap menu mobile diberi background abu muda agar mudah dibedakan/disentuh */
   }
 
   .mobile-nav .nav-link:hover {
@@ -199,6 +249,7 @@ a {
     color: var(--primary-green);
   }
 
+  /* Tombol Login versi mobile, sedikit beda layout dari desktop */
   .mobile-nav .nav-login {
     background: var(--primary-green);
     color: #fff !important;
@@ -217,11 +268,11 @@ a {
   }
 
   .mobile-nav .nav-link::after {
-    display: none;
+    display: none; /* garis bawah animasi tidak relevan di tampilan mobile */
   }
 
   .dropdown-menu {
-    position: static !important;
+    position: static !important; /* dropdown di mobile tidak melayang, tapi ikut alur normal halaman */
     box-shadow: none;
     border: none;
     padding-left: 10px;
@@ -229,15 +280,17 @@ a {
 }
 
 /* ================= HERO FULL ================= */
+/* Bagian banner/carousel utama di halaman Home, dibuat full-width
+   (lebar penuh browser) walau parent-nya mungkin dibatasi container */
 .hero-section {
   width: 100% !important;
-  min-height: min(100vh, 760px);
+  min-height: min(100vh, 760px); /* tinggi maksimal 760px ATAU 100% tinggi layar, mana yang lebih kecil */
   height: min(100vh, 760px);
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 9;          /* rasio lebar:tinggi seperti video, agar proporsional */
   margin: 0 !important;
   padding: 0 !important;
   overflow: hidden;
-  background: #173923;
+  background: #173923; /* hijau gelap, terlihat sesaat sebelum gambar carousel termuat */
 }
 
 .hero-section .carousel,
@@ -249,15 +302,18 @@ a {
 .hero-section .carousel-item img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* gambar mengisi penuh area tanpa distorsi/gepeng, sisi yang kelebihan dipotong */
 }
 
+/* Placeholder/skeleton — kotak abu-abu animasi yang muncul SEMENTARA
+   selagi gambar asli masih loading dari server, agar tidak terlihat
+   blank/kosong (UX lebih baik) */
 .hero-media-placeholder,
 .image-placeholder {
   width: 100%;
   background: linear-gradient(90deg, #eef2ef 25%, #f8faf8 37%, #eef2ef 63%);
   background-size: 400% 100%;
-  animation: skeleton-shimmer 1.4s ease infinite;
+  animation: skeleton-shimmer 1.4s ease infinite; /* animasi "kilauan" bergerak, ciri khas skeleton loading */
 }
 
 .hero-media-placeholder {
@@ -268,6 +324,7 @@ a {
   min-height: 560px;
 }
 
+/* Definisi animasi shimmer/kilauan untuk skeleton loading di atas */
 @keyframes skeleton-shimmer {
   0% {
     background-position: 100% 50%;
@@ -283,6 +340,9 @@ a {
   padding: 0 !important;
 }
 
+/* Trik CSS agar elemen full-width sampai tepi browser, meskipun
+   parent-nya (container Bootstrap) punya max-width terbatas:
+   width: 100vw lalu ditarik balik ke kiri sejauh setengah viewport */
 #header-carousel {
   width: 100vw;
   margin-left: calc(-50vw + 50%);
@@ -291,12 +351,14 @@ a {
 /* ================= VISI MISI ================= */
 #visi-misi {
   width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  margin-left: calc(-50vw + 50%); /* trik full-width yang sama seperti di atas */
   padding: 80px 20px;
   position: relative;
   overflow: hidden;
 }
 
+/* Layer overlay putih transparan di atas background section (misal
+   foto), supaya teks di atasnya lebih mudah dibaca */
 #visi-misi::before {
   content: "";
   position: absolute;
@@ -305,6 +367,8 @@ a {
   z-index: 1;
 }
 
+/* Konten asli section ini diberi z-index lebih tinggi dari overlay,
+   supaya teks/isi tetap muncul DI ATAS layer overlay putih tadi */
 #visi-misi .content-box {
   position: relative;
   z-index: 2;
@@ -320,6 +384,7 @@ a {
   text-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
+/* Garis kecil hijau di bawah judul, sebagai aksen visual */
 #visi-misi h1::after {
   content: "";
   width: 60px;
@@ -344,21 +409,26 @@ a {
   margin-bottom: 6px;
 }
 
+/* CATATAN: rule ini sengaja memaksa SEMUA elemen di dalam
+   .visi-misi-section menjadi warna teks hitam (override apapun rule
+   sebelumnya), karena section ini kemungkinan punya background
+   terang/putih sendiri yang berbeda dari section #visi-misi di atas. */
 .visi-misi-section * {
   color: black !important;
 }
 
 /* ================= MOBILE FIX ================= */
+/* Penyesuaian khusus tampilan Hero & Visi Misi di layar HP (≤768px) */
 @media (max-width: 768px) {
   .hero-section {
     min-height: 560px;
     height: 560px;
-    aspect-ratio: auto;
+    aspect-ratio: auto; /* di HP, rasio 16:9 dilepas agar tinggi tetap pas */
   }
 
   #visi-misi {
     width: 100% !important;
-    margin-left: 0 !important;
+    margin-left: 0 !important; /* trik full-width dimatikan di mobile agar tidak overflow horizontal */
     padding: 40px 15px !important;
     min-height: auto !important;
     height: auto !important;
@@ -374,7 +444,7 @@ a {
     z-index: 2;
     max-width: 900px;
     margin: 0 auto;
-    text-align: left;
+    text-align: left; /* di mobile, teks rata kiri (bukan center) supaya lebih mudah dibaca */
   }
 
   #visi-misi span,
@@ -386,12 +456,17 @@ a {
 }
 
 /* ================= ANIMATION ================= */
+/* Class animasi umum "fade up" — elemen muncul dari transparan +
+   sedikit di bawah, lalu naik ke posisi normal sambil memudar masuk.
+   Dipakai untuk efek scroll-reveal di beberapa bagian halaman. */
 .animate-fade-up {
   opacity: 0;
   transform: translateY(30px);
   animation: fadeUp 5s ease forwards;
 }
 
+/* Class delay, dipakai bersamaan dengan .animate-fade-up supaya
+   beberapa elemen muncul bertahap (staggered), bukan bersamaan */
 .delay-1 {
   animation-delay: 0.5s;
 }
@@ -408,6 +483,7 @@ a {
 }
 
 /* ================= HEADING ================= */
+/* Style judul section dengan warna hijau brand + garis kecil di bawahnya */
 .heading-green {
   color: var(--primary-green) !important;
   font-weight: 700;
@@ -454,6 +530,8 @@ a {
 }
 
 /* ================= BUTTON CUSTOM ================= */
+/* Override warna default tombol Bootstrap (.btn-primary) supaya
+   ikut warna hijau brand SIKOMA, bukan biru default Bootstrap */
 .btn-primary {
   background-color: var(--primary-green) !important;
   border: none;
@@ -464,6 +542,8 @@ a {
 }
 
 /* ================= STAT CARD (landing page) ================= */
+/* Kartu statistik di halaman Home (misal: jumlah laporan, kawasan, dll),
+   ditampilkan dengan background warna-warni berbeda per kategori */
 .card-stat {
   width: 100%;
   padding: 20px;
@@ -472,7 +552,7 @@ a {
 }
 
 .row {
-  overflow-x: hidden;
+  overflow-x: hidden; /* mencegah scroll horizontal tidak sengaja akibat grid Bootstrap */
 }
 
 .stat-card {
@@ -497,17 +577,23 @@ a {
   font-size: 14px;
 }
 
+/* Tiga varian warna kartu statistik, dibedakan per kategori data */
 .stat-card.yellow { background: #f4b400; }
 .stat-card.brown  { background: #c89b6d; }
 .stat-card.orange { background: #d2691e; }
 
 /* ================= MISC ================= */
+/* Class bantuan (utility) untuk membuat teks rata kanan-kiri (justify),
+   dipakai di deskripsi card Program / Informasi & Edukasi / Executive
+   Summary sesuai request dosen pembimbing */
 .text-justify {
   text-align: justify;
   line-height: 1.7;
   font-size: inherit;
 }
+
 /* ================= DESKRIPSI DETAIL ================= */
+/* Style untuk isi konten artikel/detail (misal halaman detail Edukasi) */
 .deskripsi-content {
   line-height: 1.8;
   font-size: 16px;
@@ -522,15 +608,20 @@ a {
   margin-bottom: 10px;
 }
 
-/* =========================
-   LOGIN PAGE — replace the existing LOGIN section in style.css
-========================= */
+/* ================================================================
+   LOGIN PAGE
+   ================================================================
+   Layout halaman Login: dibagi 2 kolom — kiri berisi form Login,
+   kanan berisi ilustrasi/gambar. Di mobile, otomatis berubah jadi
+   1 kolom (gambar di atas, form di bawah).
+   ================================================================ */
 
-/* Paksa section login full width dari parent apapun */
+/* Section login dipaksa full-width browser (trik yang sama seperti
+   #header-carousel dan #visi-misi di atas) */
 .login-wrapper {
   width: 100vw;
-  margin-left: calc(-50vw + 50%);   /* keluar dari container parent yang sempit */
-  min-height: calc(100vh - 160px);
+  margin-left: calc(-50vw + 50%);
+  min-height: calc(100vh - 160px); /* tinggi penuh layar dikurangi tinggi navbar+footer kira-kira */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -540,12 +631,12 @@ a {
 }
 
 .login-left {
-  flex: 0 0 400px;
+  flex: 0 0 400px; /* kolom form: lebar tetap 400px, tidak menyusut/membesar */
   max-width: 400px;
 }
 
 .login-right {
-   flex: 0 1 500px;
+   flex: 0 1 500px; /* kolom gambar: maksimal 500px, tapi bisa menyusut jika layar sempit */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -554,7 +645,7 @@ a {
 .login-image {
   width: 100%;
   max-width: 500px;
-  aspect-ratio: 1058 / 733;
+  aspect-ratio: 1058 / 733; /* rasio asli gambar ilustrasi, agar tidak gepeng/distorsi */
   object-fit: contain;
 }
 
@@ -582,6 +673,8 @@ a {
   margin-bottom: 6px;
 }
 
+/* Style input form Login — dibuat custom (bukan default Bootstrap)
+   supaya tampilannya lebih modern: background abu muda, rounded corner */
 .login-input {
   height: 48px;
   border-radius: 8px;
@@ -594,6 +687,7 @@ a {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+/* Saat input di-klik/fokus: border hijau + efek glow halus + background jadi putih */
 .login-input:focus {
   border-color: #2f6f4f;
   box-shadow: 0 0 0 3px rgba(47,111,79,0.12);
@@ -601,11 +695,13 @@ a {
   background: #fff;
 }
 
+/* Tombol mata (show/hide password), diposisikan menempel di dalam
+   input bagian kanan */
 .password-toggle {
   position: absolute;
   right: 14px;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%); /* trik agar benar-benar center vertikal terhadap tinggi input */
   border: none;
   background: transparent;
   color: #9ca3af;
@@ -619,7 +715,8 @@ a {
   color: #6b7280;
 }
 
-/* Remember Me + Forgot row */
+/* Baris "Remember Me" (checkbox) dan link "Lupa Password",
+   diletakkan sejajar kiri-kanan */
 .login-remember-row {
   display: flex;
   align-items: center;
@@ -634,18 +731,18 @@ a {
   font-size: 14px;
   color: #374151;
   cursor: pointer;
-  user-select: none;
+  user-select: none; /* mencegah teks label ke-select/ke-blok saat user klik checkbox */
 }
 
 .login-remember-check {
   width: 16px;
   height: 16px;
-  accent-color: #2f6f4f;
+  accent-color: #2f6f4f; /* warna checkbox saat dicentang ikut hijau brand (bukan biru default browser) */
   cursor: pointer;
 }
 
 .forgot-link {
-  color: #dc2626;
+  color: #dc2626; /* merah, agar menonjol sebagai aksi yang berbeda dari tombol utama */
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
@@ -655,7 +752,7 @@ a {
   text-decoration: underline;
 }
 
-/* Sign in button */
+/* Tombol utama "Sign In" / Masuk */
 .btn-login {
   width: 100%;
   height: 50px;
@@ -674,12 +771,14 @@ a {
   background: #255c42;
 }
 
+/* Tampilan tombol saat disabled (misal sedang proses loading submit) */
 .btn-login:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-/* Applicant login link */
+/* Link "Login sebagai Pemohon/Masyarakat", dibedakan dari link biasa
+   dengan underline supaya terlihat seperti link, bukan tombol */
 .applicant-link {
   color: #2f6f4f;
   font-size: 14px;
@@ -698,7 +797,9 @@ a {
   text-decoration: none;
 }
 
-/* ---- Responsive ---- */
+/* ---- Responsive Login Page ---- */
+/* Di tablet/HP (≤991px): layout 2 kolom diubah jadi 1 kolom vertikal,
+   dan gambar ilustrasi dipindah ke ATAS form (order: -1) */
 @media (max-width: 991px) {
 
   .login-wrapper {
@@ -716,12 +817,12 @@ a {
   }
 
   .login-right {
-    order: -1;
+    order: -1; /* memaksa kolom gambar pindah ke posisi PERTAMA (atas) meski di HTML letaknya kedua */
     width: 100%;
   }
 
   .login-image {
-    max-width: 260px;
+    max-width: 260px; /* gambar diperkecil di mobile agar tidak mendominasi layar */
   }
 
   .login-title {
@@ -734,10 +835,16 @@ a {
   }
 }
 
-/* ================= INFORMASI & EDUKASI PUBLIC ================= */
+/* ================================================================
+   INFORMASI & EDUKASI (Halaman Publik)
+   ================================================================
+   Styling untuk halaman "Informasi & Edukasi" yang berisi beberapa
+   section: Kawasan Konservasi, Jenis TSL Dilindungi, Executive
+   Summary, dan Peraturan — semuanya ditampilkan dalam bentuk grid card.
+   ================================================================ */
 .informasi-edukasi-page {
   width: 100%;
-  padding: 96px 0 56px;
+  padding: 96px 0 56px; /* padding atas besar (96px) untuk memberi jarak dari navbar fixed di atasnya */
   background: #f7faf8;
 }
 
@@ -749,6 +856,10 @@ a {
   padding-right: 20px;
 }
 
+/* Setiap section (Kawasan, TSL, Executive Summary, Peraturan) diberi
+   scroll-margin-top, supaya saat di-klik dari menu dropdown navbar
+   (anchor link, misal /informasi-edukasi#peraturan), section tidak
+   tertutup oleh navbar fixed saat halaman auto-scroll ke sana */
 .public-section {
   scroll-margin-top: 110px;
   margin-bottom: 64px;
@@ -760,13 +871,15 @@ a {
   text-align: center;
 }
 
+/* "Kicker" = label kecil di atas judul section (contoh: badge kecil
+   bertuliskan kategori), berbentuk pill/rounded */
 .public-section-kicker {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
   padding: 6px 12px;
-  border-radius: 999px;
+  border-radius: 999px; /* radius sangat besar = bentuk pill/kapsul penuh */
   background: #e8f4ed;
   color: var(--primary-green);
   font-size: 13px;
@@ -776,7 +889,7 @@ a {
 .public-section-title {
   margin: 0;
   color: var(--primary-green);
-  font-size: clamp(26px, 3vw, 40px);
+  font-size: clamp(26px, 3vw, 40px); /* responsive: minimal 26px, ideal 3% lebar layar, maksimal 40px */
   font-weight: 800;
   line-height: 1.2;
 }
@@ -798,13 +911,15 @@ a {
   line-height: 1.75;
 }
 
+/* Grid 3 kolom untuk menampilkan daftar card Edukasi / TSL / Executive
+   Summary secara berjajar */
 .edukasi-grid,
 .tsl-grid,
 .summary-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 kolom dengan lebar sama rata */
   gap: 24px;
-  align-items: stretch;
+  align-items: stretch; /* semua card di 1 baris dipaksa setinggi card tertinggi, agar rapi */
 }
 
 .edukasi-card,
@@ -819,6 +934,7 @@ a {
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
+/* Efek hover: card sedikit terangkat + shadow lebih jelas + border ikut hijau */
 .edukasi-card:hover,
 .tsl-card:hover,
 .summary-card:hover {
@@ -906,13 +1022,14 @@ a {
 
 .tsl-card {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* memastikan tombol/footer card selalu di bawah meski tinggi teks beda-beda */
 }
 
 .tsl-card img {
   height: 190px;
 }
 
+/* Badge kecil di pojok/atas card (misal label kategori) */
 .tsl-badge,
 .summary-badge {
   display: inline-flex;
@@ -929,6 +1046,7 @@ a {
   padding: 22px;
 }
 
+/* Icon bulat/kotak kecil di card Executive Summary */
 .summary-card-icon {
   width: 44px;
   height: 44px;
@@ -942,16 +1060,18 @@ a {
   font-weight: 800;
 }
 
+/* List custom (bukan bullet point bawaan browser), tapi pakai
+   titik bulat kecil hijau yang dibuat manual lewat ::before */
 .summary-list {
   display: grid;
   gap: 12px;
   margin: 20px 0 0;
   padding: 0;
-  list-style: none;
+  list-style: none; /* mematikan bullet bawaan <ul>/<li> */
 }
 
 .summary-list li {
-  padding-left: 18px;
+  padding-left: 18px;  /* ruang kosong di kiri untuk tempat titik bulat custom */
   position: relative;
   color: #374151;
   line-height: 1.65;
@@ -964,10 +1084,11 @@ a {
   top: 11px;
   width: 7px;
   height: 7px;
-  border-radius: 50%;
+  border-radius: 50%; /* dibuat bulat penuh */
   background: var(--primary-green);
 }
 
+/* Di tablet (≤991px): grid 3 kolom diubah jadi 2 kolom */
 @media (max-width: 991px) {
   .informasi-edukasi-page {
     padding-top: 84px;
@@ -988,6 +1109,7 @@ a {
   }
 }
 
+/* Di HP (≤576px): grid diubah jadi 1 kolom (card disusun vertikal) */
 @media (max-width: 576px) {
   .informasi-edukasi-page {
     padding: 76px 0 36px;
@@ -1005,7 +1127,7 @@ a {
   }
 
   .public-section-header {
-    text-align: left;
+    text-align: left; /* di HP, header section rata kiri (bukan center) supaya lebih natural dibaca */
     margin-bottom: 20px;
   }
 
@@ -1061,11 +1183,16 @@ a {
   }
 }
 
-/* ================= INFORMASI & EDUKASI DETAIL ================= */
+/* ================================================================
+   INFORMASI & EDUKASI DETAIL
+   ================================================================
+   Styling halaman detail satu artikel/konten Edukasi (saat card
+   di-klik, masuk ke halaman detail lengkap)
+   ================================================================ */
 .informasi-detail-page {
   padding: 112px 0 64px;
   background: #f7faf8;
-  min-height: calc(100vh - 120px);
+  min-height: calc(100vh - 120px); /* memastikan halaman tetap penuh setinggi layar, walau konten sedikit, agar footer tidak "menempel" aneh */
 }
 
 .informasi-detail-article {
@@ -1084,6 +1211,7 @@ a {
   text-align: center;
 }
 
+/* Link "← Kembali" di atas halaman detail */
 .informasi-detail-back {
   display: inline-flex;
   align-items: center;
@@ -1114,7 +1242,7 @@ a {
 
 .informasi-detail-image {
   width: 100%;
-  height: min(460px, 52vw);
+  height: min(460px, 52vw); /* tinggi gambar maksimal 460px, tapi menyesuaikan lebih kecil di layar sempit */
   min-height: 260px;
   margin-bottom: 28px;
   border-radius: 8px;
@@ -1144,6 +1272,7 @@ a {
   margin-bottom: 16px;
 }
 
+/* Tampilan saat konten artikel kosong/tidak ditemukan (empty state) */
 .informasi-detail-empty {
   padding: 22px;
   border-radius: 8px;
@@ -1164,6 +1293,7 @@ a {
   line-height: 1.75;
 }
 
+/* Box "insight" tambahan di bawah artikel (semacam poin-poin penting/highlight) */
 .informasi-detail-insight {
   max-width: 860px;
   margin: 34px auto 0;
@@ -1210,6 +1340,8 @@ a {
   background: var(--primary-green);
 }
 
+/* Section info tambahan di bagian paling bawah halaman detail,
+   dipisahkan dengan garis horizontal (border-top) */
 .informasi-detail-info {
   max-width: 860px;
   margin: 36px auto 0;
@@ -1225,6 +1357,7 @@ a {
   font-size: clamp(24px, 2vw, 30px);
 }
 
+/* Grid 2 kolom untuk menampilkan kartu-kartu info pendukung */
 .detail-info-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1252,6 +1385,8 @@ a {
   line-height: 1.65;
 }
 
+/* Box catatan/note khusus (misal disclaimer atau info penting),
+   diberi border + background hijau muda agar menonjol dari konten lain */
 .informasi-detail-note {
   max-width: 860px;
   margin: 28px auto 0;
@@ -1273,6 +1408,7 @@ a {
   line-height: 1.7;
 }
 
+/* Tampilan state khusus halaman detail (misal: loading / data tidak ditemukan) */
 .informasi-detail-state {
   max-width: 640px;
   margin: 0 auto;
@@ -1318,7 +1454,13 @@ a {
   }
 }
 
-/* Active markup hooks for InformasiEdukasi.jsx */
+/* ================================================================
+   Active markup hooks for InformasiEdukasi.jsx
+   ================================================================
+   Class-class tambahan yang dipakai langsung oleh komponen
+   InformasiEdukasi.jsx untuk mengatur jarak antar section & layout
+   card secara lebih spesifik.
+   ================================================================ */
 .informasi-section {
   max-width: 1180px;
   margin-left: auto;
@@ -1327,7 +1469,7 @@ a {
 }
 
 .informasi-section + .informasi-section {
-  padding-top: 24px;
+  padding-top: 24px; /* jarak atas section KEDUA dst dikurangi, supaya antar section tidak terlalu renggang */
 }
 
 .edukasi-card,
@@ -1342,12 +1484,12 @@ a {
 
 .edukasi-card-body,
 .summary-card-body {
-  flex: 1 1 auto;
+  flex: 1 1 auto; /* body card "mengisi" sisa ruang yang tersedia, mendorong tombol/footer tetap di bawah */
 }
 
 .edukasi-card-action {
   padding: 0 18px 18px;
-  margin-top: auto;
+  margin-top: auto; /* tombol "Baca Selengkapnya" selalu menempel di bagian paling bawah card */
 }
 
 .edukasi-card-button {
@@ -1358,9 +1500,12 @@ a {
   text-decoration: none;
 }
 
+/* Class bantuan untuk memotong deskripsi card maksimal 4 baris,
+   sisanya disembunyikan (supaya tinggi card tetap konsisten antar
+   card meski panjang teks berbeda-beda) */
 .truncate-4 {
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 4;     /* maksimal 4 baris teks yang ditampilkan */
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1379,7 +1524,13 @@ a {
   }
 }
 
-/* ================= DETAIL INFORMASI SIMPLE ================= */
+/* ================================================================
+   DETAIL INFORMASI SIMPLE
+   ================================================================
+   Versi LEBIH SEDERHANA dari halaman detail (dipakai untuk konten
+   yang tidak butuh layout insight/info tambahan selengkap di atas,
+   misal halaman detail Program)
+   ================================================================ */
 .detail-page-simple {
   padding: 96px 0 56px;
   background: #f8faf8;
@@ -1476,7 +1627,14 @@ a {
   }
 }
 
-/* Executive Summary responsive */
+/* ================================================================
+   Executive Summary responsive
+   ================================================================
+   Di HP (≤640px), layout artikel Executive Summary yang aslinya
+   berdampingan (gambar kiri, teks kanan) diubah jadi bertumpuk
+   (gambar di atas, teks di bawah), karena lebar layar tidak cukup
+   untuk 2 kolom berdampingan.
+   ================================================================ */
 @media (max-width: 640px) {
   #executive-summary article {
     flex-direction: column !important;

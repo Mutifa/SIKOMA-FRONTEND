@@ -1,5 +1,8 @@
 import React from 'react'
 
+/// ImageModal Component
+// Menampilkan gambar dalam modal dengan latar belakang gelap
+// Dapat ditutup dengan klik di luar gambar atau tombol close
 export default function ImageModal({ src, onClose }) {
   if (!src) return null
 
@@ -13,6 +16,7 @@ export default function ImageModal({ src, onClose }) {
         className="modal-dialog modal-dialog-centered modal-lg"
         onClick={(e) => e.stopPropagation()}
       >
+        // Modal content dengan gambar dan tombol close
         <div className="modal-content bg-transparent border-0 shadow-none">
           <div className="modal-body text-center p-0">
             <img
@@ -27,6 +31,7 @@ export default function ImageModal({ src, onClose }) {
             />
           </div>
 
+        // Tombol close di pojok kanan atas
           <button
             className="btn btn-light position-absolute top-0 end-0 m-2"
             onClick={onClose}
