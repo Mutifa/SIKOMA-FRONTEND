@@ -34,7 +34,9 @@ export default function ProgramDetail() {
 
   return (
     <Template title={data?.judul || 'Detail Program'} active="edukasi">
-      <section className="container my-5">
+      <section className="detail-page-simple">
+  <div className="container">
+    </div>
 
         {loading && (
           <div className="row">

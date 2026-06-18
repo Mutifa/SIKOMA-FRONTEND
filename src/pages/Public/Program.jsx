@@ -55,7 +55,7 @@ export default function Program() {
       </div>
 
       {/* CONTENT */}
-      <section className="container-xxl py-5">
+      <section className="container-xxl py-5 program-public-page">
         <div className="container">
 
           <h2 className="mb-4 heading-green">
@@ -75,66 +75,34 @@ export default function Program() {
             ) : items.length > 0 ? (
               items.map((p) => (
                 <div key={p.id} className="col-md-6 col-lg-4 d-flex">
-                  <div className="card w-100 shadow-sm" style={{ borderRadius: 12, overflow: 'hidden' }}>
-
-                    {/* IMAGE */}
+                  <article className="edukasi-card wow fadeInUp" style={{ width: '100%' }}>
                     <img
-                      src={`https://codemy.my.id/uploads/program/${p.foto}`}
-                      alt={p.judul}
-                      className="card-img-top"
-                      width={400}
-                      height={200}
                       loading="lazy"
                       decoding="async"
-                      style={{ objectFit: 'cover', width: '100%' }}
+                      src={`https://codemy.my.id/uploads/program/${p.foto}`}
+                      alt={p.judul}
+                      width={400}
+                      height={200}
+                      className="edukasi-card-image"
                       onError={e => { e.currentTarget.style.display = 'none' }}
                     />
 
-                    {/* BODY */}
-                    <div className="card-body d-flex flex-column p-4">
-
-                      {/* Judul — tinggi tetap 2 baris */}
-                      <h5
-                        className="card-title fw-bold mb-2"
-                        style={{
-                          minHeight: '3rem',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                        }}
-                      >
+                    <div className="edukasi-card-body">
+                      <h3 className="edukasi-card-title">
                         {p.judul}
-                      </h5>
+                      </h3>
 
-                      {/* Deskripsi bersih, potong di batas kata */}
-                      <p
-                        className="card-text text-muted mb-4"
-                        style={{
-                          fontSize: '0.9rem',
-                          lineHeight: '1.6',
-                          minHeight: '4rem',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 3,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                          textAlign: 'justify', 
-                        }}
-                      >
+                      <p className="edukasi-card-text" style={{ textAlign: 'justify' }}>
                         {truncate(stripHtml(p.deskripsi), 110)}
                       </p>
 
-                      {/* BUTTON selalu di bawah */}
-                      <Link
-                        to={`/program/${p.id}`}
-                        className="btn btn-success mt-auto w-100"
-                        style={{ borderRadius: 8 }}
-                      >
-                        Selengkapnya
-                      </Link>
-
+                      <div className="edukasi-card-action">
+                        <Link to={`/program/${p.id}`} className="edukasi-card-button">
+                          Selengkapnya
+                        </Link>
+                      </div>
                     </div>
-                  </div>
+                  </article>
                 </div>
               ))
             ) : (

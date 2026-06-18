@@ -925,6 +925,8 @@ a {
 .edukasi-card,
 .tsl-card,
 .summary-card {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   overflow: hidden;
   border: 1px solid #dce7df;
@@ -932,6 +934,18 @@ a {
   background: #ffffff;
   box-shadow: 0 10px 26px rgba(18, 38, 28, 0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.edukasi-card-body,
+.tsl-card-body,
+.summary-card-body,
+.edukasi-card .card-body,
+.tsl-card .card-body,
+.summary-card .card-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 /* Efek hover: card sedikit terangkat + shadow lebih jelas + border ikut hijau */
@@ -1003,7 +1017,7 @@ a {
 .tsl-card .btn,
 .summary-card .btn,
 .edukasi-card-button {
-  margin-top: 16px;
+  margin-top: 0;
   border-radius: 6px;
   padding: 9px 14px;
   background: var(--primary-green);
@@ -1018,6 +1032,10 @@ a {
 .edukasi-card-button:hover {
   background: var(--primary-green-dark);
   border-color: var(--primary-green-dark);
+}
+
+.edukasi-card-text {
+  margin-bottom: 12px;
 }
 
 .tsl-card {
@@ -1489,7 +1507,11 @@ a {
 
 .edukasi-card-action {
   padding: 0 18px 18px;
-  margin-top: auto; /* tombol "Baca Selengkapnya" selalu menempel di bagian paling bawah card */
+  margin-top: 0;
+}
+
+.edukasi-card-text {
+  margin-bottom: 10px;
 }
 
 .edukasi-card-button {
@@ -1498,6 +1520,12 @@ a {
   justify-content: center;
   min-height: 40px;
   text-decoration: none;
+  align-self: flex-start;
+}
+
+.program-public-page .edukasi-card-action {
+  padding: 0;
+  margin-top: 12px;
 }
 
 /* Class bantuan untuk memotong deskripsi card maksimal 4 baris,
