@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Template from '../../layouts/Template.jsx'
 import { authService } from '../../services/authService.js'
+import { validateFormInputs } from '../../utils/formValidation.js'
 
 export default function ResetPassword() {
 
@@ -16,11 +17,16 @@ export default function ResetPassword() {
   const [loading, setLoading] = React.useState(false) // status loading
 
   // ── Handler submit ───────────────────────────────────────────
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault()   // cegah reload halaman
     setLoading(true)     // aktifkan loading
     setError('')         // reset error
     setMessage('')       // reset pesan sukses
+
+    if (!(await validateFormInputs(e.target))) {
+      setLoading(false)
+      return
+    }
 
     // Ambil token dan email dari URL parameter (?token=...&email=...)
     const token = new URLSearchParams(window.location.search).get('token')
@@ -59,7 +65,7 @@ export default function ResetPassword() {
               <div className="alert alert-danger">{error}</div>
             )}
 
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmit} noValidate>
 
               {/* ── Input Password Baru ── */}
               <div className="mb-3">

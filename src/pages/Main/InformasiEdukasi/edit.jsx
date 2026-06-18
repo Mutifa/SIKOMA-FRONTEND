@@ -4,6 +4,7 @@ import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import adminInformasiEdukasiService from '../../../services/adminInformasiEdukasiService.js'
 import { assetUrl } from '../../../lib/assets.js'
 import { successAlert, errorAlert } from '../../../utils/alert'
+import { validateFormInputs } from '../../../utils/formValidation.js'
 
 export default function KontenEdit() {
 
@@ -74,7 +75,7 @@ export default function KontenEdit() {
         </div>
       }
     >
-      <form id="edukasi-edit-form" onSubmit={handleSubmit}>
+      <form id="edukasi-edit-form" onSubmit={handleSubmit} noValidate>
         <div className="white-box">
 
           <div className="mb-3">

@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import { useAuth } from '../../../contexts/AuthContext.jsx'
 import { akunService } from '../../../services/akunService.js'
+import { validateFormInputs } from '../../../utils/formValidation.js'
 
 // Mapping nilai role dari backend ke label yang ditampilkan ke user
 const roleLabel = {
@@ -155,15 +156,18 @@ export default function AkunEdit() {
     // Handler submit form: update profil, lalu update password jika diisi
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setSaving(true)
     setError('')
     setSuccess('')
 
-      // Validasi password dulu sebelum kirim request apapun
-    if (!validatePassword()) {
-      setSaving(false)
+    if (!(await validateFormInputs(e.target))) {
       return
     }
+
+    if (!validatePassword()) {
+      return
+    }
+
+    setSaving(true)
 
     try {
       // Update data profil (nama, username, email)
@@ -207,7 +211,7 @@ export default function AkunEdit() {
       {error && <div className="alert alert-danger">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
 
-      <form className="akun-edit-form" onSubmit={handleSubmit}>
+      <form className="akun-edit-form" onSubmit={handleSubmit} noValidate>
         {/* Header form dengan judul dan tombol kembali */}
         <div className="akun-edit-header">
           <div>

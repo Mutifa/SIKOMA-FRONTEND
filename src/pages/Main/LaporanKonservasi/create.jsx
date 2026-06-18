@@ -4,6 +4,7 @@ import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import '../../../assets/css/LaporanKonservasi.css'
 import { laporanKonservasiService } from '../../../services/laporanKonservasi'
 import { successAlert, errorAlert } from '../../../utils/alert'
+import { validateFormInputs } from '../../../utils/formValidation.js'
 
 // ── UTALITAS TANGGAL ─────────────────────────────────────────────────────────
 const bulanIndo = [
@@ -149,6 +150,11 @@ export default function LaporanCreate() {
   // ── SUBMIT FORM ──────────────────────────────────────────────────────────
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    if (!(await validateFormInputs(e.target))) {
+      return
+    }
+
     setLoading(true)
     setError('')
 
@@ -197,7 +203,7 @@ export default function LaporanCreate() {
       <div className="row">
         <div className="col-12">
           <div className="lk-card">
-            <form id="laporan-create-form" onSubmit={handleSubmit} encType="multipart/form-data">
+            <form id="laporan-create-form" onSubmit={handleSubmit} encType="multipart/form-data" noValidate>
 
               {/* SEKSI 1 — DESKRIPSI KEGIATAN */}
               <div className="mb-4">

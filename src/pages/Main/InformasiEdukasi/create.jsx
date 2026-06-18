@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import adminInformasiEdukasiService from '../../../services/adminInformasiEdukasiService.js'
 import { successAlert, errorAlert } from '../../../utils/alert.js'
+import { validateFormInputs } from '../../../utils/formValidation.js'
 
 export default function KontenCreate() {
 
@@ -19,6 +20,11 @@ export default function KontenCreate() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    if (!(await validateFormInputs(e.target))) {
+      return
+    }
+
     setSaving(true)
 
     try {
@@ -53,7 +59,7 @@ export default function KontenCreate() {
         </div>
       }
     >
-      <form id="edukasi-form" onSubmit={handleSubmit}>
+      <form id="edukasi-form" onSubmit={handleSubmit} noValidate>
         <div className="white-box">
 
           <div className="mb-3">

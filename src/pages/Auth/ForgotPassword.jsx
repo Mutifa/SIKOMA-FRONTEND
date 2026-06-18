@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Template from '../../layouts/Template.jsx'
 import { authService } from '../../services/authService.js'
+import { validateFormInputs } from '../../utils/formValidation.js'
 
 export default function ForgotPassword() {
 
@@ -12,11 +13,16 @@ export default function ForgotPassword() {
   const [loading, setLoading] = React.useState(false) // status loading
 
   // ── Handler submit ───────────────────────────────────────────
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault()             // cegah reload halaman
     setError('')                   // reset error
     setMessage('')                 // reset pesan sukses
     setLoading(true)               // aktifkan loading
+
+    if (!(await validateFormInputs(e.target))) {
+      setLoading(false)
+      return
+    }
 
     authService.forgotPassword({ email })
       .then(() => setMessage('Link reset telah dikirim ke email Anda.'))
@@ -51,7 +57,7 @@ export default function ForgotPassword() {
               <div className="alert alert-danger">{error}</div>
             )}
 
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmit} noValidate>
 
               {/* ── Input Email ── */}
               <div className="mb-3">

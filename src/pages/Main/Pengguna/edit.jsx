@@ -4,6 +4,7 @@ import DashboardLayout from '../../../layouts/DashboardLayout'
 import { penggunaService } from '../../../services/penggunaService'
 // Tambah import ini
 import { successAlert, errorAlert } from '../../../utils/alert'
+import { validateFormInputs } from '../../../utils/formValidation.js'
 
 export default function PenggunaEdit() {
 
@@ -58,6 +59,10 @@ export default function PenggunaEdit() {
  const handleSubmit = async (e) => {
   e.preventDefault()
 
+  if (!(await validateFormInputs(e.target))) {
+    return
+  }
+
   try {
     await penggunaService.update(id, formData)
     await successAlert('Berhasil', 'Pengguna berhasil diupdate')  // ← tambah ini
@@ -99,7 +104,7 @@ export default function PenggunaEdit() {
       }
     >
 
-      <form id="pengguna-edit-form" onSubmit={handleSubmit}>
+      <form id="pengguna-edit-form" onSubmit={handleSubmit} noValidate>
 
         <div className="white-box">
 
@@ -119,6 +124,7 @@ export default function PenggunaEdit() {
                   name: e.target.value
                 })
               }
+              required
             />
 
           </div>
@@ -139,6 +145,7 @@ export default function PenggunaEdit() {
                   username: e.target.value
                 })
               }
+              required
             />
 
           </div>
@@ -159,6 +166,7 @@ export default function PenggunaEdit() {
                   email: e.target.value
                 })
               }
+              required
             />
 
           </div>

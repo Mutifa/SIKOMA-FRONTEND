@@ -3,7 +3,8 @@ import React from 'react'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import { useAuth } from '../../../contexts/AuthContext.jsx'
 import { akunService } from '../../../services/akunService.js'
-import { successAlert } from '../../../utils/alert.js'
+import { successAlert, errorAlert } from '../../../utils/alert.js'
+import { validateFormInputs } from '../../../utils/formValidation.js'
 
 const extractProfile = (payload, fallbackUser = {}) => {
   const data = payload?.data?.user || payload?.user || payload?.data || payload || {}
@@ -107,8 +108,13 @@ export default function Akun() {
 
   const handleProfileSubmit = async (event) => {
     event.preventDefault()
-    setSaving(true)
     setError('')
+
+    if (!(await validateFormInputs(event.target))) {
+      return
+    }
+
+    setSaving(true)
 
     try {
       await akunService.updateProfile(formData)
@@ -126,19 +132,19 @@ export default function Akun() {
     setError('')
 
     if (!passwordData.current_password || !passwordData.password || !passwordData.password_confirmation) {
-      setError('Lengkapi semua field password')
+      await errorAlert('Validasi', 'Lengkapi semua field password')
       setSaving(false)
       return
     }
 
     if (passwordData.password.length < 8) {
-      setError('Password baru minimal 8 karakter')
+      await errorAlert('Validasi', 'Password baru minimal 8 karakter')
       setSaving(false)
       return
     }
 
     if (passwordData.password !== passwordData.password_confirmation) {
-      setError('Konfirmasi password baru tidak sama')
+      await errorAlert('Validasi', 'Konfirmasi password baru tidak sama')
       setSaving(false)
       return
     }
@@ -192,7 +198,7 @@ export default function Akun() {
 
         <div className="akun-settings-content">
           {activeTab === 'profile' ? (
-            <form className="akun-settings-form" onSubmit={handleProfileSubmit}>
+            <form className="akun-settings-form" onSubmit={handleProfileSubmit} noValidate>
               <div className="akun-settings-fields">
                 <div className="akun-settings-field">
                   <label>Nama Lengkap</label>
@@ -234,7 +240,7 @@ export default function Akun() {
 
             </form>
           ) : (
-            <form className="akun-settings-form akun-settings-form-password" onSubmit={handlePasswordSubmit}>
+            <form className="akun-settings-form akun-settings-form-password" onSubmit={handlePasswordSubmit} noValidate>
               <div className="akun-settings-fields">
                 <PasswordField
                   label="Password Lama"

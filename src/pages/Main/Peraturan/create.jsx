@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../../layouts/DashboardLayout.jsx'
 import peraturanService from '../../../services/peraturan.js'
 import { successAlert, errorAlert } from '../../../utils/alert'
+import { validateFormInputs } from '../../../utils/formValidation.js'
 
 export default function PeraturanCreate() {
 
@@ -22,6 +23,10 @@ export default function PeraturanCreate() {
   const handleSubmit = async (e) => {
 
     e.preventDefault()
+
+    if (!(await validateFormInputs(e.target))) {
+      return
+    }
 
     setSaving(true)
 
@@ -75,7 +80,7 @@ export default function PeraturanCreate() {
       }
     >
 
-      <form id="peraturan-form" onSubmit={handleSubmit}>
+      <form id="peraturan-form" onSubmit={handleSubmit} noValidate>
 
         <div className="white-box">
 
