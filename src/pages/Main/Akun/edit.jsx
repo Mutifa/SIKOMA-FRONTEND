@@ -203,12 +203,12 @@ export default function AkunEdit() {
 
   return (
     <DashboardLayout title="Edit Akun">
-      // Tampilkan pesan error atau sukses jika ada
+      {/* Tampilkan pesan error atau sukses jika ada */}
       {error && <div className="alert alert-danger">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
 
       <form className="akun-edit-form" onSubmit={handleSubmit}>
-        // Header form dengan judul dan tombol kembali
+        {/* Header form dengan judul dan tombol kembali */}
         <div className="akun-edit-header">
           <div>
             <h4>Perbarui Profil</h4>
@@ -221,7 +221,7 @@ export default function AkunEdit() {
         </div>
 
         <div className="akun-edit-grid">
-          // Kartu informasi profil
+          {/* Kartu informasi profil */}
           <div className="akun-card">
             <div className="akun-section-title">
               <span className="akun-section-dot"></span>
@@ -253,7 +253,7 @@ export default function AkunEdit() {
                 />
               </div>
 
-              // Role hanya ditampilkan, tidak bisa diedit user 
+              {/* Role hanya ditampilkan, tidak bisa diedit user */}
               <div className="akun-form-group akun-form-wide">
                 <label className="akun-field-label">Email</label>
                 <input
@@ -275,7 +275,7 @@ export default function AkunEdit() {
               </div>
             </div>
           </div>
-          // Card kanan: form ganti password (opsional) 
+          {/* Card kanan: form ganti password (opsional) */}
           <div className="akun-card akun-card-soft">
             <div className="akun-section-title">
               <span className="akun-section-dot"></span>
@@ -310,7 +310,7 @@ export default function AkunEdit() {
             </div>
           </div>
         </div>
-      // Tombol aksi simpan dan batal
+        {/* Tombol aksi simpan dan batal */}
         <div className="akun-action-bar">
           <Link to="/akun" className="btn-secondary-custom">
             Batal

@@ -1451,6 +1451,177 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 
 .loading-center { display: flex; justify-content: center; align-items: center; min-height: 200px; }
 
+.akun-settings-page {
+  min-height: calc(100vh - 190px);
+  margin: -16px -24px;
+  padding: 30px 48px 56px;
+  background: #fff;
+}
+
+.akun-settings-tabs {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 0;
+  margin-bottom: 34px;
+  border-bottom: 1px solid #dfe7e2;
+}
+
+.akun-settings-tabs button {
+  min-width: 96px;
+  padding: 0 20px 12px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #1e2d26;
+  font-family: var(--font-main);
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.akun-settings-tabs button.active {
+  border-color: var(--green-600);
+  color: var(--green-700);
+}
+
+.akun-settings-content {
+  width: 100%;
+}
+
+.akun-settings-form {
+  display: grid;
+  grid-template-columns: minmax(280px, 650px);
+  gap: 34px;
+  align-items: start;
+}
+
+.akun-settings-form-password {
+  grid-template-columns: minmax(280px, 520px);
+}
+
+.akun-settings-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.akun-settings-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: #2c342f;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.akun-settings-field input,
+.akun-settings-password input {
+  width: 100%;
+  height: 42px;
+  padding: 9px 13px;
+  border: 1px solid #d8e0dc;
+  border-radius: 6px;
+  background: #fff;
+  color: #1d2a24;
+  font-family: var(--font-main);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+.akun-settings-field input:focus,
+.akun-settings-password input:focus {
+  border-color: var(--green-600);
+  box-shadow: 0 0 0 3px rgba(47,111,79,0.10);
+}
+
+.akun-settings-password {
+  position: relative;
+}
+
+.akun-settings-password input {
+  padding-right: 44px;
+}
+
+.akun-settings-password button {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  transform: translateY(-50%);
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #6b7c72;
+  cursor: pointer;
+}
+
+.akun-settings-password button:hover {
+  background: var(--green-50);
+  color: var(--green-800);
+}
+
+.akun-settings-save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: 88px;
+  min-height: 36px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #1a5c35;
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+}
+
+.akun-settings-save:hover {
+  background: #133524;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.akun-settings-save:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+  transform: none;
+}
+
+@media (max-width: 991px) {
+  .akun-settings-page {
+    margin: -16px -24px;
+    padding: 24px;
+  }
+
+  .akun-settings-form {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+}
+
+@media (max-width: 575px) {
+  .akun-settings-page {
+    margin: -14px;
+    padding: 20px 14px 36px;
+  }
+
+  .akun-settings-tabs {
+    display: flex;
+    width: 100%;
+  }
+
+  .akun-settings-tabs button {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
 /* ============================================================
    ADMIN CONSISTENCY LAYER
    Menyamakan tampilan fitur admin tanpa mengubah logic komponen.
@@ -1687,14 +1858,22 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 .page-wrapper .btn-warning-custom,
 .page-wrapper .btn-danger-custom,
 .page-wrapper .btn-secondary-custom,
+.page-wrapper .akun-settings-save,
 .page-wrapper .lk-btn-primary,
 .page-wrapper .lk-btn-back,
 .page-wrapper .lk-btn-location {
-  min-height: 36px;
-  border-radius: 8px;
+  min-height: 38px;
+  min-width: 92px;
+  padding: 8px 18px !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
   font-weight: 600;
+  line-height: 1.2 !important;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
 }
 
 .page-wrapper .btn-sm,
@@ -1703,7 +1882,8 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 .page-wrapper .btn-danger-custom.btn-sm {
   min-height: 32px;
   min-width: 32px;
-  padding: 6px 10px;
+  padding: 6px 10px !important;
+  font-size: 12px !important;
 }
 
 .page-wrapper .form-label,
