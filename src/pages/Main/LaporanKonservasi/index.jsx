@@ -191,10 +191,20 @@ const formatDate = (date) => {
       </DashboardLayout>
     )
   }
-
-  // ── Render ───────────────────────────────────────────────────────────────
+// ── Render ───────────────────────────────────────────────────────────────
   return (
-    <DashboardLayout title="Laporan Konservasi">
+    <DashboardLayout 
+      title="Laporan Konservasi"
+      // 🔥 MASUKKAN TOMBOL KE DALAM PROPERTI actions DI SINI
+      actions={
+        isAdminLapangan && (
+          <Link to="/laporan-konservasi/create" className="btn-primary-custom">
+            <i className="fas fa-plus me-2"></i>
+            Tambah Laporan
+          </Link>
+        )
+      }
+    >
 
       {/* Pesan error jika fetch gagal */}
       {error && (
@@ -204,17 +214,10 @@ const formatDate = (date) => {
         </div>
       )}
 
-      {/* Tombol Tambah — hanya tampil untuk Admin Lapangan */}
       {/* White box / card tabel */}
       <div className="white-box">
-        {isAdminLapangan && (
-          <div className="admin-card-toolbar">
-            <Link to="/laporan-konservasi/create" className="btn-primary-custom">
-              <i className="fas fa-plus"></i>
-              Tambah Laporan
-            </Link>
-          </div>
-        )}
+        
+        {/* ❌ Bagian {isAdminLapangan && ...} yang sebelumnya di sini SUDAH DIHAPUS */}
 
         {isAdminPusat && (
           <div className="row mb-3">
@@ -237,7 +240,8 @@ const formatDate = (date) => {
         {/* Wrapper overflow agar tabel bisa di-scroll horizontal di mobile */}
         <div style={{ overflowX: 'auto' }}>
           <table className="lk-table">
-            <thead>
+            {/* ... Sisa isi tabel ke bawah tetap sama, tidak ada yang diubah ... */}
+             <thead>
               <tr>
                 <th style={{ width: '48px' }}>No</th>
                 <th>Judul</th>

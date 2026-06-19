@@ -295,8 +295,9 @@ export default function DashboardLayout({
       <div className="page-wrapper">
 
         {/* BREADCRUMB */}
-        <div className="page-breadcrumb">
-          <div className="page-header-row">
+       <div className="page-breadcrumb">
+          {/* 🔥 Tambahkan class Bootstrap d-flex justify-content-between align-items-center di baris ini */}
+          <div className="page-header-row d-flex justify-content-between align-items-center">
             <div className="page-header-main">
               
               {/* Title halaman */}
@@ -306,7 +307,7 @@ export default function DashboardLayout({
 
               {/* Breadcrumb */}
               <nav aria-label="breadcrumb">
-                <ol className="breadcrumb">
+               <ol className="breadcrumb mb-0">
                   <li className="breadcrumb-item">
                     <a href="#">Home</a>
                   </li>
