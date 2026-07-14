@@ -1,9 +1,12 @@
 import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 
 function Navbar({ website }) {
   const FILE_URL = 'https://codemy.my.id'
   const [logoKey, setLogoKey] = React.useState(Date.now())
+  const location = useLocation()
+  const isProfilActive = location.pathname.startsWith('/profil')
+  const isInformasiActive = location.pathname.startsWith('/informasi-edukasi')
 
 // Gunakan useEffect untuk memperbarui logoKey saat website.logo berubah
   React.useEffect(() => {
@@ -57,38 +60,27 @@ function Navbar({ website }) {
             
             {/* 1. Dropdown: Profil Perusahaan (Sudah Diperbaiki) */}
             <li className="nav-item dropdown custom-hover-dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="/#struktur-organisasi" 
-                role="button"
+              <Link
+                to="/"
+                className={`nav-link dropdown-toggle ${isProfilActive ? 'active' : ''}`}
               >
                 Profil
-              </a>
+              </Link>
               <ul className="dropdown-menu">
                 <li>
-                  <a href="/#struktur-organisasi" className="dropdown-item">
+                  <NavLink to="/profil/struktur-organisasi" className="dropdown-item">
                     Struktur Organisasi
-                  </a>
+                  </NavLink>
                 </li>
                 <li>
-                  <a href="/#visi-misi" className="dropdown-item">
+                  <NavLink to="/profil/visi-misi" className="dropdown-item">
                     Visi Misi
-                  </a>
+                  </NavLink>
                 </li>
                 <li>
-                  <a href="/#sejarah" className="dropdown-item">
+                  <NavLink to="/profil/sejarah" className="dropdown-item">
                     Sejarah UPT KPH Tasik Besar Serkap
-                  </a>
-                  <li>
-
-                    {/*BUAT HALAMAN BARU*/}
-    {/* <NavLink
-        to="/data-satwa-public"
-        className="dropdown-item"
-    >
-        Data Satwa
-    </NavLink> */}
-</li>
+                  </NavLink>
                 </li>
               </ul>
             </li>
@@ -110,33 +102,32 @@ function Navbar({ website }) {
                 - Dihapus data-bs-toggle agar link langsung berfungsi saat diklik
             */}
             <li className="nav-item dropdown custom-hover-dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="/informasi-edukasi#kawasan-konservasi"
-                role="button"
+              <NavLink
+                to="/informasi-edukasi/kawasan-konservasi"
+                className={`nav-link dropdown-toggle ${isInformasiActive ? 'active' : ''}`}
               >
                 Informasi & Edukasi
-              </a>
+              </NavLink>
               <ul className="dropdown-menu">
                 <li>
-                  <a href="/informasi-edukasi#kawasan-konservasi" className="dropdown-item">
+                  <NavLink to="/informasi-edukasi/kawasan-konservasi" className="dropdown-item">
                     Kawasan Konservasi
-                  </a>
+                  </NavLink>
                 </li>
                 <li>
-                  <a href="/informasi-edukasi#dilindungi" className="dropdown-item">
+                  <NavLink to="/informasi-edukasi/jenis-tsl-dilindungi" className="dropdown-item">
                     Jenis TSL Dilindungi
-                  </a>
+                  </NavLink>
                 </li>
                 <li>
-                  <a href="/informasi-edukasi#executive-summary" className="dropdown-item">
+                  <NavLink to="/informasi-edukasi/executive-summary" className="dropdown-item">
                     Executive Summary
-                  </a>
+                  </NavLink>
                 </li>
                 <li>
-                  <a href="/informasi-edukasi#peraturan" className="dropdown-item">
+                  <NavLink to="/informasi-edukasi/peraturan" className="dropdown-item">
                     Peraturan
-                  </a>
+                  </NavLink>
                 </li>
               </ul>
             </li>

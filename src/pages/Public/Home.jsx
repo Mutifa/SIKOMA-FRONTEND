@@ -1,262 +1,101 @@
+import React, { useEffect, useState } from 'react'
 import Template from '../../layouts/Template.jsx'
 import { assetUrl } from '../../lib/assets.js'
 import { homeService } from '../../services/homeService.js'
-import React, { useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom'
-import { sanitizeHtml } from '../../utils/sanitizeHtml.js'
 
 export default function Home() {
-  const [banner, setBanner] = useState([]);
-  const [program, setProgram] = useState([]);
-  const [website, setWebsite] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const location = useLocation()
-  const FILE_URL = 'https://codemy.my.id'
+  const [banner, setBanner] = useState([])
+  const [website, setWebsite] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const fallbackHero = {
     id: 'fallback-hero',
     gambar: null,
     src: '/home-assets/img/carousel-1.jpg',
-    alt: 'Kawasan konservasi'
+    alt: 'Kawasan konservasi',
   }
 
-  //untuk scroll ke section tertentu ketika ada hash di url
   useEffect(() => {
-    const handleScroll = () => {
-      if (location.hash) {
-        const el = document.querySelector(location.hash)
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' })
-        }
-      }
-    }
+    let mounted = true
 
-    //untuk delay scroll agar element sudah ter-render
-    setTimeout(handleScroll, 300)
-  }, [location])
-
-
-  // API
-  useEffect(() => {
     homeService
       .get()
       .then((res) => {
-        setBanner(res.data.banner);
-        setProgram(res.data.program);
-        setWebsite(res.data.website);
+        if (!mounted) return
+        setBanner(res.data.banner || [])
+        setWebsite(res.data.website)
       })
       .catch((err) => {
-        console.error("ERROR:", err);
-        setError("Gagal mengambil data dari server");
+        if (!mounted) return
+        console.error('ERROR:', err)
+        setError('Gagal mengambil data dari server')
       })
       .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+        if (mounted) setLoading(false)
+      })
 
-  const formatText = (text) =>
-    text
-      ? text
-        .replace(/\r\n/g, '\n')
-        .replace(/a\./g, '\na.')
-        .replace(/b\./g, '\nb.')
-        .replace(/c\./g, '\nc.')
-        .replace(/\n{2,}/g, '\n')
-        .trim()
-      : ''
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  const heroItems = Array.isArray(banner) && banner.length > 0 ? banner : [fallbackHero]
 
   return (
     <Template title={website?.nama || 'Beranda'} active="home">
-
-      {/* Carousel Start */}
       <div className="container-fluid p-0 hero-section">
         <div id="header-carousel" className="carousel slide h-100" data-bs-ride="carousel" style={{ position: 'relative' }}>
           <div className="carousel-inner h-100">
-            {(Array.isArray(banner) && banner.length > 0 ? banner : [fallbackHero]).map((b, idx) => (
-                <div key={b.id} className={`carousel-item h-100 ${idx === 0 ? 'active' : ''}`} style={{ position: 'relative' }}>
-                  {(b?.gambar || b?.src) ? (
-                    <img
-                      className="w-100 h-100"
-                      src={b.src || assetUrl(`/uploads/galeri/${b.gambar}`)}
-                      alt={b.alt || 'Banner'}
-                      width={1920}
-                      height={1080}
-                      loading={idx === 0 ? "eager" : "lazy"}
-                      decoding="async"
-                      fetchPriority={idx === 0 ? "high" : "auto"}
-                      style={{ objectFit: 'cover' }}
-                    />
-                  ) : (
-                    <div className="hero-media-placeholder" />
-                  )}
-                  <div className="carousel-caption w-100 h-100 d-flex align-items-center justify-content-center text-center">
-                    <div className="w-100 px-3">
-                      <div className="row justify-content-center">
-                        <div className="col-lg-8">
-                          <h1 className="hero-title text-white fw-bold animate-fade-up">
-                            Selamat Datang di<br /> {website?.deskripsi}
-                          </h1>
-                          <p className="hero-subtitle">
-                            Kini telah hadir Sistem Informasi Konservasi untuk <br />
-                            Unit Pelaksanaan Teknis <br />
-                            Tasik Besar Serkap
-                          </p>
-                        </div>
+            {heroItems.map((b, idx) => (
+              <div key={b.id || idx} className={`carousel-item h-100 ${idx === 0 ? 'active' : ''}`} style={{ position: 'relative' }}>
+                {(b?.gambar || b?.src) ? (
+                  <img
+                    className="w-100 h-100"
+                    src={b.src || assetUrl(`/uploads/galeri/${b.gambar}`)}
+                    alt={b.alt || 'Banner'}
+                    width={1920}
+                    height={1080}
+                    loading={idx === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    fetchPriority={idx === 0 ? 'high' : 'auto'}
+                    style={{ objectFit: 'cover' }}
+                  />
+                ) : (
+                  <div className="hero-media-placeholder" />
+                )}
+                <div className="carousel-caption w-100 h-100 d-flex align-items-center justify-content-center text-center">
+                  <div className="w-100 px-3">
+                    <div className="row justify-content-center">
+                      <div className="col-lg-8">
+                        <h1 className="hero-title text-white fw-bold animate-fade-up">
+                          Selamat Datang di<br /> {website?.deskripsi}
+                        </h1>
+                        <p className="hero-subtitle">
+                          Kini telah hadir Sistem Informasi Konservasi untuk <br />
+                          Unit Pelaksanaan Teknis <br />
+                          Tasik Besar Serkap
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
         </div>
       </div>
-      {/* Carousel End */}
 
-      <section className="container-fluid p-0 py-0">
-        <div className="w-100 p-0">
-          {loading && (
-            <div className="container py-5 home-section-placeholder">
-              <div className="image-placeholder mb-4" style={{ height: 48, maxWidth: 720, margin: '0 auto', borderRadius: 8 }} />
-              <div className="image-placeholder" style={{ aspectRatio: '1448 / 720', maxWidth: 800, margin: '0 auto', borderRadius: 8 }} />
-            </div>
-          )}
-          {error && <div className="container py-5"><div className="alert alert-danger">{error}</div></div>}
+      {loading && (
+        <section className="container py-5 home-section-placeholder">
+          <div className="image-placeholder mb-4" style={{ height: 48, maxWidth: 720, margin: '0 auto', borderRadius: 8 }} />
+        </section>
+      )}
 
-          {!loading && !error && (
-            <>
-              {/* Struktur Start */}
-              {/* padding-bottom di set ke 0 agar nyatu dengan visi misi */}
-              <div id="struktur-organisasi" className="container-fluid p-0 pt-5 pb-0">
-                <div className="container mb-4">
-                  <div className="text-center">
-                    <h2 className="fw-bold heading-green animate-title">
-                      Struktur Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan <br /> Tasik Besar Serkap
-                    </h2>
-                  </div>
-                </div>
-
-                {/* mt-0 dan margin reset agar nempel */}
-                <div
-                  className="text-center mt-0 p-0 overflow-hidden m-0 g-0"
-                  style={{ overflowX: 'auto' }}
-                >
-                  <img
-                    src={
-                      website?.struktur
-                        ? `${FILE_URL}/uploads/profil/${website.struktur}`
-                        : `${FILE_URL}/uploads/profil/struktur.png`
-                    }
-                    alt="Struktur Organisasi"
-                    width={1448}
-                    height={720}
-                    loading="lazy"
-                    decoding="async"
-                    style={{
-                      maxWidth: '800px',
-                      width: '100%',
-                      height: 'auto',
-                      display: 'block',
-                      margin: '0 auto'
-                    }}
-                  />
-                </div>
-              </div>
-              {/* Struktur End */}
-
-              {/* Visi Misi Start */}
-              <div
-                id="visi-misi"
-                className="container-fluid p-0 visi-misi-section"
-                style={{
-                  backgroundImage: `url(${FILE_URL}/img/visi-misi.jpg)`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  position: 'relative',
-                  minHeight: 'calc(100vh - 70px)'
-                }}
-              >
-                {/* 🔥 TAMBAH flex biar center */}
-                <div className="visi-misi-content-wrap w-100 position-relative d-flex align-items-center justify-content-center"
-                  style={{ zIndex: 2 }}>
-                  <div className="content-box text-start">
-                    <h2 className="visi-misi-title heading-green animate-title">
-                      Visi dan Misi Unit Pelaksanaan Teknis Kesatuan <br />Pengelolaan Hutan
-                    </h2>
-                    <div className="visi-misi-copy mb-4">
-                      <p className="visi-misi-label">Visi:</p>
-                      <div className="visi-misi-text" style={{ whiteSpace: 'pre-line' }}>
-                        {formatText(website?.visi || 'Visi belum tersedia')}
-                      </div>
-                    </div>
-                    <div className="visi-misi-copy">
-                      <p className="visi-misi-label">Misi:</p>
-                      <div className="visi-misi-text" style={{ whiteSpace: 'pre-line' }}>
-                        {formatText(website?.misi || 'Misi belum tersedia')}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Visi Misi End */}
-
-
-              {/* Sejarah Start */} {/* UNTUK HALAMAN SEJARAH */}
-              <div id="sejarah" className="container-xxl py-5">
-                <div className="container">
-                  <div className="text-center mb-5">
-                    <h2 className="fw-bold heading-green animate-title">
-                      Sejarah Unit Pelaksanaan Teknis Kesatuan Pengelolaan Hutan <br />Tasik Besar Serkap
-                    </h2>
-                  </div>
-                  <div className="row g-4">
-                    <div className="col-lg-6">
-                      <h4>Sejarah</h4>
-                      <p style={{ textAlign: 'justify' }}>
-                        Unit Pelaksana Teknis Kesatuan Pengelolaan Hutan (UPT KPH) Tasik Besar Serkap adalah unit
-                        pelaksana teknis di bawah Dinas Lingkungan Hidup dan Kehutanan Provinsi Riau yang bertugas
-                        melaksanakan kegiatan pengelolaan hutan di wilayah kerjanya. KPH Tasik Besar Serkap memiliki
-                        wilayah kerja di Kabupaten Siak dan Pelalawan, Riau, dengan luas mencapai ratusan ribu hektar.
-                        <br /><br />
-                        Pembentukan KPH Tasik Besar Serkap tidak lepas dari kebijakan pemerintah pusat dan daerah
-                        dalam rangka pengelolaan hutan yang lebih efektif dan efisien, serta mendukung pembangunan
-                        berkelanjutan. Beberapa poin penting terkait sejarah pembentukannya
-                        <br /><br />
-                        Namun, dengan dukungan dari berbagai pihak, termasuk pemerintah, masyarakat, and pelaku
-                        usaha, diharapkan KPH Tasik Besar Serkap dapat melaksanakan tugas dan fungsinya secara
-                        optimal, sehingga pengelolaan hutan di wilayah kerjanya dapat berjalan berkelanjutan dan
-                        memberikan manfaat bagi semua pihak.
-                      </p>
-                    </div>
-                    <div className="col-lg-6">
-                      <h4>Peraturan Gubenur Riau :</h4>
-                      <p style={{ textAlign: 'justify' }}>
-                        KPH Tasik Besar Serkap dibentuk berdasarkan Peraturan Gubernur Riau yang mengatur tentang
-                        pembentukan and pengelolaan KPH di wilayah Provinsi Riau.
-                      </p>
-                      <h4>Wilayah Kerja yang Luas :</h4>
-                      <p style={{ textAlign: 'justify' }}>
-                        KPH Tasik Besar Serkap memiliki wilayah kerja yang cukup luas, mencakup Kabupaten Siak and
-                        Pelalawan, yang merupakan kawasan hutan dengan berbagai potensi and fungsi.
-                      </p>
-                      <h4>Tugas and Fungsi KPH Tasik Besar Serkap:</h4>
-                      <ol>
-                        <li>Tata Hutan and Penyusunan Rencana Pengelolaan</li>
-                        <li>Pemanfaatan Hutan</li>
-                        <li>Rehabilitasi and Reklamasi Hutan</li>
-                        <li>Perlindungan Hutan</li>
-                        <li>Konservasi Sumber Daya Alam</li>
-                        <li>Pengendalian Kebakaran Hutan and Lahan</li>
-                      </ol>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Sejarah End */}
-              
-            </>
-          )}
-        </div>
-      </section>
+      {error && (
+        <section className="container py-5">
+          <div className="alert alert-danger">{error}</div>
+        </section>
+      )}
     </Template>
   )
 }

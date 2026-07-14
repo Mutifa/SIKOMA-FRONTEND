@@ -15,188 +15,98 @@ export default function InformasiDetail() {
 
   React.useEffect(() => {
     let mounted = true
-    informasiEdukasiService.getById(id)
-      .then(res => {
+
+    informasiEdukasiService
+      .getById(id)
+      .then((res) => {
         if (!mounted) return
         const result = res.data.data || res.data
         if (!result) setError('Data tidak ditemukan')
         else setData(result)
-        setLoading(false)
       })
-      .catch(err => {
+      .catch((err) => {
         if (!mounted) return
-        setError(err.message)
-        setLoading(false)
+        setError(err.message || 'Gagal memuat detail informasi.')
       })
-    return () => { mounted = false }
+      .finally(() => {
+        if (mounted) setLoading(false)
+      })
+
+    return () => {
+      mounted = false
+    }
   }, [id])
 
   const tanggal = data?.created_at
     ? new Date(data.created_at).toLocaleDateString('id-ID', {
-        day: 'numeric', month: 'long', year: 'numeric'
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
       })
     : null
 
-  // Cek apakah kategori Executive Summary
   const isExecutive = data?.kategori === 'Edukasi' || data?.kategori === 'Executive'
 
   return (
     <Template title={data?.judul || 'Detail Informasi'} active="informasi">
+      <main className="informasi-detail-page">
+        <div className="container">
+          <button type="button" className="informasi-detail-back" onClick={() => navigate(-1)}>
+            &larr; Kembali
+          </button>
 
-      {loading && (
-        <div className="container my-5">
-          <div className="image-placeholder mb-4" style={{ height: 360, borderRadius: 8 }} />
-          <div className="image-placeholder mb-3" style={{ height: 36, maxWidth: 640, borderRadius: 8 }} />
-          <div className="image-placeholder" style={{ height: 160, borderRadius: 8 }} />
-        </div>
-      )}
+          {loading && (
+            <div className="informasi-detail-article">
+              <div className="image-placeholder mb-4" style={{ height: 360, borderRadius: 8 }} />
+              <div className="image-placeholder mb-3" style={{ height: 36, maxWidth: 640, borderRadius: 8 }} />
+              <div className="image-placeholder" style={{ height: 160, borderRadius: 8 }} />
+            </div>
+          )}
 
-      {error && (
-        <div className="container my-5">
-          <div className="alert alert-danger">{error}</div>
-        </div>
-      )}
+          {error && (
+            <div className="informasi-detail-state">
+              <h2>Data tidak dapat ditampilkan</h2>
+              <p>{error}</p>
+            </div>
+          )}
 
-      {!loading && !error && data && (
-        <>
-          {isExecutive ? (
-            /* ── LAYOUT EXECUTIVE SUMMARY: foto kiri + konten kanan ── */
-            <section className="container my-5">
-              <div className="row g-4 align-items-start">
-
-                {/* Kolom Foto */}
-                {data.foto && (
-                  <div className="col-lg-5 col-md-12 text-center">
-                    <img
-                      src={assetUrl(`/uploads/edukasi/${data.foto}`)}
-                      alt={data.judul}
-                      width={500}
-                      height={620}
-                      loading="eager"
-                      decoding="async"
-                      fetchPriority="high"
-                      style={{
-                        width: '100%',
-                        aspectRatio: '500 / 620',
-                        height: 'auto',
-                        maxHeight: 620,
-                        objectFit: 'contain',
-                        borderRadius: 10,
-                        background: '#f8f9fa',
-                        padding: 8,
-                      }}
-                    />
-                  </div>
-                )}
-
-                {/* Kolom Konten */}
-                <div className={data.foto ? 'col-lg-7 col-md-12' : 'col-12'}>
-                  {tanggal && (
-                    <p style={{ color: '#6c757d', fontSize: '0.875rem', marginBottom: 8 }}>
-                      📅 {tanggal}
-                    </p>
-                  )}
-                  <h1 className="fw-bold mb-3" style={{ lineHeight: 1.4 }}>
-                    {data.judul}
-                  </h1>
-                  <div style={{
-                    width: 60, height: 3,
-                    backgroundColor: '#2d7a3a',
-                    borderRadius: 4,
-                    marginBottom: 28
-                  }} />
-                  {data.deskripsi ? (
-                    <div
-                      style={{ textAlign: 'justify', lineHeight: '1.85', fontSize: '1rem', color: '#333' }}
-                      dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.deskripsi) }}
-                    />
-                  ) : (
-                    <p className="text-muted fst-italic">Tidak ada deskripsi untuk artikel ini.</p>
-                  )}
-                </div>
-
-              </div>
-            </section>
-          ) : (
-            /* ── LAYOUT INFORMASI / SATWA: hero image atas + konten bawah ── */
-            <>
+          {!loading && !error && data && (
+            <article className={`informasi-detail-article ${isExecutive ? 'is-executive' : ''}`}>
               {data.foto && (
-                <div style={{ width: '100%', background: '#f8f9fa', textAlign: 'center', padding: '24px 0' }}>
+                <div className="informasi-detail-media">
                   <img
                     src={assetUrl(`/uploads/edukasi/${data.foto}`)}
                     alt={data.judul}
-                    width={1200}
-                    height={600}
+                    width={isExecutive ? 500 : 1200}
+                    height={isExecutive ? 620 : 600}
                     loading="eager"
                     decoding="async"
                     fetchPriority="high"
-                    style={{ maxWidth: '100%', maxHeight: 600, objectFit: 'contain', borderRadius: 8 }}
+                    className={isExecutive ? 'informasi-detail-image executive-image' : 'informasi-detail-image'}
                   />
                 </div>
               )}
-              <section className="container my-5" style={{ maxWidth: 820 }}>
-                {tanggal && (
-                  <p style={{ color: '#6c757d', fontSize: '0.875rem', marginBottom: 8 }}>
-                    📅 {tanggal}
-                  </p>
-                )}
-                <h1 className="fw-bold mb-3" style={{ lineHeight: 1.4 }}>
-                  {data.judul}
-                </h1>
-                <div style={{
-                  width: 60, height: 3,
-                  backgroundColor: '#2d7a3a',
-                  borderRadius: 4,
-                  marginBottom: 28
-                }} />
+
+              <div className="informasi-detail-body">
+                <header className="informasi-detail-header">
+                  {tanggal && <p className="informasi-detail-meta">{tanggal}</p>}
+                  <h1 className="informasi-detail-title">{data.judul}</h1>
+                  <div className="informasi-detail-divider" />
+                </header>
+
                 {data.deskripsi ? (
                   <div
-                    style={{ textAlign: 'justify', lineHeight: '1.85', fontSize: '1rem', color: '#333' }}
+                    className="informasi-detail-content"
                     dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.deskripsi) }}
                   />
                 ) : (
-                  <p className="text-muted fst-italic">Tidak ada deskripsi untuk artikel ini.</p>
+                  <p className="informasi-detail-empty">Tidak ada deskripsi untuk artikel ini.</p>
                 )}
-              </section>
-            </>
+              </div>
+            </article>
           )}
-        </>
-      )}
-
-      {/* Tombol Kembali Floating */}
-      <button
-        onClick={() => navigate(-1)}
-        style={{
-          position: 'fixed',
-          bottom: 32,
-          left: 32,
-          zIndex: 1000,
-          backgroundColor: '#2d7a3a',
-          color: '#fff',
-          border: 'none',
-          borderRadius: 50,
-          padding: '12px 24px',
-          fontSize: '15px',
-          fontWeight: 600,
-          cursor: 'pointer',
-          boxShadow: '0 4px 14px rgba(0,0,0,0.25)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          transition: 'background-color 0.2s ease, transform 0.2s ease',
-        }}
-        onMouseEnter={e => {
-          e.currentTarget.style.backgroundColor = '#245f2d'
-          e.currentTarget.style.transform = 'scale(1.05)'
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.backgroundColor = '#2d7a3a'
-          e.currentTarget.style.transform = 'scale(1)'
-        }}
-      >
-        ← Kembali
-      </button>
-
+        </div>
+      </main>
     </Template>
   )
 }

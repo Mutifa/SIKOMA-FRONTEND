@@ -11,10 +11,16 @@ import PublicHome from './pages/Public/Home.jsx'
 import Program from './pages/Public/Program'
 import ProgramDetail from './pages/Public/ProgramDetail'
 import InformasiEdukasiDetailPublic from './pages/Public/InformasiEdukasiDetail.jsx'
-import PublicInformasiEdukasi from './pages/Public/InformasiEdukasi.jsx'
 import PublicStandarPelayanan from './pages/Public/StandarPelayanan.jsx'
 import Profil from './pages/Public/Profil.jsx'
 import Kontak from './pages/Public/Kontak'
+import StrukturOrganisasi from './pages/Public/Profil/StrukturOrganisasi.jsx'
+import VisiMisi from './pages/Public/Profil/VisiMisi.jsx'
+import SejarahProfil from './pages/Public/Profil/Sejarah.jsx'
+import KawasanKonservasi from './pages/Public/InformasiEdukasi/KawasanKonservasi.jsx'
+import JenisTslDilindungi from './pages/Public/InformasiEdukasi/JenisTslDilindungi.jsx'
+import ExecutiveSummary from './pages/Public/InformasiEdukasi/ExecutiveSummary.jsx'
+import PeraturanInformasiEdukasi from './pages/Public/InformasiEdukasi/Peraturan.jsx'
 
 // ================= AUTH =================
 import Login from './pages/Auth/Login.jsx'
@@ -91,12 +97,19 @@ export default function App() {
           <Route path="/program/:id" element={<ProgramDetail />} />
 
           {/* Halaman lain */}
-          <Route path="/informasi-edukasi" element={<PublicInformasiEdukasi />} />
+          <Route path="/informasi-edukasi" element={<Navigate to="/informasi-edukasi/kawasan-konservasi" replace />} />
+          <Route path="/informasi-edukasi/kawasan-konservasi" element={<KawasanKonservasi />} />
+          <Route path="/informasi-edukasi/jenis-tsl-dilindungi" element={<JenisTslDilindungi />} />
+          <Route path="/informasi-edukasi/executive-summary" element={<ExecutiveSummary />} />
+          <Route path="/informasi-edukasi/peraturan" element={<PeraturanInformasiEdukasi />} />
           <Route path="/informasi-edukasi/:id" element={<InformasiEdukasiDetailPublic />} />
 
           <Route path="/standar-pelayanan" element={<PublicStandarPelayanan />} />
 
           <Route path="/profil" element={<Profil />} />
+          <Route path="/profil/struktur-organisasi" element={<StrukturOrganisasi />} />
+          <Route path="/profil/visi-misi" element={<VisiMisi />} />
+          <Route path="/profil/sejarah" element={<SejarahProfil />} />
           <Route path="/kontak" element={<Kontak />} />
 
           {/* ================= AUTH ================= */}
