@@ -165,7 +165,7 @@ export default function Informasi() {
           <p className="text-center text-muted fst-italic">Belum ada data.</p>
         )}
 
-        <div className="container" style={{ maxWidth: 900 }}>
+        <div className="executive-summary-list">
           {data.edukasi?.map((p, index) => (
             <article
               key={p.id}
@@ -258,8 +258,21 @@ export default function Informasi() {
         </div>
       </section>
 
+          {/* CONTOH SECTION BARU
+<section className="container-xxl py-5 bg-light">
+    <div className="container">
+        <div className="text-center mb-5">
+            <h2>Program Lainnya</h2>
+            <p>
+                Ini contoh section baru.
+            </p>
+        </div>
+    </div>
+</section> */}
+
+
       {/* DAFTAR PERATURAN */}
-      <section id="peraturan" className="container py-5">
+      <section id="peraturan" className="public-section informasi-section">
         <div className="text-center mb-4">
           <h2 className="fw-bold heading-green animate-title">Daftar Peraturan</h2>
         </div>
@@ -279,7 +292,7 @@ export default function Informasi() {
               </div>
               <div className="flex-shrink-0">
                 <a
-                  href={`https://codemy.my.id/uploads/peraturan/${p.file}`}
+                  href={`https://codemy.my.id/uploads/peraturan/${p.file}`} // dapatkan file dari server yang sudah diunggah
                   download
                   className="btn btn-success"
                   style={{ whiteSpace: 'nowrap', borderRadius: 8 }}

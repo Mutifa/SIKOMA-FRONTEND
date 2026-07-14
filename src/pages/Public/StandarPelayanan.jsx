@@ -99,6 +99,13 @@ export default function StandarPelayanan() {
                   <div className="col-12">
                     <textarea name="pesan" className="form-control border-0" rows="4" placeholder="Pesan kamu" value={form.pesan} onChange={e => setForm({ ...form, pesan: e.target.value })}></textarea>
                   </div>
+
+                  
+                  {/* button kiri <div className="text-start">
+    <button className="btn btn-primary py-3">
+        {loading ? 'Mengirim...' : 'Kirim'}
+    </button>
+</div> */}
                   <div className="col-12">
                     <button className="btn btn-primary w-100 py-3" type="submit" disabled={loading}>
                       {loading ? 'Mengirim...' : 'Kirim'}
@@ -110,6 +117,8 @@ export default function StandarPelayanan() {
           </div>
         </div>
       </div>
+
+      //SECTION BARU//
     </Template>
   )
 }

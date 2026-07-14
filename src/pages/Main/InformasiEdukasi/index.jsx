@@ -7,7 +7,7 @@ import { successAlert, errorAlert, confirmDelete } from '../../../utils/alert.js
 
 export default function Konten() {
 
-  const [data, setData] = React.useState([])
+  const [data, setData] = React.useState([]) //data konten edukasi
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(true)
   const [searchTerm, setSearchTerm] = React.useState('')

@@ -84,7 +84,9 @@ export default function DashboardLayout({
       { to: '/laporan-konservasi', icon: 'fa-file-lines', label: 'Laporan Konservasi' },
       { to: '/pesan-masuk', icon: 'fa-clipboard-list', label: 'Standar Pelayanan' },
       { to: '/akun', icon: 'fa-user-cog', label: 'Akun' },
+      { to: '/data-satwa', icon: 'fa-database', label: 'Data Satwa' }
     ]
+
   } else {
     // MENU ADMIN LAPANGAN
     menuItems = [

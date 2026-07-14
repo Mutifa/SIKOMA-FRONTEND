@@ -113,6 +113,18 @@ export default function Program() {
         </div>
       </section>
 
+{/* Section Baru CONTOH STARTT */}
+{/* <section className="container-xxl py-5 bg-light">
+    <div className="container">
+        <div className="text-center mb-5">
+            <h2 className="heading-green">
+                Program Unggulan</h2>
+            <p> Berikut merupakan contoh section baru.</p>
+        </div>
+    </div>
+</section> */}
+{/* Section Baru CONTOH END*/}
+
     </Template>
   )
 }

@@ -20,6 +20,7 @@ const toYYYYMMDD = (date) => {
   return `${y}-${m}-${d}`
 }
 
+// Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
 const getTodayDateString = () => toYYYYMMDD(new Date())
 
 const getTomorrowDateString = () => {
@@ -92,8 +93,8 @@ export default function LaporanCreate() {
   }
 
   // ── AMBIL GPS & REVERSE GEOCODING ────────────────────────────────────────
-  const getLocation = () => {
-    if (!navigator.geolocation) {
+  const getLocation = () => {    
+    if (!navigator.geolocation) { 
       setLocationStatus('❌ Browser tidak mendukung geolocation!')
       return
     }

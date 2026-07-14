@@ -64,6 +64,9 @@ import AkunEdit from './pages/Main/Akun/edit'
 
 import Dashboard from './pages/Main/Dashboard/index'
 
+// import DataSatwa from './pages/Main/Data Satwa/index.jsx'
+// import DataSatwaPublic from './pages/Public/DataSatwa.jsx'
+
 // ================= UTIL =================
 import NotFound from './pages/NotFound.jsx'
 import HealthCheck from './pages/HealthCheck.jsx'
@@ -254,37 +257,37 @@ export default function App() {
             } />
 
           <Route path="/dashboard/informasi-edukasi" element={
-  <RoleGuard allowedRoles={['admin_pusat']}>
-    <InformasiEdukasi />
-  </RoleGuard>
-} />
+            <RoleGuard allowedRoles={['admin_pusat']}>
+              <InformasiEdukasi />
+            </RoleGuard>
+          } />
 
-<Route
-  path="/dashboard/informasi-edukasi/create"
-  element={
-    <RoleGuard allowedRoles={['admin_pusat']}>
-      <InformasiEdukasiCreate />
-    </RoleGuard>
-  }
-/>
+          <Route
+            path="/dashboard/informasi-edukasi/create"
+            element={
+              <RoleGuard allowedRoles={['admin_pusat']}>
+                <InformasiEdukasiCreate />
+              </RoleGuard>
+            }
+          />
 
-<Route
-  path="/dashboard/informasi-edukasi/detail/:id"
-  element={
-    <RoleGuard allowedRoles={['admin_pusat']}>
-      <InformasiEdukasiDetail />
-    </RoleGuard>
-  }
-/>
+          <Route
+            path="/dashboard/informasi-edukasi/detail/:id"
+            element={
+              <RoleGuard allowedRoles={['admin_pusat']}>
+                <InformasiEdukasiDetail />
+              </RoleGuard>
+            }
+          />
 
-<Route
-  path="/dashboard/informasi-edukasi/edit/:id"
-  element={
-    <RoleGuard allowedRoles={['admin_pusat']}>
-      <InformasiEdukasiEdit />
-    </RoleGuard>
-  }
-/>
+          <Route
+            path="/dashboard/informasi-edukasi/edit/:id"
+            element={
+              <RoleGuard allowedRoles={['admin_pusat']}>
+                <InformasiEdukasiEdit />
+              </RoleGuard>
+            }
+          />
 
           <Route path="/kawasan" element={
             <RoleGuard allowedRoles={['admin_pusat']}>
@@ -336,6 +339,24 @@ export default function App() {
               <StandarPelayanan />
             </RoleGuard>
           } />
+
+          {/* <Route path="/data-satwa" element={
+            <RoleGuard allowedRoles={['admin_pusat']}>
+              <DataSatwa />
+            </RoleGuard>
+          } />
+          <Route path="/data-satwa-public" element={
+            <DataSatwaPublic />
+          } /> */}
+
+          {/* ================= ADMIN LAPANGAN (PROTECTED) ================= */}
+
+          {/* halaman admin lapangan lainnya */}
+          {/* <Route path="/admin-lapangan/laporan-konservasi" element={
+            <RoleGuard allowedRoles={['admin_lapangan']}>
+              <LaporanKonservasi />
+            </RoleGuard>
+          } /> */}
 
           {/* ================= UTIL ================= */}
 

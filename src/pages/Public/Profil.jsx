@@ -11,7 +11,7 @@ export default function Profil() {
   const [logoKey, setLogoKey] = React.useState(Date.now())
 
 React.useEffect(() => {
-  profilPerusahaanService.get()
+  profilPerusahaanService.get() //API mengambil data profil perusahaan
     .then(res => {
 
       console.log('PROFILE PUBLIC', res.data)

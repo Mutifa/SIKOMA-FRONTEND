@@ -20,6 +20,7 @@ export default function Home() {
     alt: 'Kawasan konservasi'
   }
 
+  //untuk scroll ke section tertentu ketika ada hash di url
   useEffect(() => {
     const handleScroll = () => {
       if (location.hash) {
@@ -30,6 +31,7 @@ export default function Home() {
       }
     }
 
+    //untuk delay scroll agar element sudah ter-render
     setTimeout(handleScroll, 300)
   }, [location])
 
@@ -55,9 +57,11 @@ export default function Home() {
   const formatText = (text) =>
     text
       ? text
+        .replace(/\r\n/g, '\n')
         .replace(/a\./g, '\na.')
         .replace(/b\./g, '\nb.')
         .replace(/c\./g, '\nc.')
+        .replace(/\n{2,}/g, '\n')
         .trim()
       : ''
 
@@ -168,25 +172,25 @@ export default function Home() {
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   position: 'relative',
-                  height: 'calc(100vh - 70px)'
+                  minHeight: 'calc(100vh - 70px)'
                 }}
               >
                 {/* 🔥 TAMBAH flex biar center */}
-                <div className="w-100 position-relative d-flex align-items-center justify-content-center text-center"
-                  style={{ zIndex: 2, minHeight: '500px' }}>
-                  <div className="content-box text-start" style={{ color: 'black' }}>
-                    <h2 className="fw-bold heading-green animate-title">
+                <div className="visi-misi-content-wrap w-100 position-relative d-flex align-items-center justify-content-center"
+                  style={{ zIndex: 2 }}>
+                  <div className="content-box text-start">
+                    <h2 className="visi-misi-title heading-green animate-title">
                       Visi dan Misi Unit Pelaksanaan Teknis Kesatuan <br />Pengelolaan Hutan
                     </h2>
-                    <div className="text-start fw-bold mb-4">
-                      <p className="mb-2">Visi:</p>
-                      <div style={{ whiteSpace: 'pre-line' }}>
+                    <div className="visi-misi-copy mb-4">
+                      <p className="visi-misi-label">Visi:</p>
+                      <div className="visi-misi-text" style={{ whiteSpace: 'pre-line' }}>
                         {formatText(website?.visi || 'Visi belum tersedia')}
                       </div>
                     </div>
-                    <div className="text-start fw-bold">
-                      <p className="mb-2">Misi:</p>
-                      <div style={{ whiteSpace: 'pre-line' }}>
+                    <div className="visi-misi-copy">
+                      <p className="visi-misi-label">Misi:</p>
+                      <div className="visi-misi-text" style={{ whiteSpace: 'pre-line' }}>
                         {formatText(website?.misi || 'Misi belum tersedia')}
                       </div>
                     </div>
@@ -195,7 +199,8 @@ export default function Home() {
               </div>
               {/* Visi Misi End */}
 
-              {/* Sejarah Start */}
+
+              {/* Sejarah Start */} {/* UNTUK HALAMAN SEJARAH */}
               <div id="sejarah" className="container-xxl py-5">
                 <div className="container">
                   <div className="text-center mb-5">
@@ -247,6 +252,7 @@ export default function Home() {
                 </div>
               </div>
               {/* Sejarah End */}
+              
             </>
           )}
         </div>

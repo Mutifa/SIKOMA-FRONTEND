@@ -79,6 +79,16 @@ function Navbar({ website }) {
                   <a href="/#sejarah" className="dropdown-item">
                     Sejarah UPT KPH Tasik Besar Serkap
                   </a>
+                  <li>
+
+                    {/*BUAT HALAMAN BARU*/}
+    {/* <NavLink
+        to="/data-satwa-public"
+        className="dropdown-item"
+    >
+        Data Satwa
+    </NavLink> */}
+</li>
                 </li>
               </ul>
             </li>
