@@ -129,7 +129,12 @@ export default function DashboardLayout({
     profilPerusahaanService.get()
       .then(res => {
         if (mounted) {
-          setWebsiteData(res.data)
+          setWebsiteData(
+            res.data?.website ||
+            res.data?.data?.website ||
+            res.data?.data ||
+            res.data
+          )
           setLogoKey(Date.now())
         }
       })

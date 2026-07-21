@@ -118,7 +118,6 @@ export default function StandarPelayanan() {
         </div>
       </div>
 
-      //SECTION BARU//
     </Template>
   )
 }

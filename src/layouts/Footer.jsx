@@ -1,6 +1,31 @@
 import React from 'react'
 
 export default function Footer({ website }) {
+  const getSocialLabel = (value, fallback) => {
+    if (!value) return fallback
+
+    return value
+      .replace(/^https?:\/\/(www\.)?/i, '')
+      .replace(/^(facebook|instagram)\.com\//i, '')
+      .replace(/^@/, '')
+      .replace(/\/$/, '')
+  }
+
+  const getSocialUrl = (value, platform) => {
+    if (!value) return '#'
+    if (/^https?:\/\//i.test(value)) return value
+
+    const username = value.replace(/^@/, '')
+    return platform === 'facebook'
+      ? `https://facebook.com/${username}`
+      : `https://instagram.com/${username}`
+  }
+
+  const facebookLabel = getSocialLabel(website?.facebook, 'kph.tbs')
+  const instagramLabel = getSocialLabel(website?.instagram, 'kph.tbs')
+  const facebookUrl = getSocialUrl(website?.facebook, 'facebook')
+  const instagramUrl = getSocialUrl(website?.instagram, 'instagram')
+
   return (
     <>
      <div id="kontak" style={{ background: '#2f2f2f', color: '#fff' }}>
@@ -19,8 +44,28 @@ export default function Footer({ website }) {
               </div>
 
               {/* SOSIAL */}
-              <p><i className="fab fa-facebook me-2"></i> kph.tbs</p>
-              <p><i className="fab fa-instagram me-2"></i> kph.tbs</p>
+              <p>
+                <a
+                  href={facebookUrl}
+                  className="text-white"
+                  target={facebookUrl === '#' ? undefined : '_blank'}
+                  rel={facebookUrl === '#' ? undefined : 'noopener noreferrer'}
+                >
+                  <i className="fab fa-facebook me-2"></i>
+                  {facebookLabel}
+                </a>
+              </p>
+              <p>
+                <a
+                  href={instagramUrl}
+                  className="text-white"
+                  target={instagramUrl === '#' ? undefined : '_blank'}
+                  rel={instagramUrl === '#' ? undefined : 'noopener noreferrer'}
+                >
+                  <i className="fab fa-instagram me-2"></i>
+                  {instagramLabel}
+                </a>
+              </p>
 
               <p className="mt-3">terms & services</p>
               <p>{website?.nama || 'SIKOMA'} © 2026</p>

@@ -17,6 +17,12 @@ const Field = ({ label, value }) => (
   </div>
 )
 
+const getWebsiteData = (res) =>
+  res.data?.website ||
+  res.data?.data?.website ||
+  res.data?.data ||
+  res.data
+
 export default function ProfilPerusahaan() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -29,7 +35,7 @@ export default function ProfilPerusahaan() {
     setLoading(true)
     profilPerusahaanService.get()
       .then(res => {
-        setFormData(res.data)
+        setFormData(getWebsiteData(res))
         setImgKey(Date.now())
         setLoading(false)
       })

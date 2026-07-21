@@ -27,10 +27,16 @@ const cleanHtml = (html) =>
     logo: null, struktur: null
   })
 
+  const getWebsiteData = (res) =>
+    res.data?.website ||
+    res.data?.data?.website ||
+    res.data?.data ||
+    res.data
+
   React.useEffect(() => {
     profilPerusahaanService.get()
       .then(res => {
-        const data = res.data
+        const data = getWebsiteData(res)
         setFormData({
           nama:      data.nama      || '',
           deskripsi: data.deskripsi || '',
