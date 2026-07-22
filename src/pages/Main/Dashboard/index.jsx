@@ -60,6 +60,12 @@ export default function AdminPusatDashboard() {
   const [loading, setLoading] = React.useState(true)
   const [laporanKonservasi, setLaporanKonservasi] = React.useState([])
   const [showAllDaerah, setShowAllDaerah] = React.useState(false)
+  
+  // State untuk tracking notifikasi laporan ditolak yang sudah dibaca (Admin Lapangan)
+  const [dismissedNotifications, setDismissedNotifications] = React.useState(() => {
+    const stored = localStorage.getItem('dismissedLaporanDitolak')
+    return stored ? JSON.parse(stored) : []
+  })
 
   // Ringkasan data yang digunakan di summary card
  const summary = {
@@ -83,6 +89,24 @@ export default function AdminPusatDashboard() {
       action()
     }
   }
+
+  // ──────────────────────────────────────────────
+  // Handler untuk dismiss notifikasi laporan ditolak (Admin Lapangan)
+  // ──────────────────────────────────────────────
+  const dismissLaporanDitolakNotification = (laporanId) => {
+    const updated = [...dismissedNotifications, laporanId]
+    setDismissedNotifications(updated)
+    localStorage.setItem('dismissedLaporanDitolak', JSON.stringify(updated))
+  }
+
+  // ──────────────────────────────────────────────
+  // Filter laporan yang ditolak dan belum dibaca (untuk Admin Lapangan)
+  // ──────────────────────────────────────────────
+  const laporanDitolakBelumDibaca = React.useMemo(() => {
+    return laporanKonservasi.filter(item =>
+      item.status === 2 && !dismissedNotifications.includes(item.id)
+    )
+  }, [laporanKonservasi, dismissedNotifications])
 
   // Ambil data user dari context dan tentukan role-nya
   const { user } = useAuth()
@@ -285,6 +309,44 @@ export default function AdminPusatDashboard() {
 
           <>
 
+            {/* ── NOTIFIKASI LAPORAN PENDING ── */}
+            {laporanPending > 0 && (
+              <div
+                className="alert alert-warning alert-dismissible fade show mb-4 d-flex align-items-center"
+                role="alert"
+                style={{
+                  cursor: 'pointer',
+                  backgroundColor: '#fef3c7',
+                  borderColor: '#fcd34d',
+                  borderLeft: '4px solid #f59e0b',
+                  transition: 'all 0.3s ease'
+                }}
+                onClick={goToLaporanKonservasi}
+                onKeyDown={(event) => openWithKeyboard(event, goToLaporanKonservasi)}
+                tabIndex={0}
+                role="button"
+              >
+                <div style={{ marginRight: '12px', fontSize: '1.25rem', color: '#d97706' }}>
+                  <i className="fas fa-bell"></i>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <strong style={{ color: '#92400e' }}>
+                    Ada {laporanPending} laporan konservasi yang menunggu verifikasi.
+                  </strong>
+                  <div style={{ fontSize: '0.9rem', color: '#b45309', marginTop: '4px' }}>
+                    Klik untuk melihat detail laporan
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="alert"
+                  aria-label="Close"
+                  onClick={(e) => e.stopPropagation()}
+                ></button>
+              </div>
+            )}
+
             {/* ── SUMMARY CARDS ── */}
             <div className="dashboard-summary-grid">
 
@@ -297,6 +359,7 @@ export default function AdminPusatDashboard() {
                   onKeyDown={(event) => openWithKeyboard(event, goToLaporanKonservasi)}
                   role="button"
                   tabIndex={0}
+                  aria-label={`Total laporan masuk: ${data.laporanTerakhir || 0}, klik untuk melihat detail`}
                 >
 
                   <div className="d-flex justify-content-between align-items-start">
@@ -336,6 +399,7 @@ export default function AdminPusatDashboard() {
                   onKeyDown={(event) => openWithKeyboard(event, goToLaporanKonservasi)}
                   role="button"
                   tabIndex={0}
+                  aria-label={`Laporan disetujui: ${summary.disetujui || 0}, klik untuk melihat detail`}
                 >
 
                   <div className="d-flex justify-content-between align-items-start">
@@ -377,6 +441,7 @@ export default function AdminPusatDashboard() {
                   onKeyDown={(event) => openWithKeyboard(event, () => navigate('/pesan-masuk'))}
                   role="button"
                   tabIndex={0}
+                  aria-label={`Feedback: ${data.feedback || 0}, klik untuk melihat detail`}
                 >
 
                   <div className="d-flex justify-content-between align-items-start">
@@ -580,8 +645,53 @@ export default function AdminPusatDashboard() {
         ══════════════════════════════════════ */}
         {isAdminLapangan && (
           <>
+            {/* ── NOTIFIKASI LAPORAN DITOLAK ── */}
+            {laporanDitolakBelumDibaca.length > 0 && (
+              <div className="alert alert-danger alert-dismissible fade show mb-4 d-flex align-items-center"
+                role="alert"
+                style={{
+                  cursor: 'pointer',
+                  backgroundColor: '#fee2e2',
+                  borderColor: '#fca5a5',
+                  borderLeft: '4px solid #dc2626',
+                  transition: 'all 0.3s ease'
+                }}
+                onClick={() => {
+                  laporanDitolakBelumDibaca.forEach(item => dismissLaporanDitolakNotification(item.id))
+                  goToLaporanKonservasi()
+                }}
+                onKeyDown={(event) => openWithKeyboard(event, () => {
+                  laporanDitolakBelumDibaca.forEach(item => dismissLaporanDitolakNotification(item.id))
+                  goToLaporanKonservasi()
+                })}
+                tabIndex={0}
+              >
+                <div style={{ marginRight: '12px', fontSize: '1.25rem', color: '#b91c1c' }}>
+                  <i className="fas fa-bell"></i>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <strong style={{ color: '#7f1d1d' }}>
+                    ⚠️ Ada {laporanDitolakBelumDibaca.length} laporan konservasi yang ditolak.
+                  </strong>
+                  <div style={{ fontSize: '0.9rem', color: '#991b1b', marginTop: '4px' }}>
+                    Admin Pusat telah menolak {laporanDitolakBelumDibaca.length === 1 ? 'laporan' : 'laporan-laporan'} Anda. Klik untuk melihat detail dan alasan penolakan.
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="alert"
+                  aria-label="Close"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    laporanDitolakBelumDibaca.forEach(item => dismissLaporanDitolakNotification(item.id))
+                  }}
+                ></button>
+              </div>
+            )}
+
             {/* ── SUMMARY CARDS ── */}
-            <div className="row">
+            <div className="row g-3">
 
               {/* Card: Total Laporan Kegiatan */}
               <div className="col-lg-6 col-md-6 col-sm-12 d-flex">
@@ -597,6 +707,7 @@ export default function AdminPusatDashboard() {
                   }}
                   role="button"
                   tabIndex={0}
+                  aria-label="Total laporan kegiatan, klik untuk melihat detail"
                 >
 
                   <div className="lapangan-card-header">
@@ -647,6 +758,7 @@ export default function AdminPusatDashboard() {
                   }}
                   role="button"
                   tabIndex={0}
+                  aria-label="Status laporan konservasi, klik untuk melihat detail"
                 >
 
                   <h5
@@ -692,8 +804,8 @@ export default function AdminPusatDashboard() {
             </div>
 
             {/* ── LINE CHART: Pelaporan Kegiatan per Bulan ── */}
-            <div className="dashboard-insight-grid mt-4">
-              <div className="white-box dashboard-overview-card">
+            <div className="dashboard-insight-grid">
+              <div className="white-box dashboard-overview-card" role="button" tabIndex={0} aria-label={`Laporan bulan ini: ${laporanBulanIni} laporan`} onClick={goToLaporanKonservasi} onKeyDown={(event) => openWithKeyboard(event, goToLaporanKonservasi)}>
                 <div className="dashboard-overview-main">
                   <span className="dashboard-overview-label">Laporan Bulan Ini</span>
                   <strong>{laporanBulanIni}</strong>
@@ -703,7 +815,7 @@ export default function AdminPusatDashboard() {
                 </div>
               </div>
 
-              <div className="white-box dashboard-overview-card">
+              <div className="white-box dashboard-overview-card" role="button" tabIndex={0} aria-label={`Status pending: ${laporanPending} laporan`} onClick={goToLaporanKonservasi} onKeyDown={(event) => openWithKeyboard(event, goToLaporanKonservasi)}>
                 <div className="dashboard-overview-main">
                   <span className="dashboard-overview-label">Status Pending</span>
                   <strong>{laporanPending}</strong>
@@ -711,7 +823,7 @@ export default function AdminPusatDashboard() {
                 </div>
               </div>
 
-              <div className="white-box dashboard-overview-card">
+              <div className="white-box dashboard-overview-card" role="button" tabIndex={0} aria-label={`Tingkat persetujuan: ${approvalRate}%`} onClick={goToLaporanKonservasi} onKeyDown={(event) => openWithKeyboard(event, goToLaporanKonservasi)}>
                 <div className="dashboard-overview-main">
                   <span className="dashboard-overview-label">Tingkat Persetujuan</span>
                   <strong>{approvalRate}%</strong>
@@ -723,10 +835,10 @@ export default function AdminPusatDashboard() {
               </div>
             </div>
 
-            <div className="row mt-4">
+            <div className="row g-3" style={{ marginTop: '16px' }}>
               <div className="col-12">
-                <div className="white-box dashboard-insight-card">
-                  <h5 className="lapangan-card-title mb-3">Insight Cepat</h5>
+                <div className="white-box dashboard-insight-card" role="button" tabIndex={0} aria-label="Insight cepat dashboard" onClick={goToLaporanKonservasi} onKeyDown={(event) => openWithKeyboard(event, goToLaporanKonservasi)}>
+                  <h5 className="lapangan-card-title" style={{ marginBottom: '12px' }}>Insight Cepat</h5>
                   <div className="dashboard-insight-list dashboard-insight-list-inline">
                     {quickInsights.map(item => (
                       <div className="dashboard-insight-item" key={item.title}>
@@ -742,13 +854,19 @@ export default function AdminPusatDashboard() {
               </div>
             </div>
 
-            <div className="row mt-4">
+            <div className="row g-3" style={{ marginTop: '16px' }}>
               <div className="col-12">
                 <div
                   className="white-box lapangan-dashboard-card lapangan-line-card"
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Grafik pelaporan kegiatan tahunan"
+                  onClick={goToLaporanKonservasi}
+                  onKeyDown={(event) => openWithKeyboard(event, goToLaporanKonservasi)}
                 >
                   <h5
-                    className="lapangan-card-title mb-3"
+                    className="lapangan-card-title"
+                    style={{ marginBottom: '12px' }}
                   >
                     Pelaporan Kegiatan
                   </h5>

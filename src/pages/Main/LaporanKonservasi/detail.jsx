@@ -54,8 +54,18 @@ export default function LaporanDetail() {
     laporanKonservasiService.getById(id) // backend mengambil: detail 1 laporan -- show($id)
       .then(res => {
         if (!mounted) return
-        setLaporan(res.data?.data || res.data)
+        const laporanData = res.data?.data || res.data
+        setLaporan(laporanData)
         setLoading(false)
+
+        // Auto-dismiss notifikasi jika Admin Lapangan membuka laporan yang ditolak
+        if (isAdminLapangan && laporanData?.status === 2) {
+          const dismissedList = JSON.parse(localStorage.getItem('dismissedLaporanDitolak') || '[]')
+          if (!dismissedList.includes(laporanData.id)) {
+            dismissedList.push(laporanData.id)
+            localStorage.setItem('dismissedLaporanDitolak', JSON.stringify(dismissedList))
+          }
+        }
       })
       .catch(err => {
         if (!mounted) return
@@ -64,7 +74,7 @@ export default function LaporanDetail() {
       })
 
     return () => { mounted = false }
-  }, [id])
+  }, [id, isAdminLapangan])
 
   // ── Update status laporan (Admin Pusat) ──────────────────────────────────
   const handleUpdateStatus = async (laporanId, status) => { //Setujui/tolak laporan -- validasi($id)/updateStatus($id)

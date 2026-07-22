@@ -723,14 +723,15 @@ a { text-decoration: none; color: inherit; }
 }
 
 .lapangan-dashboard-card {
-  border-radius: var(--radius-lg);
-  padding: 28px 30px;
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
   margin-bottom: 0;
+  cursor: pointer;
 }
 
 .lapangan-stat-card,
 .lapangan-chart-card {
-  min-height: 320px;
+  min-height: 200px;
 }
 
 .lapangan-stat-card {
@@ -741,13 +742,17 @@ a { text-decoration: none; color: inherit; }
 
 .dashboard-action-card {
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, filter 0.2s ease;
 }
 
 .dashboard-action-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   border-color: #cfe4d8;
-  box-shadow: 0 14px 32px rgba(26,71,49,0.12);
+  box-shadow: 0 10px 24px rgba(26,71,49,0.09);
+}
+
+.dashboard-action-card:active {
+  transform: translateY(-1px);
 }
 
 .dashboard-action-card:focus-visible {
@@ -764,41 +769,46 @@ a { text-decoration: none; color: inherit; }
 
 .lapangan-card-title {
   color: #17231d;
-  font-size: 16px;
-  font-weight: 800;
-  line-height: 1.35;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
   margin: 0;
 }
 
 .lapangan-card-icon {
   align-items: center;
   background: #1f3a68;
-  border-radius: 10px;
+  border-radius: 8px;
   color: #fff;
   display: flex;
-  flex: 0 0 58px;
-  font-size: 26px;
-  height: 58px;
+  flex: 0 0 48px;
+  font-size: 22px;
+  height: 48px;
   justify-content: center;
-  width: 58px;
+  width: 48px;
+  transition: background 0.2s ease;
+}
+
+.dashboard-action-card:hover .lapangan-card-icon {
+  background: #173a6b;
 }
 
 .lapangan-stat-body {
-  padding-top: 28px;
+  padding-top: 12px;
 }
 
 .lapangan-stat-number {
   color: #2d0c73;
-  font-size: 44px;
+  font-size: 32px;
   font-weight: 800;
   line-height: 1;
-  margin: 0 0 16px;
+  margin: 0 0 6px;
 }
 
 .lapangan-stat-caption {
   color: #58665f;
   display: block;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .lapangan-chart-card {
@@ -808,31 +818,48 @@ a { text-decoration: none; color: inherit; }
 
 .lapangan-pie-chart {
   flex: 1;
-  min-height: 240px;
-  padding-top: 10px;
+  min-height: 140px;
+  padding-top: 4px;
 }
 
 .lapangan-line-card {
-  margin-top: 8px;
+  margin-top: 0;
 }
 
 .lapangan-line-chart {
-  height: 420px;
+  height: 280px;
 }
 
 .dashboard-insight-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+  margin-top: 16px;
 }
 
 .dashboard-overview-card {
-  min-height: 132px;
+  min-height: auto;
   margin-bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 14px;
+  gap: 8px;
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.dashboard-overview-card:hover,
+.dashboard-overview-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: #cfe4d8;
+  box-shadow: 0 8px 20px rgba(26,71,49,0.08);
+}
+
+.dashboard-overview-card:focus-visible {
+  outline: 3px solid rgba(58,138,99,0.22);
+  outline-offset: 2px;
 }
 
 .dashboard-overview-main {
@@ -886,11 +913,26 @@ a { text-decoration: none; color: inherit; }
 .dashboard-progress span.pending { background: #f59e0b; }
 .dashboard-progress span.rejected { background: #e11d48; }
 
-.dashboard-status-card,
 .dashboard-insight-card {
   height: 100%;
-  min-height: 390px;
+  min-height: auto;
   margin-bottom: 0;
+  padding: 20px 24px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.dashboard-insight-card:hover,
+.dashboard-insight-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: #cfe4d8;
+  box-shadow: 0 8px 20px rgba(26,71,49,0.08);
+}
+
+.dashboard-insight-card:focus-visible {
+  outline: 3px solid rgba(58,138,99,0.22);
+  outline-offset: 2px;
 }
 
 .dashboard-status-card {
@@ -983,6 +1025,7 @@ a { text-decoration: none; color: inherit; }
 .dashboard-insight-list-inline {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .dashboard-modal-overlay {
@@ -2580,10 +2623,32 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   .dashboard-insight-list-inline {
     grid-template-columns: 1fr;
   }
+  
+  /* Responsive tap target untuk mobile */
+  .dashboard-overview-card {
+    min-height: 80px;
+    padding: 20px;
+  }
+  
+  .dashboard-action-card {
+    min-height: auto;
+  }
+  
   .dashboard-modern-stat {
     min-height: 150px;
     padding: 20px !important;
   }
+  
+  .lapangan-dashboard-card {
+    padding: 24px;
+    min-height: auto;
+  }
+  
+  .lapangan-stat-card,
+  .lapangan-chart-card {
+    min-height: 180px;
+  }
+  
   .dashboard-modern-stat::after {
     display: none;
   }
@@ -2659,7 +2724,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   .user-info .name { max-width: 100px; overflow: hidden; text-overflow: ellipsis; }
   .akun-grid { grid-template-columns: 1fr; }
   .page-wrapper .container-fluid {
-    padding: 14px;
+    padding: 12px;
   }
   .page-wrapper .white-box {
     padding: 16px;
@@ -2667,6 +2732,39 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   .page-wrapper .white-box.p-0 {
     padding: 0 !important;
   }
+  
+  /* Dashboard responsive tap targets */
+  .dashboard-overview-card {
+    min-height: 90px;
+    padding: 16px;
+  }
+  
+  .dashboard-action-card,
+  .lapangan-dashboard-card {
+    padding: 20px;
+  }
+  
+  .dashboard-modern-stat {
+    min-height: 140px;
+    padding: 18px !important;
+  }
+  
+  .lapangan-stat-card,
+  .lapangan-chart-card {
+    min-height: 160px;
+  }
+  
+  .lapangan-card-icon {
+    flex: 0 0 44px !important;
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 20px !important;
+  }
+  
+  .dashboard-insight-item {
+    padding: 14px;
+  }
+  
   .page-wrapper .table-responsive,
   .page-wrapper [style*="overflowX"] {
     border-radius: 10px;
