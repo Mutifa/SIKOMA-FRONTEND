@@ -70,8 +70,6 @@ import AkunEdit from './pages/Main/Akun/edit'
 
 import Dashboard from './pages/Main/Dashboard/index'
 
-// import DataSatwa from './pages/Main/Data Satwa/index.jsx'
-// import DataSatwaPublic from './pages/Public/DataSatwa.jsx'
 
 // ================= UTIL =================
 import NotFound from './pages/NotFound.jsx'
