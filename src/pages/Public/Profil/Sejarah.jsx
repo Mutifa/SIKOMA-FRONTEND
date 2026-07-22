@@ -13,7 +13,7 @@ export default function Sejarah() {
   ]
 
   return (
-    <Template title="Sejarah UPT KPH Tasik Besar Serkap" active="profil">
+    <Template title="Sejarah" active="profil">
       <section id="sejarah" className="history-section">
         <div className="container">
           <div className="text-center mb-5 history-heading">

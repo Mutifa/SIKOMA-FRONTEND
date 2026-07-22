@@ -58,20 +58,27 @@ function Navbar({ website }) {
         <div className="collapse navbar-collapse mobile-menu" id="navbarNav">
           <ul className="navbar-nav ms-auto align-items-lg-center mobile-nav">
             
+            {/* 0. Beranda */}
+            <li className="nav-item">
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? 'active' : ''}`
+                }
+              >
+                Beranda
+              </NavLink>
+            </li>
+
             {/* 1. Dropdown: Profil Perusahaan (Sudah Diperbaiki) */}
             <li className="nav-item dropdown custom-hover-dropdown">
               <Link
-                to="/"
+                to="/profil/visi-misi"
                 className={`nav-link dropdown-toggle ${isProfilActive ? 'active' : ''}`}
               >
                 Profil
               </Link>
               <ul className="dropdown-menu">
-                <li>
-                  <NavLink to="/profil/struktur-organisasi" className="dropdown-item">
-                    Struktur Organisasi
-                  </NavLink>
-                </li>
                 <li>
                   <NavLink to="/profil/visi-misi" className="dropdown-item">
                     Visi Misi
@@ -79,7 +86,12 @@ function Navbar({ website }) {
                 </li>
                 <li>
                   <NavLink to="/profil/sejarah" className="dropdown-item">
-                    Sejarah UPT KPH Tasik Besar Serkap
+                    Sejarah 
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/profil/struktur-organisasi" className="dropdown-item">
+                    Struktur Organisasi
                   </NavLink>
                 </li>
               </ul>
