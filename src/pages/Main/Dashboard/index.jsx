@@ -181,7 +181,9 @@ export default function AdminPusatDashboard() {
   const totalLaporan = toNumber(summary.total_laporan) || laporanTahunanTotal
   const laporanDisetujui = toNumber(summary.disetujui)
   const laporanDitolak = toNumber(data.ditolak)
-  const laporanPending = Math.max(totalLaporan - laporanDisetujui - laporanDitolak, 0)
+  const laporanPending = React.useMemo(() => {
+    return laporanKonservasi.filter(item => item.status === 0).length
+  }, [laporanKonservasi])
   const totalStatusLaporan = laporanDisetujui + laporanDitolak + laporanPending
   const approvalRate = totalStatusLaporan > 0
     ? Math.round((laporanDisetujui / totalStatusLaporan) * 100)
